@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Serilog;
 
 namespace Swampnet.Evl
 {
@@ -15,6 +16,12 @@ namespace Swampnet.Evl
     {
         public Startup(IConfiguration configuration)
         {
+			Log.Logger = new LoggerConfiguration()
+				.MinimumLevel.Verbose()
+				.Enrich.FromLogContext()
+				.WriteTo.Console()
+				.CreateLogger();
+
             Configuration = configuration;
         }
 
@@ -27,9 +34,13 @@ namespace Swampnet.Evl
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IApplicationLifetime appLifetime)
         {
-            if (env.IsDevelopment())
+			loggerFactory.AddSerilog();
+
+			appLifetime.ApplicationStopped.Register(Log.CloseAndFlush);
+
+			if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
