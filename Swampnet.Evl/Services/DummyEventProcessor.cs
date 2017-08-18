@@ -14,7 +14,7 @@ namespace Swampnet.Evl.Services
 
         public void Process(Event evt)
         {
-            Log.Information("Processing evt {EventSummary} {Processor}", evt.Summary, this.GetType().Name);
+            //Log.Information("Processing evt {EventSummary} {Processor}", evt.Summary, this.GetType().Name);
         }
     }
 
@@ -24,7 +24,7 @@ namespace Swampnet.Evl.Services
 
         public void Process(Event evt)
         {
-            Log.Information("Processing evt {EventSummary} {Processor}", evt.Summary, this.GetType().Name);
+            //Log.Information("Processing evt {EventSummary} {Processor}", evt.Summary, this.GetType().Name);
         }
     }
 }

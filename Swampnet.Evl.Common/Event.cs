@@ -15,8 +15,9 @@ namespace Swampnet.Evl.Common
 		public string Summary { get; set; }
 
 		public List<Property> Properties { get; set; }
+		public string Source { get; set; }
 
-        public override string ToString()
+		public override string ToString()
         {
             return $"{TimestampUtc:s} [{Category}] {Summary}";
         }
