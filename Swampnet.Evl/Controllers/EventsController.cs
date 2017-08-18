@@ -12,9 +12,9 @@ namespace Swampnet.Evl.Controllers
 	[Route("api/events")]
 	public class EventsController : Controller
 	{
-        private readonly IEventProcessor _eventProcessor;
+        private readonly IEventProcessorQueue _eventProcessor;
 
-        public EventsController(IEventProcessor eventProcessor)
+        public EventsController(IEventProcessorQueue eventProcessor)
         {
             _eventProcessor = eventProcessor;
         }
@@ -32,9 +32,9 @@ namespace Swampnet.Evl.Controllers
 
 				await Task.Delay(1); // Just to satisfy our async declaration form now.
 
-				var apiKey = Request.Headers[Constants.API_KEY_HEADER].SingleOrDefault();
+                var apiKey = Request.ApiKey();
 
-                evt.Properties.Add(Request.HttpContext);
+                evt.Properties.AddRange(Request.CommonProperties());
 
                 // @TODO: Auth
                 // @TODO: Save evt
@@ -69,11 +69,11 @@ namespace Swampnet.Evl.Controllers
 
                 await Task.Delay(1); // Just to satisfy our async declaration for now.
 
-                var apiKey = Request.Headers[Constants.API_KEY_HEADER].SingleOrDefault();
+                var apiKey = Request.ApiKey();
 
                 Parallel.ForEach(evts, evt =>
                 {
-                    evt.Properties.Add(Request.HttpContext);
+                    evt.Properties.AddRange(Request.CommonProperties());
                 });
 
                 // @TODO: Auth

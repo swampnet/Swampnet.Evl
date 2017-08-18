@@ -13,6 +13,7 @@ using Swashbuckle.AspNetCore.Swagger;
 using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
 using Swampnet.Evl.Interfaces;
+using Swampnet.Evl.Services;
 
 namespace Swampnet.Evl
 {
@@ -34,8 +35,13 @@ namespace Swampnet.Evl
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-			// Add framework services.
-			services.AddMvc().AddJsonOptions(options => {
+            services.AddSingleton<IEventProcessorQueue, EventProcessorQueue>();
+            // So, there has to be a better way of doing this!
+            services.AddSingleton<IEventProcessor, DummyEventProcessor>();
+            services.AddSingleton<IEventProcessor, AnotherDummyEventProcessor>();
+
+            // Add framework services.  
+            services.AddMvc().AddJsonOptions(options => {
 				options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
 				options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
 			});
@@ -53,7 +59,6 @@ namespace Swampnet.Evl
 				});
 			});
 
-            services.AddSingleton<IEventProcessor, IEventProcessor>();
 		}
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

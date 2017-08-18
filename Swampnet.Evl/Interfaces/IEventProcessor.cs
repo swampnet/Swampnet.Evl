@@ -6,9 +6,18 @@ using System.Threading.Tasks;
 
 namespace Swampnet.Evl.Interfaces
 {
-    public interface IEventProcessor
+    // Pretty bad name, it's actually processing events (via an internal queue)
+    public interface IEventProcessorQueue
     {
         void Enqueue(Event evt);
         void Enqueue(IEnumerable<Event> evts);
+    }
+
+
+
+    public interface IEventProcessor
+    {
+        void Process(Event evt);
+        int Priority { get; }
     }
 }

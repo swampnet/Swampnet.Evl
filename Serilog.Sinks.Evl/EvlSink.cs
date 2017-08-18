@@ -15,7 +15,7 @@ namespace Serilog.Sinks.Evl
     public class EvlSink : PeriodicBatchingSink
     {
         private static readonly int _defaultBatchSize = 50;                        // Maximum number of LogEvents in a batch
-        private static readonly TimeSpan _defaultPeriod = TimeSpan.FromSeconds(5); // How often we flush the batch
+        private static readonly TimeSpan _defaultPeriod = TimeSpan.FromSeconds(30); // How often we flush the batch
 
         private readonly IFormatProvider _formatProvider;
 

@@ -17,7 +17,7 @@ namespace IntegrationTests
             int count = 1;
             while (true)
             {
-                Log.Information("Some Properties {One} {Two} {Count}", 1, 2, count++);
+                Log.Information("Some Properties {Count} {One} {Two} ", count++, 1, 2);
                 Thread.Sleep(5000);
             }
 
