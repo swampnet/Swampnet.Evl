@@ -15,17 +15,46 @@ namespace Swampnet.Evl.Common
 		public string Summary { get; set; }
 
 		public List<Property> Properties { get; set; }
-	}
+
+        public override string ToString()
+        {
+            return $"{TimestampUtc:s} [{Category}] {Summary}";
+        }
+    }
 
 
 	public class Property : IProperty
 	{
-		public string Category { get; set; }
+        public Property()
+        {
+        }
+
+
+        public Property(string name, object value)
+            : this("", name, value)
+        {
+        }
+
+        public Property(string category, string name, object value)
+        {
+            Category = category;
+            Name = name;
+            Value = value?.ToString();
+        }
+
+        public string Category { get; set; }
 
 		public string Name { get; set; }
 
 		public string Value { get; set; }
-	}
+
+        public override string ToString()
+        {
+            return string.IsNullOrEmpty(Category) 
+                ? $"{Name} = {Value}" 
+                : $"[{Category}] {Name} = {Value}";
+        }
+    }
 
 
 	///// <summary>
