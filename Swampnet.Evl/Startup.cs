@@ -12,6 +12,7 @@ using Serilog;
 using Swashbuckle.AspNetCore.Swagger;
 using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
+using Swampnet.Evl.Interfaces;
 
 namespace Swampnet.Evl
 {
@@ -51,6 +52,8 @@ namespace Swampnet.Evl
 					Description = "Backend API for Evl"
 				});
 			});
+
+            services.AddSingleton<IEventProcessor, IEventProcessor>();
 		}
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

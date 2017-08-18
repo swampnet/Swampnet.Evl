@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using Swampnet.Evl.Common;
+using Swampnet.Evl.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,14 @@ namespace Swampnet.Evl.Controllers
 	[Route("api/events")]
 	public class EventsController : Controller
 	{
+        private readonly IEventProcessor _eventProcessor;
+
+        public EventsController(IEventProcessor eventProcessor)
+        {
+            _eventProcessor = eventProcessor;
+        }
+
+
 		[HttpPost]
 		public async Task<IActionResult> Post([FromBody] Event evt)
 		{
@@ -24,9 +33,15 @@ namespace Swampnet.Evl.Controllers
 				await Task.Delay(1); // Just to satisfy our async declaration form now.
 
 				var apiKey = Request.Headers[Constants.API_KEY_HEADER].SingleOrDefault();
-				var remoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress.ToString();
 
-				return Ok();
+                evt.Properties.Add(Request.HttpContext);
+
+                // @TODO: Auth
+                // @TODO: Save evt
+
+                _eventProcessor.Enqueue(evt);
+
+                return Ok();
 				//return CreatedAtRoute("GetEventDetails", new { id = 0 }, evt);
 			}
 			catch (UnauthorizedAccessException ex)
@@ -55,7 +70,16 @@ namespace Swampnet.Evl.Controllers
                 await Task.Delay(1); // Just to satisfy our async declaration for now.
 
                 var apiKey = Request.Headers[Constants.API_KEY_HEADER].SingleOrDefault();
-                var remoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress.ToString();
+
+                Parallel.ForEach(evts, evt =>
+                {
+                    evt.Properties.Add(Request.HttpContext);
+                });
+
+                // @TODO: Auth
+                // @TODO: Save evts
+
+                _eventProcessor.Enqueue(evts);
 
                 return Ok();
                 //return CreatedAtRoute("GetEventDetails", new { id = 0 }, evt);
