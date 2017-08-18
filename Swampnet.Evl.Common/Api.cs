@@ -11,21 +11,26 @@ namespace Swampnet.Evl
     // Bloody awful name.
     public static class Api
     {
-        private static string _defaultEndpoint = "http://localhost:53830/api/events";
         private static string _apiKey = "29016692-9A8D-47CC-82A0-75C6BDB7D0DE";
+        private static string _endpoint = "http://localhost:53830/api/events";
+
+        public static string ApiKey { get => _apiKey; set => _apiKey = value; }
+        public static string Endpoint { get => _endpoint; set => _endpoint = value; }
 
         public static async Task PostAsync(Event e)
         {
             using (var client = new HttpClient())
             {
-                client.DefaultRequestHeaders.Add("x-api-key", _apiKey);
+                client.DefaultRequestHeaders.Add("x-api-key", ApiKey);
 
                 var rs = await client.PostAsync(
-                    _defaultEndpoint,
+                    Endpoint,
                     new StringContent(
                         JsonConvert.SerializeObject(e),
                         Encoding.UTF8,
                         "application/json"));
+
+                rs.EnsureSuccessStatusCode();
             }
         }
 
@@ -34,14 +39,16 @@ namespace Swampnet.Evl
         {
             using (var client = new HttpClient())
             {
-                client.DefaultRequestHeaders.Add("x-api-key", _apiKey);
+                client.DefaultRequestHeaders.Add("x-api-key", ApiKey);
 
                 var rs = await client.PostAsync(
-                    _defaultEndpoint + "/bulk",
+                    Endpoint + "/bulk",
                     new StringContent(
                         JsonConvert.SerializeObject(e),
                         Encoding.UTF8,
                         "application/json"));
+
+                rs.EnsureSuccessStatusCode();
             }
         }
     }
