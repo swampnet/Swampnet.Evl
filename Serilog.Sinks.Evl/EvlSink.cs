@@ -70,6 +70,7 @@ namespace Serilog.Sinks.Evl
             foreach(var s in source)
             {
                 var evlEvent = new Event();
+				evlEvent.Source = "@TODO: SOURCE"; // Although, we infer that from the api-key don't we?
                 evlEvent.Summary = s.RenderMessage(_formatProvider);
                 evlEvent.TimestampUtc = s.Timestamp.UtcDateTime;
                 evlEvent.Category = s.Level.ToString();

@@ -69,6 +69,22 @@ namespace Swampnet.Evl.Entities
 					result = MatchExpression(GetOperand(evt), Value);
 					break;
 
+				case RuleOperatorType.LT:
+					result = Lt(GetOperand(evt), Value);
+					break;
+
+				case RuleOperatorType.LTE:
+					result = Eq(GetOperand(evt), Value) || Lt(GetOperand(evt), Value);
+					break;
+
+				case RuleOperatorType.GT:
+					result = Gt(GetOperand(evt), Value);
+					break;
+
+				case RuleOperatorType.GTE:
+					result = Eq(GetOperand(evt), Value) || Gt(GetOperand(evt), Value);
+					break;
+
 				default:
 					throw new NotImplementedException(Operator.ToString());
 			}
@@ -105,6 +121,35 @@ namespace Swampnet.Evl.Entities
 			return operand.EqualsNoCase(value);
 		}
 
+		private bool Lt(string operand, string value)
+		{
+			if(double.TryParse(operand, out double lhs_nmber) && double.TryParse(value, out double rhs_number))
+			{
+				return lhs_nmber < rhs_number;
+			}
+
+			if(DateTime.TryParse(operand, out DateTime lhs_date) && DateTime.TryParse(value, out DateTime rhs_date))
+			{
+				return lhs_date < rhs_date;
+			}
+
+			return false;
+		}
+
+		private bool Gt(string operand, string value)
+		{
+			if (double.TryParse(operand, out double lhs_nmber) && double.TryParse(value, out double rhs_number))
+			{
+				return lhs_nmber > rhs_number;
+			}
+
+			if (DateTime.TryParse(operand, out DateTime lhs_date) && DateTime.TryParse(value, out DateTime rhs_date))
+			{
+				return lhs_date > rhs_date;
+			}
+
+			return false;
+		}
 
 		private bool MatchExpression(string operand, string value)
 		{
@@ -143,6 +188,7 @@ namespace Swampnet.Evl.Entities
 		Null,
 		Source,
 		Category,
+		Summary,
 		Property
 	}
 
