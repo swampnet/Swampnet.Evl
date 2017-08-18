@@ -10,7 +10,7 @@ using System.Threading;
 
 namespace Swampnet.Evl.Services
 {
-    public class EventProcessorQueue : IEventProcessorQueue
+    class EventProcessorQueue : IEventProcessorQueue
     {
         private readonly ConcurrentQueue<Event> _queue = new ConcurrentQueue<Event>();
         private readonly AutoResetEvent _queueEvent = new AutoResetEvent(false);

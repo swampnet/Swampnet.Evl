@@ -1,6 +1,8 @@
 ﻿using Serilog;
+using Serilog.Exceptions;
 using System;
 using System.Threading;
+using Swampnet.Evl;
 
 namespace IntegrationTests
 {
@@ -10,6 +12,7 @@ namespace IntegrationTests
         {
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Verbose()
+                .Enrich.WithExceptionDetails()
                 .WriteTo.Console()
                 .WriteTo.EvlSink()
                 .CreateLogger();
@@ -17,8 +20,24 @@ namespace IntegrationTests
             int count = 1;
             while (true)
             {
-                Log.Information("Some Properties {Count} {One} {Two} ", count++, 1, 2);
-                Thread.Sleep(5000);
+                try
+                {
+                    Log.Information("Some Properties {Count} {One} {Two} ", count++, 1, 2);
+
+                    if(count % 10 == 0)
+                    {
+                        throw new Exception("Text Exception");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ex.AddData("Count", count);
+                    Log.Error(ex, ex.Message);
+                }
+                finally
+                {
+                    Thread.Sleep(5000);
+                }
             }
 
             Console.WriteLine("key");
