@@ -18,7 +18,7 @@ namespace IntegrationTests
             while (true)
             {
                 Log.Information("Some Properties {One} {Two} {Count}", 1, 2, count++);
-                Thread.Sleep(2000);
+                Thread.Sleep(5000);
             }
 
             Console.WriteLine("key");

@@ -6,6 +6,8 @@ using Serilog.Events;
 using Serilog.Configuration;
 using Swampnet.Evl.Common;
 using System.Linq;
+using System.Threading.Tasks;
+using Swampnet.Evl;
 
 namespace Serilog.Sinks.Evl
 {
@@ -35,13 +37,20 @@ namespace Serilog.Sinks.Evl
         }
 
 
-        protected override void EmitBatch(IEnumerable<LogEvent> events)
+
+        protected override Task EmitBatchAsync(IEnumerable<LogEvent> events)
         {
             var evlEvents = Convert(events);
-            Console.WriteLine($"EmitBatch: {evlEvents.Count()}");
-            // @TODO: Post to Evl
-            // @TODO: Need to take failure into account here. Serilog won't do anything to recover so we need to.
-            //          - Can we add 'em back into the queue somehow?
+
+            try
+            {
+                return Api.PostAsync(evlEvents);
+            }
+            catch (Exception ex)
+            {
+                // @TODO: Add back into queue somehow?
+                throw;
+            }
         }
 
 
