@@ -36,35 +36,9 @@ namespace UnitTests
                 new Property("some-other-property", "some-other-value"),
                 new Property("one", "1"),
                 new Property("two", "2"),
-                new Property("three", "3")
-            };
-        }
-
-        public static IEnumerable<Rule> Rules()
-        {
-            return new[]
-            {
-                new Rule()
-                {
-                    Expression = new Expression(RuleOperatorType.MATCH_ALL)
-                    {
-                        Children = new List<Expression>()
-                        {
-                            new Expression(RuleOperatorType.EQ, RuleOperandType.Category, "test"),
-                            new Expression(RuleOperatorType.EQ, RuleOperandType.Summary, "test-summary")
-                        }
-                    },
-                    Actions = new[]
-                    {
-                        new ActionDefinition("Debug")
-                        {
-                            Properties = new[]
-                            {
-                                new Property("name-01", "value-01")
-                            }
-                        }
-                    }
-                }
+                new Property("three", "3"),
+                new Property("one-point-two-three", 1.23),
+                new Property("some-date", "2008-12-11 03:00:00")
             };
         }
 
@@ -78,6 +52,7 @@ namespace UnitTests
                 new AddPropertyActionHandler()
             };
         }
+
 
         private class MockedRuleLoader : IRuleLoader
         {

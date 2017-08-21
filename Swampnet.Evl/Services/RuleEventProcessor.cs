@@ -18,7 +18,7 @@ namespace Swampnet.Evl.Services
         public RuleEventProcessor(IRuleLoader loader, IEnumerable<IActionHandler> actionHandlers)
         {
             _loader = loader;
-            _actionHandlers = actionHandlers.ToDictionary(a => a.GetType().Name.Replace("ActionHandler", ""));
+            _actionHandlers = actionHandlers.ToDictionary(a => a.GetType().Name.Replace("ActionHandler", "").ToLower());
         }
 
         public void Process(Event evt)
@@ -43,9 +43,11 @@ namespace Swampnet.Evl.Services
                         {
                             foreach (var action in rule.Actions)
                             {
-                                if (_actionHandlers.ContainsKey(action.Type))
+                                var key = action.Type.ToLower();
+
+                                if (_actionHandlers.ContainsKey(key))
                                 {
-                                    _actionHandlers[action.Type].Apply(evt, action.Properties);
+                                    _actionHandlers[key].Apply(evt, action.Properties);
                                 }
                                 else
                                 {
@@ -55,6 +57,8 @@ namespace Swampnet.Evl.Services
 
                             // Stop processing a rule if it comes back true
                             rules.Remove(rule);
+
+                            // Keep track of the number of rules that evaluated to true
                             count++;
                         }
                     }

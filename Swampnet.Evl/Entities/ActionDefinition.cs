@@ -12,10 +12,11 @@ namespace Swampnet.Evl.Entities
         {
         }
 
-        public ActionDefinition(string type)
+        public ActionDefinition(string type, IEnumerable<Property> properties = null)
             : this()
         {
             Type = type;
+            Properties = properties?.ToArray();
         }
 
         public string Type { get; set; }

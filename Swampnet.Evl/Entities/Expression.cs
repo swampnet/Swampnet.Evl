@@ -94,9 +94,12 @@ namespace Swampnet.Evl.Entities
 
         public override string ToString()
         {
-            return $"{Operator} {Operand} {Argument} '{Value}'";
+            return IsContainer 
+                ? $"{Operator} ({Children.Count} children)"
+                : $"{Operand} {Operator} {Argument} '{Value}'";
         }
 
+        public bool IsContainer => Operator == RuleOperatorType.MATCH_ALL || Operator == RuleOperatorType.MATCH_ANY;
 
         private string GetOperand(Event evt)
 		{

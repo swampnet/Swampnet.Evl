@@ -115,8 +115,22 @@ namespace UnitTests
 		}
 
 
-		// Test MATCH_ALL operator
-		[TestMethod]
+        [TestMethod]
+        public void Expression_LT_Date_01()
+        {
+            //var dt = DateTime.Parse("2008-12-11 03:00:00");
+
+            var evt = Mock.Event();
+            var expression = new Expression(RuleOperatorType.LT, RuleOperandType.Property, "some-date", "2009-12-11 03:00:00");
+            var expected = true;
+            var actual = expression.Evaluate(evt);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+
+        // Test MATCH_ALL operator
+        [TestMethod]
 		public void Expression_MATCH_ALL()
 		{
 			var evt = Mock.Event();

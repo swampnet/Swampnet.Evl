@@ -28,5 +28,41 @@ namespace Swampnet.Evl
 
             return v;
 		}
-	}
+
+
+        public static int IntValue(this IEnumerable<IProperty> properties, string name, int defaultValue = 0)
+        {
+            int v = defaultValue;
+
+            int.TryParse(properties.StringValue(name, defaultValue.ToString()), out v);
+
+            return v;
+        }
+
+
+        public static double DoubleValue(this IEnumerable<IProperty> properties, string name, double defaultValue = 0.0)
+        {
+            double v = defaultValue;
+
+            double.TryParse(properties.StringValue(name, defaultValue.ToString()), out v);
+
+            return v;
+        }
+
+
+        public static DateTime DateTimeValue(this IEnumerable<IProperty> properties, string name)
+        {
+            return properties.DateTimeValue(name, DateTime.MinValue);
+        }
+
+
+        public static DateTime DateTimeValue(this IEnumerable<IProperty> properties, string name, DateTime defaultValue)
+        {
+            DateTime v = defaultValue;
+
+            DateTime.TryParse(properties.StringValue(name, defaultValue.ToString()), out v);
+
+            return v;
+        }
+    }
 }
