@@ -14,6 +14,7 @@ using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
 using Swampnet.Evl.Interfaces;
 using Swampnet.Evl.Services;
+using Swampnet.Evl.Actions;
 
 namespace Swampnet.Evl
 {
@@ -36,9 +37,18 @@ namespace Swampnet.Evl
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<IEventProcessorQueue, EventProcessorQueue>();
+            services.AddSingleton<IRuleLoader, HackyRuleLoader>();
+
             // So, there has to be a better way of doing this!
+            // EventProcessors
             services.AddSingleton<IEventProcessor, DummyEventProcessor>();
             services.AddSingleton<IEventProcessor, AnotherDummyEventProcessor>();
+            services.AddSingleton<IEventProcessor, RuleEventProcessor>();
+
+            // Action Handlers
+            services.AddSingleton<IActionHandler, DebugActionHandler>();
+            services.AddSingleton<IActionHandler, AddPropertyActionHandler>();
+            services.AddSingleton<IActionHandler, ChangeCategoryActionHandler>();
 
             // Add framework services.  
             services.AddMvc().AddJsonOptions(options => {

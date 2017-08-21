@@ -17,14 +17,16 @@ namespace Swampnet.Evl
 		public static string StringValue(this IEnumerable<IProperty> properties, string name, string defaultValue = "")
 		{
 			string v = defaultValue;
+            if(properties != null && properties.Any())
+            {
+                var p = properties.SingleOrDefault(x => x.Name.EqualsNoCase(name));
+                if (p != null)
+                {
+                    v = p.Value;
+                }
+            }
 
-			var p = properties.SingleOrDefault(x => x.Name.EqualsNoCase(name));
-			if(p != null)
-			{
-				v = p.Value;
-			}
-
-			return v;
+            return v;
 		}
 	}
 }
