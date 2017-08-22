@@ -4,8 +4,17 @@ using System.Text;
 
 namespace Swampnet.Evl
 {
+    /// <summary>
+    /// String extensions / helper methods
+    /// </summary>
     public static class StringExtensions
     {
+        /// <summary>
+        /// Perform a case insensitive comparison
+        /// </summary>
+        /// <param name="lhs"></param>
+        /// <param name="rhs"></param>
+        /// <returns></returns>
 		public static bool EqualsNoCase(this string lhs, string rhs)
 		{
 			// Both null -> true

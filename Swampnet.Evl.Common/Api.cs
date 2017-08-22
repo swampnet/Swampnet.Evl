@@ -8,7 +8,12 @@ using System.Threading.Tasks;
 
 namespace Swampnet.Evl
 {
-    // Bloody awful name.
+    /// <summary>
+    /// Helper class to aid calling the web api
+    /// </summary>
+    /// <remarks>
+    /// @TODO: Not a great name.
+    /// </remarks>
     public static class Api
     {
         private static string _apiKey = "29016692-9A8D-47CC-82A0-75C6BDB7D0DE";
