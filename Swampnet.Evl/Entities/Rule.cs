@@ -7,6 +7,16 @@ namespace Swampnet.Evl.Entities
 {
     public class Rule
     {
+        public Rule()
+        {
+        }
+
+        public Rule(string name)
+        {
+            Name = name;
+        }
+
+        public string Name { get; set; }
         public Expression Expression { get; set; }
         public ActionDefinition[] Actions { get; set; }
     }

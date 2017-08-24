@@ -32,7 +32,7 @@ namespace Swampnet.Evl
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<IEventProcessorQueue, EventProcessorQueue>();
-            services.AddSingleton<IRuleLoader, HackyRuleLoader>();
+            services.AddSingleton<IRuleLoader, MockedRuleLoader>();
 
             // Event Processors
             foreach (var eventProcessor in AppDomain.CurrentDomain.GetAssemblies().AllOfType<IEventProcessor>())

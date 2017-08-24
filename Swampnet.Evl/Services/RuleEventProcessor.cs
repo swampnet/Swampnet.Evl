@@ -36,11 +36,12 @@ namespace Swampnet.Evl.Services
                 while (count > 0 && rules.Any())
                 {
                     count = 0;
-
+                    
                     foreach (var rule in rules.ToArray())
                     {
                         if (rule.Expression.Evaluate(evt))
                         {
+                            evt.Properties.Add(new Property("Internal", "Rule Triggered", rule.Name));
                             foreach (var action in rule.Actions)
                             {
                                 var key = action.Type.ToLower();
@@ -48,6 +49,7 @@ namespace Swampnet.Evl.Services
                                 if (_actionHandlers.ContainsKey(key))
                                 {
                                     _actionHandlers[key].Apply(evt, action.Properties);
+                                    evt.Properties.Add(new Property("Internal", "ActionApplied", key));
                                 }
                                 else
                                 {
