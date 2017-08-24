@@ -1,20 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Serilog;
 using Swashbuckle.AspNetCore.Swagger;
 using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
 using Swampnet.Evl.Interfaces;
 using Swampnet.Evl.Services;
-using Swampnet.Evl.Actions;
 
 namespace Swampnet.Evl
 {
@@ -39,16 +34,17 @@ namespace Swampnet.Evl
             services.AddSingleton<IEventProcessorQueue, EventProcessorQueue>();
             services.AddSingleton<IRuleLoader, HackyRuleLoader>();
 
-            // So, there has to be a better way of doing this!
-            // EventProcessors
-            services.AddSingleton<IEventProcessor, DummyEventProcessor>();
-            services.AddSingleton<IEventProcessor, AnotherDummyEventProcessor>();
-            services.AddSingleton<IEventProcessor, RuleEventProcessor>();
+            // Event Processors
+            foreach (var eventProcessor in AppDomain.CurrentDomain.GetAssemblies().AllOfType<IEventProcessor>())
+            {
+                services.AddSingleton(typeof(IEventProcessor), eventProcessor);
+            }
 
             // Action Handlers
-            services.AddSingleton<IActionHandler, DebugActionHandler>();
-            services.AddSingleton<IActionHandler, AddPropertyActionHandler>();
-            services.AddSingleton<IActionHandler, ChangeCategoryActionHandler>();
+            foreach (var actionHandler in AppDomain.CurrentDomain.GetAssemblies().AllOfType<IActionHandler>())
+            {
+                services.AddSingleton(typeof(IActionHandler), actionHandler);
+            }
 
             // Add framework services.  
             services.AddMvc().AddJsonOptions(options => {
