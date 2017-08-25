@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Swampnet.Evl.Common.Contracts
 {
     // Jeez, I dunno, just something to abstract away the loading of rules. Name may very well change...
-    public interface IRuleLoader
+    public interface IRuleDataAccess
     {
         /// <summary>
         /// Load all the rules for this aqpplication

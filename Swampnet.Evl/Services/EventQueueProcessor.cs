@@ -2,11 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Swampnet.Evl.Common;
 using Serilog;
 using System.Collections.Concurrent;
 using System.Threading;
+using Swampnet.Evl.Contracts;
 
 namespace Swampnet.Evl.Services
 {

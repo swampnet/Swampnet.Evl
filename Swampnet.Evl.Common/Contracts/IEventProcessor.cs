@@ -7,14 +7,6 @@ using System.Threading.Tasks;
 
 namespace Swampnet.Evl.Common.Contracts
 {
-    public interface IEventQueueProcessor
-    {
-        void Enqueue(Guid id);
-        void Enqueue(IEnumerable<Guid> ids);
-    }
-
-
-
     public interface IEventProcessor
     {
         void Process(Event evt);

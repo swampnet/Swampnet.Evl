@@ -1,16 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using Swampnet.Evl.Client;
-using Swampnet.Evl.Common;
 using Swampnet.Evl.Common.Contracts;
+using Swampnet.Evl.Contracts;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Swampnet.Evl.Controllers
 {
-	[Route("api/events")]
+    [Route("api/events")]
 	public class EventsController : Controller
 	{
         private readonly IEventQueueProcessor _eventProcessor;
@@ -30,7 +29,7 @@ namespace Swampnet.Evl.Controllers
             return Ok(events);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "Details")]
         public async Task<IActionResult> Get(Guid id)
         {
             var evt = await _eventDal.ReadAsync(id);
@@ -59,13 +58,12 @@ namespace Swampnet.Evl.Controllers
                 evt.Properties.AddRange(Request.CommonProperties());
 
                 // @TODO: Auth
-                // @TODO: Save evt
+
                 var id = await _eventDal.CreateAsync(null, evt);
 
                 _eventProcessor.Enqueue(id);
 
-                return Ok();
-				//return CreatedAtRoute("GetEventDetails", new { id = 0 }, evt);
+				return CreatedAtRoute("Details", new { id = id }, evt);
 			}
 			catch (UnauthorizedAccessException ex)
 			{
@@ -96,7 +94,6 @@ namespace Swampnet.Evl.Controllers
                 var ids = new List<Guid>();
 
                 // @TODO: Auth
-                // @TODO: Save evts
 
                 Parallel.ForEach(evts, async evt =>
                 {

@@ -72,7 +72,7 @@ namespace Swampnet.Evl.DAL.InMemory.Services
                 }
 
                 // .. and remove any properties no longer present.
-                // @HACK: Ignoreing this for now
+                // @HACK: Ignoring this for now
 
                 await context.SaveChangesAsync();
             }

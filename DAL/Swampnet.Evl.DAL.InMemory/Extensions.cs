@@ -11,7 +11,7 @@ namespace Swampnet.Evl.DAL.InMemory
     {
         public static void AddInMemoryDataProvider(this IServiceCollection services)
         {
-            services.AddSingleton<IRuleLoader, RuleLoader>();
+            services.AddSingleton<IRuleDataAccess, RuleDataAccess>();
             services.AddSingleton<IEventDataAccess, EventDataAccess>();
         }
     }

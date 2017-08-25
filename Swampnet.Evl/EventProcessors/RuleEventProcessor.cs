@@ -13,12 +13,12 @@ namespace Swampnet.Evl.EventProcessors
 {
     class RuleEventProcessor : IEventProcessor
     {
-        private readonly IRuleLoader _loader;
+        private readonly IRuleDataAccess _loader;
         private readonly Dictionary<string, IActionHandler> _actionHandlers;
 
         public int Priority => 0;
 
-        public RuleEventProcessor(IRuleLoader loader, IEnumerable<IActionHandler> actionHandlers)
+        public RuleEventProcessor(IRuleDataAccess loader, IEnumerable<IActionHandler> actionHandlers)
         {
             _loader = loader;
             _actionHandlers = actionHandlers.ToDictionary(a => a.GetType().Name.Replace("ActionHandler", "").ToLower());

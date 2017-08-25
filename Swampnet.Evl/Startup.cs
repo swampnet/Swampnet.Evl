@@ -11,6 +11,7 @@ using Newtonsoft.Json;
 using Swampnet.Evl.Common.Contracts;
 using Swampnet.Evl.Services;
 using Swampnet.Evl.DAL.InMemory;
+using Swampnet.Evl.Contracts;
 
 namespace Swampnet.Evl
 {

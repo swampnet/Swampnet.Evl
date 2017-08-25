@@ -7,7 +7,7 @@ using Swampnet.Evl.Client;
 
 namespace Swampnet.Evl.DAL.InMemory.Services
 {
-    class RuleLoader : IRuleLoader
+    class RuleDataAccess : IRuleDataAccess
     {
         public IEnumerable<Rule> Load(Application app)
         {

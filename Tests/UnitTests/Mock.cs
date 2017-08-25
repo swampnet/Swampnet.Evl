@@ -23,7 +23,7 @@ namespace UnitTests
         }
 
 
-        internal static IRuleLoader RuleLoader(IEnumerable<Rule> rules)
+        internal static IRuleDataAccess RuleLoader(IEnumerable<Rule> rules)
         {
             return new MockedRuleLoader(rules);
         }
@@ -55,7 +55,7 @@ namespace UnitTests
         }
 
 
-        private class MockedRuleLoader : IRuleLoader
+        private class MockedRuleLoader : IRuleDataAccess
         {
             private readonly IEnumerable<Rule> _rules;
 
