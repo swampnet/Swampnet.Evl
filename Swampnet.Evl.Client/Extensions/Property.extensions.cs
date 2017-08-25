@@ -11,6 +11,17 @@ namespace Swampnet.Evl
     /// </summary>
 	public static class PropertyExtensions
 	{
+        public static IEnumerable<IProperty> Values(this IEnumerable<IProperty> properties, string category, string name)
+        {
+            return properties.Where(p => p.Category.EqualsNoCase(category) && p.Name.EqualsNoCase(name));
+        }
+
+        public static IEnumerable<IProperty> Values(this IEnumerable<IProperty> properties, string name)
+        {
+            return properties.Where(p => p.Name.EqualsNoCase(name));
+        }
+
+
         /// <summary>
         /// Return property values of all those properties of name 'name'
         /// </summary>

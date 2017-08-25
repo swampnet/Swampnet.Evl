@@ -1,20 +1,16 @@
 ﻿using Swampnet.Evl.Common.Contracts;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Text;
 using Swampnet.Evl.Common.Entities;
 using Swampnet.Evl.Common;
 
-namespace Swampnet.Evl.Services
+namespace Swampnet.Evl.DAL.InMemory.Services
 {
-    public class MockedRuleLoader : IRuleLoader
+    class RuleLoader : IRuleLoader
     {
         public IEnumerable<Rule> Load(Application app)
         {
-            // @TODO: Load application specific rules from cache or DB or somewhere.
-            // @HACK: Just hard coding some generic stuff for now.
-
             return new[] {
                 new Rule("Test Email")
                 {

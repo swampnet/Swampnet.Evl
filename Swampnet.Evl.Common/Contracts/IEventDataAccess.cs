@@ -9,9 +9,30 @@ namespace Swampnet.Evl.Common.Contracts
 {
     public interface IEventDataAccess
     {
-        long Create(Application app, Event evt);
-        Event Read(long id);
-        void Update(long id, Event evt);
-        IEnumerable<Event> Search(/* Criteria */);
+        /// <summary>
+        /// Save a new event to the backing store
+        /// </summary>
+        /// <param name="app"></param>
+        /// <param name="evt"></param>
+        /// <returns></returns>
+        Task<Guid> CreateAsync(Application app, Event evt);
+
+        /// <summary>
+        /// Read an existing event from the backing store
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        Task<Event> ReadAsync(Guid id);
+
+        /// <summary>
+        /// Update an existing event
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="evt"></param>
+        /// <returns></returns>
+        Task UpdateAsync(Guid id, Event evt);
+
+
+        Task<IEnumerable<Event>> SearchAsync(/* Criteria */);
     }
 }

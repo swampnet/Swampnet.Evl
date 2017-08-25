@@ -13,9 +13,11 @@ namespace Swampnet.Evl.Controllers
 	public class EventsController : Controller
 	{
         private readonly IEventQueueProcessor _eventProcessor;
+        private readonly IEventDataAccess _eventDal;
 
-        public EventsController(IEventQueueProcessor eventProcessor)
+        public EventsController(IEventDataAccess eventDal, IEventQueueProcessor eventProcessor)
         {
+            _eventDal = eventDal;
             _eventProcessor = eventProcessor;
         }
 
@@ -30,14 +32,13 @@ namespace Swampnet.Evl.Controllers
 					return BadRequest();
 				}
 
-				await Task.Delay(1); // Just to satisfy our async declaration form now.
-
                 var apiKey = Request.ApiKey();
 
                 evt.Properties.AddRange(Request.CommonProperties());
 
                 // @TODO: Auth
                 // @TODO: Save evt
+                var id = await _eventDal.CreateAsync(null, evt);
 
                 _eventProcessor.Enqueue(evt);
 

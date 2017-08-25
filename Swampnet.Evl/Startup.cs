@@ -10,6 +10,7 @@ using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
 using Swampnet.Evl.Common.Contracts;
 using Swampnet.Evl.Services;
+using Swampnet.Evl.DAL.InMemory;
 
 namespace Swampnet.Evl
 {
@@ -32,7 +33,8 @@ namespace Swampnet.Evl
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<IEventQueueProcessor, EventQueueProcessor>();
-            services.AddSingleton<IRuleLoader, MockedRuleLoader>();
+
+            services.AddInMemoryDataProvider();
 
             // Event Processors
             foreach (var eventProcessor in AppDomain.CurrentDomain.GetAssemblies().AllOfType<IEventProcessor>())

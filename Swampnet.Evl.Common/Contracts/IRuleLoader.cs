@@ -10,7 +10,7 @@ namespace Swampnet.Evl.Common.Contracts
     public interface IRuleLoader
     {
         /// <summary>
-        /// Load all th erules for this aqpplication
+        /// Load all the rules for this aqpplication
         /// </summary>
         /// <param name="app"></param>
         /// <returns></returns>
