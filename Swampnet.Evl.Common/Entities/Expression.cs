@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace Swampnet.Evl.Entities
+namespace Swampnet.Evl.Common.Entities
 {
     public class Expression
     {

@@ -2,8 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Swampnet.Evl.Interfaces;
-using Swampnet.Evl.Entities;
+using Swampnet.Evl.Common.Contracts;
+using Swampnet.Evl.Common.Entities;
 using Swampnet.Evl.Actions;
 
 namespace UnitTests

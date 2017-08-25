@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Swampnet.Evl.Common;
-using Swampnet.Evl.Entities;
+using Swampnet.Evl.Common.Entities;
 using Swampnet.Evl.Services;
 
 namespace UnitTests

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Swampnet.Evl.Interfaces
+namespace Swampnet.Evl.Common.Contracts
 {
     // Pretty bad name, it's actually processing events (via an internal queue)
     public interface IEventProcessorQueue

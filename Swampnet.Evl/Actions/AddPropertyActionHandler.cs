@@ -1,9 +1,9 @@
-﻿using Swampnet.Evl.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Swampnet.Evl.Common;
+using Swampnet.Evl.Common.Contracts;
 
 namespace Swampnet.Evl.Actions
 {

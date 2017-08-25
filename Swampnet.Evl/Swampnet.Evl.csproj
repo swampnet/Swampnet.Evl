@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Swampnet.Evl.Client\Swampnet.Evl.Client.csproj" />
+    <ProjectReference Include="..\Swampnet.Evl.Common\Swampnet.Evl.Common.csproj" />
   </ItemGroup>
 
 </Project>

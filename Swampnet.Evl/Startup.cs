@@ -8,7 +8,7 @@ using Serilog;
 using Swashbuckle.AspNetCore.Swagger;
 using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
-using Swampnet.Evl.Interfaces;
+using Swampnet.Evl.Common.Contracts;
 using Swampnet.Evl.Services;
 
 namespace Swampnet.Evl

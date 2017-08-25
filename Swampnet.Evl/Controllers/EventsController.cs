@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using Swampnet.Evl.Common;
-using Swampnet.Evl.Interfaces;
+using Swampnet.Evl.Common.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;

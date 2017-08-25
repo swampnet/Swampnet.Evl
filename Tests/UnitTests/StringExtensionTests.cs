@@ -1,7 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Swampnet.Evl;
 using Swampnet.Evl.Common;
-using Swampnet.Evl.Interfaces;
+using Swampnet.Evl.Common.Contracts;
 using Swampnet.Evl.Services;
 using System;
 using System.Threading.Tasks;

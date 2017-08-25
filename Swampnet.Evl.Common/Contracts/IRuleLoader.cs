@@ -1,10 +1,10 @@
-﻿using Swampnet.Evl.Entities;
+﻿using Swampnet.Evl.Common.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Swampnet.Evl.Interfaces
+namespace Swampnet.Evl.Common.Contracts
 {
     // Jeez, I dunno, just something to abstract away the loading of rules. Name may very well change...
     public interface IRuleLoader
