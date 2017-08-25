@@ -8,8 +8,8 @@ namespace Swampnet.Evl.Common.Contracts
 {
     public interface IEventQueueProcessor
     {
-        void Enqueue(Event evt);
-        void Enqueue(IEnumerable<Event> evts);
+        void Enqueue(Guid id);
+        void Enqueue(IEnumerable<Guid> ids);
     }
 
 

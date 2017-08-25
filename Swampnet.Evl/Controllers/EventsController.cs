@@ -40,7 +40,7 @@ namespace Swampnet.Evl.Controllers
                 // @TODO: Save evt
                 var id = await _eventDal.CreateAsync(null, evt);
 
-                _eventProcessor.Enqueue(evt);
+                _eventProcessor.Enqueue(id);
 
                 return Ok();
 				//return CreatedAtRoute("GetEventDetails", new { id = 0 }, evt);
@@ -71,16 +71,22 @@ namespace Swampnet.Evl.Controllers
                 await Task.Delay(1); // Just to satisfy our async declaration for now.
 
                 var apiKey = Request.ApiKey();
-
-                Parallel.ForEach(evts, evt =>
-                {
-                    evt.Properties.AddRange(Request.CommonProperties());
-                });
+                var ids = new List<Guid>();
 
                 // @TODO: Auth
                 // @TODO: Save evts
 
-                _eventProcessor.Enqueue(evts);
+                Parallel.ForEach(evts, async evt =>
+                {
+                    evt.Properties.AddRange(Request.CommonProperties());
+                    var id = await _eventDal.CreateAsync(null, evt);
+                    lock (ids)
+                    {
+                        ids.Add(id);
+                    }
+                });
+
+                _eventProcessor.Enqueue(ids);
 
                 return Ok();
                 //return CreatedAtRoute("GetEventDetails", new { id = 0 }, evt);

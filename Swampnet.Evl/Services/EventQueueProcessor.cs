@@ -12,14 +12,17 @@ namespace Swampnet.Evl.Services
 {
     class EventQueueProcessor : IEventQueueProcessor
     {
-        private readonly ConcurrentQueue<Event> _queue = new ConcurrentQueue<Event>();
+        private readonly ConcurrentQueue<Guid> _queue = new ConcurrentQueue<Guid>();
         private readonly AutoResetEvent _queueEvent = new AutoResetEvent(false);
         private readonly Thread _monitorThread;
         private readonly IEnumerable<IEventProcessor> _processors;
+        private readonly IEventDataAccess _dal;
 
-        public EventQueueProcessor(IEnumerable<IEventProcessor> processors)
+        public EventQueueProcessor(IEventDataAccess dal, IEnumerable<IEventProcessor> processors)
         {
+            _dal = dal;
             _processors = processors;
+
             _monitorThread = new Thread(MonitorThread)
             {
                 IsBackground = true,
@@ -30,48 +33,51 @@ namespace Swampnet.Evl.Services
         }
 
 
-        public void Enqueue(Event evt)
+        public void Enqueue(Guid id)
         {
-            _queue.Enqueue(evt);
+            _queue.Enqueue(id);
             _queueEvent.Set();
         }
 
 
-        public void Enqueue(IEnumerable<Event> evts)
+        public void Enqueue(IEnumerable<Guid> ids)
         {
-            foreach(var evt in evts)
+            foreach(var id in ids)
             {
-                Enqueue(evt);
+                _queue.Enqueue(id);
             }
+            _queueEvent.Set();
         }
 
 
-        private IEnumerable<Event> Wait()
+        private IEnumerable<Guid> Wait()
         {
             _queueEvent.WaitOne();
 
-            var evts = new List<Event>();
+            var ids = new List<Guid>();
 
-            while(_queue.TryDequeue(out Event result))
+            while(_queue.TryDequeue(out Guid result))
             {
-                evts.Add(result);
+                ids.Add(result);
             }
 
-            return evts;
+            return ids;
         }
 
 
         private void MonitorThread()
         {
-            var evts = Wait();
-            while (evts != null)
+            var eventIds = Wait();
+            while (eventIds != null)
             {
-                Log.Debug("Process {EventCount} events", evts.Count());
-                foreach(var evt in evts.OrderBy(e => e.TimestampUtc))
+                Log.Debug("Process {EventCount} events", eventIds.Count());
+                foreach(var eventId in eventIds)
                 {
                     try
                     {
-                        foreach(var processor in _processors.OrderBy(p => p.Priority))
+                        var evt = _dal.ReadAsync(eventId).Result;
+
+                        foreach (var processor in _processors.OrderBy(p => p.Priority))
                         {
                             try
                             {
@@ -90,7 +96,7 @@ namespace Swampnet.Evl.Services
                     }
                 }
 
-                evts = Wait();
+                eventIds = Wait();
             }
         }
     }

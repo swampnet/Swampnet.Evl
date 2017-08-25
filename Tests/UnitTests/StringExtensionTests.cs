@@ -37,35 +37,5 @@ namespace UnitTests
 
 			Assert.IsTrue(lhs.EqualsNoCase(rhs));
 		}
-
-
-		[TestMethod]
-        public void TestMethod1()
-        {
-            var processor = new MockedEventProcessor();
-            var queue = new EventQueueProcessor(new[] { processor });
-
-            queue.Enqueue(new Event()
-            {
-                Summary = "Mocked Event",
-                TimestampUtc = DateTime.UtcNow
-            });
-
-            Task.Delay(1000).Wait();
-
-            Assert.IsTrue(processor.WasCalled);
-        }
-    }
-
-
-    public class MockedEventProcessor : IEventProcessor
-    {
-        public int Priority => 0;
-        public bool WasCalled { get; set; } = false;
-
-        public void Process(Event evt)
-        {
-            WasCalled = true;
-        }
     }
 }
