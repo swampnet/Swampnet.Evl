@@ -34,6 +34,6 @@ namespace Swampnet.Evl.Common.Contracts
         Task UpdateAsync(Guid id, Event evt);
 
 
-        Task<IEnumerable<EventSummary>> SearchAsync(/* Criteria */);
+        Task<IEnumerable<EventSummary>> SearchAsync(EventSearchCriteria criteria);
     }
 }

@@ -79,13 +79,40 @@ namespace Swampnet.Evl.DAL.InMemory.Services
         }
 
 
-        public async Task<IEnumerable<EventSummary>> SearchAsync()
+        public async Task<IEnumerable<EventSummary>> SearchAsync(EventSearchCriteria criteria)
         {
             using (var context = EventContext.Create())
             {
-                var events = await context.Events.OrderBy(e => e.TimestampUtc).ToArrayAsync();
+                var query = context.Events.AsQueryable();
 
-                return events.Select(e => Convert.ToEventSummary(e));
+                if (criteria.Id.HasValue)
+                {
+                    query = query.Where(e => e.Id == criteria.Id);
+                }
+
+                if (!string.IsNullOrEmpty(criteria.Summary))
+                {
+                    query = query.Where(e => e.Summary.Contains(criteria.Summary));
+                }
+
+                if (!string.IsNullOrEmpty(criteria.Category))
+                {
+                    query = query.Where(e => e.Category == criteria.Category);
+                }
+
+                if (criteria.FromUtc.HasValue)
+                {
+                    query = query.Where(e => e.TimestampUtc >= criteria.FromUtc);
+                }
+
+                if (criteria.ToUtc.HasValue)
+                {
+                    query = query.Where(e => e.TimestampUtc <= criteria.ToUtc);
+                }
+
+                var results = await query.OrderBy(e => e.TimestampUtc).ToArrayAsync();
+
+                return results.Select(e => Convert.ToEventSummary(e));
             }
         }
     }

@@ -22,9 +22,9 @@ namespace Swampnet.Evl.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get([FromQuery] EventSearchCriteria criteria)
         {
-            var events = await _eventDal.SearchAsync();
+            var events = await _eventDal.SearchAsync(criteria);
 
             return Ok(events);
         }
