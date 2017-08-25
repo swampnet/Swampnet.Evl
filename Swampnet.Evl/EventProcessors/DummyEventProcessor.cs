@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Swampnet.Evl.Common;
 using Serilog;
 
-namespace Swampnet.Evl.Services
+namespace Swampnet.Evl.EventProcessors
 {
     class DummyEventProcessor : IEventProcessor
     {

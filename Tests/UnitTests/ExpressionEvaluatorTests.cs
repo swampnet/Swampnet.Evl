@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Swampnet.Evl.Common;
 using Swampnet.Evl.Common.Entities;
+using Swampnet.Evl.Services;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,7 +9,7 @@ using System.Text;
 namespace UnitTests
 {
 	[TestClass]
-	public class ExpressionTests
+	public class ExpressionEvaluatorTests
     {
 		// Test basic EQ operator
 		[TestMethod]
@@ -16,9 +17,10 @@ namespace UnitTests
 		{
 			var evt = Mock.Event();
 			var expression = new Expression(RuleOperatorType.EQ, RuleOperandType.Category, "test");
+            var evaluator = new ExpressionEvaluator();
 
 			var expected = true;
-			var actual = expression.Evaluate(evt);
+			var actual = evaluator.Evaluate(expression, evt);
 
 			Assert.AreEqual(expected, actual);
 		}
@@ -29,9 +31,10 @@ namespace UnitTests
 		{
 			var evt = Mock.Event();
 			var expression = new Expression(RuleOperatorType.EQ, RuleOperandType.Property, "some-property", "test");
+            var evaluator = new ExpressionEvaluator();
 
-			var expected = true;
-			var actual = expression.Evaluate(evt);
+            var expected = true;
+			var actual = evaluator.Evaluate(expression, evt);
 
 			Assert.AreEqual(expected, actual);
 		}
@@ -43,9 +46,10 @@ namespace UnitTests
 		{
 			var evt = Mock.Event();
 			var expression = new Expression(RuleOperatorType.EQ, RuleOperandType.Property, "some-non-existant-property", "test");
+            var evaluator = new ExpressionEvaluator();
 
-			var expected = false;
-			var actual = expression.Evaluate(evt);
+            var expected = false;
+			var actual = evaluator.Evaluate(expression, evt);
 
 			Assert.AreEqual(expected, actual);
 		}
@@ -57,9 +61,10 @@ namespace UnitTests
 		{
 			var evt = Mock.Event();
 			var expression = new Expression(RuleOperatorType.NOT_EQ, RuleOperandType.Category, "test-xxx");
+            var evaluator = new ExpressionEvaluator();
 
-			var expected = true;
-			var actual = expression.Evaluate(evt);
+            var expected = true;
+			var actual = evaluator.Evaluate(expression, evt);
 
 			Assert.AreEqual(expected, actual);
 		}
@@ -70,9 +75,10 @@ namespace UnitTests
 		{
 			var evt = Mock.Event();
 			var expression = new Expression(RuleOperatorType.REGEX, RuleOperandType.Category, "t.*t");
+            var evaluator = new ExpressionEvaluator();
 
-			var expected = true;
-			var actual = expression.Evaluate(evt);
+            var expected = true;
+			var actual = evaluator.Evaluate(expression, evt);
 
 			Assert.AreEqual(expected, actual);
 		}
@@ -82,9 +88,10 @@ namespace UnitTests
 		{
 			var evt = Mock.Event();
 			var expression = new Expression(RuleOperatorType.LT, RuleOperandType.Property, "two", "3");
+            var evaluator = new ExpressionEvaluator();
 
-			var expected = true;
-			var actual = expression.Evaluate(evt);
+            var expected = true;
+			var actual = evaluator.Evaluate(expression, evt);
 
 			Assert.AreEqual(expected, actual);
 		}
@@ -94,9 +101,10 @@ namespace UnitTests
 		{
 			var evt = Mock.Event();
 			var expression = new Expression(RuleOperatorType.LTE, RuleOperandType.Property, "two", "2");
+            var evaluator = new ExpressionEvaluator();
 
-			var expected = true;
-			var actual = expression.Evaluate(evt);
+            var expected = true;
+			var actual = evaluator.Evaluate(expression, evt);
 
 			Assert.AreEqual(expected, actual);
 		}
@@ -107,9 +115,10 @@ namespace UnitTests
 		{
 			var evt = Mock.Event();
 			var expression = new Expression(RuleOperatorType.GT, RuleOperandType.Property, "two", "1");
+            var evaluator = new ExpressionEvaluator();
 
-			var expected = true;
-			var actual = expression.Evaluate(evt);
+            var expected = true;
+			var actual = evaluator.Evaluate(expression, evt);
 
 			Assert.AreEqual(expected, actual);
 		}
@@ -122,8 +131,10 @@ namespace UnitTests
 
             var evt = Mock.Event();
             var expression = new Expression(RuleOperatorType.LT, RuleOperandType.Property, "some-date", "2009-12-11 03:00:00");
+            var evaluator = new ExpressionEvaluator();
+
             var expected = true;
-            var actual = expression.Evaluate(evt);
+            var actual = evaluator.Evaluate(expression, evt);
 
             Assert.AreEqual(expected, actual);
         }
@@ -142,9 +153,10 @@ namespace UnitTests
 					new Expression(RuleOperatorType.NOT_EQ, RuleOperandType.Category, "test-xxx")
 				}
 			};
+            var evaluator = new ExpressionEvaluator();
 
-			var expected = true;
-			var actual = expression.Evaluate(evt);
+            var expected = true;
+			var actual = evaluator.Evaluate(expression, evt);
 
 			Assert.AreEqual(expected, actual);
 		}
@@ -164,10 +176,10 @@ namespace UnitTests
 					new Expression(RuleOperatorType.EQ, RuleOperandType.Category, "test-yyy")
 				}
 			};
+            var evaluator = new ExpressionEvaluator();
 
-
-			var expected = true;
-			var actual = expression.Evaluate(evt);
+            var expected = true;
+			var actual = evaluator.Evaluate(expression, evt);
 
 			Assert.AreEqual(expected, actual);
 		}
@@ -192,10 +204,11 @@ namespace UnitTests
 					}
 				}
 			};
+            var evaluator = new ExpressionEvaluator();
 
 
-			var expected = true;
-			var actual = expression.Evaluate(evt);
+            var expected = true;
+			var actual = evaluator.Evaluate(expression, evt);
 
 			Assert.AreEqual(expected, actual);
 		}

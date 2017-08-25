@@ -5,10 +5,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Swampnet.Evl.Common;
 using System.Diagnostics;
+using Swampnet.Evl.Contracts;
+using Swampnet.Evl.Services;
 
-namespace Swampnet.Evl.Services
+namespace Swampnet.Evl.EventProcessors
 {
-    public class RuleEventProcessor : IEventProcessor
+    class RuleEventProcessor : IEventProcessor
     {
         private readonly IRuleLoader _loader;
         private readonly Dictionary<string, IActionHandler> _actionHandlers;
@@ -24,6 +26,7 @@ namespace Swampnet.Evl.Services
         public void Process(Event evt)
         {
             var rules = _loader.Load(null).ToList();
+            var expressionEvaluator = new ExpressionEvaluator();
 
             if (rules.Any())
             {
@@ -39,7 +42,7 @@ namespace Swampnet.Evl.Services
                     
                     foreach (var rule in rules.ToArray())
                     {
-                        if (rule.Expression.Evaluate(evt))
+                        if (expressionEvaluator.Evaluate(rule.Expression, evt))
                         {
                             evt.Properties.Add(new Property("Internal", "Rule Triggered", rule.Name));
                             foreach (var action in rule.Actions)

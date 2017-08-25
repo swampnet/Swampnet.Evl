@@ -10,14 +10,14 @@ using System.Threading;
 
 namespace Swampnet.Evl.Services
 {
-    class EventProcessorQueue : IEventProcessorQueue
+    class EventQueueProcessor : IEventQueueProcessor
     {
         private readonly ConcurrentQueue<Event> _queue = new ConcurrentQueue<Event>();
         private readonly AutoResetEvent _queueEvent = new AutoResetEvent(false);
         private readonly Thread _monitorThread;
         private readonly IEnumerable<IEventProcessor> _processors;
 
-        public EventProcessorQueue(IEnumerable<IEventProcessor> processors)
+        public EventQueueProcessor(IEnumerable<IEventProcessor> processors)
         {
             _processors = processors;
             _monitorThread = new Thread(MonitorThread)

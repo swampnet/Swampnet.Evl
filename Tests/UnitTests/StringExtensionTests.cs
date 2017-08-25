@@ -43,7 +43,7 @@ namespace UnitTests
         public void TestMethod1()
         {
             var processor = new MockedEventProcessor();
-            var queue = new EventProcessorQueue(new[] { processor });
+            var queue = new EventQueueProcessor(new[] { processor });
 
             queue.Enqueue(new Event()
             {

@@ -12,9 +12,9 @@ namespace Swampnet.Evl.Controllers
 	[Route("api/events")]
 	public class EventsController : Controller
 	{
-        private readonly IEventProcessorQueue _eventProcessor;
+        private readonly IEventQueueProcessor _eventProcessor;
 
-        public EventsController(IEventProcessorQueue eventProcessor)
+        public EventsController(IEventQueueProcessor eventProcessor)
         {
             _eventProcessor = eventProcessor;
         }

@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 
 namespace Swampnet.Evl.Common.Contracts
 {
-    // Pretty bad name, it's actually processing events (via an internal queue)
-    public interface IEventProcessorQueue
+    public interface IEventQueueProcessor
     {
         void Enqueue(Event evt);
         void Enqueue(IEnumerable<Event> evts);
