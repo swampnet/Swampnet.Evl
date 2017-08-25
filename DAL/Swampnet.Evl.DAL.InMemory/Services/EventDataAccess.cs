@@ -14,7 +14,7 @@ namespace Swampnet.Evl.DAL.InMemory.Services
     {
         public async Task<Guid> CreateAsync(Application app, Event evt)
         {
-            using(var context = new EventContext())
+            using(var context = EventContext.Create())
             {
                 var internalEvent = Convert.ToInternalEvent(evt);
                 internalEvent.Id = Guid.NewGuid();
@@ -28,7 +28,7 @@ namespace Swampnet.Evl.DAL.InMemory.Services
 
         public async Task<Event> ReadAsync(Guid id)
         {
-            using (var context = new EventContext())
+            using (var context = EventContext.Create())
             {
                 var evt = await context.Events.Include(e => e.Properties).SingleOrDefaultAsync(e => e.Id == id);
 
@@ -39,7 +39,7 @@ namespace Swampnet.Evl.DAL.InMemory.Services
 
         public async Task UpdateAsync(Guid id, Event evt)
         {
-            using (var context = new EventContext())
+            using (var context = EventContext.Create())
             {
                 var internalEvent = await context.Events.Include(e => e.Properties).SingleOrDefaultAsync(e => e.Id == id);
 
