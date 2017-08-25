@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Swampnet.Evl.Common;
+using Swampnet.Evl.Client;
 using Swampnet.Evl.Common.Contracts;
 
 namespace Swampnet.Evl.Actions

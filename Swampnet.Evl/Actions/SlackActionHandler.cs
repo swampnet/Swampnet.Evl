@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Swampnet.Evl.Common;
 using Serilog;
+using Swampnet.Evl.Client;
 
 namespace Swampnet.Evl.Actions
 {

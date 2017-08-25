@@ -7,6 +7,7 @@ using Swampnet.Evl.Common.Entities;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using Swampnet.Evl.Client;
 
 namespace Swampnet.Evl.DAL.InMemory.Services
 {
@@ -77,9 +78,15 @@ namespace Swampnet.Evl.DAL.InMemory.Services
             }
         }
 
-        public Task<IEnumerable<Event>> SearchAsync()
+
+        public async Task<IEnumerable<EventSummary>> SearchAsync()
         {
-            throw new NotImplementedException();
+            using (var context = EventContext.Create())
+            {
+                var events = await context.Events.OrderBy(e => e.TimestampUtc).ToArrayAsync();
+
+                return events.Select(e => Convert.ToEventSummary(e));
+            }
         }
     }
 }

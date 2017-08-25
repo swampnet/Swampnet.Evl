@@ -4,6 +4,7 @@ using Swampnet.Evl.Common;
 using Swampnet.Evl.Common.Entities;
 using Swampnet.Evl.Services;
 using Swampnet.Evl.EventProcessors;
+using Swampnet.Evl.Client;
 
 namespace UnitTests
 {

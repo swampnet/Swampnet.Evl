@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Swampnet.Evl.Common.Entities;
-using Swampnet.Evl.Common;
+using Swampnet.Evl.Client;
 
 namespace Swampnet.Evl.DAL.InMemory.Services
 {

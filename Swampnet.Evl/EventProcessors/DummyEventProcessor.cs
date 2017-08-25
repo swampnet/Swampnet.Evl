@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Swampnet.Evl.Common;
+using Swampnet.Evl.Client;
 using Serilog;
 
 namespace Swampnet.Evl.EventProcessors

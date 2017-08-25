@@ -1,5 +1,5 @@
 ﻿using Newtonsoft.Json;
-using Swampnet.Evl.Common;
+using Swampnet.Evl.Client;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;

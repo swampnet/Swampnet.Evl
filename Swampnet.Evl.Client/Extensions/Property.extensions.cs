@@ -1,8 +1,9 @@
-﻿using Swampnet.Evl.Common;
+﻿using Swampnet.Evl.Client;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
+using Swampnet.Evl.Client;
 
 namespace Swampnet.Evl
 {

@@ -89,6 +89,8 @@ namespace Swampnet.Evl.Services
                                 Log.Error(ex, ex.Message);
                             }
                         }
+
+                        _dal.UpdateAsync(eventId, evt).Wait();
                     }
                     catch (Exception ex)
                     {

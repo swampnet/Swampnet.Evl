@@ -1,4 +1,4 @@
-﻿using Swampnet.Evl.Common;
+﻿using Swampnet.Evl.Client;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -18,8 +18,8 @@ namespace Swampnet.Evl.DAL.InMemory.Entities
         public override string ToString()
         {
             return string.IsNullOrEmpty(Category)
-                ? $"{Name} = {Value}"
-                : $"[{Category}] {Name} = {Value}";
+                ? $"{Id} - {Name} = {Value}"
+                : $"{Id} - [{Category}] {Name} = {Value}";
         }
 
 

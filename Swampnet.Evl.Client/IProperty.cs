@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Swampnet.Evl.Common
+namespace Swampnet.Evl.Client
 {
-	public interface IProperty
+    public interface IProperty
 	{
 		string Category { get; set; }
 

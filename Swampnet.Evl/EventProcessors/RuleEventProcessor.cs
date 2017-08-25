@@ -7,6 +7,7 @@ using Swampnet.Evl.Common;
 using System.Diagnostics;
 using Swampnet.Evl.Contracts;
 using Swampnet.Evl.Services;
+using Swampnet.Evl.Client;
 
 namespace Swampnet.Evl.EventProcessors
 {

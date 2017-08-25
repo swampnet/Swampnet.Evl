@@ -1,9 +1,9 @@
-﻿using Swampnet.Evl.Common;
-using Swampnet.Evl.DAL.InMemory.Entities;
+﻿using Swampnet.Evl.DAL.InMemory.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
+using Swampnet.Evl.Client;
 
 namespace Swampnet.Evl.DAL.InMemory
 {
@@ -44,6 +44,17 @@ namespace Swampnet.Evl.DAL.InMemory
                     TimestampUtc = evt.TimestampUtc,
                     Properties = evt.Properties?.Select(p => ToProperty(p)).ToList()
                 };
+        }
+
+        internal static EventSummary ToEventSummary(InternalEvent evt)
+        {
+            return new EventSummary()
+            {
+                Id = evt.Id,
+                Category = evt.Category,
+                Summary = evt.Summary,
+                TimestampUtc = evt.TimestampUtc
+            };
         }
 
         internal static Property ToProperty(IProperty property)

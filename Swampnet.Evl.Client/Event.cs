@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Swampnet.Evl.Common
+namespace Swampnet.Evl.Client
 {
     /// <summary>
     /// An event
     /// </summary>
 	public class Event
 	{
-		/// <summary>
-		/// Event timestamp (UTC)
-		/// </summary>
-		public DateTime TimestampUtc { get; set; }
+        /// <summary>
+        /// Event timestamp (UTC)
+        /// </summary>
+        public DateTime TimestampUtc { get; set; }
 
         /// <summary>
         /// Event category

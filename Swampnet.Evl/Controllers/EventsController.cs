@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Serilog;
+using Swampnet.Evl.Client;
 using Swampnet.Evl.Common;
 using Swampnet.Evl.Common.Contracts;
 using System;
@@ -21,8 +22,29 @@ namespace Swampnet.Evl.Controllers
             _eventProcessor = eventProcessor;
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Get()
+        {
+            var events = await _eventDal.SearchAsync();
 
-		[HttpPost]
+            return Ok(events);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get(Guid id)
+        {
+            var evt = await _eventDal.ReadAsync(id);
+
+            if(evt == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(evt);
+        }
+
+
+        [HttpPost]
 		public async Task<IActionResult> Post([FromBody] Event evt)
 		{
 			try

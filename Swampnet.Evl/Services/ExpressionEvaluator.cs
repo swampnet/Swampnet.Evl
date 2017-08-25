@@ -2,6 +2,7 @@
 using Swampnet.Evl.Common;
 using Swampnet.Evl.Common.Entities;
 using System.Text.RegularExpressions;
+using Swampnet.Evl.Client;
 
 namespace Swampnet.Evl.Services
 {

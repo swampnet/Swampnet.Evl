@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using Serilog.Events;
 using Serilog.Configuration;
-using Swampnet.Evl.Common;
+using Swampnet.Evl.Client;
 using System.Linq;
 using System.Threading.Tasks;
 using Swampnet.Evl;

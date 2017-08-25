@@ -5,6 +5,7 @@ using System.Text;
 using Swampnet.Evl.Common.Contracts;
 using Swampnet.Evl.Common.Entities;
 using Swampnet.Evl.Actions;
+using Swampnet.Evl.Client;
 
 namespace UnitTests
 {

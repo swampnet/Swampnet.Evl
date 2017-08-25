@@ -1,4 +1,5 @@
-﻿using Swampnet.Evl.Common;
+﻿using Swampnet.Evl.Client;
+using Swampnet.Evl.Common;
 using Swampnet.Evl.Common.Entities;
 using System;
 using System.Collections.Generic;
@@ -33,6 +34,6 @@ namespace Swampnet.Evl.Common.Contracts
         Task UpdateAsync(Guid id, Event evt);
 
 
-        Task<IEnumerable<Event>> SearchAsync(/* Criteria */);
+        Task<IEnumerable<EventSummary>> SearchAsync(/* Criteria */);
     }
 }
