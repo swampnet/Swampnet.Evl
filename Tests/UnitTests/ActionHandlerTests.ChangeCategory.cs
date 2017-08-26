@@ -3,6 +3,7 @@ using Swampnet.Evl;
 using Swampnet.Evl.Actions;
 using Swampnet.Evl.Client;
 using Swampnet.Evl.Common;
+using Swampnet.Evl.Common.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -22,10 +23,14 @@ namespace UnitTests
 
             changeCategoryAction.Apply(
                 evt, 
-                new[] 
-                {
-                    new Property("category", expected)
-                });
+				new ActionDefinition()
+				{
+					Properties = new[]
+					{
+						new Property("category", expected)
+					}
+				},
+				new Rule() { Name = "Mocked Rule" });
 
             var actual = evt.Category;
 
@@ -41,14 +46,18 @@ namespace UnitTests
 
             var changeCategoryAction = new ChangeCategoryActionHandler();
 
-            changeCategoryAction.Apply(
-                evt,
-                new[]
-                {
-                    new Property("some-unrelated-property", "some unrelated value")
-                });
+			changeCategoryAction.Apply(
+				evt,
+				new ActionDefinition()
+				{
+					Properties = new[]
+					{
+						new Property("some-unrelated-property", "some unrelated value")
+					}
+				},
+				new Rule() { Name = "Mocked Rule" });
 
-            var actual = evt.Category;
+			var actual = evt.Category;
 
             Assert.AreEqual(expected, actual);
         }
@@ -61,11 +70,15 @@ namespace UnitTests
 
             var changeCategoryAction = new ChangeCategoryActionHandler();
 
-            changeCategoryAction.Apply(
-                evt,
-                null);
+			changeCategoryAction.Apply(
+				evt,
+				new ActionDefinition()
+				{
+					Properties = null
+				},
+				new Rule() { Name = "Mocked Rule" });
 
-            var actual = evt.Category;
+			var actual = evt.Category;
 
             Assert.AreEqual(expected, actual);
         }

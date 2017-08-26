@@ -17,7 +17,7 @@ namespace Swampnet.Evl
     public static class Api
     {
         private static string _apiKey = "29016692-9A8D-47CC-82A0-75C6BDB7D0DE";
-        private static string _endpoint = "http://localhost:53831/api/events";
+        private static string _endpoint = "http://localhost:5000/api/events";
 
         public static string ApiKey { get => _apiKey; set => _apiKey = value; }
         public static string Endpoint { get => _endpoint; set => _endpoint = value; }

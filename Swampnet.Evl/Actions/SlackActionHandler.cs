@@ -6,14 +6,15 @@ using System.Threading.Tasks;
 using Swampnet.Evl.Common;
 using Serilog;
 using Swampnet.Evl.Client;
+using Swampnet.Evl.Common.Entities;
 
 namespace Swampnet.Evl.Actions
 {
     class SlackActionHandler : IActionHandler
     {
-        public void Apply(Event evt, IEnumerable<IProperty> properties)
+        public void Apply(Event evt, ActionDefinition actionDefinition, Rule rule)
         {
-            var channel = properties.StringValue("channel");
+            var channel = actionDefinition.Properties.StringValue("channel");
 
             if (!channel.Any())
             {

@@ -4,6 +4,7 @@ using Swampnet.Evl;
 using Swampnet.Evl.Actions;
 using Swampnet.Evl.Common;
 using Swampnet.Evl.Client;
+using Swampnet.Evl.Common.Entities;
 
 namespace UnitTests
 {
@@ -22,10 +23,14 @@ namespace UnitTests
 
             addPropertyAction.Apply(
                 evt, 
-                new[] 
-                {
-                    new Property("new-property", "new property value")
-                });
+				new ActionDefinition()
+				{
+					Properties = new[]
+					{
+						new Property("new-property", "new property value")
+					}
+				},
+				new Rule() { Name = "Mocked Rule"});
 
             // Assert property now exists and has correct value
             Assert.IsTrue(evt.Properties.Any(p => p.Name == "new-property"));
@@ -45,11 +50,15 @@ namespace UnitTests
 
             addPropertyAction.Apply(
                 evt,
-                new[]
-                {
-                    new Property("new-property", "new property value"),
-                    new Property("new-property-02", "new property value 02")
-                });
+				new ActionDefinition()
+				{
+					Properties = new[]
+					{
+						new Property("new-property", "new property value"),
+						new Property("new-property-02", "new property value 02")
+					}
+				},
+				new Rule() { Name = "Mocked Rule" });
 
             // Assert property now exists and has correct value
             Assert.IsTrue(evt.Properties.Any(p => p.Name == "new-property"));
@@ -67,15 +76,19 @@ namespace UnitTests
 
             var addPropertyAction = new AddPropertyActionHandler();
 
-            addPropertyAction.Apply(
-                evt,
-                new[]
-                {
-                    new Property("new-property", "new property value")
-                });
+			addPropertyAction.Apply(
+				evt,
+				new ActionDefinition()
+				{
+					Properties = new[]
+					{
+						new Property("new-property", "new property value")
+					}
+				},
+				new Rule() { Name = "Mocked Rule" });
 
-            // Assert property now exists and has correct value
-            Assert.IsTrue(evt.Properties.Any(p => p.Name == "new-property"));
+			// Assert property now exists and has correct value
+			Assert.IsTrue(evt.Properties.Any(p => p.Name == "new-property"));
             Assert.AreEqual(evt.Properties.StringValue("new-property"), "new property value");
         }
 
@@ -87,12 +100,16 @@ namespace UnitTests
 
             var addPropertyAction = new AddPropertyActionHandler();
 
-            addPropertyAction.Apply(
-                evt,
-                null);
+			addPropertyAction.Apply(
+				evt,
+				new ActionDefinition()
+				{
+					Properties = null
+				},
+				new Rule() { Name = "Mocked Rule" });
 
-            // Make sure we didn't add any properties
-            Assert.AreEqual(evt.Properties.Count, propertyCount);
+			// Make sure we didn't add any properties
+			Assert.AreEqual(evt.Properties.Count, propertyCount);
         }
 
         [TestMethod]
@@ -103,12 +120,16 @@ namespace UnitTests
 
             var addPropertyAction = new AddPropertyActionHandler();
 
-            addPropertyAction.Apply(
-                evt,
-                null);
+			addPropertyAction.Apply(
+				evt,
+				new ActionDefinition()
+				{
+					Properties = new Property[0]
+				},
+				new Rule() { Name = "Mocked Rule" });
 
-            // Make sure we didn't add any properties
-            Assert.AreEqual(evt.Properties.Count, propertyCount);
+			// Make sure we didn't add any properties
+			Assert.AreEqual(evt.Properties.Count, propertyCount);
         }
     }
 }

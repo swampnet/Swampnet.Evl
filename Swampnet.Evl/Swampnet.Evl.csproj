@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
+    <UserSecretsId>355f8b3c-fe44-4d1f-9100-40b20862c207</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -23,6 +24,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DAL\Swampnet.Evl.DAL.InMemory\Swampnet.Evl.DAL.InMemory.csproj" />
+    <ProjectReference Include="..\Plugins\Swampnet.Evl.Plugins.Email\Swampnet.Evl.Plugins.Email.csproj" />
     <ProjectReference Include="..\Swampnet.Evl.Client\Swampnet.Evl.Client.csproj" />
     <ProjectReference Include="..\Swampnet.Evl.Common\Swampnet.Evl.Common.csproj" />
   </ItemGroup>

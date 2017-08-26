@@ -5,14 +5,15 @@ using System.Linq;
 using System.Threading.Tasks;
 using Swampnet.Evl.Common;
 using Swampnet.Evl.Client;
+using Swampnet.Evl.Common.Entities;
 
 namespace Swampnet.Evl.Actions
 {
     class ChangeCategoryActionHandler : IActionHandler
     {
-        public void Apply(Event evt, IEnumerable<IProperty> properties)
+        public void Apply(Event evt, ActionDefinition actionDefinition, Rule rule)
         {
-            var cat = properties.StringValue("category");
+            var cat = actionDefinition.Properties.StringValue("category");
             if(!string.IsNullOrEmpty(cat))
             {
                 evt.Category = cat;

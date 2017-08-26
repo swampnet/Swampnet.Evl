@@ -13,18 +13,18 @@ namespace Swampnet.Evl.Controllers
 	public class EventsController : Controller
 	{
         private readonly IEventQueueProcessor _eventProcessor;
-        private readonly IEventDataAccess _eventDal;
+        private readonly IEventDataAccess _dal;
 
-        public EventsController(IEventDataAccess eventDal, IEventQueueProcessor eventProcessor)
+        public EventsController(IEventDataAccess dal, IEventQueueProcessor eventProcessor)
         {
-            _eventDal = eventDal;
+            _dal = dal;
             _eventProcessor = eventProcessor;
         }
 
         [HttpGet]
         public async Task<IActionResult> Get([FromQuery] EventSearchCriteria criteria)
         {
-            var events = await _eventDal.SearchAsync(criteria);
+            var events = await _dal.SearchAsync(criteria);
 
             return Ok(events);
         }
@@ -32,7 +32,7 @@ namespace Swampnet.Evl.Controllers
         [HttpGet("{id}", Name = "Details")]
         public async Task<IActionResult> Get(Guid id)
         {
-            var evt = await _eventDal.ReadAsync(id);
+            var evt = await _dal.ReadAsync(id);
 
             if(evt == null)
             {
@@ -59,7 +59,7 @@ namespace Swampnet.Evl.Controllers
 
                 // @TODO: Auth
 
-                var id = await _eventDal.CreateAsync(null, evt);
+                var id = await _dal.CreateAsync(null, evt);
 
                 _eventProcessor.Enqueue(id);
 
@@ -98,7 +98,7 @@ namespace Swampnet.Evl.Controllers
                 Parallel.ForEach(evts, async evt =>
                 {
                     evt.Properties.AddRange(Request.CommonProperties());
-                    var id = await _eventDal.CreateAsync(null, evt);
+                    var id = await _dal.CreateAsync(null, evt);
                     lock (ids)
                     {
                         ids.Add(id);

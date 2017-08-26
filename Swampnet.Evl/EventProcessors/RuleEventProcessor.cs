@@ -52,7 +52,7 @@ namespace Swampnet.Evl.EventProcessors
 
                                 if (_actionHandlers.ContainsKey(key))
                                 {
-                                    _actionHandlers[key].Apply(evt, action.Properties);
+                                    _actionHandlers[key].Apply(evt, action, rule);
                                     evt.Properties.Add(new Property("Internal", "ActionApplied", key));
                                 }
                                 else

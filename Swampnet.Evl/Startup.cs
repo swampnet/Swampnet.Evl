@@ -12,6 +12,7 @@ using Swampnet.Evl.Common.Contracts;
 using Swampnet.Evl.Services;
 using Swampnet.Evl.DAL.InMemory;
 using Swampnet.Evl.Contracts;
+using Swampnet.Evl.Plugins.Email;
 
 namespace Swampnet.Evl
 {
@@ -43,11 +44,14 @@ namespace Swampnet.Evl
                 services.AddSingleton(typeof(IEventProcessor), eventProcessor);
             }
 
-            // Action Handlers
-            foreach (var actionHandler in AppDomain.CurrentDomain.GetAssemblies().AllOfType<IActionHandler>())
-            {
-                services.AddSingleton(typeof(IActionHandler), actionHandler);
-            }
+			services.AddShizzleWizzle();
+
+			// Action Handlers
+			foreach (var actionHandler in AppDomain.CurrentDomain.GetAssemblies().AllOfType<IActionHandler>())
+			{
+				services.AddSingleton(typeof(IActionHandler), actionHandler);
+			}
+
 
             // Add framework services.  
             services.AddMvc().AddJsonOptions(options => {
