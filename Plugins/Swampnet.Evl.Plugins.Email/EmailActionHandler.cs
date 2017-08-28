@@ -11,12 +11,20 @@ using MimeKit;
 using MailKit.Net.Smtp;
 using Swampnet.Evl.Common.Entities;
 using Microsoft.Extensions.Configuration;
+using System.IO;
+using System.Reflection;
+using System.Text;
+using System.Xml.Xsl;
+using System.Xml;
+using System.Xml.Serialization;
+using System.Xml.Linq;
 
 namespace Swampnet.Evl.Plugins.Email
 {
 	/*
 		Configuration:
 
+		- Application settings
 		{
 			"email": {
 				"default": {
@@ -32,12 +40,21 @@ namespace Swampnet.Evl.Plugins.Email
 			}
 		}
 		 
-	*/
 
+		- Rule properties:
+		to
+		cc
+		bcc
+		from-address
+		from-name
+		host
+		port
+		usr
+		pwd
+	*/
 
 	class EmailActionHandler : IActionHandler
 	{
-		private const string _defaultFrom = "evl@theswamp.co.uk";
 		private readonly IConfiguration _cfg;
 
 		public EmailActionHandler(IConfiguration cfg)
@@ -45,9 +62,10 @@ namespace Swampnet.Evl.Plugins.Email
 			_cfg = cfg;
 		}
 
-		// @TODO: Figure out how to register it with te DI cleanly
 		// @TODO: Add some kind of audit against the event to show we sent an email and to who (and what rule triggered it).
 		// @TODO: Apply should really be async
+		// @TODO: Actually, we really need the event ID as well (So we can reference it in the email template)
+		// @TODO: Need a way of allowing ActionHandlers to set up any DI stuff required...
 		public void Apply(Event evt, ActionDefinition actionDefinition, Rule rule)
 		{
 			var to = actionDefinition.Properties.StringValues("to");
@@ -76,7 +94,7 @@ namespace Swampnet.Evl.Plugins.Email
 			{
 				throw new ArgumentException("TO Parameter missing");
 			}
-
+			
 			var message = new MimeMessage();
 			message.From.Add(string.IsNullOrEmpty(fromName) ? new MailboxAddress(from) : new MailboxAddress(fromName, from));
 			foreach(var x in to)
@@ -92,12 +110,20 @@ namespace Swampnet.Evl.Plugins.Email
 				message.Bcc.Add(new MailboxAddress(x));
 			}
 
-			message.Subject = $"'{rule.Name}' triggered at {evt.TimestampUtc}";
+			var template = LoadResource("Swampnet.Evl.Plugins.Email.default.template.xml");
 
-			// @TODO: Need a way better way of doing this (especially. considering Summary might have stuff that needs encoding for html.)
+
+			var transformed = Transform(ToXmlString(evt), template);
+
+			var doc = XDocument.Parse(transformed);
+			var subject = doc.Element("email").Element("subject");
+			var html = doc.Element("email").Element("html");
+
+			message.Subject = subject.Value.Trim();
+
 			message.Body = new TextPart("html")
 			{
-				Text = "<html><body><h1>" + evt.Summary + "</h1></body></html>"
+				Text = html.ToString()
 			};
 
 			using (var client = new SmtpClient())
@@ -115,14 +141,79 @@ namespace Swampnet.Evl.Plugins.Email
 				client.Disconnect(true);
 			}
 		}
-	}
 
 
-	public static class Extensions
-	{
-		public static void AddShizzleWizzle(this IServiceCollection services)
+		private static string LoadResource(string name)
 		{
-			//services.AddSingleton<IActionHandler, EmailActionHandler>();
+			var assembly = Assembly.GetExecutingAssembly();
+			var resourceStream = assembly.GetManifestResourceStream(name);
+
+			using (var reader = new StreamReader(resourceStream, Encoding.UTF8))
+			{
+				return reader.ReadToEnd();
+			}
 		}
+
+		private static string Transform(string xml, string xslt)
+		{
+			string transformed = null;
+
+			var transform = new XslCompiledTransform();
+			using (var reader = XmlReader.Create(new StringReader(xslt)))
+			{
+				transform.Load(reader);
+			}
+
+			using (var results = new StringWriter())
+			{
+				using (var reader = XmlReader.Create(new StringReader(xml)))
+				{
+					transform.Transform(reader, null, results);
+					transformed = results.ToString();
+				}
+			}
+
+			return transformed;
+		}
+
+
+		/// <summary>
+		/// Serialize to xml
+		/// </summary>
+		/// <param name="o"></param>
+		/// <returns></returns>
+		public static string ToXmlString(object o)
+		{
+			try
+			{
+				string xml = o as string;
+
+				if (xml == null)
+				{
+					if (o != null)
+					{
+						XmlSerializer s = new XmlSerializer(o.GetType());
+
+						using (var sw = new StringWriter())
+						{
+							s.Serialize(sw, o);
+							xml = sw.ToString();
+						}
+					}
+					else
+					{
+						xml = "<null/>";
+					}
+				}
+
+				return xml;
+			}
+			catch (Exception ex)
+			{
+				ex.AddData("o", o == null ? "null" : o.GetType().Name);
+				throw;
+			}
+		}
+
 	}
 }

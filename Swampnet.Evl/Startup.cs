@@ -13,6 +13,7 @@ using Swampnet.Evl.Services;
 using Swampnet.Evl.DAL.InMemory;
 using Swampnet.Evl.Contracts;
 using Swampnet.Evl.Plugins.Email;
+using Scrutor;
 
 namespace Swampnet.Evl
 {
@@ -38,19 +39,18 @@ namespace Swampnet.Evl
 
             services.AddInMemoryDataProvider();
 
-            // Event Processors
-            foreach (var eventProcessor in AppDomain.CurrentDomain.GetAssemblies().AllOfType<IEventProcessor>())
-            {
-                services.AddSingleton(typeof(IEventProcessor), eventProcessor);
-            }
+			services.Scan(scan => scan
+				.FromApplicationDependencies()
 
-			services.AddShizzleWizzle();
+				.AddClasses(classes => classes.AssignableTo<IEventProcessor>())
+				.As<IEventProcessor>()
+				.WithSingletonLifetime()
 
-			// Action Handlers
-			foreach (var actionHandler in AppDomain.CurrentDomain.GetAssemblies().AllOfType<IActionHandler>())
-			{
-				services.AddSingleton(typeof(IActionHandler), actionHandler);
-			}
+				.AddClasses(classes => classes.AssignableTo<IActionHandler>())
+				.As<IActionHandler>()
+				.WithSingletonLifetime()
+			);
+
 
 
             // Add framework services.  

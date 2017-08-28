@@ -8,6 +8,7 @@ using System.Diagnostics;
 using Swampnet.Evl.Contracts;
 using Swampnet.Evl.Services;
 using Swampnet.Evl.Client;
+using Serilog;
 
 namespace Swampnet.Evl.EventProcessors
 {
@@ -57,7 +58,8 @@ namespace Swampnet.Evl.EventProcessors
                                 }
                                 else
                                 {
-                                    // @TODO: We should throw an exception here shouldn't we?
+									// @TODO: We should throw an exception here shouldn't we?
+									Log.Error("Can't find handler for action: {action}");
                                 }
                             }
 

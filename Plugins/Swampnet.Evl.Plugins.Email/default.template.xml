@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xsl:stylesheet version="1.0"
+				xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+				xmlns:msxsl="urn:schemas-microsoft-com:xslt"
+				xmlns:parser="urn:parser"
+				xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1"
+				exclude-result-prefixes="msxsl">
+	<xsl:output method="xml" indent="yes" />
+	<xsl:template match="/">
+		<email>
+			<subject>
+				Event Notification
+			</subject>
+			<html>
+				<body>
+					Please find below details of an event to which you are subscribed<br/><br/>
+					Type: <xsl:value-of select="/Event/Category" /><br/>
+					Summary: <xsl:value-of select="/Event/Summary" /><br/>
+					<table>
+						<xsl:for-each select="/Event/Properties/Property">
+							<tr>
+								<td>
+									<xsl:value-of select="Name"/>
+								</td>
+								<td>
+									<xsl:value-of select="Value"/>
+								</td>
+							</tr>
+						</xsl:for-each>
+					</table>
+				</body>
+			</html>
+		</email>
+	</xsl:template>
+</xsl:stylesheet>
