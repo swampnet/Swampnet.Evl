@@ -23,6 +23,8 @@ namespace Swampnet.Evl.DAL.InMemory.Services
 
                 await context.SaveChangesAsync();
 
+                evt.Id = internalEvent.Id;
+
                 return internalEvent.Id;
             }
         }

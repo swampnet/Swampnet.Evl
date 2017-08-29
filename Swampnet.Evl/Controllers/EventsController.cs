@@ -61,8 +61,6 @@ namespace Swampnet.Evl.Controllers
 
                 var id = await _dal.CreateAsync(null, evt);
 
-                evt.Id = id;
-
                 _eventProcessor.Enqueue(id);
 
 				return CreatedAtRoute("Details", new { id = id }, evt);

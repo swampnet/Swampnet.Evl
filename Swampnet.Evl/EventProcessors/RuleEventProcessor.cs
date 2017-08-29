@@ -51,15 +51,23 @@ namespace Swampnet.Evl.EventProcessors
                             {
                                 var key = action.Type.ToLower();
 
-                                if (_actionHandlers.ContainsKey(key))
+                                try
                                 {
+                                    if (!_actionHandlers.ContainsKey(key))
+                                    {
+                                        throw new InvalidOperationException($"Unknown action: {action.Type}");
+                                    }
+
                                     _actionHandlers[key].Apply(evt, action, rule);
-                                    evt.Properties.Add(new Property("Internal", "ActionApplied", key));
+
+                                    evt.Properties.Add(new Property("Internal", "ActionApplied", action.Type));
                                 }
-                                else
+                                catch (Exception ex)
                                 {
-									// @TODO: We should throw an exception here shouldn't we?
-									Log.Error("Can't find handler for action: {action}");
+                                    ex.AddData("Action", action.Type);
+                                    Log.Error(ex, ex.Message);
+
+                                    evt.Properties.Add(new Property("Internal", "ActionFailed", action.Type + $" ({ex.Message})"));
                                 }
                             }
 

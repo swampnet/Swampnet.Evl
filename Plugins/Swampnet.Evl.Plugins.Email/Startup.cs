@@ -10,8 +10,7 @@ namespace Swampnet.Evl.Plugins.Email
     {
         public static void AddEmailActionHandler(this IServiceCollection services)
         {
-            services.AddSingleton<IActionHandler, EmailActionHandler>();
-
+            services.AddTransient<IActionHandler, EmailActionHandler>();
             services.AddTransient<ITemplateLoader, TemplateLoader>();
             services.AddTransient<ITemplateTransformer, TemplateTransformer>();
         }

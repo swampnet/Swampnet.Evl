@@ -13,9 +13,9 @@ namespace Swampnet.Evl
     {
         public static void AddDefaultActionHandlers(this IServiceCollection services)
         {
-            services.AddSingleton<IActionHandler, AddPropertyActionHandler>();
-            services.AddSingleton<IActionHandler, ChangeCategoryActionHandler>();
-            services.AddSingleton<IActionHandler, DebugActionHandler>();
+            services.AddTransient<IActionHandler, AddPropertyActionHandler>();
+            services.AddTransient<IActionHandler, ChangeCategoryActionHandler>();
+            services.AddTransient<IActionHandler, DebugActionHandler>();
         }
 
         public static void AddDefaultEventProcessors(this IServiceCollection services)
