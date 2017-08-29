@@ -39,6 +39,7 @@ namespace Swampnet.Evl.DAL.InMemory
                 ? null 
                 : new Event()
                 {
+                    Id = evt.Id,
                     Category = evt.Category,
                     Summary = evt.Summary,
                     TimestampUtc = evt.TimestampUtc,

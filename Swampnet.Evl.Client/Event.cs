@@ -9,6 +9,11 @@ namespace Swampnet.Evl.Client
 	public class Event
 	{
         /// <summary>
+        /// Event Id
+        /// </summary>
+        public Guid? Id { get; set; }
+
+        /// <summary>
         /// Event timestamp (UTC)
         /// </summary>
         public DateTime TimestampUtc { get; set; }
@@ -79,17 +84,4 @@ namespace Swampnet.Evl.Client
                 : $"[{Category}] {Name} = {Value}";
         }
     }
-
-
-	///// <summary>
-	///// Event summary - Push this down to client for 'master' view.
-	///// </summary>
-	//public class EventSummary
-	//{
-	//	public long Id { get; set; }
-	//	public DateTime TimestampUtc { get; set; }
-	//	public string Category { get; set; }
-	//	public string Summary { get; set; }
-	//	public string ApplicationName { get; set; }
-	//}
 }

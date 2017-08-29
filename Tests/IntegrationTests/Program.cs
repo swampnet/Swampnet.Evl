@@ -17,8 +17,8 @@ namespace IntegrationTests
                 .WriteTo.EvlSink()
                 .CreateLogger();
 
-            LogException();
-            //RaiseEvents();
+            //LogException();
+            RaiseEvents();
 
             Console.WriteLine("key");
             Console.ReadKey(true);
