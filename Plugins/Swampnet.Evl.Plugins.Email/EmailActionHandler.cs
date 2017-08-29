@@ -29,7 +29,7 @@ namespace Swampnet.Evl.Plugins.Email
 			"email": {
 				"default": {
 					"from": "evl",
-					"address": "evl@theswamp.co.cuk"
+					"address": "evl@theswamp.co.uk"
 				},
 				"smtp": {
 					"host": "smtp.sendgrid.net",
@@ -56,16 +56,21 @@ namespace Swampnet.Evl.Plugins.Email
 	class EmailActionHandler : IActionHandler
 	{
 		private readonly IConfiguration _cfg;
+        private readonly ITemplateLoader _templateLoader;
+        private readonly ITemplateTransformer _transformer;
 
-		public EmailActionHandler(IConfiguration cfg)
+        public EmailActionHandler(IConfiguration cfg, ITemplateLoader templateLoader, ITemplateTransformer transformer)
 		{
 			_cfg = cfg;
+            _templateLoader = templateLoader;
+            _transformer = transformer;
 		}
+
 
 		// @TODO: Add some kind of audit against the event to show we sent an email and to who (and what rule triggered it).
 		// @TODO: Apply should really be async
 		// @TODO: Actually, we really need the event ID as well (So we can reference it in the email template)
-		// @TODO: Need a way of allowing ActionHandlers to set up any DI stuff required...
+        //          - Sooner or later you're just going to have to have the ID on the event itself...
 		public void Apply(Event evt, ActionDefinition actionDefinition, Rule rule)
 		{
 			var to = actionDefinition.Properties.StringValues("to");
@@ -110,12 +115,9 @@ namespace Swampnet.Evl.Plugins.Email
 				message.Bcc.Add(new MailboxAddress(x));
 			}
 
-			var template = LoadResource("Swampnet.Evl.Plugins.Email.default.template.xml");
+            var template = _templateLoader.Load();
+            var doc = _transformer.Transform(evt, template);
 
-
-			var transformed = Transform(ToXmlString(evt), template);
-
-			var doc = XDocument.Parse(transformed);
 			var subject = doc.Element("email").Element("subject");
 			var html = doc.Element("email").Element("html");
 
@@ -141,79 +143,5 @@ namespace Swampnet.Evl.Plugins.Email
 				client.Disconnect(true);
 			}
 		}
-
-
-		private static string LoadResource(string name)
-		{
-			var assembly = Assembly.GetExecutingAssembly();
-			var resourceStream = assembly.GetManifestResourceStream(name);
-
-			using (var reader = new StreamReader(resourceStream, Encoding.UTF8))
-			{
-				return reader.ReadToEnd();
-			}
-		}
-
-		private static string Transform(string xml, string xslt)
-		{
-			string transformed = null;
-
-			var transform = new XslCompiledTransform();
-			using (var reader = XmlReader.Create(new StringReader(xslt)))
-			{
-				transform.Load(reader);
-			}
-
-			using (var results = new StringWriter())
-			{
-				using (var reader = XmlReader.Create(new StringReader(xml)))
-				{
-					transform.Transform(reader, null, results);
-					transformed = results.ToString();
-				}
-			}
-
-			return transformed;
-		}
-
-
-		/// <summary>
-		/// Serialize to xml
-		/// </summary>
-		/// <param name="o"></param>
-		/// <returns></returns>
-		public static string ToXmlString(object o)
-		{
-			try
-			{
-				string xml = o as string;
-
-				if (xml == null)
-				{
-					if (o != null)
-					{
-						XmlSerializer s = new XmlSerializer(o.GetType());
-
-						using (var sw = new StringWriter())
-						{
-							s.Serialize(sw, o);
-							xml = sw.ToString();
-						}
-					}
-					else
-					{
-						xml = "<null/>";
-					}
-				}
-
-				return xml;
-			}
-			catch (Exception ex)
-			{
-				ex.AddData("o", o == null ? "null" : o.GetType().Name);
-				throw;
-			}
-		}
-
 	}
 }

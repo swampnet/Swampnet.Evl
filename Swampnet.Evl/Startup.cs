@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,12 +7,10 @@ using Serilog;
 using Swashbuckle.AspNetCore.Swagger;
 using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
-using Swampnet.Evl.Common.Contracts;
 using Swampnet.Evl.Services;
 using Swampnet.Evl.DAL.InMemory;
 using Swampnet.Evl.Contracts;
 using Swampnet.Evl.Plugins.Email;
-using Scrutor;
 
 namespace Swampnet.Evl
 {
@@ -39,19 +36,13 @@ namespace Swampnet.Evl
 
             services.AddInMemoryDataProvider();
 
-			services.Scan(scan => scan
-				.FromApplicationDependencies()
+            // Add default Event Processors
+            services.AddDefaultEventProcessors();
 
-				.AddClasses(classes => classes.AssignableTo<IEventProcessor>())
-				.As<IEventProcessor>()
-				.WithSingletonLifetime()
+            // Add default Action Handlers
+            services.AddDefaultActionHandlers();
 
-				.AddClasses(classes => classes.AssignableTo<IActionHandler>())
-				.As<IActionHandler>()
-				.WithSingletonLifetime()
-			);
-
-
+            services.AddEmailActionHandler();
 
             // Add framework services.  
             services.AddMvc().AddJsonOptions(options => {
