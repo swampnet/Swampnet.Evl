@@ -9,6 +9,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Swampnet.Evl;
 using Serilog.Debugging;
+using System.Diagnostics;
 
 namespace Serilog.Sinks.Evl
 {
@@ -62,8 +63,9 @@ namespace Serilog.Sinks.Evl
 
         private readonly List<Event> _failedEvents = new List<Event>();
 
+
         // Convert Serilog LogEvent to an Evl.Event
-        private IEnumerable<Event> Convert(IEnumerable<LogEvent> source)
+        internal IEnumerable<Event> Convert(IEnumerable<LogEvent> source)
         {
             var evlEvents = new List<Event>();
 
@@ -74,11 +76,64 @@ namespace Serilog.Sinks.Evl
                 evlEvent.Summary = s.RenderMessage(_formatProvider);
                 evlEvent.TimestampUtc = s.Timestamp.UtcDateTime;
                 evlEvent.Category = s.Level.ToString();
-                evlEvent.Properties = s.Properties.Select(p => new Property(p.Key, p.Value)).ToList();
+
+                evlEvent.Properties = new List<Property>();
+                Process(evlEvent.Properties, s.Properties);
+
                 evlEvents.Add(evlEvent);
             }
 
             return evlEvents;
+        }
+
+
+        private void Process(List<Property> properties, IReadOnlyDictionary<string, LogEventPropertyValue> logEventValues)
+        {
+            foreach(var logEventValue in logEventValues)
+            {
+                var scalar = logEventValue.Value as ScalarValue;
+                if(scalar != null)
+                {
+                    properties.Add(new Property(logEventValue.Key, scalar.Value.ToString()));
+                }
+
+                var d = logEventValue.Value as DictionaryValue;
+                if(d != null)
+                {
+                    Process(properties, null, d.Elements);
+                }
+
+                var seq = logEventValue.Value as SequenceValue;
+                // @TODO: Handle SequenceValue's
+
+                var str = logEventValue.Value as StructureValue;
+                // @TODO: Handle StructureValue's
+            }
+        }
+
+
+        private void Process(List<Property> properties, string category, IReadOnlyDictionary<ScalarValue, LogEventPropertyValue> logEventValues)
+        {
+            foreach (var logEventValue in logEventValues)
+            {
+                var scalar = logEventValue.Value as ScalarValue;
+                if (scalar != null)
+                {
+                    properties.Add(new Property(category, logEventValue.Key.ToString(), scalar.Value.ToString()));
+                }
+
+                var d = logEventValue.Value as DictionaryValue;
+                if (d != null)
+                {
+                    Process(properties, logEventValue.Key.ToString(), d.Elements);
+                }
+
+                var seq = logEventValue.Value as SequenceValue;
+                // @TODO: Handle SequenceValue's
+
+                var str = logEventValue.Value as StructureValue;
+                // @TODO: Handle StructureValue's
+            }
         }
     }
 }
