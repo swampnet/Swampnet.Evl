@@ -16,7 +16,7 @@ namespace Swampnet.Evl.Actions
             var cat = actionDefinition.Properties.StringValue("category");
             if(!string.IsNullOrEmpty(cat))
             {
-                evt.Category = cat;
+                evt.Category = Enum.Parse<EventCategory>(cat, true);
             }
         }
     }

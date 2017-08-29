@@ -16,7 +16,7 @@ namespace UnitTests
             return new Event()
             {
                 Source = "source",
-                Category = "test",
+                Category = EventCategory.Information,
                 Summary = "test-summary",
                 Properties = new List<Property>(Mock.Properties())
             };

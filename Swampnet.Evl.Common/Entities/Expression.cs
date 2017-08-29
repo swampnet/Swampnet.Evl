@@ -10,17 +10,17 @@ namespace Swampnet.Evl.Common.Entities
 			Operator = RuleOperatorType.MATCH_ALL;
 		}
 
-		public Expression(RuleOperatorType op, RuleOperandType operand, string arg, string value)
+		public Expression(RuleOperatorType op, RuleOperandType operand, string arg, object value)
 			: this()
 		{
 			Operator = op;
 			Operand = operand;
 			Argument = arg;
-			Value = value;
+			Value = value?.ToString();
 		}
 
 
-		public Expression(RuleOperatorType op, RuleOperandType operand, string value)
+		public Expression(RuleOperatorType op, RuleOperandType operand, object value)
 			: this(op, operand, null, value)
 		{			
 		}

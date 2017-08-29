@@ -18,16 +18,16 @@ namespace UnitTests
             var processor = new RuleEventProcessor(
                 Mock.RuleLoader(new[]
                 {
-                    // Rule: Change 'test' category to 'test-updated'
+                    // Rule: Change 'information' category to 'debug'
                     new Rule()
                     {
-                        Expression = new Expression(RuleOperatorType.EQ, RuleOperandType.Category, "test"),
+                        Expression = new Expression(RuleOperatorType.EQ, RuleOperandType.Category, EventCategory.Information),
                         Actions = new[]
                         {
                             new ActionDefinition(
                                 "ChangeCategory", 
                                 new[] {
-                                    new Property("category", "test-updated")
+                                    new Property("category", "debug")
                                 })
                         }
                     }
@@ -35,11 +35,11 @@ namespace UnitTests
                 Mock.ActionHandlers());
 
             //
-            Assert.AreEqual("test", evt.Category);
+            Assert.AreEqual(EventCategory.Information, evt.Category);
 
             processor.Process(evt);
 
-            Assert.AreEqual("test-updated", evt.Category);
+            Assert.AreEqual(EventCategory.Debug, evt.Category);
         }
 
 
@@ -53,11 +53,11 @@ namespace UnitTests
             var processor = new RuleEventProcessor(
                 Mock.RuleLoader(new[]
                 {
-                    // Rule: If category = 'test-updated' then add a property. Note that we're relying on the next
+                    // Rule: If category = 'debug' then add a property. Note that we're relying on the next
                     //       rule to actually *change* the category to that!
                     new Rule()
                     {
-                        Expression = new Expression(RuleOperatorType.EQ, RuleOperandType.Category, "test-updated"),
+                        Expression = new Expression(RuleOperatorType.EQ, RuleOperandType.Category, EventCategory.Debug),
                         Actions = new[]
                         {
                             new ActionDefinition(
@@ -69,16 +69,16 @@ namespace UnitTests
                     },
 
 
-                    // Rule: Change 'test' category to 'test-updated'
+                    // Rule: Change 'information' category to 'debug'
                     new Rule()
                     {
-                        Expression = new Expression(RuleOperatorType.EQ, RuleOperandType.Category, "test"),
+                        Expression = new Expression(RuleOperatorType.EQ, RuleOperandType.Category, EventCategory.Information),
                         Actions = new[]
                         {
                             new ActionDefinition(
                                 "ChangeCategory",
                                 new[] {
-                                    new Property("category", "test-updated")
+                                    new Property("category", EventCategory.Debug)
                                 })
                         }
                     }
@@ -86,12 +86,12 @@ namespace UnitTests
                 Mock.ActionHandlers());
 
             //
-            Assert.AreEqual("test", evt.Category);
+            Assert.AreEqual(EventCategory.Information, evt.Category);
             Assert.IsFalse(evt.Properties.Any(p => p.Name.Equals("new-property")));
 
             processor.Process(evt);
 
-            Assert.AreEqual("test-updated", evt.Category);
+            Assert.AreEqual(EventCategory.Debug, evt.Category);
             Assert.IsTrue(evt.Properties.Any(p => p.Name.Equals("new-property")));
         }
     }

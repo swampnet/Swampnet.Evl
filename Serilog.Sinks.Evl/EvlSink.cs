@@ -72,10 +72,10 @@ namespace Serilog.Sinks.Evl
             foreach(var s in source)
             {
                 var evlEvent = new Event();
-				evlEvent.Source = "@TODO: SOURCE"; // Although, we infer that from the api-key don't we?
+				evlEvent.Source = "@TODO: SOURCE";                  // Although, we infer that from the api-key don't we?
                 evlEvent.Summary = s.RenderMessage(_formatProvider);
                 evlEvent.TimestampUtc = s.Timestamp.UtcDateTime;
-                evlEvent.Category = s.Level.ToString();
+                evlEvent.Category = Convert(s.Level);
 
                 evlEvent.Properties = new List<Property>();
                 Process(evlEvent.Properties, s.Properties);
@@ -86,6 +86,35 @@ namespace Serilog.Sinks.Evl
             return evlEvents;
         }
 
+        private EventCategory Convert(LogEventLevel level)
+        {
+            EventCategory cat = EventCategory.Information;
+
+            switch (level)
+            {
+                case LogEventLevel.Information:
+                    cat = EventCategory.Information;
+                    break;
+
+                case LogEventLevel.Fatal:
+                case LogEventLevel.Error:
+                    cat = EventCategory.Error;
+                    break;
+
+                case LogEventLevel.Debug:
+                    cat = EventCategory.Debug;
+                    break;
+
+                case LogEventLevel.Warning:
+                    cat = EventCategory.Warning;
+                    break;
+
+                default:
+                    throw new NotSupportedException($"Serilog event category {level} not supported");
+            }
+
+            return cat;
+        }
 
         private void Process(List<Property> properties, IReadOnlyDictionary<string, LogEventPropertyValue> logEventValues)
         {

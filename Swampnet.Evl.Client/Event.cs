@@ -1,8 +1,18 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using System;
 using System.Collections.Generic;
 
 namespace Swampnet.Evl.Client
 {
+    public enum EventCategory
+    {
+        Debug,
+        Information,
+        Warning,
+        Error
+    }
+
     /// <summary>
     /// An event
     /// </summary>
@@ -24,7 +34,8 @@ namespace Swampnet.Evl.Client
         /// <remarks>
         /// eg, Information, Error, Warning etc
         /// </remarks>
-		public string Category { get; set; }
+        [JsonConverter(typeof(StringEnumConverter))]
+        public EventCategory Category { get; set; }
 
         /// <summary>
         /// Summary of event

@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Swampnet.Evl.Client;
 using Swampnet.Evl.Common;
 using Swampnet.Evl.Common.Entities;
 using Swampnet.Evl.Services;
@@ -16,7 +17,7 @@ namespace UnitTests
 		public void Expression_EQ_01()
 		{
 			var evt = Mock.Event();
-			var expression = new Expression(RuleOperatorType.EQ, RuleOperandType.Category, "test");
+			var expression = new Expression(RuleOperatorType.EQ, RuleOperandType.Category, EventCategory.Information);
             var evaluator = new ExpressionEvaluator();
 
 			var expected = true;
@@ -74,7 +75,7 @@ namespace UnitTests
 		public void Expression_Regex_01()
 		{
 			var evt = Mock.Event();
-			var expression = new Expression(RuleOperatorType.REGEX, RuleOperandType.Category, "t.*t");
+			var expression = new Expression(RuleOperatorType.REGEX, RuleOperandType.Category, "inf.*ion"); // Yeah, running a regex over category is'nt a great test (it's an enum)
             var evaluator = new ExpressionEvaluator();
 
             var expected = true;
@@ -149,7 +150,7 @@ namespace UnitTests
 			{
 				Children = new List<Expression>()
 				{
-					new Expression(RuleOperatorType.EQ, RuleOperandType.Category, "test"),
+					new Expression(RuleOperatorType.EQ, RuleOperandType.Category, "information"),
 					new Expression(RuleOperatorType.NOT_EQ, RuleOperandType.Category, "test-xxx")
 				}
 			};
@@ -172,7 +173,7 @@ namespace UnitTests
 				Children = new List<Expression>()
 				{
 					new Expression(RuleOperatorType.EQ, RuleOperandType.Category, "test-xxx"),
-					new Expression(RuleOperatorType.EQ, RuleOperandType.Category, "test"),
+					new Expression(RuleOperatorType.EQ, RuleOperandType.Category, "information"),
 					new Expression(RuleOperatorType.EQ, RuleOperandType.Category, "test-yyy")
 				}
 			};
@@ -192,7 +193,7 @@ namespace UnitTests
 			{
 				Children = new List<Expression>()
 				{
-					new Expression(RuleOperatorType.EQ, RuleOperandType.Category, "test"),
+					new Expression(RuleOperatorType.EQ, RuleOperandType.Category, "information"),
 					new Expression(RuleOperatorType.MATCH_ANY)
 					{
 						Children = new List<Expression>()

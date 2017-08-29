@@ -51,7 +51,7 @@ namespace Swampnet.Evl.DAL.InMemory.Services
                     throw new NullReferenceException($"Event {id} not found");
                 }
 
-                internalEvent.Category = evt.Category;
+                internalEvent.Category = evt.Category.ToString();
                 internalEvent.Summary = evt.Summary;
                 internalEvent.TimestampUtc = evt.TimestampUtc; // Not sure we should allow this
 

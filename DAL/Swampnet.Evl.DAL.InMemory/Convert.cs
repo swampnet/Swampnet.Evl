@@ -15,7 +15,7 @@ namespace Swampnet.Evl.DAL.InMemory
                 ? null
                 : new InternalEvent()
                 {
-                    Category = evt.Category,
+                    Category = evt.Category.ToString(),
                     Summary = evt.Summary,
                     TimestampUtc = evt.TimestampUtc,
                     Properties = evt.Properties?.Select(p => ToInternalProperty(p)).ToList()
@@ -40,7 +40,7 @@ namespace Swampnet.Evl.DAL.InMemory
                 : new Event()
                 {
                     Id = evt.Id,
-                    Category = evt.Category,
+                    Category = Enum.Parse<EventCategory>(evt.Category, true),
                     Summary = evt.Summary,
                     TimestampUtc = evt.TimestampUtc,
                     Properties = evt.Properties?.Select(p => ToProperty(p)).ToList()

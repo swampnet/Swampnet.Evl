@@ -17,7 +17,7 @@ namespace UnitTests
         public void Action_ChangeCategory()
         {
             var evt = Mock.Event();
-            var expected = "new-category";
+            var expected = EventCategory.Warning;
 
             var changeCategoryAction = new ChangeCategoryActionHandler();
 

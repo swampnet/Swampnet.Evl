@@ -65,7 +65,7 @@ namespace Swampnet.Evl.Services
             switch (expression.Operand)
             {
                 case RuleOperandType.Category:
-                    op = evt.Category;
+                    op = evt.Category.ToString();
                     break;
 
                 case RuleOperandType.Source:
