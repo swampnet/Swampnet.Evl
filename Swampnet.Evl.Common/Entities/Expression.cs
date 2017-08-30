@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using System.Collections.Generic;
 
 namespace Swampnet.Evl.Common.Entities
 {
@@ -32,11 +34,19 @@ namespace Swampnet.Evl.Common.Entities
 		}
 
 
-		public RuleOperatorType	Operator { get; set; }
-		public RuleOperandType Operand { get; set; }
-		public string Argument { get; set; }	 // eg, property name
-		public string Value { get; set; }
-		public List<Expression> Children { get; set; }
+        [JsonConverter(typeof(StringEnumConverter))]
+        public RuleOperatorType	Operator { get; set; }
+
+        [JsonConverter(typeof(StringEnumConverter))]
+        public RuleOperandType Operand { get; set; }
+
+		public string Argument { get; set; }     // eg, property name
+
+        public string Value { get; set; }
+
+        public List<Expression> Children { get; set; }
+
+        [JsonIgnore]
         public bool IsContainer => Operator == RuleOperatorType.MATCH_ALL || Operator == RuleOperatorType.MATCH_ANY;
 
         public override string ToString()

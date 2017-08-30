@@ -6,6 +6,7 @@ using Swampnet.Evl.Common.Contracts;
 using Swampnet.Evl.Common.Entities;
 using Swampnet.Evl.Actions;
 using Swampnet.Evl.Client;
+using System.Threading.Tasks;
 
 namespace UnitTests
 {
@@ -64,9 +65,34 @@ namespace UnitTests
                 _rules = rules;
             }
 
-            public IEnumerable<Rule> Load(Application app)
+            public Task CreateAsync(Rule rule)
             {
-                return _rules;
+                throw new NotImplementedException();
+            }
+
+            public Task DeleteAsync(Guid id)
+            {
+                throw new NotImplementedException();
+            }
+
+            public Task<Rule> LoadAsync(Guid id)
+            {
+                throw new NotImplementedException();
+            }
+
+            public Task<IEnumerable<Rule>> LoadAsync(Application app)
+            {
+                return Task.Run(() => _rules);
+            }
+
+            public Task<IEnumerable<RuleSummary>> SearchAsync()
+            {
+                throw new NotImplementedException();
+            }
+
+            public Task UpdateAsync(Rule rule)
+            {
+                throw new NotImplementedException();
             }
         }
     }

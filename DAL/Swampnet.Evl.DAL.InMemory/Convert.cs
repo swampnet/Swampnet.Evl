@@ -4,11 +4,13 @@ using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 using Swampnet.Evl.Client;
+using Swampnet.Evl.Common.Entities;
 
 namespace Swampnet.Evl.DAL.InMemory
 {
     static class Convert
     {
+        #region Event
         internal static InternalEvent ToInternalEvent(Event evt)
         {
             return evt == null
@@ -67,5 +69,32 @@ namespace Swampnet.Evl.DAL.InMemory
                 Value = property.Value
             };
         }
+        #endregion
+
+        #region Rule
+        internal static Rule ToRule(InternalRule source)
+        {
+            return new Rule()
+            {
+                Id = source.Id,
+                IsActive = source.IsActive,
+                Name = source.Name,
+                Expression = source.ExpressionData.Deserialize<Expression>(),
+                Actions = source.ActionData.Deserialize<ActionDefinition[]>()
+            };
+        }
+
+        internal static InternalRule ToRule(Rule source)
+        {
+            return new InternalRule()
+            {
+                Id = source.Id.HasValue ? source.Id.Value : Guid.Empty,
+                Name = source.Name,
+                IsActive = source.IsActive,
+                ExpressionData = source.Expression.ToXmlString(),
+                ActionData = source.Actions.ToXmlString()
+            };
+        }
+        #endregion
     }
 }

@@ -6,22 +6,22 @@ using System.Text;
 
 namespace Swampnet.Evl.DAL.InMemory
 {
-    class EventContext : DbContext
+    class RuleContext : DbContext
     {
-        public EventContext(DbContextOptions options)
+        public RuleContext(DbContextOptions options)
             : base(options)
         {
         }
 
-        public DbSet<InternalEvent> Events { get; set; }
+        public DbSet<InternalRule> Rules { get; set; }
 
-        public static EventContext Create()
+        public static RuleContext Create()
         {
-            var options = new DbContextOptionsBuilder<EventContext>()
+            var options = new DbContextOptionsBuilder<RuleContext>()
                 .UseInMemoryDatabase("evl-database")
                 .Options;
 
-            return new EventContext(options);
+            return new RuleContext(options);
         }
     }
 }

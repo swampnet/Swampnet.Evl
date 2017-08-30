@@ -29,7 +29,7 @@ namespace Swampnet.Evl.Controllers
             return Ok(events);
         }
 
-        [HttpGet("{id}", Name = "Details")]
+        [HttpGet("{id}", Name = "EventDetails")]
         public async Task<IActionResult> Get(Guid id)
         {
             var evt = await _dal.ReadAsync(id);
@@ -63,7 +63,7 @@ namespace Swampnet.Evl.Controllers
 
                 _eventProcessor.Enqueue(id);
 
-				return CreatedAtRoute("Details", new { id = id }, evt);
+				return CreatedAtRoute("EventDetails", new { id = id }, evt);
 			}
 			catch (UnauthorizedAccessException ex)
 			{

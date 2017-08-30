@@ -16,8 +16,18 @@ namespace Swampnet.Evl.Common.Entities
             Name = name;
         }
 
+        public Guid? Id { get; set; }
+        public bool IsActive { get; set; }
         public string Name { get; set; }
         public Expression Expression { get; set; }
         public ActionDefinition[] Actions { get; set; }
+    }
+
+
+    public class RuleSummary
+    {
+        public Guid Id { get; set; }
+        public string Name { get; set; }
+        public bool IsActive { get; set; }
     }
 }

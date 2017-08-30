@@ -9,11 +9,16 @@ namespace Swampnet.Evl.Common.Contracts
     // Jeez, I dunno, just something to abstract away the loading of rules. Name may very well change...
     public interface IRuleDataAccess
     {
-        /// <summary>
-        /// Load all the rules for this aqpplication
-        /// </summary>
-        /// <param name="app"></param>
-        /// <returns></returns>
-        IEnumerable<Rule> Load(Application app);
+        Task<IEnumerable<RuleSummary>> SearchAsync();
+
+        Task<Rule> LoadAsync(Guid id);
+
+        Task<IEnumerable<Rule>> LoadAsync(Application app);
+
+        Task CreateAsync(Rule rule);
+
+        Task UpdateAsync(Rule rule);
+
+        Task DeleteAsync(Guid id);
     }
 }

@@ -27,7 +27,8 @@ namespace Swampnet.Evl.EventProcessors
 
         public void Process(Event evt)
         {
-            var rules = _loader.Load(null).ToList();
+            var rules = _loader.LoadAsync(null).Result.ToList();
+
             var expressionEvaluator = new ExpressionEvaluator();
 
             if (rules.Any())
