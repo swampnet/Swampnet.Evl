@@ -97,9 +97,9 @@ namespace Swampnet.Evl.DAL.InMemory.Services
                     query = query.Where(e => e.Summary.Contains(criteria.Summary));
                 }
 
-                if (!string.IsNullOrEmpty(criteria.Category))
+                if (criteria.Category.HasValue)
                 {
-                    query = query.Where(e => e.Category == criteria.Category);
+                    query = query.Where(e => e.Category == criteria.Category.ToString());
                 }
 
                 if (criteria.FromUtc.HasValue)

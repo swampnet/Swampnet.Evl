@@ -19,8 +19,7 @@ namespace Swampnet.Evl.DAL.InMemory.Services
                     {
                         new ActionDefinition("email", new[]
                         {
-                            new Property("to", "pj@theswamp.co.uk"),
-                            new Property("cc", "pete.whitby@gmail.com"),
+                            new Property("to", "pj@theswamp.co.uk")
                         })
                     }
                 },

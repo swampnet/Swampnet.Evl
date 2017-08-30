@@ -52,7 +52,7 @@ namespace Swampnet.Evl.DAL.InMemory
             return new EventSummary()
             {
                 Id = evt.Id,
-                Category = evt.Category,
+                Category = Enum.Parse<EventCategory>(evt.Category,true),
                 Summary = evt.Summary,
                 TimestampUtc = evt.TimestampUtc
             };

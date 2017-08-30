@@ -55,6 +55,10 @@ namespace IntegrationTests
                     {
                         throw new Exception("Text Exception");
                     }
+                    else if(count %7 == 0)
+                    {
+                        throw new Exception("Text Exception NOT-AN-ERROR");
+                    }
                 }
                 catch (Exception ex)
                 {
