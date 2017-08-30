@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Swampnet.Evl.Client;
+using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Swampnet.Evl
 {
@@ -24,6 +24,28 @@ namespace Swampnet.Evl
             else
             {
                 ex.Data.Add(key, value);
+            }
+        }
+
+
+        public static void AddData(this Exception ex, IProperty property)
+        {
+            if (ex.Data.Contains(property.Name))
+            {
+                ex.Data[property.Name] = property.Value;
+            }
+            else
+            {
+                ex.Data.Add(property.Name, property.Value);
+            }
+        }
+
+
+        public static void AddData(this Exception ex, IEnumerable<IProperty> properties)
+        {
+            foreach(var p in properties)
+            {
+                ex.AddData(p);
             }
         }
     }

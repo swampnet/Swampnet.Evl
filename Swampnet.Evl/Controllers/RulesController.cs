@@ -46,8 +46,6 @@ namespace Swampnet.Evl.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] Rule rule)
         {
-            await Task.Delay(1);
-
             Log.Information("Create rule {ruleName}", rule.Name);
             
             // @TODO: Auth
@@ -62,13 +60,34 @@ namespace Swampnet.Evl.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(Guid id, [FromBody] Rule rule)
         {
-            Log.Information("Put rule {ruleId} {ruleName}", id, rule.Name);
+            try
+            {
+                Log.Information("Put rule {ruleId} {ruleName}", id, rule.Name);
 
-            // @TODO: Auth
+                // @TODO: Auth
 
-            await _rulesData.UpdateAsync(rule);
+                if (rule.Id.HasValue && rule.Id.Value != id)
+                {
+                    // @TODO: Something off here: We might be trying to update the wrong rule.
+                }
 
-            return Ok();
+                await _rulesData.UpdateAsync(rule);
+
+                // Not sure I should be returning this for an update?
+                return CreatedAtRoute("RuleDetails", new { id = id }, rule);
+            }
+            catch (NullReferenceException ex) // Dangerous. Might be because of something else.
+            {
+                ex.AddData("id", id);
+                Log.Error(ex, ex.Message);
+                return NotFound();
+            }
+            catch (Exception ex)
+            {
+                ex.AddData("id", id);
+                Log.Error(ex, ex.Message);
+                throw;
+            }
         }
 
 

@@ -1,9 +1,7 @@
 ﻿using Swampnet.Evl.Client;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Linq;
-using Swampnet.Evl.Client;
 
 namespace Swampnet.Evl
 {
@@ -16,6 +14,7 @@ namespace Swampnet.Evl
         {
             return properties.Where(p => p.Category.EqualsNoCase(category) && p.Name.EqualsNoCase(name));
         }
+
 
         public static IEnumerable<IProperty> Values(this IEnumerable<IProperty> properties, string name)
         {

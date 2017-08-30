@@ -71,13 +71,16 @@ namespace Swampnet.Evl.DAL.InMemory.Services
             using (var context = RuleContext.Create())
             {
                 var r = context.Rules.SingleOrDefault(x => x.Id == rule.Id);
-                if(r != null)
+                if(r == null)
                 {
-                    r.Name = rule.Name;
-                    r.IsActive = rule.IsActive;
-                    r.ActionData = rule.Actions.ToXmlString();
-                    r.ExpressionData = rule.Expression.ToXmlString();
+                    throw new NullReferenceException("Rule not found");
                 }
+
+                r.Name = rule.Name;
+                r.IsActive = rule.IsActive;
+                r.ActionData = rule.Actions.ToXmlString();
+                r.ExpressionData = rule.Expression.ToXmlString();
+
                 await context.SaveChangesAsync();
             }
         }
