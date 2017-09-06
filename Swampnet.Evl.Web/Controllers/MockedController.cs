@@ -7,10 +7,10 @@ using Swampnet.Evl.Web.Entities;
 
 namespace Swampnet.Evl.Web.Controllers
 {
-    [Route("api/[controller]")]
-    public class SampleDataController : Controller
+    [Route("api/mocked")]
+    public class MockedController : Controller
     {
-        [HttpGet("[action]")]
+        [HttpGet("rules")]
         public IEnumerable<RuleSummary> GetRules()
         {
             //Task.Delay(2000).Wait();
@@ -18,7 +18,7 @@ namespace Swampnet.Evl.Web.Controllers
         }
 
 
-        [HttpGet("[action]/{id}")]
+        [HttpGet("rules/{id}")]
         public Rule GetRule(string id)
         {
             //Task.Delay(1000).Wait();
@@ -26,7 +26,7 @@ namespace Swampnet.Evl.Web.Controllers
         }
 
 
-        [HttpGet("[action]")]
+        [HttpGet("meta")]
         public MetaData GetMetaData()
         {
             return new MetaData

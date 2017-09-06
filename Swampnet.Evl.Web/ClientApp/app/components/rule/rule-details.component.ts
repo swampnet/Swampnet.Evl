@@ -1,6 +1,6 @@
 ﻿import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ProjectRoleService } from '../../services/project-role.service';
+import { ApiService } from '../../services/api.service';
 import { Rule, Property, ActionDefinition, MetaData, ActionMetaData } from '../../entities/entities';
 
 @Component({
@@ -17,7 +17,7 @@ export class RuleDetailsComponent {
     _metaData: MetaData;
 
     constructor(
-        private _projectService: ProjectRoleService,
+        private _api: ApiService,
         private _route: ActivatedRoute) {
 	}
 
@@ -27,11 +27,11 @@ export class RuleDetailsComponent {
         this.sub = this._route.params.subscribe(params => {
             let id = params['id'];
 
-            this._projectService.getMetaData().then((res: MetaData) => {
+			this._api.getMetaData().then((res: MetaData) => {
                 this._metaData = res;
 
                 // Load rule data
-                this._projectService.getRule(id).then((res: Rule) => {
+				this._api.getRule(id).then((res: Rule) => {
                     this._rule = res;
                 }, (error) => {
                     console.log("Failed to get rule", error._body, "error");
@@ -121,7 +121,7 @@ export class RuleDetailsComponent {
     }
 
 	save() {
-		this._projectService.saveRule(this._rule)
+		this._api.saveRule(this._rule)
 			.then(() => console.log("saved"),
 			(e) => { console.log("failed", e._body, "error") }
 			);

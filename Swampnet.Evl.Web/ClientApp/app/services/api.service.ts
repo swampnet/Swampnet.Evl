@@ -5,7 +5,7 @@ import 'rxjs/Rx';
 import 'rxjs/add/operator/toPromise';
 
 @Injectable()
-export class ProjectRoleService {
+export class ApiService {
     headers: Headers;
     options: RequestOptions;
 
@@ -26,7 +26,7 @@ export class ProjectRoleService {
     getRules() {
 
         return new Promise((resolve, reject) => {
-            this._http.get(this._baseUrl + 'api/SampleData/GetRules')
+            this._http.get(this._baseUrl + 'api/mocked/rules')
                 .map(res => res.json())
                 .catch((error: any) => {
                     console.error(error);
@@ -43,7 +43,7 @@ export class ProjectRoleService {
 	getRule(id: string) {
 
 		return new Promise((resolve, reject) => {
-			this._http.get(this._baseUrl + 'api/SampleData/GetRule/' + id)
+			this._http.get(this._baseUrl + 'api/mocked/rules/' + id)
 				.map(res => res.json())
 				.catch((error: any) => {
 					console.error(error);
@@ -61,7 +61,7 @@ export class ProjectRoleService {
         let body = JSON.stringify(rule);
 
         return new Promise((resolve, reject) => {
-            this._http.post(this._baseUrl + 'api/SampleData/Rules', body, this.options)
+            this._http.post(this._baseUrl + 'api/mocked/rules', body, this.options)
                 .catch((error: any) => {
                     console.error(error);
                     reject(error);
@@ -76,7 +76,7 @@ export class ProjectRoleService {
 
     getMetaData() {
         return new Promise((resolve, reject) => {
-            this._http.get(this._baseUrl + 'api/SampleData/GetMetaData')
+            this._http.get(this._baseUrl + 'api/mocked/meta')
                 .map(res => res.json())
                 .catch((error: any) => {
                     console.error(error);

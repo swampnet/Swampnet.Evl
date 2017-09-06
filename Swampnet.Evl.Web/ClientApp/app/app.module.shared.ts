@@ -8,7 +8,7 @@ import { AppComponent } from './components/app/app.component';
 import { NavMenuComponent } from './components/navmenu/navmenu.component';
 import { HomeComponent } from './components/home/home.component';
 
-import { ProjectRoleService } from './services/project-role.service'
+import { ApiService } from './services/api.service'
 import { RulesComponent } from './components/rule/rules.component';
 import { RuleDetailsComponent } from './components/rule/rule-details.component';
 import { ExpressionComponent } from './components/expression/expression.component';
@@ -40,7 +40,7 @@ import { ActionDefinitionComponent } from './components/action-definition/action
         ])
     ],
     providers: [
-        ProjectRoleService
+        ApiService
     ]
 })
 export class AppModuleShared {
