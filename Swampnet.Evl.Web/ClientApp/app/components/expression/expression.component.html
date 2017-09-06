@@ -1,0 +1,58 @@
+﻿<div *ngIf="expression && expression.isActive">
+
+    <!-- Expression -->
+    <div [ngClass]="isRoot ? 'root-expression' : 'expression'" [class.highlightExpression]="isMouseOverDelete">
+		<span *ngIf="!isContainer">
+			<select [(ngModel)]="expression.operand">
+				<option *ngFor="let op of operands" [value]="op.name">{{op.name}}</option>
+			</select>
+
+            <input *ngIf="getOperandMetaData(expression.operand).dataType == 'require-args'" [(ngModel)]="expression.argument">            
+		</span>
+
+		<span *ngIf="isContainer">
+            <!-- Operators (Group) -->
+			<select [(ngModel)]="expression.operator">
+				<option *ngFor="let op of groupOperators" [value]="op.code">{{op.display}}</option>
+			</select>
+
+            <!-- Add new group -->
+			<span (click)="addGroup()" class="link glyphicon glyphicon-plus"></span>
+		</span>
+
+        <!-- Operators (Expression) -->
+		<select *ngIf="!isContainer" [(ngModel)]="expression.operator">
+			<option *ngFor="let op of expressionOperators" [value]="op.code">{{op.display}}</option>
+		</select>
+
+        <!-- Value -->
+        <span *ngIf="!isContainer" [ngSwitch]="getOperandMetaData(expression.operand).dataType">
+            <select *ngSwitchCase="'select'" [(ngModel)]="expression.value">
+                <option *ngFor="let option of getOperandMetaData(expression.operand).options" [value]="option.value">{{option.display}}</option>
+            </select>
+            <label *ngSwitchCase="'datetime'">@TODO: DateTime picker</label>
+            <input *ngSwitchDefault [(ngModel)]="expression.value">
+        </span>
+
+        <!-- Delete node -->
+        <div *ngIf="!isRoot" class="link delete" (mouseenter)="delMouseEnter()" (mouseleave)="delMouseLeave()" (click)="deleteExpression()">
+			<span class="link glyphicon glyphicon-trash"></span>
+		</div>
+
+		<!-- Children -->
+		<div *ngIf="isContainer" class="group-expression">
+			<div *ngFor="let child of expression.children">
+				<expression-view [expression]="child" [isRoot]="false" [metaData]="metaData"></expression-view>
+			</div>
+
+            <!-- Add new expression -->
+			<span (click)="addChild()" class="link indent glyphicon glyphicon-plus"></span>
+		</div>
+    </div>
+
+    <!--<div><pre>{{metaData | json}}</pre></div>-->
+</div>
+
+<div *ngIf="!expression">
+    <div>!! null expression  !!</div>
+</div>

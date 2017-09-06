@@ -1,0 +1,58 @@
+﻿.group-expression {
+	border-width: 1px;
+	padding: 0;
+	border-left: 5px solid lightgrey;
+	border-bottom: 1px solid lightgrey;
+}
+
+
+.indent {
+	margin-left: 30px;
+}
+
+.expression {
+	padding: 0;
+	margin-left: 30px;
+	margin-bottom: 2px;
+	padding-top: 1px;
+	padding-left: 1px;
+	padding-bottom: 1px;
+	padding-right: 1px;
+}
+
+.root-expression {
+	padding: 0;
+	margin-left: 5px;
+	margin-bottom: 2px;
+	padding-top: 1px;
+	padding-left: 1px;
+	padding-bottom: 1px;
+	padding-right: 1px;
+}
+
+
+@keyframes highlightExpressionAnimation {
+	to {
+		background-color: lightblue;
+	}
+}
+
+.highlightExpression {
+	animation-name: highlightExpressionAnimation;
+	animation-duration: 1s;
+	animation-fill-mode: both;
+}
+
+
+.delete{
+	cursor: pointer;
+	float: right;
+}
+
+.new-group{
+
+}
+
+.new-expression {
+	margin-left: 30px;
+}

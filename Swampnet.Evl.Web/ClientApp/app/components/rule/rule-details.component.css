@@ -1,0 +1,10 @@
+﻿.link {
+	cursor: pointer;
+}
+
+.availableAction{
+	margin: 5px;
+}
+
+	.availableAction:hover {
+	}

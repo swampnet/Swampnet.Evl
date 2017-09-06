@@ -7,16 +7,23 @@ import { RouterModule } from '@angular/router';
 import { AppComponent } from './components/app/app.component';
 import { NavMenuComponent } from './components/navmenu/navmenu.component';
 import { HomeComponent } from './components/home/home.component';
-import { FetchDataComponent } from './components/fetchdata/fetchdata.component';
-import { CounterComponent } from './components/counter/counter.component';
+
+import { ProjectRoleService } from './services/project-role.service'
+import { RulesComponent } from './components/rule/rules.component';
+import { RuleDetailsComponent } from './components/rule/rule-details.component';
+import { ExpressionComponent } from './components/expression/expression.component';
+import { ActionDefinitionComponent } from './components/action-definition/action-definition.component';
+
 
 @NgModule({
     declarations: [
         AppComponent,
         NavMenuComponent,
-        CounterComponent,
-        FetchDataComponent,
-        HomeComponent
+        HomeComponent,
+        RulesComponent,
+        RuleDetailsComponent,
+        ExpressionComponent,
+        ActionDefinitionComponent
     ],
     imports: [
         CommonModule,
@@ -25,10 +32,15 @@ import { CounterComponent } from './components/counter/counter.component';
         RouterModule.forRoot([
             { path: '', redirectTo: 'home', pathMatch: 'full' },
             { path: 'home', component: HomeComponent },
-            { path: 'counter', component: CounterComponent },
-            { path: 'fetch-data', component: FetchDataComponent },
+
+            { path: 'rules', component: RulesComponent },
+            { path: 'rules/:id', component: RuleDetailsComponent },
+
             { path: '**', redirectTo: 'home' }
         ])
+    ],
+    providers: [
+        ProjectRoleService
     ]
 })
 export class AppModuleShared {

@@ -1,0 +1,10 @@
+﻿<div *ngIf="rules; else noRulesTemplate">
+    <div *ngFor="let r of rules">
+        <a [routerLink]="['/rules', r.id]">{{ r.name }}</a>
+    </div>
+</div>
+
+
+<ng-template #noRulesTemplate>
+    <div>Loading...</div>
+</ng-template>
