@@ -73,7 +73,7 @@ export class RuleDetailsComponent {
 	createRootExpression() {
 		if (this._rule) {
 			this._rule.expression = {
-				operator: "match_all",
+				operator: "MATCH_ALL",
 				operand: "",
 				argument: "",
 				value: "",

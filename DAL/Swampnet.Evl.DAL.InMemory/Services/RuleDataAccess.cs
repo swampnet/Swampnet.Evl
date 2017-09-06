@@ -141,7 +141,7 @@ namespace Swampnet.Evl.DAL.InMemory.Services
                     IsActive = true,
                     Expression = new Expression(RuleOperatorType.MATCH_ALL)
                     {
-                        Children = new List<Expression>()
+                        Children = new []
                         {
                             new Expression(RuleOperatorType.EQ, RuleOperandType.Category, "error"),
                             new Expression(RuleOperatorType.REGEX, RuleOperandType.Summary, @".*NOT-AN-ERROR.*")

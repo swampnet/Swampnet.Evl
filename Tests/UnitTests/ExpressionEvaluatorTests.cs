@@ -148,7 +148,7 @@ namespace UnitTests
 			var evt = Mock.Event();
 			var expression = new Expression(RuleOperatorType.MATCH_ALL)
 			{
-				Children = new List<Expression>()
+				Children = new []
 				{
 					new Expression(RuleOperatorType.EQ, RuleOperandType.Category, "information"),
 					new Expression(RuleOperatorType.NOT_EQ, RuleOperandType.Category, "test-xxx")
@@ -170,7 +170,7 @@ namespace UnitTests
 			var evt = Mock.Event();
 			var expression = new Expression(RuleOperatorType.MATCH_ANY)
 			{
-				Children = new List<Expression>()
+				Children = new []
 				{
 					new Expression(RuleOperatorType.EQ, RuleOperandType.Category, "test-xxx"),
 					new Expression(RuleOperatorType.EQ, RuleOperandType.Category, "information"),
@@ -191,12 +191,12 @@ namespace UnitTests
 			var evt = Mock.Event();
 			var expression = new Expression(RuleOperatorType.MATCH_ALL)
 			{
-				Children = new List<Expression>()
+				Children = new []
 				{
 					new Expression(RuleOperatorType.EQ, RuleOperandType.Category, "information"),
 					new Expression(RuleOperatorType.MATCH_ANY)
 					{
-						Children = new List<Expression>()
+						Children = new []
 						{
 							new Expression(RuleOperatorType.EQ, RuleOperandType.Property, "some-property", "test-xxx"),
 							new Expression(RuleOperatorType.EQ, RuleOperandType.Property, "some-property", "test-yyy"),

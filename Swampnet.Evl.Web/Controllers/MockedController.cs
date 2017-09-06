@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Swampnet.Evl.Web.Entities;
+using Swampnet.Evl.Common.Entities;
+using Swampnet.Evl.Client;
 
 namespace Swampnet.Evl.Web.Controllers
 {
@@ -14,12 +15,12 @@ namespace Swampnet.Evl.Web.Controllers
         public IEnumerable<RuleSummary> GetRules()
         {
             //Task.Delay(2000).Wait();
-            return _rules.Select(r => new RuleSummary(r.Id, r.Name));
+            return _rules.Select(r => new RuleSummary(r.Id.Value, r.Name));
         }
 
 
         [HttpGet("rules/{id}")]
-        public Rule GetRule(string id)
+        public Rule GetRule(Guid id)
         {
             //Task.Delay(1000).Wait();
             return _rules.SingleOrDefault(r => r.Id == id);
@@ -75,14 +76,14 @@ namespace Swampnet.Evl.Web.Controllers
                         {
                             new MetaDataCapture()
                             {
-                                Name = "category",
+                                Name = "Category",
                                 IsRequired = true,
                                 DataType = "select",
                                 Options = new[]
                                 {
-                                    new Option("Information", "inf"),
-                                    new Option("Error", "err"),
-                                    new Option("Debug", "dbg")
+                                    new Option("Information", "Information"),
+                                    new Option("Error", "Error"),
+                                    new Option("Debug", "Debug")
                                 }
                             }
                         }
@@ -114,12 +115,12 @@ namespace Swampnet.Evl.Web.Controllers
 
                 Operators = new[]
                 {
-                    new ExpressionOperator("match_all", "Match All", true),
-                    new ExpressionOperator("match_any", "Match Any", true),
+                    new ExpressionOperator(RuleOperatorType.MATCH_ALL, "Match All", true),
+                    new ExpressionOperator(RuleOperatorType.MATCH_ANY, "Match Any", true),
 
-                    new ExpressionOperator("eq", "=", false),
-                    new ExpressionOperator("not_eq", "<>", false),
-                    new ExpressionOperator("regex", "Match Expression", false)
+                    new ExpressionOperator(RuleOperatorType.EQ, "=", false),
+                    new ExpressionOperator(RuleOperatorType.NOT_EQ, "<>", false),
+                    new ExpressionOperator(RuleOperatorType.REGEX, "Match Expression", false)
                 },
 
                 Operands = new[]
@@ -141,9 +142,9 @@ namespace Swampnet.Evl.Web.Controllers
                         DataType = "select",
                         Options = new[]
                         {
-                            new Option("Information", "inf"),
-                            new Option("Error", "err"),
-                            new Option("Debug", "dbg")
+                            new Option("Information", "Information"),
+                            new Option("Error", "Error"),
+                            new Option("Debug", "Debug")
                         }
                     },
 
@@ -161,23 +162,23 @@ namespace Swampnet.Evl.Web.Controllers
         {
             new Rule()
             {
-                Id = "id-01",
+                Id = Guid.NewGuid(),
                 Name = "Some madeup junk",
-                Expression = new Expression("match_all")
+                Expression = new Expression(RuleOperatorType.MATCH_ALL)
                 {
                     Children = new[]
                     {
-                        new Expression("eq", "Category", null, "info"),
-                        new Expression("eq", "Summary", null, "test"),
-                        new Expression("match_any")
+                        new Expression(RuleOperatorType.EQ, RuleOperandType.Category, null, "Information"),
+                        new Expression(RuleOperatorType.EQ, RuleOperandType.Summary, null, "test"),
+                        new Expression(RuleOperatorType.MATCH_ANY)
                         {
                             Children = new[]
                             {
-                                new Expression("eq", "Property", "prop-one", "1"),
-                                new Expression("eq", "Property", "prop-two", "2")
+                                new Expression(RuleOperatorType.EQ, RuleOperandType.Property, "prop-one", "1"),
+                                new Expression(RuleOperatorType.EQ, RuleOperandType.Property, "prop-two", "2")
                             }
                         },
-                        new Expression("eq", "Property", "prop-three", "3")
+                        new Expression(RuleOperatorType.EQ, RuleOperandType.Property, "prop-three", "3")
                     }
                 },
                 Actions = new[]
@@ -195,21 +196,21 @@ namespace Swampnet.Evl.Web.Controllers
                     {
                         Properties = new[]
                         {
-                            new Property("category", "inf")
+                            new Property("Category", "Information")
                         }
                     }
                 }
             },
             new Rule()
             {
-                Id = "id-02",
+                Id = Guid.NewGuid(),
                 Name = "Email test",
-                Expression = new Expression("match_all")
+                Expression = new Expression(RuleOperatorType.MATCH_ALL)
                 {
                     Children = new[]
                     {
-                        new Expression("eq", "Category", null, "info"),
-                        new Expression("regex", "Summary", null, "*.test-email*."),
+                        new Expression(RuleOperatorType.EQ, RuleOperandType.Category, null, "Information"),
+                        new Expression(RuleOperatorType.REGEX, RuleOperandType.Summary, null, "*.test-email*."),
                     }
                 },
                 Actions = new[]
@@ -222,8 +223,15 @@ namespace Swampnet.Evl.Web.Controllers
                             new Property("cc", ""),
                             new Property("bcc", ""),
                         }
-                    }
-                }
+                    },
+					new ActionDefinition("change-category")
+					{
+						Properties = new[]
+						{
+							new Property("Category", "Information")
+						}
+					}
+				}
             }
         };
     }

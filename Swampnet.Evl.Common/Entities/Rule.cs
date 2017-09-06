@@ -9,9 +9,11 @@ namespace Swampnet.Evl.Common.Entities
     {
         public Rule()
         {
+			IsActive = true;
         }
 
         public Rule(string name)
+			: this()
         {
             Name = name;
         }
@@ -26,6 +28,18 @@ namespace Swampnet.Evl.Common.Entities
 
     public class RuleSummary
     {
+		public RuleSummary()
+		{
+			IsActive = true;
+		}
+
+		public RuleSummary(Guid id, string name)
+			: this()
+		{
+			Id = id;
+			Name = name;
+		}
+
         public Guid Id { get; set; }
         public string Name { get; set; }
         public bool IsActive { get; set; }

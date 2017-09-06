@@ -11,6 +11,7 @@ namespace Swampnet.Evl.Common.Entities
     {
         public ActionDefinition()
         {
+			IsActive = true;
         }
 
         public ActionDefinition(string type, IEnumerable<Property> properties = null)
@@ -20,7 +21,9 @@ namespace Swampnet.Evl.Common.Entities
             Properties = properties?.ToArray();
         }
 
-        public string Type { get; set; }
+
+		public bool IsActive { get; set; }
+		public string Type { get; set; }
 
         public Property[] Properties { get; set; }
     }

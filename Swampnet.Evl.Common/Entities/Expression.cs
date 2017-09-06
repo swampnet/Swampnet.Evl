@@ -8,7 +8,8 @@ namespace Swampnet.Evl.Common.Entities
     {
 		public Expression()
 		{
-			Children = new List<Expression>();
+			IsActive = true;
+			Children = new Expression[0];
 			Operator = RuleOperatorType.MATCH_ALL;
 		}
 
@@ -44,15 +45,17 @@ namespace Swampnet.Evl.Common.Entities
 
         public string Value { get; set; }
 
-        public List<Expression> Children { get; set; }
+        public Expression[] Children { get; set; }
 
-        [JsonIgnore]
+		public bool IsActive { get; set; }
+
+		[JsonIgnore]
         public bool IsContainer => Operator == RuleOperatorType.MATCH_ALL || Operator == RuleOperatorType.MATCH_ANY;
 
         public override string ToString()
         {
             return IsContainer 
-                ? $"{Operator} ({Children.Count} children)"
+                ? $"{Operator} ({Children.Length} children)"
                 : $"{Operand} {Operator} {Argument} '{Value}'";
         }
     }

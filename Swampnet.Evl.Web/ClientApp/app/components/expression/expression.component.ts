@@ -19,7 +19,7 @@ export class ExpressionComponent {
         }
 
         this.expression.children.push({
-            operator: "eq",
+            operator: "EQ",
             operand: "Summary", // We need a default summary for some reason?
             argument: "",
             value: "",
@@ -34,7 +34,7 @@ export class ExpressionComponent {
 		}
 
 		this.expression.children.push({
-			operator: "match_all",
+			operator: "MATCH_ALL",
 			operand: "",
 			argument: "",
 			value: "",
