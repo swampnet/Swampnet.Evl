@@ -158,6 +158,28 @@ namespace Swampnet.Evl.Web.Controllers
         }
 
 
+
+
+        [HttpGet("events")]
+        public IEnumerable<EventSummary> Events([FromQuery] EventSearchCriteria criteria)
+        {
+            return _events.Select(e => new EventSummary() {
+                Id = e.Id.Value,
+                Category = e.Category,
+                Summary= e.Summary,
+                TimestampUtc = e.TimestampUtc
+            });
+        }
+
+
+        [HttpGet("events/{id}")]
+        public Event GetEventDetails(Guid id)
+        {
+            return _events.SingleOrDefault(e => e.Id == id);
+        }
+
+
+
         private readonly static IEnumerable<Rule> _rules = new[]
         {
             new Rule()
@@ -224,15 +246,46 @@ namespace Swampnet.Evl.Web.Controllers
                             new Property("bcc", ""),
                         }
                     },
-					new ActionDefinition("change-category")
-					{
-						Properties = new[]
-						{
-							new Property("Category", "Information")
-						}
-					}
-				}
+                    new ActionDefinition("change-category")
+                    {
+                        Properties = new[]
+                        {
+                            new Property("Category", "Information")
+                        }
+                    }
+                }
             }
+        };
+
+
+        private readonly static IEnumerable<Event> _events = new[]
+        {
+                new Event()
+                {
+                    Id = Guid.NewGuid(),
+                    Category = EventCategory.Information,
+                    Summary = "Mocked event 1",
+                    TimestampUtc = DateTime.UtcNow,
+                    Properties = new List<Property>()
+                    {
+                        new Property("name-one", "value-one"),
+                        new Property("name-two", "value-two"),
+                        new Property("name-three", "value-three")
+                    }
+                },
+                new Event()
+                {
+                    Id = Guid.NewGuid(),
+                    Category = EventCategory.Information,
+                    Summary = "Mocked event 2",
+                    TimestampUtc = DateTime.UtcNow,
+                    Properties = new List<Property>()
+                    {
+                        new Property("name-one", "value-one"),
+                        new Property("name-two", "value-two"),
+                        new Property("name-three", "value-three")
+                    }
+                }
         };
     }
 }

@@ -59,3 +59,26 @@ export interface MetaData{
     operands: MetaDataCapture[];
     operators: ExpressionOperator[];
 }
+
+export interface EventSummary {
+    id: string;
+    category: string;
+    summary: string;
+    timestampUtc: Date;
+}
+
+export interface EventSearchCriteria {
+    id?: string;
+    category?: string;
+    summary?: string;
+    fromUtc?: Date;
+    toUtc?: Date;
+}
+
+export interface Event {
+    id: string;
+    category: string;
+    summary: string;
+    timestampUtc: Date;
+    properties: Property[];
+}

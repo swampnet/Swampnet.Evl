@@ -1,0 +1,7 @@
+﻿<h1>details</h1>
+<div>{{event.timestampUtc}}</div>
+<div>{{event.category}}</div>
+<div>{{event.summary}}</div>
+<div *ngFor="let p of event.properties">
+    <div>{{p.name}} - {{p.value}}</div>
+</div>

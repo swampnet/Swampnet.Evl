@@ -1,6 +1,6 @@
 ﻿import { Injectable, Inject } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { Http, Response, Headers, RequestOptions } from '@angular/http';
+import { Http, Response, Headers, RequestOptions, URLSearchParams } from '@angular/http';
 import 'rxjs/Rx';
 import 'rxjs/add/operator/toPromise';
 
@@ -77,6 +77,41 @@ export class ApiService {
     getMetaData() {
         return new Promise((resolve, reject) => {
             this._http.get(this._baseUrl + 'api/mocked/meta')
+                .map(res => res.json())
+                .catch((error: any) => {
+                    console.error(error);
+                    reject(error);
+                    return Observable.throw(error.json().error || 'Server error');
+                })
+                .subscribe((data) => {
+                    resolve(data);
+                });
+        });
+    }
+
+    searchEvents(criteria: any) {
+        let params = new URLSearchParams();
+        for (let key in criteria) {
+            params.set(key, criteria[key])
+        }
+
+        return new Promise((resolve, reject) => {
+            this._http.get(this._baseUrl + 'api/mocked/events?' + params.toString())
+                .map(res => res.json())
+                .catch((error: any) => {
+                    console.error(error);
+                    reject(error);
+                    return Observable.throw(error.json().error || 'Server error');
+                })
+                .subscribe((data) => {
+                    resolve(data);
+                });
+        });
+    }
+
+    getEvent(id: string) {
+        return new Promise((resolve, reject) => {
+            this._http.get(this._baseUrl + 'api/mocked/events/' + id)
                 .map(res => res.json())
                 .catch((error: any) => {
                     console.error(error);

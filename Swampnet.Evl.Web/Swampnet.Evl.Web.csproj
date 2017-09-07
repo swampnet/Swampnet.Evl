@@ -23,9 +23,17 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="ClientApp\app\components\events\events.component.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Serilog.Sinks.Evl\Serilog.Sinks.Evl.csproj" />
     <ProjectReference Include="..\Swampnet.Evl.Client\Swampnet.Evl.Client.csproj" />
     <ProjectReference Include="..\Swampnet.Evl.Common\Swampnet.Evl.Common.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\app\components\events\events.component.ts" />
   </ItemGroup>
 
   <Target Name="DebugRunWebpack" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('wwwroot\dist') ">
