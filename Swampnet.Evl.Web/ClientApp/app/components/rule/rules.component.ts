@@ -11,12 +11,12 @@ export class RulesComponent {
     public rules: RuleSummary[];
 
     constructor(
-        private _api: ApiService) {
+        private api: ApiService) {
     }
 
     ngOnInit() {
 
-        this._api.getRules().then((res: RuleSummary[]) => {
+        this.api.getRules().then((res: RuleSummary[]) => {
             this.rules = res;
         }, (error) => {
             console.log("Failed to get rule", error._body, "error");
