@@ -4,3 +4,11 @@
         padding-top: 50px;
     }
 }
+
+.property-name {
+    text-align: right;
+}
+
+.property-value {
+    padding: 1px;
+}

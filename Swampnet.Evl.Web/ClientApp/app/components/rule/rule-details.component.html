@@ -3,11 +3,11 @@
 <div *ngIf="rule; else noRuleTemplate">
 	<div class="container-fluid">
 		<div class="row">
-			<div class="col-sm-1">Id</div>
+			<div class="col-sm-1 property-name">Id</div>
 			<div class="col-sm-11">{{rule.id}}</div>
 		</div>
 		<div class="row">
-			<div class="col-sm-1">Name</div>
+			<div class="col-sm-1 property-name">Name</div>
 			<div class="col-sm-11"><input [(ngModel)]="rule.name"></div>
 		</div>
 	</div>

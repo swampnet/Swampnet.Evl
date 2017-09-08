@@ -5,7 +5,7 @@ import { ApiService } from '../../services/api.service';
 @Component({
     selector: 'events-search-criteria',
 	templateUrl: './events-search-criteria.component.html',
-	
+    styleUrls: ['./events-search-criteria.component.css']
 })
 export class EventsSearchCriteriaComponent {
     @Input() criteria: EventSearchCriteria;
