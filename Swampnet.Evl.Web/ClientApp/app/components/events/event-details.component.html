@@ -1,7 +1,14 @@
 ﻿<h1>details</h1>
-<div>{{event.timestampUtc}}</div>
-<div>{{event.category}}</div>
-<div>{{event.summary}}</div>
-<div *ngFor="let p of event.properties">
-    <div>{{p.name}} - {{p.value}}</div>
+<div *ngIf="event; else noResults">
+	<div>{{event.timestampUtc}}</div>
+	<div>{{event.category}}</div>
+	<div>{{event.summary}}</div>
+	<div *ngFor="let p of event.properties">
+		<div><strong>{{p.name}}</strong> - {{p.value}}</div>
+	</div>
 </div>
+
+
+<ng-template #noResults>
+	<div>No Results</div>
+</ng-template>
