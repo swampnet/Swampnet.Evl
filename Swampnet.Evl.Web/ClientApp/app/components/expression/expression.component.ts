@@ -3,8 +3,8 @@ import { Expression, MetaData, ExpressionOperator, MetaDataCapture } from '../..
 
 @Component({
     selector: 'expression-view',
-//    templateUrl: './expression.component.html',
-    templateUrl: './expression-prototype.html',    
+    templateUrl: './expression.component.html',
+    //templateUrl: './expression-prototype.html',    
     styleUrls: ['./expression.component.css']
 })
 export class ExpressionComponent {
