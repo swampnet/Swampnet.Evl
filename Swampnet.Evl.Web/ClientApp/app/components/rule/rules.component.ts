@@ -1,4 +1,5 @@
 ﻿import { Component } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 import { ApiService } from '../../services/api.service';
 import { RuleSummary } from '../../entities/entities';
 
@@ -11,6 +12,7 @@ export class RulesComponent {
     public rules: RuleSummary[];
 
     constructor(
+        private router: Router,        
         private api: ApiService) {
     }
 
@@ -22,5 +24,9 @@ export class RulesComponent {
             console.log("Failed to get rule", error._body, "error");
         });
 
+    }
+
+    newRule(){
+        this.router.navigate(['/rules/new']);
     }
 }

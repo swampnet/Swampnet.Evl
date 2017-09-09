@@ -25,8 +25,9 @@ export interface ActionDefinition {
 }
 
 export interface Rule {
-	id: string;
-	name: number;
+	id?: string;
+    name: string;
+    isActive: boolean;
 	expression?: Expression;
 	actions?: ActionDefinition[];
 }
@@ -73,6 +74,8 @@ export interface EventSearchCriteria {
     summary?: string;
     fromUtc?: Date;
     toUtc?: Date;
+    pageSize?: number;
+    page?: number;
 }
 
 export interface Event {

@@ -8,7 +8,7 @@ using Swampnet.Evl.Client;
 
 namespace Swampnet.Evl.Web.Controllers
 {
-    [Route("api/mocked")]
+    [Route("api")]
     public class MockedController : Controller
     {
         [HttpGet("rules")]

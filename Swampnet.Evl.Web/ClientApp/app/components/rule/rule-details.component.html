@@ -25,6 +25,11 @@
 		<button type="button" *ngFor="let action of metaData.actionMetaData" (click)="addAction(action)" class="btn btn-default availableAction">{{action.type}}</button>
 	</div>
 
+	<div>
+		<button (click)="save()" type="button" class="btn btn-default">Save</button>
+		<button (click)="cancel()" type="button" class="btn btn-cancel">Cancel</button>
+		<button (click)="delete()" type="button" class="btn btn-cancel">Delete</button>
+	</div>
 	<!-- Debug -->
 	<div style="background-color:lightgoldenrodyellow; padding: 5px; margin-top: 20px">
 		<h3>Debug</h3>

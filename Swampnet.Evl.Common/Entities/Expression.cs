@@ -71,6 +71,8 @@ namespace Swampnet.Evl.Common.Entities
 
 	public enum RuleOperatorType
 	{
+		NULL,
+
 		EQ,
 		NOT_EQ,
 		REGEX,

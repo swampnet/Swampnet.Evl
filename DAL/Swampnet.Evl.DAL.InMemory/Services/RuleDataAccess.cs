@@ -22,7 +22,7 @@ namespace Swampnet.Evl.DAL.InMemory.Services
         {
             using (var context = RuleContext.Create())
             {
-                var rules = await context.Rules.ToListAsync();
+                var rules = await context.Rules.Where(r => r.IsActive).ToListAsync();
                 return rules.Select(r => new RuleSummary()
                 {
                     Id = r.Id,
@@ -37,7 +37,7 @@ namespace Swampnet.Evl.DAL.InMemory.Services
         {
             using (var context = RuleContext.Create())
             {
-                var rule = await context.Rules.SingleOrDefaultAsync(r => r.Id == id);
+                var rule = await context.Rules.SingleOrDefaultAsync(r => r.IsActive && r.Id == id);
 
                 return Convert.ToRule(rule);
             }
@@ -48,7 +48,7 @@ namespace Swampnet.Evl.DAL.InMemory.Services
         {
             using (var context = RuleContext.Create())
             {
-                var rules = await context.Rules.ToListAsync();
+                var rules = await context.Rules.Where(r => r.IsActive).ToListAsync();
 
                 return rules.Select(r => Convert.ToRule(r));
             }
@@ -85,11 +85,22 @@ namespace Swampnet.Evl.DAL.InMemory.Services
             }
         }
 
-        public Task DeleteAsync(Guid id)
+        public async Task DeleteAsync(Guid id)
         {
-            // @TODO: Now, do we really want to delete stuff or just flag it as so?
-            //        A: Well, flag it as so, obv. Question is, do we use the active flag for that?
-            return Task.Delay(1);
+			// @TODO: Now, do we really want to delete stuff or just flag it as so?
+			//        A: Well, flag it as so, obv. Question is, do we use the active flag for that?
+			using (var context = RuleContext.Create())
+			{
+				var r = context.Rules.SingleOrDefault(x => x.Id == id);
+				if (r == null)
+				{
+					throw new NullReferenceException("Rule not found");
+				}
+
+				r.IsActive = false;
+
+				await context.SaveChangesAsync();
+			}
         }
 
         private void Seed()
@@ -111,21 +122,36 @@ namespace Swampnet.Evl.DAL.InMemory.Services
                 {
                     Id = Guid.NewGuid(),
                     IsActive = true,
-                    Expression = new Expression(RuleOperatorType.REGEX, RuleOperandType.Summary, @".*TEST-EMAIL.*"),
-                    Actions = new[]
-                    {
-                        new ActionDefinition("email", new[]
-                        {
-                            new Property("to", "pj@theswamp.co.uk")
-                        })
-                    }
-                },
+					
+                    Expression = new Expression(RuleOperatorType.MATCH_ALL)
+					{
+						Children = new[]
+						{
+							new Expression(RuleOperatorType.REGEX, RuleOperandType.Summary, @".*TEST-EMAIL.*")
+						}
+					},
+					Actions = new[]
+					{
+						new ActionDefinition("email", new[]
+						{
+							new Property("to", "pj@theswamp.co.uk"),
+							new Property("cc", null),
+							new Property("bcc", null)
+						})
+					}
+				},
 
                 new Rule("Test Slack")
                 {
                     Id = Guid.NewGuid(),
                     IsActive = true,
-                    Expression = new Expression(RuleOperatorType.REGEX, RuleOperandType.Summary, @".*TEST-SLACK.*"),
+                    Expression = new Expression(RuleOperatorType.MATCH_ALL)
+					{
+						Children = new[]
+						{
+							new Expression(RuleOperatorType.REGEX, RuleOperandType.Summary, @".*TEST-SLACK.*")
+						}
+					},
                     Actions = new[]
                     {
                         new ActionDefinition("slack", new[]
@@ -143,15 +169,15 @@ namespace Swampnet.Evl.DAL.InMemory.Services
                     {
                         Children = new []
                         {
-                            new Expression(RuleOperatorType.EQ, RuleOperandType.Category, "error"),
-                            new Expression(RuleOperatorType.REGEX, RuleOperandType.Summary, @".*NOT-AN-ERROR.*")
+                            new Expression(RuleOperatorType.EQ, RuleOperandType.Category, "Error"),
+                            new Expression(RuleOperatorType.REGEX, RuleOperandType.Summary, @".*not-an-error.*")
                         }
                     },
                     Actions = new[]
                     {
-                        new ActionDefinition("changecategory", new[]
+                        new ActionDefinition("change-category", new[]
                         {
-                            new Property("category", "information")
+                            new Property("Category", "Information")
                         })
                     }
                 }

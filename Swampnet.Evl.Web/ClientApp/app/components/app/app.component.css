@@ -12,3 +12,7 @@
 .property-value {
     padding: 1px;
 }
+
+.mouse-pointer{
+	cursor: pointer;
+}

@@ -1,7 +1,15 @@
 ﻿<div *ngIf="rules; else noRulesTemplate">
-    <div *ngFor="let r of rules">
-        <a [routerLink]="['/rules', r.id]">{{ r.name }}</a>
+    <div class="container-fluid">
+        <div *ngFor="let r of rules">
+            <div *ngIf="r.isActive" class="row">
+                <div class="col-sm-12"><a [routerLink]="['/rules', r.id]">{{ r.name }}</a></div>
+            </div>
+        </div>            
     </div>
+    <div>
+        <span (click)="newRule()" class="link  mouse-pointer">new...</span>
+    </div>
+    
 </div>
 
 

@@ -10,7 +10,9 @@ import { ApiService } from '../../services/api.service';
 export class EventsComponent {
     public events: EventSummary[];
     public criteria: EventSearchCriteria = {
-        category: "Information"
+        category: "Information",
+        pageSize: 20,
+        page: 0
     };
 
     constructor(

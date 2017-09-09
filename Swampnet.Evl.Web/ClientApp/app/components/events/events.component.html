@@ -5,9 +5,9 @@
 
 <div *ngIf="events; else noResults" class="container-fluid">
     <div class="row" *ngFor="let e of events">
-        <div class="col-sm-4">{{e.timestampUtc}}</div>
+        <div class="col-sm-2">{{e.timestampUtc | date: 'mediumTime'}}</div>
         <div class="col-sm-2">{{e.category}}</div>
-        <div class="col-sm-5">{{e.summary}}</div>
+        <div class="col-sm-7">{{e.summary}}</div>
         <div class="col-sm-1"><a [routerLink]="['/events', e.id]">details</a></div>
     </div>
 </div>

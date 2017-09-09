@@ -112,7 +112,14 @@ namespace Swampnet.Evl.DAL.InMemory.Services
                     query = query.Where(e => e.TimestampUtc <= criteria.ToUtc);
                 }
 
-                var results = await query.OrderBy(e => e.TimestampUtc).ToArrayAsync();
+				query = query.OrderByDescending(e => e.TimestampUtc);
+
+				if (criteria.PageSize > 0 && criteria.Page >= 0)
+				{
+					query = query.Skip(criteria.PageSize * criteria.Page).Take(criteria.PageSize);
+				}
+
+                var results = await query.ToArrayAsync();
 
                 return results.Select(e => Convert.ToEventSummary(e));
             }

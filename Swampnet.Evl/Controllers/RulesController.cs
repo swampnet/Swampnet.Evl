@@ -93,14 +93,28 @@ namespace Swampnet.Evl.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {
-            await Task.Delay(1);
+			try
+			{
+				Log.Information("Delete rule {ruleId}", id);
 
-            Log.Information("Delete rule {ruleId}", id);
+				// @TODO: Auth
 
-            // @TODO: Auth
-            // @TODO: Delete
+				await _rulesData.DeleteAsync(id);
 
-            return Ok();
-        }
-    }
+				return Ok();
+			}
+			catch (NullReferenceException ex) // Dangerous. Might be because of something else.
+			{
+				ex.AddData("id", id);
+				Log.Error(ex, ex.Message);
+				return NotFound();
+			}
+			catch (Exception ex)
+			{
+				ex.AddData("id", id);
+				Log.Error(ex, ex.Message);
+				throw;
+			}
+		}
+	}
 }

@@ -49,7 +49,7 @@ namespace IntegrationTests
             {
                 try
                 {
-                    Log.Information("Some Properties {Count} {One} {Two} ", count++, 1, 2);
+                    //Log.Information("Some Properties {Count} {One} {Two} ", count++, 1, 2);
 
                     if (count % 10 == 0)
                     {
@@ -59,6 +59,10 @@ namespace IntegrationTests
                     {
                         throw new Exception("Text Exception NOT-AN-ERROR");
                     }
+					else if(count % 13 == 0)
+					{
+						Log.Information("Some Properties {Count} {One} {Two} ", count++, 1, 2);
+					}
                 }
                 catch (Exception ex)
                 {
@@ -68,6 +72,7 @@ namespace IntegrationTests
                 finally
                 {
                     Thread.Sleep(1000);
+					count++;
                 }
             }
         }

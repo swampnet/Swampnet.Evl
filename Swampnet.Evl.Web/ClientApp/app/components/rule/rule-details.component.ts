@@ -1,5 +1,5 @@
 ﻿import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { ApiService } from '../../services/api.service';
 import { Rule, Property, ActionDefinition, MetaData, ActionMetaData } from '../../entities/entities';
 
@@ -18,6 +18,7 @@ export class RuleDetailsComponent {
 
     constructor(
         private api: ApiService,
+        private router: Router,
         private route: ActivatedRoute) {
 	}
 
@@ -30,12 +31,16 @@ export class RuleDetailsComponent {
 			this.api.getMetaData().then((res: MetaData) => {
                 this.metaData = res;
 
-                // Load rule data
-				this.api.getRule(id).then((res: Rule) => {
-                    this.rule = res;
-                }, (error) => {
-                    console.log("Failed to get rule", error._body, "error");
-                });
+                if(id == "new"){
+                    this.rule = this.createRootExpression();
+                } else {
+                    // Load rule data
+                    this.api.getRule(id).then((res: Rule) => {
+                        this.rule = res;
+                    }, (error) => {
+                        console.log("Failed to get rule", error._body, "error");
+                    });
+                }
             }, (error) => {
                 console.log("Failed to get meta", error._body, "error");
             });
@@ -54,25 +59,29 @@ export class RuleDetailsComponent {
 	}
 
 	createRootExpression() {
-		if (this.rule) {
-			this.rule.expression = {
-				operator: "MATCH_ALL",
-				operand: "",
-				argument: "",
-				value: "",
-				isActive: true,
-				children: [
-					{
-						operator: "eq",
-						operand: "Category",
-						argument: "",
-						value: "information",
-						isActive: true,
-						children: []
-					}
-				]
-			};
-		}
+        return {
+            id: undefined,
+            name: "New rule",
+            isActive: true,
+            expression: {
+                operator: "MATCH_ALL",
+                operand: "NULL",
+                argument: "",
+                value: "",
+                isActive: true,
+                children: [
+                    {
+                        operator: "EQ",
+                        operand: "Category",
+                        argument: "",
+                        value: "Information",
+                        isActive: true,
+                        children: []
+                    }
+                ]
+            },
+            actions: []
+        };
 	}
 
     addAction(meta: ActionMetaData) {
@@ -104,10 +113,38 @@ export class RuleDetailsComponent {
     }
 
 	save() {
-		this.api.saveRule(this.rule)
-			.then(() => console.log("saved"),
+        if(this.rule != null && this.rule.id == undefined){
+            this.api.createRule(this.rule)
+			.then(() => {
+                console.log("saved");
+                this.router.navigate(['/rules']);                
+            },
 			(e) => { console.log("failed", e._body, "error") }
 			);
-	}
+        } else {
+            this.api.updateRule(this.rule)
+            .then(() => {
+                console.log("saved");
+                this.router.navigate(['/rules']);
+            },
+            (e) => { console.log("failed", e._body, "error") }
+            );    
+        }
+    }
+    
+    cancel(){
+        this.router.navigate(['/rules']);                        
+    }
+
+    delete(){
+        if(this.rule && this.rule.id){
+            this.api.deleteRule(this.rule.id).then((res: any) => {
+                this.router.navigate(['/rules']);                
+            }, (error) => {
+                console.log("Failed to get rule", error._body, "error");
+            });
+        }
+    }
+
 }
 

@@ -50,7 +50,7 @@ namespace Swampnet.Evl.EventProcessors
                             evt.Properties.Add(new Property("Internal", "Rule Triggered", rule.Name));
                             foreach (var action in rule.Actions)
                             {
-                                var key = action.Type.ToLower();
+                                var key = action.Type.Replace("-", "").ToLower();
 
                                 try
                                 {

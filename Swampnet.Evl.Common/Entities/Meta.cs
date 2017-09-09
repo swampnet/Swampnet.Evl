@@ -54,7 +54,20 @@ namespace Swampnet.Evl.Common.Entities
                     }
                 },
 
-                new ActionMetaData()
+				new ActionMetaData()
+				{
+					Type = "slack",
+					Properties = new[]
+					{
+						new MetaDataCapture()
+						{
+							Name = "channel",
+							IsRequired = true
+						}
+					}
+				},
+
+				new ActionMetaData()
                 {
                     Type = "change-category",
                     Properties = new[]

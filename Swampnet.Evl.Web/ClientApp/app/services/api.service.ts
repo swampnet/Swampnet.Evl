@@ -8,12 +8,14 @@ import 'rxjs/add/operator/toPromise';
 export class ApiService {
     headers: Headers;
     options: RequestOptions;
-
+    private _baseUrl: string;
 
     constructor(
-        private _http: Http,
-        @Inject('BASE_URL') private _baseUrl: string) {
+        private _http: Http) {
 
+        //this._baseUrl = "http://localhost:5001/api/";
+        this._baseUrl = "http://localhost:5000/api/";
+        
         this.headers = new Headers({
             'Content-Type': 'application/json',
             'Accept': 'q=0.8;application/json;q=0.9'
@@ -26,7 +28,7 @@ export class ApiService {
     getRules() {
 
         return new Promise((resolve, reject) => {
-            this._http.get(this._baseUrl + 'api/mocked/rules')
+            this._http.get(this._baseUrl + 'rules')
                 .map(res => res.json())
                 .catch((error: any) => {
                     console.error(error);
@@ -43,7 +45,7 @@ export class ApiService {
 	getRule(id: string) {
 
 		return new Promise((resolve, reject) => {
-			this._http.get(this._baseUrl + 'api/mocked/rules/' + id)
+			this._http.get(this._baseUrl + 'rules/' + id)
 				.map(res => res.json())
 				.catch((error: any) => {
 					console.error(error);
@@ -56,12 +58,42 @@ export class ApiService {
 		});
 	}
 
+    deleteRule(id: string) {        
+        return new Promise((resolve, reject) => {
+            this._http.delete(this._baseUrl + 'rules/' + id)
+                .catch((error: any) => {
+                    console.error(error);
+                    reject(error);
+                    return Observable.throw(error.json().error || 'Server error');
+                })
+                .subscribe((data) => {
+                    resolve(data);
+                });
+        });
+    }
+        
 
-    saveRule(rule: any) {
+    createRule(rule: any) {
         let body = JSON.stringify(rule);
 
         return new Promise((resolve, reject) => {
-            this._http.post(this._baseUrl + 'api/mocked/rules', body, this.options)
+            this._http.post(this._baseUrl + 'rules', body, this.options)
+                .catch((error: any) => {
+                    console.error(error);
+                    reject(error);
+                    return Observable.throw(error.json().error || 'Server error');
+                })
+                .subscribe((data) => {
+                    resolve(data);
+                });
+        });
+    }
+
+    updateRule(rule: any) {
+        let body = JSON.stringify(rule);
+
+        return new Promise((resolve, reject) => {
+            this._http.put(this._baseUrl + 'rules/' + rule.id, body, this.options)
                 .catch((error: any) => {
                     console.error(error);
                     reject(error);
@@ -76,7 +108,7 @@ export class ApiService {
 
     getMetaData() {
         return new Promise((resolve, reject) => {
-            this._http.get(this._baseUrl + 'api/mocked/meta')
+            this._http.get(this._baseUrl + 'meta')
                 .map(res => res.json())
                 .catch((error: any) => {
                     console.error(error);
@@ -96,7 +128,7 @@ export class ApiService {
         }
 
         return new Promise((resolve, reject) => {
-            this._http.get(this._baseUrl + 'api/mocked/events?' + params.toString())
+            this._http.get(this._baseUrl + 'events?' + params.toString())
                 .map(res => res.json())
                 .catch((error: any) => {
                     console.error(error);
@@ -111,7 +143,7 @@ export class ApiService {
 
     getEvent(id: string) {
         return new Promise((resolve, reject) => {
-            this._http.get(this._baseUrl + 'api/mocked/events/' + id)
+            this._http.get(this._baseUrl + 'events/' + id)
                 .map(res => res.json())
                 .catch((error: any) => {
                     console.error(error);

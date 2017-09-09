@@ -18,5 +18,7 @@ namespace Swampnet.Evl.Client
         public DateTime? FromUtc { get; set; }
 
         public DateTime? ToUtc { get; set; }
-    }
+		public int PageSize { get; set; }
+		public int Page { get; set; }
+	}
 }

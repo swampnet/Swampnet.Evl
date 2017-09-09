@@ -73,9 +73,9 @@ namespace Swampnet.Evl.Plugins.Email
         //          - Sooner or later you're just going to have to have the ID on the event itself...
 		public void Apply(Event evt, ActionDefinition actionDefinition, Rule rule)
 		{
-			var to = actionDefinition.Properties.StringValues("to");
-			var cc = actionDefinition.Properties.StringValues("cc");
-			var bcc = actionDefinition.Properties.StringValues("bcc");
+			var to = actionDefinition.Properties.StringValue("to");
+			var cc = actionDefinition.Properties.StringValue("cc");
+			var bcc = actionDefinition.Properties.StringValue("bcc");
 			var from = actionDefinition.Properties.StringValue("from-address", _cfg["email:default:address"]);
 			var fromName = actionDefinition.Properties.StringValue("from-name", _cfg["email:default:from"]);
 			var host = actionDefinition.Properties.StringValue("host", _cfg["email:smtp:host"]);
@@ -95,27 +95,33 @@ namespace Swampnet.Evl.Plugins.Email
 			{
 				throw new ArgumentException("FROM parameter missing");
 			}
-			if (!to.Any())
+			if (string.IsNullOrEmpty(to))
 			{
 				throw new ArgumentException("TO Parameter missing");
 			}
 			
 			var message = new MimeMessage();
 			message.From.Add(string.IsNullOrEmpty(fromName) ? new MailboxAddress(from) : new MailboxAddress(fromName, from));
-			foreach(var x in to)
+			foreach(var x in to.Split(";"))
 			{
 				message.To.Add(new MailboxAddress(x));
 			}
-			foreach(var x in cc)
+			if (!string.IsNullOrEmpty(cc))
 			{
-				message.Cc.Add(new MailboxAddress(x));
+				foreach (var x in cc.Split(";"))
+				{
+					message.Cc.Add(new MailboxAddress(x));
+				}
 			}
-			foreach (var x in bcc)
+			if (!string.IsNullOrEmpty(bcc))
 			{
-				message.Bcc.Add(new MailboxAddress(x));
+				foreach (var x in bcc.Split(";"))
+				{
+					message.Bcc.Add(new MailboxAddress(x));
+				}
 			}
 
-            var template = _templateLoader.Load();
+			var template = _templateLoader.Load();
             var doc = _transformer.Transform(evt, template);
 
 			var subject = doc.Element("email").Element("subject");
