@@ -10,9 +10,11 @@ namespace Serilog
     {
         public static LoggerConfiguration EvlSink(
                   this LoggerSinkConfiguration loggerConfiguration,
+                  string apiKey,
+                  string endpoint,
                   IFormatProvider formatProvider = null)
         {
-            return loggerConfiguration.Sink(new EvlSink(formatProvider));
+            return loggerConfiguration.Sink(new EvlSink(formatProvider, apiKey, endpoint));
         }
     }
 }

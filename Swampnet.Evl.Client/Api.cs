@@ -2,6 +2,7 @@
 using Swampnet.Evl.Client;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,20 +14,17 @@ namespace Swampnet.Evl
     /// </summary>
     /// <remarks>
     /// @TODO: Not a great name.
-    /// @TODO: Need a sensible way of specifying the connection and api-key info.
     /// </remarks>
     public static class Api
     {
-        private static string _apiKey = "29016692-9A8D-47CC-82A0-75C6BDB7D0DE";
-        private static string _endpoint = "http://localhost:5000/api/events";
-
-        public static string ApiKey { get => _apiKey; set => _apiKey = value; }
-
-        public static string Endpoint { get => _endpoint; set => _endpoint = value; }
+        public static string ApiKey { get; set; }
+        public static string Endpoint { get; set; }
 
 
         public static async Task PostAsync(Event e)
         {
+            Validate();
+
             using (var client = new HttpClient())
             {
                 client.DefaultRequestHeaders.Add("x-api-key", ApiKey);
@@ -45,6 +43,8 @@ namespace Swampnet.Evl
 
         public static async Task PostAsync(IEnumerable<Event> e)
         {
+            Validate();
+
             using (var client = new HttpClient())
             {
                 client.DefaultRequestHeaders.Add("x-api-key", ApiKey);
@@ -57,6 +57,18 @@ namespace Swampnet.Evl
                         "application/json"));
 
                 rs.EnsureSuccessStatusCode();
+            }
+        }
+
+        private static void Validate()
+        {
+            if (string.IsNullOrEmpty(ApiKey))
+            {
+                throw new ArgumentNullException("ApiKey");
+            }
+            if (string.IsNullOrEmpty(Endpoint))
+            {
+                throw new ArgumentNullException("Endpoint");
             }
         }
     }

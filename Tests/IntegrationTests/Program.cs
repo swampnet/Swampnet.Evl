@@ -3,18 +3,30 @@ using Serilog.Exceptions;
 using System;
 using System.Threading;
 using Swampnet.Evl;
+using Microsoft.Extensions.Configuration;
+using System.IO;
 
 namespace IntegrationTests
 {
     static class Program
     {
+        public static IConfigurationRoot Configuration { get; set; }
+
         private static void Main(string[] args)
         {
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("cfg.json");
+
+            Configuration = builder.Build();
+
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Verbose()
                 .Enrich.WithExceptionDetails()
                 .WriteTo.Console()
-                .WriteTo.EvlSink()
+                .WriteTo.EvlSink(
+                    Configuration["evl:api-key"], 
+                    Configuration["evl:endpoint"])
                 .CreateLogger();
 
             //LogException();

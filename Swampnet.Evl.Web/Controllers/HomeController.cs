@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 
 namespace Swampnet.Evl.Web.Controllers
 {
@@ -11,6 +12,7 @@ namespace Swampnet.Evl.Web.Controllers
     {
         public IActionResult Index()
         {
+            Log.Information("GET: Index");
             return View();
         }
 

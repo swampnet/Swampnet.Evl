@@ -20,9 +20,12 @@ namespace Serilog.Sinks.Evl
 
         private readonly IFormatProvider _formatProvider;
 
-        public EvlSink(IFormatProvider formatProvider)
+        public EvlSink(IFormatProvider formatProvider, string apiKey, string endpoint)
             : this(_defaultBatchSize, _defaultPeriod)
         {
+            Api.ApiKey = apiKey;
+            Api.Endpoint = endpoint;
+
             _formatProvider = formatProvider;
         }
 

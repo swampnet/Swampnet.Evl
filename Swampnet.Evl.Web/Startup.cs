@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Serilog;
+using Serilog.Exceptions;
 
 namespace Swampnet_Evl_Web
 {
@@ -15,6 +17,14 @@ namespace Swampnet_Evl_Web
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Verbose()
+                .Enrich.WithExceptionDetails()
+                .WriteTo.EvlSink(
+                    Configuration["evl:api-key"],
+                    Configuration["evl:endpoint"])
+                .CreateLogger();
         }
 
         public IConfiguration Configuration { get; }
