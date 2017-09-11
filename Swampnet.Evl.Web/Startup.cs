@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Serilog.Exceptions;
+using Serilog.Events;
 
 namespace Swampnet_Evl_Web
 {
@@ -20,7 +21,10 @@ namespace Swampnet_Evl_Web
 
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Verbose()
+                .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+                .Enrich.FromLogContext()
                 .Enrich.WithExceptionDetails()
+                .WriteTo.Console()
                 .WriteTo.EvlSink(
                     Configuration["evl:api-key"],
                     Configuration["evl:endpoint"])

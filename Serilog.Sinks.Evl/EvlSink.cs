@@ -126,7 +126,7 @@ namespace Serilog.Sinks.Evl
                 var scalar = logEventValue.Value as ScalarValue;
                 if(scalar != null)
                 {
-                    properties.Add(new Property(logEventValue.Key, scalar.Value.ToString()));
+                    properties.Add(new Property(logEventValue.Key, scalar.Value));
                 }
 
                 var d = logEventValue.Value as DictionaryValue;
@@ -151,7 +151,7 @@ namespace Serilog.Sinks.Evl
                 var scalar = logEventValue.Value as ScalarValue;
                 if (scalar != null)
                 {
-                    properties.Add(new Property(category, logEventValue.Key.ToString(), scalar.Value.ToString()));
+                    properties.Add(new Property(category, logEventValue.Key.ToString(), scalar.Value));
                 }
 
                 var d = logEventValue.Value as DictionaryValue;
