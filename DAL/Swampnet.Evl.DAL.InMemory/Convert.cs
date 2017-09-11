@@ -20,7 +20,9 @@ namespace Swampnet.Evl.DAL.InMemory
                     Category = evt.Category.ToString(),
                     Summary = evt.Summary,
                     TimestampUtc = evt.TimestampUtc,
+                    LastUpdatedUtc = evt.LastUpdatedUtc.HasValue ? evt.LastUpdatedUtc.Value : evt.TimestampUtc,
                     Properties = evt.Properties?.Select(p => ToInternalProperty(p)).ToList()
+
                 };
         }
 
@@ -45,6 +47,7 @@ namespace Swampnet.Evl.DAL.InMemory
                     Category = Enum.Parse<EventCategory>(evt.Category, true),
                     Summary = evt.Summary,
                     TimestampUtc = evt.TimestampUtc,
+                    LastUpdatedUtc = evt.LastUpdatedUtc,
                     Properties = evt.Properties?.Select(p => ToProperty(p)).ToList()
                 };
         }

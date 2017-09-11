@@ -29,6 +29,17 @@ namespace Swampnet.Evl.Client
         public DateTime TimestampUtc { get; set; }
 
         /// <summary>
+        /// Last time event was updated
+        /// </summary>
+        /// <remarks>
+        /// We sometimes manipulate an event after it's been captured (We might add properties or change its category
+        /// due to a rule firing)
+        /// This value tracks when we last changed it
+        /// </remarks>
+        [JsonIgnore]
+        public DateTime? LastUpdatedUtc { get; set; }
+
+        /// <summary>
         /// Event category
         /// </summary>
         /// <remarks>

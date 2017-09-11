@@ -72,6 +72,7 @@ export interface EventSearchCriteria {
     id?: string;
     category?: string;
     summary?: string;
+    timestampUtc?: Date;
     fromUtc?: Date;
     toUtc?: Date;
     pageSize?: number;

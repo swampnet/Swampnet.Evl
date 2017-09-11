@@ -12,6 +12,8 @@ namespace Swampnet.Evl.DAL.InMemory.Entities
         /// </summary>
         public DateTime TimestampUtc { get; set; }
 
+        public DateTime LastUpdatedUtc { get; set; }
+
         /// <summary>
         /// Event category
         /// </summary>

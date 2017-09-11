@@ -53,7 +53,8 @@ namespace Swampnet.Evl.DAL.InMemory.Services
 
                 internalEvent.Category = evt.Category.ToString();
                 internalEvent.Summary = evt.Summary;
-                internalEvent.TimestampUtc = evt.TimestampUtc; // Not sure we should allow this
+                //internalEvent.TimestampUtc = evt.TimestampUtc; // Not sure we should allow this
+                internalEvent.LastUpdatedUtc = DateTime.UtcNow;
 
                 // We need to update any matching properties, or add new ones
                 // @TODO: Jeez, how will this work for multiple properties with same category/name?
@@ -102,22 +103,37 @@ namespace Swampnet.Evl.DAL.InMemory.Services
                     query = query.Where(e => e.Category == criteria.Category.ToString());
                 }
 
-                if (criteria.FromUtc.HasValue)
+                // Realtime search
+                if (criteria.TimestampUtc.HasValue)
                 {
-                    query = query.Where(e => e.TimestampUtc >= criteria.FromUtc);
+                    query = query.Where(e => e.LastUpdatedUtc >= criteria.TimestampUtc);
+
+                    // Realtime search returns in date order (newest first)
+                    query = query.OrderByDescending(e => e.TimestampUtc);
                 }
 
-                if (criteria.ToUtc.HasValue)
+                // Advanced search
+                else
                 {
-                    query = query.Where(e => e.TimestampUtc <= criteria.ToUtc);
+                    if (criteria.FromUtc.HasValue)
+                    {
+                        query = query.Where(e => e.TimestampUtc >= criteria.FromUtc);
+                    }
+
+                    if (criteria.ToUtc.HasValue)
+                    {
+                        query = query.Where(e => e.TimestampUtc <= criteria.ToUtc);
+                    }
+
+                    if (criteria.PageSize > 0 && criteria.Page >= 0)
+                    {
+                        query = query.Skip(criteria.PageSize * criteria.Page).Take(criteria.PageSize);
+                    }
+
+                    // Advanced search returns in date order (oldest first) - Is this going to be confusing?
+                    query = query.OrderBy(e => e.TimestampUtc);
                 }
 
-				query = query.OrderByDescending(e => e.TimestampUtc);
-
-				if (criteria.PageSize > 0 && criteria.Page >= 0)
-				{
-					query = query.Skip(criteria.PageSize * criteria.Page).Take(criteria.PageSize);
-				}
 
                 var results = await query.ToArrayAsync();
 

@@ -15,10 +15,16 @@ namespace Swampnet.Evl.Client
 
         public string Summary { get; set; }
 
-        public DateTime? FromUtc { get; set; }
+        // Just an awful name. Basically, we use this in real-time mode to return all
+        // the events raised *or modified* since this time.
+        public DateTime? TimestampUtc { get; set; }
 
+        #region Advanced
+        public DateTime? FromUtc { get; set; }
         public DateTime? ToUtc { get; set; }
-		public int PageSize { get; set; }
-		public int Page { get; set; }
-	}
+        public int PageSize { get; set; }
+        public int Page { get; set; }
+        #endregion
+
+    }
 }
