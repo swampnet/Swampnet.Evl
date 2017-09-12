@@ -7,3 +7,7 @@ https://serilog.net/
 
 http://www.mimekit.net/
 A cross-platform .NET library for IMAP, POP3, and SMTP
+
+
+Create deployment script:
+azure site deploymentscript -s Swampnet.Evl.sln --aspWAP Swampnet.Evl.Web\Swampnet.Evl.Web.csproj
