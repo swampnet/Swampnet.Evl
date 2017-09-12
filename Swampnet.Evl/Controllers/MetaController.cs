@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace Swampnet.Evl.Controllers
 {
-    [Route("api/meta")]
+    [Route("meta")]
     public class MetaController : Controller
     {
-        // GET api/meta
+        // GET meta
         [HttpGet]
         public IActionResult Get()
         {

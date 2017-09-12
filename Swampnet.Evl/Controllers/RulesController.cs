@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Swampnet.Evl.Controllers
 {
-    [Route("api/rules")]
+    [Route("rules")]
     public class RulesController : Controller
     {
         private readonly IRuleDataAccess _rulesData;
@@ -18,7 +18,7 @@ namespace Swampnet.Evl.Controllers
         }
 
         
-        // GET api/rules
+        // GET rules
         [HttpGet]
         public async Task<IActionResult> Get()
         {
@@ -30,7 +30,7 @@ namespace Swampnet.Evl.Controllers
         }
 
 
-        // GET api/rules/<id>
+        // GET rules/<id>
         [HttpGet("{id}", Name = "RuleDetails")]
         public async Task<IActionResult> Get(Guid id)
         {
@@ -40,7 +40,7 @@ namespace Swampnet.Evl.Controllers
         }
 
 
-        // POST api/rules
+        // POST rules
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] Rule rule)
         {
@@ -54,7 +54,7 @@ namespace Swampnet.Evl.Controllers
         }
 
 
-        // PUT api/rules/<id>
+        // PUT rules/<id>
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(Guid id, [FromBody] Rule rule)
         {
@@ -89,7 +89,7 @@ namespace Swampnet.Evl.Controllers
         }
 
 
-        // DELETE api/rules/<id>
+        // DELETE rules/<id>
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {

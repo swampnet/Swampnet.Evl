@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Swampnet.Evl.Controllers
 {
-    [Route("api/events")]
+    [Route("events")]
 	public class EventsController : Controller
 	{
         private readonly IEventQueueProcessor _eventProcessor;
