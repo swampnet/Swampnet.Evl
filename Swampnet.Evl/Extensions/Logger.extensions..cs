@@ -25,7 +25,9 @@ namespace Swampnet.Evl
         }
 
        
-
+        /// <summary>
+        /// Local evl-serilog sink
+        /// </summary>
         class LocalSink : EvlSink
         {
             private readonly IEventDataAccess _dal;

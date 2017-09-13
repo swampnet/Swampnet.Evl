@@ -99,7 +99,6 @@ namespace Swampnet.Evl
 				c.SwaggerEndpoint("/swagger/v1/swagger.json", "Evl API V1");
 			});
 
-
 			app.UseMvc();
         }
     }
