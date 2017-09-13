@@ -107,9 +107,6 @@ namespace Swampnet.Evl.DAL.InMemory.Services
                 if (criteria.TimestampUtc.HasValue)
                 {
                     query = query.Where(e => e.LastUpdatedUtc >= criteria.TimestampUtc);
-
-                    // Realtime search returns in date order (newest first)
-                    query = query.OrderByDescending(e => e.TimestampUtc);
                 }
 
                 // Advanced search
@@ -125,17 +122,17 @@ namespace Swampnet.Evl.DAL.InMemory.Services
                         query = query.Where(e => e.TimestampUtc <= criteria.ToUtc);
                     }
 
-                    if (criteria.PageSize > 0 && criteria.Page >= 0)
-                    {
-                        query = query.Skip(criteria.PageSize * criteria.Page).Take(criteria.PageSize);
-                    }
+					// Advanced search returns in date order (oldest first) - Is this going to be confusing?
+				}
 
-                    // Advanced search returns in date order (oldest first) - Is this going to be confusing?
-                    query = query.OrderBy(e => e.TimestampUtc);
-                }
+				if (criteria.PageSize > 0 && criteria.Page >= 0)
+				{
+					query = query.Skip(criteria.PageSize * criteria.Page).Take(criteria.PageSize);
+				}
 
+				query = query.OrderByDescending(e => e.TimestampUtc);
 
-                var results = await query.ToArrayAsync();
+				var results = await query.ToArrayAsync();
 
                 return results.Select(e => Convert.ToEventSummary(e));
             }

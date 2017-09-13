@@ -13,8 +13,8 @@ export class ApiService {
     constructor(
         private _http: Http) {
 
-        //this._baseUrl = "http://localhost:5001/api/";
-        this._baseUrl = "http://localhost:5000/api/";
+        //this._baseUrl = "http://localhost:5001/";
+        this._baseUrl = "http://localhost:5000/";
         
         this.headers = new Headers({
             'Content-Type': 'application/json',
