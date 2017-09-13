@@ -76,7 +76,7 @@ namespace Swampnet.Evl
                 .WriteTo.Console()
                 .CreateLogger();
 
-            //loggerFactory.AddSerilog(); // Pretty noisy!
+            loggerFactory.AddSerilog(); // Pretty noisy!
 
 			appLifetime.ApplicationStopped.Register(Log.CloseAndFlush);
 
