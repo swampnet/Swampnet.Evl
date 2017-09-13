@@ -11,6 +11,7 @@ using Swampnet.Evl.Services;
 using Swampnet.Evl.DAL.InMemory;
 using Swampnet.Evl.Contracts;
 using Swampnet.Evl.Plugins.Email;
+using Swampnet.Evl.Common.Contracts;
 
 namespace Swampnet.Evl
 {
@@ -18,12 +19,6 @@ namespace Swampnet.Evl
     {
         public Startup(IConfiguration configuration)
         {
-			Log.Logger = new LoggerConfiguration()
-				.MinimumLevel.Verbose()
-				.Enrich.FromLogContext()
-				.WriteTo.Console()
-				.CreateLogger();
-
             Configuration = configuration;
         }
 
@@ -66,9 +61,22 @@ namespace Swampnet.Evl
 		}
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IApplicationLifetime appLifetime)
+        public void Configure(
+            IApplicationBuilder app,
+            IHostingEnvironment env,
+            ILoggerFactory loggerFactory,
+            IApplicationLifetime appLifetime,
+            IEventDataAccess dal,
+            IEventQueueProcessor eventProcessor)
         {
-			loggerFactory.AddSerilog();
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Verbose()
+                .Enrich.FromLogContext()
+                .WriteTo.LocalEvlSink(dal, eventProcessor)
+                .WriteTo.Console()
+                .CreateLogger();
+
+            //loggerFactory.AddSerilog(); // Pretty noisy!
 
 			appLifetime.ApplicationStopped.Register(Log.CloseAndFlush);
 

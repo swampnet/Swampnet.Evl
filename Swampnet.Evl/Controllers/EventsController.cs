@@ -5,6 +5,7 @@ using Swampnet.Evl.Common.Contracts;
 using Swampnet.Evl.Contracts;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -27,6 +28,8 @@ namespace Swampnet.Evl.Controllers
         {
             try
             {
+                Log.Logger.WithPublicProperties(criteria).Information("Get");
+
                 var events = await _dal.SearchAsync(criteria);
 
                 return Ok(events);
@@ -118,11 +121,18 @@ namespace Swampnet.Evl.Controllers
 
                 Parallel.ForEach(evts, async evt =>
                 {
-                    evt.Properties.AddRange(Request.CommonProperties());
-                    var id = await _dal.CreateAsync(null, evt);
-                    lock (ids)
+                    try
                     {
-                        ids.Add(id);
+                        evt.Properties.AddRange(Request.CommonProperties());
+                        var id = await _dal.CreateAsync(null, evt);
+                        lock (ids)
+                        {
+                            ids.Add(id);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine(ex.Message);
                     }
                 });
 

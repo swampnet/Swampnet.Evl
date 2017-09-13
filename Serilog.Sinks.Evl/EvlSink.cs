@@ -49,7 +49,7 @@ namespace Serilog.Sinks.Evl
 
             try
             {
-                await Api.PostAsync(_failedEvents.Concat(evlEvents));
+                await PostAsync(_failedEvents.Concat(evlEvents));
 
                 _failedEvents.Clear();
             }
@@ -64,11 +64,18 @@ namespace Serilog.Sinks.Evl
             }
         }
 
+
+        protected virtual Task PostAsync(IEnumerable<Event> events)
+        {
+            return Api.PostAsync(events);
+        }
+
+
         private readonly List<Event> _failedEvents = new List<Event>();
 
 
         // Convert Serilog LogEvent to an Evl.Event
-        internal IEnumerable<Event> Convert(IEnumerable<LogEvent> source)
+        protected IEnumerable<Event> Convert(IEnumerable<LogEvent> source)
         {
             var evlEvents = new List<Event>();
 
