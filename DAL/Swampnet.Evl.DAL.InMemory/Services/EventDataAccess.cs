@@ -125,12 +125,12 @@ namespace Swampnet.Evl.DAL.InMemory.Services
 					// Advanced search returns in date order (oldest first) - Is this going to be confusing?
 				}
 
+				query = query.OrderByDescending(e => e.TimestampUtc);
+
 				if (criteria.PageSize > 0 && criteria.Page >= 0)
 				{
 					query = query.Skip(criteria.PageSize * criteria.Page).Take(criteria.PageSize);
 				}
-
-				query = query.OrderByDescending(e => e.TimestampUtc);
 
 				var results = await query.ToArrayAsync();
 
