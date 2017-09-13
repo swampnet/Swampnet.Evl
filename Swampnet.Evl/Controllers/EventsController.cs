@@ -5,6 +5,7 @@ using Swampnet.Evl.Common.Contracts;
 using Swampnet.Evl.Contracts;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace Swampnet.Evl.Controllers
@@ -24,22 +25,42 @@ namespace Swampnet.Evl.Controllers
         [HttpGet]
         public async Task<IActionResult> Get([FromQuery] EventSearchCriteria criteria)
         {
-            var events = await _dal.SearchAsync(criteria);
+            try
+            {
+                var events = await _dal.SearchAsync(criteria);
 
-            return Ok(events);
+                return Ok(events);
+            }
+            catch (Exception ex)
+            {
+                ex.AddData(criteria.GetPublicProperties());
+                Log.Error(ex, ex.Message);
+
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex);
+            }
         }
 
         [HttpGet("{id}", Name = "EventDetails")]
         public async Task<IActionResult> Get(Guid id)
         {
-            var evt = await _dal.ReadAsync(id);
-
-            if(evt == null)
+            try
             {
-                return NotFound();
-            }
+                var evt = await _dal.ReadAsync(id);
 
-            return Ok(evt);
+                if (evt == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(evt);
+            }
+            catch (Exception ex)
+            {
+                ex.AddData("id", id);
+                Log.Error(ex, ex.Message);
+
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex);
+            }
         }
 
 
@@ -73,9 +94,9 @@ namespace Swampnet.Evl.Controllers
 			catch (Exception ex)
 			{
 				Log.Error(ex, ex.Message);
-				throw;
-			}
-		}
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex);
+            }
+        }
 
 
         [HttpPost("bulk")]
@@ -118,7 +139,7 @@ namespace Swampnet.Evl.Controllers
             catch (Exception ex)
             {
                 Log.Error(ex, ex.Message);
-                throw;
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex);
             }
         }
     }

@@ -38,7 +38,10 @@ namespace Swampnet.Evl.DAL.InMemory.Services
             using (var context = RuleContext.Create())
             {
                 var rule = await context.Rules.SingleOrDefaultAsync(r => r.IsActive && r.Id == id);
-
+                if(rule == null)
+                {
+                    return null;
+                }
                 return Convert.ToRule(rule);
             }
         }

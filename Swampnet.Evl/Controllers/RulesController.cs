@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Serilog;
+using Swampnet.Evl.Client;
 using Swampnet.Evl.Common.Contracts;
 using Swampnet.Evl.Common.Entities;
 using System;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace Swampnet.Evl.Controllers
@@ -22,11 +24,19 @@ namespace Swampnet.Evl.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            // @TODO: Auth
-            // @TODO: Just want rules that we're allowed to see.
-            var rules = await _rulesData.SearchAsync();
+            try
+            {
+                // @TODO: Auth
+                // @TODO: Just want rules that we're allowed to see.
+                var rules = await _rulesData.SearchAsync();
 
-            return Ok(rules);
+                return Ok(rules);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, ex.Message);
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex);
+            }
         }
 
 
@@ -34,9 +44,24 @@ namespace Swampnet.Evl.Controllers
         [HttpGet("{id}", Name = "RuleDetails")]
         public async Task<IActionResult> Get(Guid id)
         {
-            var rule = await _rulesData.LoadAsync(id);
+            try
+            {
+                var rule = await _rulesData.LoadAsync(id);
 
-            return Ok(rule);
+                if(rule == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(rule);
+            }
+            catch (Exception ex)
+            {
+                ex.AddData("id", id);
+                Log.Error(ex, ex.Message);
+
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex);
+            }
         }
 
 
@@ -44,13 +69,21 @@ namespace Swampnet.Evl.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] Rule rule)
         {
-            Log.Information("Create rule {ruleName}", rule.Name);
-            
-            // @TODO: Auth
+            try
+            {
+                Log.Information("Create rule {ruleName}", rule.Name);
 
-            await _rulesData.CreateAsync(rule);
+                // @TODO: Auth
 
-            return CreatedAtRoute("RuleDetails", new { id = rule.Id }, rule);
+                await _rulesData.CreateAsync(rule);
+
+                return CreatedAtRoute("RuleDetails", new { id = rule.Id }, rule);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, ex.Message);
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex);
+            }
         }
 
 
@@ -84,7 +117,7 @@ namespace Swampnet.Evl.Controllers
             {
                 ex.AddData("id", id);
                 Log.Error(ex, ex.Message);
-                throw;
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex);
             }
         }
 
@@ -113,8 +146,8 @@ namespace Swampnet.Evl.Controllers
 			{
 				ex.AddData("id", id);
 				Log.Error(ex, ex.Message);
-				throw;
-			}
-		}
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex);
+            }
+        }
 	}
 }
