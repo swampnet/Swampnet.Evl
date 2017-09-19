@@ -44,9 +44,9 @@ import { EventsSearchCriteriaComponent } from './components/events/events-search
             { path: 'rules/:id', component: RuleDetailsComponent },
 
             { path: 'events', component: EventsComponent },
-			{ path: 'events/:id', component: EventDetailsComponent }
-			//,
-   //         { path: '**', redirectTo: 'home' }
+			{ path: 'events/:id', component: EventDetailsComponent },
+
+            { path: '**', redirectTo: 'home' }
         ])
     ],
     providers: [

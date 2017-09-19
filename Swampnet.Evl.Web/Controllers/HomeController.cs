@@ -13,7 +13,7 @@ namespace Swampnet.Evl.Web.Controllers
         public IActionResult Index()
         {
             Log.Information("GET: Index");
-            return View();
+            return View(new About());
         }
 
         public IActionResult Error()
@@ -22,4 +22,9 @@ namespace Swampnet.Evl.Web.Controllers
             return View();
         }
     }
+
+	public class About
+	{
+		public string Tmp { get; set; }
+	}
 }
