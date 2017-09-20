@@ -2,10 +2,10 @@
 
 <div *ngIf="rule; else noRuleTemplate">
 	<div class="container-fluid">
-		<div class="row">
+		<!--<div class="row">
 			<div class="col-sm-1 property-name">Id</div>
 			<div class="col-sm-11">{{rule.id}}</div>
-		</div>
+		</div>-->
 		<div class="row">
 			<div class="col-sm-1 property-name">Name</div>
 			<div class="col-sm-11"><input [(ngModel)]="rule.name"></div>
@@ -31,6 +31,7 @@
 		<button (click)="delete()" type="button" class="btn btn-cancel">Delete</button>
 	</div>
 	<!-- Debug -->
+	<!--
 	<div style="background-color:lightgoldenrodyellow; padding: 5px; margin-top: 20px">
 		<h3>Debug</h3>
 		<div>
@@ -42,6 +43,7 @@
         Meta
         <div><pre><small>{{metaData | json}}</small></pre></div>
 	</div>
+	-->
 </div>
 
 <ng-template #noRuleTemplate>
