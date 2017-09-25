@@ -69,7 +69,6 @@ namespace Swampnet.Evl.Services
             var eventIds = Wait();
             while (eventIds != null)
             {
-                Log.Debug("Process {EventCount} events", eventIds.Count());
                 foreach(var eventId in eventIds)
                 {
                     try
