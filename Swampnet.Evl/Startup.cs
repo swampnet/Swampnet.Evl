@@ -76,28 +76,30 @@ namespace Swampnet.Evl
                 .WriteTo.Console()
                 .CreateLogger();
 
-            loggerFactory.AddSerilog(); // Pretty noisy!
+            //loggerFactory.AddSerilog(); // Pretty noisy!
 
 			appLifetime.ApplicationStopped.Register(Log.CloseAndFlush);
 
 			if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+
+                // Enable middleware to serve generated Swagger as a JSON endpoint.
+                app.UseSwagger();
+
+                // Enable middleware to serve swagger-ui (HTML, JS, CSS etc.), specifying the Swagger JSON endpoint.
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Evl API V1");
+                });
             }
 
-			app.UseCors(cfg =>
+
+            app.UseCors(cfg =>
 				cfg.AllowAnyOrigin()
 				.AllowAnyHeader()
 				.AllowAnyMethod());
 
-			// Enable middleware to serve generated Swagger as a JSON endpoint.
-			app.UseSwagger();
-
-			// Enable middleware to serve swagger-ui (HTML, JS, CSS etc.), specifying the Swagger JSON endpoint.
-			app.UseSwaggerUI(c =>
-			{
-				c.SwaggerEndpoint("/swagger/v1/swagger.json", "Evl API V1");
-			});
 
 			app.UseMvc();
         }
