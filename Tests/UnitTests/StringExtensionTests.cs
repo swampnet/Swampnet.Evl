@@ -37,5 +37,24 @@ namespace UnitTests
 
 			Assert.IsTrue(lhs.EqualsNoCase(rhs));
 		}
+
+        [TestMethod]
+        public void String_AsX()
+        {
+            string source = "True";
+
+            Assert.AreEqual(true, source.As<bool>());
+
+            source = "1.234";
+            Assert.AreEqual(1.234, source.As<double>());
+        }
+
+
+        [TestMethod]
+        public void AsString()
+        {
+            double i = 1.234;
+            Assert.AreEqual("1.234", i.AsString());
+        }
     }
 }
