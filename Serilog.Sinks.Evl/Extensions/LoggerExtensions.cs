@@ -1,4 +1,5 @@
 ﻿using Serilog;
+using Serilog.Sinks.Evl;
 using Swampnet.Evl.Client;
 using System;
 using System.Collections.Generic;
@@ -34,7 +35,7 @@ namespace Swampnet.Evl
         {
             foreach (var p in properties)
             {
-                logger = logger.ForContext(p.Name, p.Value);
+                logger = logger.ForContext(string.IsNullOrEmpty(p.Category) ? p.Name : p.Category + EvlSink.CATEGORY_SPLIT + p.Name, p.Value);
             }
             return logger;
         }

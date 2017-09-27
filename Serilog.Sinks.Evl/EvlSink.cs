@@ -15,6 +15,8 @@ namespace Serilog.Sinks.Evl
 {
     public class EvlSink : PeriodicBatchingSink
     {
+		public const string CATEGORY_SPLIT = "@@@";
+
         private static readonly int _defaultBatchSize = 50;                        // Maximum number of LogEvents in a batch
         private static readonly TimeSpan _defaultPeriod = TimeSpan.FromSeconds(5); // How often we flush the batch
 
@@ -133,8 +135,10 @@ namespace Serilog.Sinks.Evl
                 var scalar = logEventValue.Value as ScalarValue;
                 if(scalar != null)
                 {
-                    properties.Add(new Property(logEventValue.Key, scalar.Value));
-                }
+					var parts = Split(logEventValue.Key);
+
+					properties.Add(new Property(parts.Item1, parts.Item2, scalar.Value));
+				}
 
                 var d = logEventValue.Value as DictionaryValue;
                 if(d != null)
@@ -149,6 +153,21 @@ namespace Serilog.Sinks.Evl
                 // @TODO: Handle StructureValue's
             }
         }
+
+
+		private Tuple<string, string> Split(string key)
+		{
+			string category = "";
+			string name = "key";
+
+			if (key.Contains(EvlSink.CATEGORY_SPLIT))
+			{
+				category = key.Substring(0, key.IndexOf(EvlSink.CATEGORY_SPLIT));
+				name = key.Substring(key.IndexOf(EvlSink.CATEGORY_SPLIT) + EvlSink.CATEGORY_SPLIT.Length);
+			}
+
+			return new Tuple<string, string>(category, name);
+		}
 
 
         private void Process(List<Property> properties, string category, IReadOnlyDictionary<ScalarValue, LogEventPropertyValue> logEventValues)
