@@ -20,7 +20,10 @@
           <table>
 						<xsl:for-each select="/Event/Properties/Property">
 							<tr>
-								<td>
+                <td>
+                  <xsl:value-of select="Category"/>
+                </td>
+                <td>
 									<xsl:value-of select="Name"/>
 								</td>
 								<td>
