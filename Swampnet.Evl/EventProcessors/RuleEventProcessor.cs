@@ -7,6 +7,7 @@ using Swampnet.Evl.Services;
 using Swampnet.Evl.Client;
 using Serilog;
 using System.Threading.Tasks;
+using Swampnet.Evl.Common.Entities;
 
 namespace Swampnet.Evl.EventProcessors
 {
@@ -25,7 +26,7 @@ namespace Swampnet.Evl.EventProcessors
 
         public async Task ProcessAsync(Event evt)
         {
-            var rules = _loader.LoadAsync(null).Result.ToList();
+            var rules = new List<Rule>(await _loader.LoadAsync(null));
 
             var expressionEvaluator = new ExpressionEvaluator();
 
