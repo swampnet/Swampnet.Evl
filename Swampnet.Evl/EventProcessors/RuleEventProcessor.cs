@@ -2,13 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Swampnet.Evl.Common;
 using System.Diagnostics;
-using Swampnet.Evl.Contracts;
 using Swampnet.Evl.Services;
 using Swampnet.Evl.Client;
 using Serilog;
+using System.Threading.Tasks;
 
 namespace Swampnet.Evl.EventProcessors
 {
@@ -25,7 +23,7 @@ namespace Swampnet.Evl.EventProcessors
             _actionHandlers = actionHandlers.ToDictionary(a => a.GetType().Name.Replace("ActionHandler", "").ToLower());
         }
 
-        public void Process(Event evt)
+        public async Task ProcessAsync(Event evt)
         {
             var rules = _loader.LoadAsync(null).Result.ToList();
 
@@ -59,7 +57,7 @@ namespace Swampnet.Evl.EventProcessors
                                         throw new InvalidOperationException($"Unknown action: {action.Type}");
                                     }
 
-                                    _actionHandlers[key].Apply(evt, action, rule);
+                                    await _actionHandlers[key].ApplyAsync(evt, action, rule);
 
                                     evt.Properties.Add(new Property("Internal", "ActionApplied", action.Type));
                                 }

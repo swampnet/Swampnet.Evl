@@ -37,7 +37,7 @@ namespace UnitTests
             //
             Assert.AreEqual(EventCategory.Information, evt.Category);
 
-            processor.Process(evt);
+            processor.ProcessAsync(evt).Wait();
 
             Assert.AreEqual(EventCategory.Debug, evt.Category);
         }
@@ -89,7 +89,7 @@ namespace UnitTests
             Assert.AreEqual(EventCategory.Information, evt.Category);
             Assert.IsFalse(evt.Properties.Any(p => p.Name.Equals("new-property")));
 
-            processor.Process(evt);
+            processor.ProcessAsync(evt).Wait();
 
             Assert.AreEqual(EventCategory.Debug, evt.Category);
             Assert.IsTrue(evt.Properties.Any(p => p.Name.Equals("new-property")));

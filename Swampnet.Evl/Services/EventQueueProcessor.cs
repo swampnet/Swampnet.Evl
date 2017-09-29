@@ -79,7 +79,7 @@ namespace Swampnet.Evl.Services
                         {
                             try
                             {
-                                processor.Process(evt);
+                                processor.ProcessAsync(evt);
                             }
                             catch (Exception ex)
                             {

@@ -71,7 +71,7 @@ namespace Swampnet.Evl.Plugins.Email
 		// @TODO: Apply should really be async
 		// @TODO: Actually, we really need the event ID as well (So we can reference it in the email template)
         //          - Sooner or later you're just going to have to have the ID on the event itself...
-		public void Apply(Event evt, ActionDefinition actionDefinition, Rule rule)
+		public async Task ApplyAsync(Event evt, ActionDefinition actionDefinition, Rule rule)
 		{
 			var to = actionDefinition.Properties.StringValue("to");
 			var cc = actionDefinition.Properties.StringValue("cc");
@@ -145,7 +145,8 @@ namespace Swampnet.Evl.Plugins.Email
 					client.Authenticate(usr, _cfg["email:smtp:pwd"]);
 				}
 
-				client.Send(message);
+				await client.SendAsync(message);
+
 				client.Disconnect(true);
 			}
 		}

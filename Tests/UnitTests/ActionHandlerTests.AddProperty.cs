@@ -21,7 +21,7 @@ namespace UnitTests
 
             var addPropertyAction = new AddPropertyActionHandler();
 
-            addPropertyAction.Apply(
+            addPropertyAction.ApplyAsync(
                 evt, 
 				new ActionDefinition()
 				{
@@ -30,7 +30,8 @@ namespace UnitTests
 						new Property("new-property", "new property value")
 					}
 				},
-				new Rule() { Name = "Mocked Rule"});
+				new Rule() { Name = "Mocked Rule"})
+                .Wait();
 
             // Assert property now exists and has correct value
             Assert.IsTrue(evt.Properties.Any(p => p.Name == "new-property"));
@@ -48,7 +49,7 @@ namespace UnitTests
 
             var addPropertyAction = new AddPropertyActionHandler();
 
-            addPropertyAction.Apply(
+            addPropertyAction.ApplyAsync(
                 evt,
 				new ActionDefinition()
 				{
@@ -58,7 +59,7 @@ namespace UnitTests
 						new Property("new-property-02", "new property value 02")
 					}
 				},
-				new Rule() { Name = "Mocked Rule" });
+				new Rule() { Name = "Mocked Rule" }).Wait();
 
             // Assert property now exists and has correct value
             Assert.IsTrue(evt.Properties.Any(p => p.Name == "new-property"));
@@ -76,7 +77,7 @@ namespace UnitTests
 
             var addPropertyAction = new AddPropertyActionHandler();
 
-			addPropertyAction.Apply(
+			addPropertyAction.ApplyAsync(
 				evt,
 				new ActionDefinition()
 				{
@@ -85,7 +86,7 @@ namespace UnitTests
 						new Property("new-property", "new property value")
 					}
 				},
-				new Rule() { Name = "Mocked Rule" });
+				new Rule() { Name = "Mocked Rule" }).Wait();
 
 			// Assert property now exists and has correct value
 			Assert.IsTrue(evt.Properties.Any(p => p.Name == "new-property"));
@@ -100,13 +101,13 @@ namespace UnitTests
 
             var addPropertyAction = new AddPropertyActionHandler();
 
-			addPropertyAction.Apply(
+			addPropertyAction.ApplyAsync(
 				evt,
 				new ActionDefinition()
 				{
 					Properties = null
 				},
-				new Rule() { Name = "Mocked Rule" });
+				new Rule() { Name = "Mocked Rule" }).Wait();
 
 			// Make sure we didn't add any properties
 			Assert.AreEqual(evt.Properties.Count, propertyCount);
@@ -120,13 +121,13 @@ namespace UnitTests
 
             var addPropertyAction = new AddPropertyActionHandler();
 
-			addPropertyAction.Apply(
+			addPropertyAction.ApplyAsync(
 				evt,
 				new ActionDefinition()
 				{
 					Properties = new Property[0]
 				},
-				new Rule() { Name = "Mocked Rule" });
+				new Rule() { Name = "Mocked Rule" }).Wait();
 
 			// Make sure we didn't add any properties
 			Assert.AreEqual(evt.Properties.Count, propertyCount);

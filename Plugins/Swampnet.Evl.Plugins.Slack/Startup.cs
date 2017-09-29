@@ -7,11 +7,12 @@ using System.Text;
 
 namespace Swampnet.Evl
 {
-    public static class Startup
+    public static class SlackStartup
     {
         public static void AddSlackActionHandler(this IServiceCollection services)
         {
             services.AddTransient<IActionHandler, SlackActionHandler>();
+            services.AddTransient<ISlackApi, SlackApi>();
         }
     }
 }

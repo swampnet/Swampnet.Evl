@@ -12,9 +12,10 @@ namespace Swampnet.Evl.EventProcessors
     {
         public int Priority => 0;
 
-        public void Process(Event evt)
+        public Task ProcessAsync(Event evt)
         {
             //Log.Information("Processing evt {EventSummary} {Processor}", evt.Summary, this.GetType().Name);
+            return Task.CompletedTask;
         }
     }
 
@@ -22,9 +23,10 @@ namespace Swampnet.Evl.EventProcessors
     {
         public int Priority => 0;
 
-        public void Process(Event evt)
+        public Task ProcessAsync(Event evt)
         {
             //Log.Information("Processing evt {EventSummary} {Processor}", evt.Summary, this.GetType().Name);
+            return Task.CompletedTask;
         }
     }
 }

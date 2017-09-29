@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Swampnet.Evl
 {
-    public static class Startup
+    public static class EmailStartup
     {
         public static void AddEmailActionHandler(this IServiceCollection services)
         {

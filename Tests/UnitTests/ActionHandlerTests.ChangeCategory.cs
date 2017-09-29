@@ -21,7 +21,7 @@ namespace UnitTests
 
             var changeCategoryAction = new ChangeCategoryActionHandler();
 
-            changeCategoryAction.Apply(
+            changeCategoryAction.ApplyAsync(
                 evt, 
 				new ActionDefinition()
 				{
@@ -30,7 +30,7 @@ namespace UnitTests
 						new Property("category", expected)
 					}
 				},
-				new Rule() { Name = "Mocked Rule" });
+				new Rule() { Name = "Mocked Rule" }).Wait();
 
             var actual = evt.Category;
 
@@ -46,7 +46,7 @@ namespace UnitTests
 
             var changeCategoryAction = new ChangeCategoryActionHandler();
 
-			changeCategoryAction.Apply(
+			changeCategoryAction.ApplyAsync(
 				evt,
 				new ActionDefinition()
 				{
@@ -55,7 +55,7 @@ namespace UnitTests
 						new Property("some-unrelated-property", "some unrelated value")
 					}
 				},
-				new Rule() { Name = "Mocked Rule" });
+				new Rule() { Name = "Mocked Rule" }).Wait();
 
 			var actual = evt.Category;
 
@@ -70,13 +70,13 @@ namespace UnitTests
 
             var changeCategoryAction = new ChangeCategoryActionHandler();
 
-			changeCategoryAction.Apply(
+			changeCategoryAction.ApplyAsync(
 				evt,
 				new ActionDefinition()
 				{
 					Properties = null
 				},
-				new Rule() { Name = "Mocked Rule" });
+				new Rule() { Name = "Mocked Rule" }).Wait();
 
 			var actual = evt.Category;
 

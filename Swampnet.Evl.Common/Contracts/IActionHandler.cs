@@ -15,6 +15,6 @@ namespace Swampnet.Evl.Common.Contracts
 		/// <param name="evt">The event that triggered this action</param>
 		/// <param name="actionDefinition">The action definition</param>
 		/// <param name="rule">The rule that triggered this action</param>
-        void Apply(Event evt, ActionDefinition actionDefinition, Rule rule);
+        Task ApplyAsync(Event evt, ActionDefinition actionDefinition, Rule rule);
     }
 }

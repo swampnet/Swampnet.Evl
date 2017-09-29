@@ -10,7 +10,6 @@ using Newtonsoft.Json;
 using Swampnet.Evl.Services;
 using Swampnet.Evl.DAL.InMemory;
 using Swampnet.Evl.Contracts;
-using Swampnet.Evl.Plugins.Email;
 using Swampnet.Evl.Common.Contracts;
 
 namespace Swampnet.Evl

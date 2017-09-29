@@ -9,7 +9,8 @@ namespace Swampnet.Evl.Common.Contracts
 {
     public interface IEventProcessor
     {
-        void Process(Event evt);
+        Task ProcessAsync(Event evt);
+
         int Priority { get; }
     }
 }
