@@ -38,6 +38,7 @@ namespace Swampnet.Evl
             services.AddDefaultActionHandlers();
 
             services.AddEmailActionHandler();
+            services.AddSlackActionHandler();
 
             // Add framework services.  
             services.AddMvc().AddJsonOptions(options => {

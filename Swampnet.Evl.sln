@@ -32,6 +32,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Swampnet.Evl.Web", "Swampnet.Evl.Web\Swampnet.Evl.Web.csproj", "{D5631A28-ADCD-4394-8B8E-778D654967AC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Swampnet.Evl.Plugins.Slack", "Plugins\Swampnet.Evl.Plugins.Slack\Swampnet.Evl.Plugins.Slack.csproj", "{A6C5720F-C305-46A3-81E4-A11EA65418ED}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -74,6 +76,10 @@ Global
 		{D5631A28-ADCD-4394-8B8E-778D654967AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D5631A28-ADCD-4394-8B8E-778D654967AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D5631A28-ADCD-4394-8B8E-778D654967AC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A6C5720F-C305-46A3-81E4-A11EA65418ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6C5720F-C305-46A3-81E4-A11EA65418ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6C5720F-C305-46A3-81E4-A11EA65418ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6C5720F-C305-46A3-81E4-A11EA65418ED}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -83,6 +89,7 @@ Global
 		{A48E833C-F168-4BE3-B259-0B370D418781} = {FD44FAEF-50B1-413B-BFFC-A099A9463C92}
 		{49FC25D7-C919-48CD-9164-09848E370080} = {45C0730E-6BBE-4265-9F47-75B0DBF8C29A}
 		{D62BA268-666F-45DD-A396-BD457AF95108} = {B46E28DE-6890-4BB4-B962-DB59ECFCE207}
+		{A6C5720F-C305-46A3-81E4-A11EA65418ED} = {B46E28DE-6890-4BB4-B962-DB59ECFCE207}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7662AB53-CF97-4F2F-863E-20F3110E5EFF}

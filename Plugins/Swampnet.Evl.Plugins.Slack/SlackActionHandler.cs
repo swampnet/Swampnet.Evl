@@ -1,14 +1,11 @@
-﻿using Swampnet.Evl.Common.Contracts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Swampnet.Evl.Common;
-using Serilog;
+﻿using Serilog;
 using Swampnet.Evl.Client;
+using Swampnet.Evl.Common.Contracts;
 using Swampnet.Evl.Common.Entities;
+using System;
+using System.Linq;
 
-namespace Swampnet.Evl.Actions
+namespace Swampnet.Evl.Plugins.Slack
 {
     class SlackActionHandler : IActionHandler
     {
