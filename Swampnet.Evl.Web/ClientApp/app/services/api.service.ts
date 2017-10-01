@@ -14,8 +14,8 @@ export class ApiService {
         private _http: Http) {
 
         //this._baseUrl = "http://localhost:5001/";
-		//this._baseUrl = "http://localhost:5000/";
-		this._baseUrl = "http://swampnet-evl-staging.azurewebsites.net/api/";
+		this._baseUrl = "http://localhost:5000/";
+		//this._baseUrl = "http://swampnet-evl-staging.azurewebsites.net/api/";
         
         this.headers = new Headers({
             'Content-Type': 'application/json',

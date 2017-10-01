@@ -59,20 +59,21 @@ namespace Swampnet.Evl.DAL.InMemory.Services
                 // We need to update any matching properties, or add new ones
                 // @TODO: Jeez, how will this work for multiple properties with same category/name?
                 // @HACK: I'm going to ignore this ^ for now!
-                foreach(var p in evt.Properties)
-                {
-                    var internalProperty = internalEvent.Properties.Values(p.Category, p.Name).SingleOrDefault();
+				//		  - Ok, don't. It's causing an exception!
+                //foreach(var p in evt.Properties)
+                //{
+                //    var internalProperty = internalEvent.Properties.Values(p.Category, p.Name).SingleOrDefault();
 
-                    if(internalProperty != null)
-                    {
-                        internalProperty.Value = p.Value;
-                    }
-                    else
-                    {
-                        // Add new
-                        internalEvent.Properties.Add(Convert.ToInternalProperty(p));
-                    }
-                }
+                //    if(internalProperty != null)
+                //    {
+                //        internalProperty.Value = p.Value;
+                //    }
+                //    else
+                //    {
+                //        // Add new
+                //        internalEvent.Properties.Add(Convert.ToInternalProperty(p));
+                //    }
+                //}
 
                 // .. and remove any properties no longer present.
                 // @HACK: Ignoring this for now

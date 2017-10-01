@@ -23,13 +23,6 @@ namespace Swampnet.Evl.Plugins.Slack
 
         public async Task ApplyAsync(Event evt, ActionDefinition actionDefinition, Rule rule)
         {
-            var channel = actionDefinition.Properties.StringValue("channel");
-
-            if (!channel.Any())
-            {
-                throw new ArgumentException("No 'channel' parameter");
-            }
-
             var msg = CreateSlackMessage(evt, actionDefinition, rule);
 
             await _api.PostAsync(msg);
@@ -38,7 +31,12 @@ namespace Swampnet.Evl.Plugins.Slack
         // @TODO: Should probably be a service with templating and whatnopt.
         private SlackMessage CreateSlackMessage(Event evt, ActionDefinition actionDefinition, Rule rule)
         {
-            return new SlackMessage();
+			return new SlackMessage()
+			{
+				Token = _cfg["slack:token"],
+				Channel = actionDefinition.Properties.StringValue("channel", _cfg["slack:default:channel"]),
+				UserName = "evl"
+			};
         }
     }
 }

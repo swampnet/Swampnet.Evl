@@ -10,11 +10,13 @@ using System.Threading.Tasks;
 
 namespace Swampnet.Evl.Plugins.Slack
 {
-    /// <summary>
-    /// Decouple this from the event stuff (So we don't want to have any knowledge of Events here) as we might want
-    /// to break this out into it's own package at some point.
-    /// </summary>
-    interface ISlackApi
+	/// <summary>
+	/// Decouple this from the event stuff (So we don't want to have any knowledge of Events here) as we might want
+	/// to break this out into it's own package at some point.
+	/// 
+	/// It's currently based on the legacy slack api token: https://api.slack.com/custom-integrations/legacy-tokens
+	/// </summary>
+	interface ISlackApi
     {
         Task PostAsync(SlackMessage msg);
     }
