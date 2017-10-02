@@ -53,30 +53,17 @@ namespace Swampnet.Evl.DAL.InMemory.Services
 
                 internalEvent.Category = evt.Category.ToString();
                 internalEvent.Summary = evt.Summary;
-                //internalEvent.TimestampUtc = evt.TimestampUtc; // Not sure we should allow this
                 internalEvent.LastUpdatedUtc = DateTime.UtcNow;
 
-                // We need to update any matching properties, or add new ones
-                // @TODO: Jeez, how will this work for multiple properties with same category/name?
-                // @HACK: I'm going to ignore this ^ for now!
-				//		  - Ok, don't. It's causing an exception!
-                //foreach(var p in evt.Properties)
-                //{
-                //    var internalProperty = internalEvent.Properties.Values(p.Category, p.Name).SingleOrDefault();
-
-                //    if(internalProperty != null)
-                //    {
-                //        internalProperty.Value = p.Value;
-                //    }
-                //    else
-                //    {
-                //        // Add new
-                //        internalEvent.Properties.Add(Convert.ToInternalProperty(p));
-                //    }
-                //}
-
-                // .. and remove any properties no longer present.
-                // @HACK: Ignoring this for now
+                // Update properties. At the moment we can only add new properties (How would we event match and update changed values? We can have multiple
+                // properties with the same category / name.
+                foreach(var prp in evt.Properties)
+                {
+                    if (!internalEvent.Properties.Any(p => p.Category.EqualsNoCase(prp.Category) && p.Name.EqualsNoCase(prp.Name) && p.Value.EqualsNoCase(prp.Value)))
+                    {
+                        internalEvent.Properties.Add(Convert.ToInternalProperty(prp));
+                    }
+                }
 
                 await context.SaveChangesAsync();
             }
