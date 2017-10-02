@@ -15,3 +15,4 @@ Create deployment script:
 azure site deploymentscript -s Swampnet.Evl.sln --aspWAP Swampnet.Evl.Web\Swampnet.Evl.Web.csproj
 
 Aime - Test commit
+Aime - Test commit
