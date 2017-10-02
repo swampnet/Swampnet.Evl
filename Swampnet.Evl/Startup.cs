@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Serilog;
 using Swashbuckle.AspNetCore.Swagger;
 using Newtonsoft.Json.Serialization;
@@ -57,14 +56,13 @@ namespace Swampnet.Evl
 					Description = "Backend API for Evl"
 				});
 			});
-
 		}
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(
             IApplicationBuilder app,
             IHostingEnvironment env,
-            ILoggerFactory loggerFactory,
+            //ILoggerFactory loggerFactory,
             IApplicationLifetime appLifetime,
             IEventDataAccess dal,
             IEventQueueProcessor eventProcessor)
@@ -94,12 +92,10 @@ namespace Swampnet.Evl
                 });
             }
 
-
             app.UseCors(cfg =>
 				cfg.AllowAnyOrigin()
 				.AllowAnyHeader()
 				.AllowAnyMethod());
-
 
 			app.UseMvc();
         }
