@@ -20,17 +20,16 @@ namespace Swampnet.Evl
         public static string ApiKey { get; set; }
         public static string Endpoint { get; set; }
 
-
-        public static async Task PostAsync(Event e)
+        public static async Task PostAsync(Event e, string apiKey, string endpoint)
         {
-            Validate();
+            Validate(apiKey, endpoint);
 
             using (var client = new HttpClient())
             {
-                client.DefaultRequestHeaders.Add("x-api-key", ApiKey);
+                client.DefaultRequestHeaders.Add("x-api-key", apiKey);
 
                 var rs = await client.PostAsync(
-                    Endpoint,
+                    endpoint,
                     new StringContent(
                         JsonConvert.SerializeObject(e),
                         Encoding.UTF8,
@@ -41,16 +40,22 @@ namespace Swampnet.Evl
         }
 
 
-        public static async Task PostAsync(IEnumerable<Event> e)
+        public static Task PostAsync(Event e)
         {
-            Validate();
+            return PostAsync(e, ApiKey, Endpoint);
+        }
+
+
+        public static async Task PostAsync(IEnumerable<Event> e, string apiKey, string endpoint)
+        {
+            Validate(apiKey, endpoint);
 
             using (var client = new HttpClient())
             {
-                client.DefaultRequestHeaders.Add("x-api-key", ApiKey);
+                client.DefaultRequestHeaders.Add("x-api-key", apiKey);
 
                 var rs = await client.PostAsync(
-                    Endpoint + "/bulk",
+                    endpoint + "/bulk",
                     new StringContent(
                         JsonConvert.SerializeObject(e),
                         Encoding.UTF8,
@@ -60,13 +65,19 @@ namespace Swampnet.Evl
             }
         }
 
-        private static void Validate()
+        public static Task PostAsync(IEnumerable<Event> e)
         {
-            if (string.IsNullOrEmpty(ApiKey))
+            return PostAsync(e, ApiKey, Endpoint);
+        }
+
+
+        private static void Validate(string apiKey, string endpoint)
+        {
+            if (string.IsNullOrEmpty(apiKey))
             {
                 throw new ArgumentNullException("ApiKey");
             }
-            if (string.IsNullOrEmpty(Endpoint))
+            if (string.IsNullOrEmpty(endpoint))
             {
                 throw new ArgumentNullException("Endpoint");
             }
