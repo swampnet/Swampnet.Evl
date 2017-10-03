@@ -13,6 +13,9 @@ using System.Diagnostics;
 
 namespace Swampnet.Evl
 {
+    /// <summary>
+    /// Logging / Serilog extensions
+    /// </summary>
     public static class LoggerExtensions
     {
         public static LoggerConfiguration LocalEvlSink(
@@ -43,7 +46,11 @@ namespace Swampnet.Evl
                 _eventProcessor = eventProcessor;
             }
 
-
+            /// <summary>
+            /// Not posting the events, creating them directly via the DAL (But still queing them up so we we process them as normal)
+            /// </summary>
+            /// <param name="events"></param>
+            /// <returns></returns>
             protected override async Task PostAsync(IEnumerable<Event> events)
             {
                 var ids = new List<Guid>();

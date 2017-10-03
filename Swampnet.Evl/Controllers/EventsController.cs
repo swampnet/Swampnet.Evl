@@ -39,7 +39,7 @@ namespace Swampnet.Evl.Controllers
                 ex.AddData(criteria.GetPublicProperties());
                 Log.Error(ex, ex.Message);
 
-                return StatusCode((int)HttpStatusCode.InternalServerError, ex);
+                return this.InternalServerError(ex);
             }
         }
 
@@ -62,7 +62,7 @@ namespace Swampnet.Evl.Controllers
                 ex.AddData("id", id);
                 Log.Error(ex, ex.Message);
 
-                return StatusCode((int)HttpStatusCode.InternalServerError, ex);
+                return this.InternalServerError(ex);
             }
         }
 
@@ -97,7 +97,7 @@ namespace Swampnet.Evl.Controllers
 			catch (Exception ex)
 			{
 				Log.Error(ex, ex.Message);
-                return StatusCode((int)HttpStatusCode.InternalServerError, ex);
+                return this.InternalServerError(ex);
             }
         }
 
@@ -149,7 +149,7 @@ namespace Swampnet.Evl.Controllers
             catch (Exception ex)
             {
                 Log.Error(ex, ex.Message);
-                return StatusCode((int)HttpStatusCode.InternalServerError, ex);
+                return this.InternalServerError(ex);
             }
         }
     }

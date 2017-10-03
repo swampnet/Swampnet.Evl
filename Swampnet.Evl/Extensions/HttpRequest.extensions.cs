@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace Swampnet.Evl
 {
+    /// <summary>
+    /// HttpRequest helpers
+    /// </summary>
     static class HttpRequestExtensions
     {
         public static string RemoteIpAddress(this HttpRequest rq)

@@ -38,6 +38,7 @@ namespace Swampnet.Evl.EventProcessors
                 int count = int.MaxValue;
 
                 // Keep processing the rules until either we run out of rules, or all the rules evaluate to false.
+                // When a rule evaluates to true, run any associated actions and remove the rule from our list.
                 while (count > 0 && rules.Any())
                 {
                     count = 0;
