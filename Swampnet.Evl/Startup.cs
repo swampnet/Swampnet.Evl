@@ -7,7 +7,6 @@ using Swashbuckle.AspNetCore.Swagger;
 using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
 using Swampnet.Evl.Services;
-using Swampnet.Evl.DAL.InMemory;
 using Swampnet.Evl.Contracts;
 using Swampnet.Evl.Common.Contracts;
 

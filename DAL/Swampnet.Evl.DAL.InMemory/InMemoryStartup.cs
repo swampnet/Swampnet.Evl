@@ -5,9 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Swampnet.Evl.DAL.InMemory
+namespace Swampnet.Evl
 {
-    public static class Extensions
+    public static class InMemoryStartup
     {
         public static void AddInMemoryDataProvider(this IServiceCollection services)
         {

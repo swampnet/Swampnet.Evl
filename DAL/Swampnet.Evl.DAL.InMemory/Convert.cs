@@ -11,6 +11,10 @@ namespace Swampnet.Evl.DAL.InMemory
     static class Convert
     {
         #region Event
+
+        /// <summary>
+        /// Convert an API Event to an InternalEvent
+        /// </summary>
         internal static InternalEvent ToInternalEvent(Event evt)
         {
             return evt == null
@@ -27,6 +31,9 @@ namespace Swampnet.Evl.DAL.InMemory
         }
 
 
+        /// <summary>
+        /// Convert an API IProperty to an InternalProperty
+        /// </summary>
         internal static InternalProperty ToInternalProperty(IProperty property)
         {
             return new InternalProperty()
@@ -37,6 +44,10 @@ namespace Swampnet.Evl.DAL.InMemory
             };
         }
 
+
+        /// <summary>
+        /// Convert an InternalEvent to an API Event 
+        /// </summary>
         internal static Event ToEvent(InternalEvent evt)
         {
             return evt == null 
@@ -52,6 +63,9 @@ namespace Swampnet.Evl.DAL.InMemory
                 };
         }
 
+        /// <summary>
+        /// Convert an InternalEvent to an EventSummary
+        /// </summary>
         internal static EventSummary ToEventSummary(InternalEvent evt)
         {
             return new EventSummary()
@@ -63,6 +77,11 @@ namespace Swampnet.Evl.DAL.InMemory
             };
         }
 
+        /// <summary>
+        /// Convert an IProperty to a Property
+        /// </summary>
+        /// <param name="property"></param>
+        /// <returns></returns>
         internal static Property ToProperty(IProperty property)
         {
             return new Property()
@@ -75,6 +94,10 @@ namespace Swampnet.Evl.DAL.InMemory
         #endregion
 
         #region Rule
+
+        /// <summary>
+        /// Convert InternalRule to an API Rule
+        /// </summary>
         internal static Rule ToRule(InternalRule source)
         {
             return new Rule()
@@ -87,6 +110,10 @@ namespace Swampnet.Evl.DAL.InMemory
             };
         }
 
+
+        /// <summary>
+        /// Convert an API Rule to an InternalRule
+        /// </summary>
         internal static InternalRule ToRule(Rule source)
         {
             return new InternalRule()

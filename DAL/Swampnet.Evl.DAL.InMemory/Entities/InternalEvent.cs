@@ -4,9 +4,13 @@ using System.Text;
 
 namespace Swampnet.Evl.DAL.InMemory.Entities
 {
+    /// <summary>
+    /// Entity used internally to persist event data
+    /// </summary>
     class InternalEvent
     {
         public Guid Id { get; set; }
+
         /// <summary>
         /// Event timestamp (UTC)
         /// </summary>

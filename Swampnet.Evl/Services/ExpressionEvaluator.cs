@@ -6,6 +6,9 @@ using Swampnet.Evl.Client;
 
 namespace Swampnet.Evl.Services
 {
+    /// <summary>
+    /// Expression Evaluator
+    /// </summary>
     class ExpressionEvaluator
     {
         public bool Evaluate(Expression expression, Event evt)
@@ -39,7 +42,8 @@ namespace Swampnet.Evl.Services
                     break;
 
                 case RuleOperatorType.LTE:
-                    result = Eq(GetOperand(expression, evt), expression.Value) || Lt(GetOperand(expression, evt), expression.Value);
+                    result = Eq(GetOperand(expression, evt), expression.Value) 
+                          || Lt(GetOperand(expression, evt), expression.Value);
                     break;
 
                 case RuleOperatorType.GT:
@@ -47,7 +51,8 @@ namespace Swampnet.Evl.Services
                     break;
 
                 case RuleOperatorType.GTE:
-                    result = Eq(GetOperand(expression, evt), expression.Value) || Gt(GetOperand(expression, evt), expression.Value);
+                    result = Eq(GetOperand(expression, evt), expression.Value) 
+                          || Gt(GetOperand(expression, evt), expression.Value);
                     break;
 
                 default:
@@ -90,6 +95,12 @@ namespace Swampnet.Evl.Services
             return operand.EqualsNoCase(value);
         }
 
+        /// <summary>
+        /// LT - Less than
+        /// </summary>
+        /// <remarks>
+        /// Currently only supports numeric & dates
+        /// </remarks>
         private bool Lt(string operand, string value)
         {
             if (double.TryParse(operand, out double lhs_nmber) && double.TryParse(value, out double rhs_number))
@@ -105,6 +116,12 @@ namespace Swampnet.Evl.Services
             return false;
         }
 
+        /// <summary>
+        /// GT - Greater than
+        /// </summary>
+        /// <remarks>
+        /// Currently only supports numeric & dates
+        /// </remarks>
         private bool Gt(string operand, string value)
         {
             if (double.TryParse(operand, out double lhs_nmber) && double.TryParse(value, out double rhs_number))
@@ -120,11 +137,18 @@ namespace Swampnet.Evl.Services
             return false;
         }
 
+        /// <summary>
+        /// Match regular expression
+        /// </summary>
+        /// <returns></returns>
         private bool MatchExpression(string operand, string value)
         {
             return Regex.IsMatch(operand, value, RegexOptions.IgnoreCase);
         }
 
+        /// <summary>
+        /// Returns true if all children expressions evaluate to true
+        /// </summary>
         private bool MatchAll(Expression expression, Event evt)
         {
             foreach (var child in expression.Children)
@@ -139,6 +163,12 @@ namespace Swampnet.Evl.Services
         }
 
 
+        /// <summary>
+        /// Returns true if at least one child expression evaluates to true
+        /// </summary>
+        /// <remarks>
+        /// This will return true on the first expressionthat returns true, so may not evaluate all the expressions
+        /// </remarks>
         private bool MatchAny(Expression expression, Event evt)
         {
             foreach (var child in expression.Children)

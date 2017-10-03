@@ -5,6 +5,9 @@ using System.Text;
 
 namespace Swampnet.Evl.DAL.InMemory.Entities
 {
+    /// <summary>
+    /// Entity used internally to persist a generic Property
+    /// </summary>
     internal class InternalProperty : IProperty
     {
         public long Id { get; set; }
