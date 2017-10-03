@@ -48,13 +48,42 @@ namespace Swampnet.Evl.DAL.InMemory.Services
         {
             using (var context = ManagementContext.Create())
             {
-                context.Organisations.Add(_mockedOrganisation);
+				var org = new InternalOrganisation()
+				{
+					Id = Guid.NewGuid(),
+					Name = "ACME Ltd",
+					Description = "Some mocked up organisation.\nAuto generated.",
+				};
+
+				org.Applications.Add(new InternalApplication()
+				{
+					ApiKey = _mockedApiKeys.First().Id,
+					Code = "default-app",
+					Name = "Default",
+					CreatedUtc = DateTime.UtcNow,
+					LastUpdatedUtc = DateTime.UtcNow,
+					Description = "Mocked application",
+					ApiKeys = new List<ApiKey>(_mockedApiKeys)
+				});
+
+				org.Applications.Add(new InternalApplication()
+				{
+					ApiKey = _mockedApiKeys.Last().Id,
+					Code = "second-app",
+					Name = "Some other app",
+					CreatedUtc = DateTime.UtcNow,
+					LastUpdatedUtc = DateTime.UtcNow,
+					Description = "Another mocked application",
+					ApiKeys = new List<ApiKey>(_mockedApiKeys)
+				});
+
+				context.Organisations.Add(org);
                 context.SaveChanges();
             }
         }
 
 
-        private static readonly ApiKey[] _mockedApiKeys = new[]
+        private static readonly List<ApiKey> _mockedApiKeys = new List<ApiKey>()
         {
             new ApiKey()
             {
@@ -68,39 +97,6 @@ namespace Swampnet.Evl.DAL.InMemory.Services
                 Id = Guid.Parse("58BAD582-C6CF-407A-B482-502FB423CD55"),
                 RevokedOnUtc = null
             }
-        };
-
-
-        private static readonly InternalApplication[] _mockedApplications = new[]
-        {
-            new InternalApplication()
-            {
-                ApiKeys = _mockedApiKeys,
-                ApiKey = _mockedApiKeys.First().Id,
-                Code = "default-app",
-                Name = "Default",
-                CreatedUtc = DateTime.UtcNow,
-                LastUpdatedUtc = DateTime.UtcNow,
-                Description = "Mocked application"                
-            }/*,
-            new InternalApplication()
-            {
-                ApiKeys = _mockedApiKeys,
-                ApiKey = _mockedApiKeys.Last().Id,
-                Code = "second-app",
-                Name = "Some other app",
-                CreatedUtc = DateTime.UtcNow,
-                LastUpdatedUtc = DateTime.UtcNow,
-                Description = "Another mocked application"
-            }*/
-        };
-
-        private static readonly InternalOrganisation _mockedOrganisation = new InternalOrganisation()
-        {            
-            Id = Guid.NewGuid(),
-            Name = "ACME Ltd",
-            Description = "Some mocked up organisation.\nAuto generated.",
-            Applications = _mockedApplications.ToList()
-        };
+        };        
     }
 }
