@@ -16,4 +16,11 @@ namespace Swampnet.Evl.Common.Entities
         public DateTime LastUpdatedUtc { get; set; }
         public Guid ApiKey { get; set; }
     }
+
+
+    public class ApplicationSummary
+    {
+        public string Code { get; set; }
+        public string Name { get; set; }
+    }
 }

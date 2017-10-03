@@ -33,9 +33,14 @@ namespace Swampnet.Evl.DAL.InMemory.Services
 
         // We might not need this, depends how the front end turns out. We get all the application
         // stuff in the Organisation object
-        public Task<Application> LoadApplicationAsync(Guid organisationId, string applicationCode)
+        public async Task<Application> LoadApplicationAsync(Guid organisationId, string applicationCode)
         {
-            throw new NotImplementedException();
+            using (var context = ManagementContext.Create())
+            {
+                var app = await context.Applications.SingleOrDefaultAsync(a => a.Organisation.Id == organisationId && a.Code == applicationCode);
+
+                return Convert.ToApplication(app);
+            }
         }
 
 
@@ -56,6 +61,12 @@ namespace Swampnet.Evl.DAL.InMemory.Services
                 CreatedOnUtc = DateTime.UtcNow,
                 Id = Guid.Parse("3B94A54F-FDF2-4AFF-AA80-A35ED5836841"),
                 RevokedOnUtc = null
+            },
+            new ApiKey()
+            {
+                CreatedOnUtc = DateTime.UtcNow,
+                Id = Guid.Parse("58BAD582-C6CF-407A-B482-502FB423CD55"),
+                RevokedOnUtc = null
             }
         };
 
@@ -71,7 +82,17 @@ namespace Swampnet.Evl.DAL.InMemory.Services
                 CreatedUtc = DateTime.UtcNow,
                 LastUpdatedUtc = DateTime.UtcNow,
                 Description = "Mocked application"                
-            }
+            }/*,
+            new InternalApplication()
+            {
+                ApiKeys = _mockedApiKeys,
+                ApiKey = _mockedApiKeys.Last().Id,
+                Code = "second-app",
+                Name = "Some other app",
+                CreatedUtc = DateTime.UtcNow,
+                LastUpdatedUtc = DateTime.UtcNow,
+                Description = "Another mocked application"
+            }*/
         };
 
         private static readonly InternalOrganisation _mockedOrganisation = new InternalOrganisation()

@@ -22,6 +22,15 @@ namespace Swampnet.Evl.DAL.InMemory
             };
         }
 
+        public static ApplicationSummary ToApplicationSummary(InternalApplication source)
+        {
+            return new ApplicationSummary()
+            {
+                Code = source.Code,
+                Name = source.Name
+            };
+        }
+
 
         public static Organisation ToOrganisation(InternalOrganisation source)
         {
@@ -30,7 +39,7 @@ namespace Swampnet.Evl.DAL.InMemory
                 Id = source.Id,
                 Name = source.Name,
                 Description = source.Description,
-                Applications = source.Applications.Select(Convert.ToApplication).ToArray()
+                Applications = source.Applications.Select(Convert.ToApplicationSummary).ToArray()
             };
         }
     }

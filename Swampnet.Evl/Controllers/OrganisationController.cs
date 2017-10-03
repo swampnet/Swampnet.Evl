@@ -36,5 +36,23 @@ namespace Swampnet.Evl.Controllers
                 return this.InternalServerError(ex);
             }
         }
+
+        [HttpGet("organisation/application/{code}")]
+        public async Task<IActionResult> Get(string code)
+        {
+            try
+            {
+                // @TODO: Auth
+                var org = await _managementData.LoadOrganisationAsync();
+
+                return Ok(org.Applications.SingleOrDefault(a => a.Code == code));
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, ex.Message);
+                return this.InternalServerError(ex);
+            }
+        }
+
     }
 }
