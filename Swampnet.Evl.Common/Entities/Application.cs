@@ -9,6 +9,11 @@ namespace Swampnet.Evl.Common.Entities
     // rules are application specific
     public class Application
     {
-        public string ApiKey { get; set; }
+        public string Code { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public DateTime CreatedUtc { get; set; }
+        public DateTime LastUpdatedUtc { get; set; }
+        public Guid ApiKey { get; set; }
     }
 }

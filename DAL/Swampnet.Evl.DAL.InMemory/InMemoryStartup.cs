@@ -13,6 +13,7 @@ namespace Swampnet.Evl
         {
             services.AddSingleton<IRuleDataAccess, RuleDataAccess>();
             services.AddSingleton<IEventDataAccess, EventDataAccess>();
+            services.AddSingleton<IManagementDataAccess, ManagementDataAccess>();
         }
     }
 }

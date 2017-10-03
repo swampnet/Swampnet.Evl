@@ -1,14 +1,11 @@
 ﻿using Swampnet.Evl.DAL.InMemory.Entities;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Linq;
 using Swampnet.Evl.Client;
-using Swampnet.Evl.Common.Entities;
 
 namespace Swampnet.Evl.DAL.InMemory
 {
-    static class Convert
+    static partial class Convert
     {
         #region Event
 
@@ -89,40 +86,6 @@ namespace Swampnet.Evl.DAL.InMemory
                 Category = property.Category,
                 Name = property.Name,
                 Value = property.Value
-            };
-        }
-        #endregion
-
-        #region Rule
-
-        /// <summary>
-        /// Convert InternalRule to an API Rule
-        /// </summary>
-        internal static Rule ToRule(InternalRule source)
-        {
-            return new Rule()
-            {
-                Id = source.Id,
-                IsActive = source.IsActive,
-                Name = source.Name,
-                Expression = source.ExpressionData.Deserialize<Expression>(),
-                Actions = source.ActionData.Deserialize<ActionDefinition[]>()
-            };
-        }
-
-
-        /// <summary>
-        /// Convert an API Rule to an InternalRule
-        /// </summary>
-        internal static InternalRule ToRule(Rule source)
-        {
-            return new InternalRule()
-            {
-                Id = source.Id.HasValue ? source.Id.Value : Guid.Empty,
-                Name = source.Name,
-                IsActive = source.IsActive,
-                ExpressionData = source.Expression.ToXmlString(),
-                ActionData = source.Actions.ToXmlString()
             };
         }
         #endregion
