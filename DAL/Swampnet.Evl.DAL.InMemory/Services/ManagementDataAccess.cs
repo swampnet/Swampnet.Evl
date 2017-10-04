@@ -17,7 +17,7 @@ namespace Swampnet.Evl.DAL.InMemory.Services
             Seed();
         }
 
-        // @TODO: Should be current users organisation
+
         public async Task<Organisation> LoadOrganisationAsync(Guid apiKey)
         {
             using (var context = ManagementContext.Create())
@@ -27,6 +27,7 @@ namespace Swampnet.Evl.DAL.InMemory.Services
                 return Convert.ToOrganisation(org);
             }
         }
+
 
         private void Seed()
         {

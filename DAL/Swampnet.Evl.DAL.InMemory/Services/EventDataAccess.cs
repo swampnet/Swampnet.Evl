@@ -91,6 +91,19 @@ namespace Swampnet.Evl.DAL.InMemory.Services
                     query = query.Where(e => e.Category == criteria.Category.ToString());
                 }
 
+                if (!string.IsNullOrEmpty(criteria.Source))
+                {
+                    query = query.Where(e => e.Source.Contains(criteria.Source));
+
+                    // Version must match exactly
+                    if (!string.IsNullOrEmpty(criteria.SourceVersion))
+                    {
+                        query = query.Where(e => e.SourceVersion == criteria.SourceVersion);
+                    }
+                }
+
+
+
                 // Realtime search
                 if (criteria.TimestampUtc.HasValue)
                 {

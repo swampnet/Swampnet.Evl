@@ -8,6 +8,16 @@ namespace Serilog
 {
     public static class EvlSinkExtensions
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="loggerConfiguration"></param>
+        /// <param name="apiKey"></param>
+        /// <param name="endpoint"></param>
+        /// <param name="source">Event source. Defaults to executing assembly name</param>
+        /// <param name="sourceVersion">Event source version. Defaults to executing assembly version</param>
+        /// <param name="formatProvider"></param>
+        /// <returns></returns>
         public static LoggerConfiguration EvlSink(
                   this LoggerSinkConfiguration loggerConfiguration,
                   string apiKey,
