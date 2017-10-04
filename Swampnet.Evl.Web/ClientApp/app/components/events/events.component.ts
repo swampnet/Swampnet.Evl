@@ -24,15 +24,15 @@ export class EventsComponent {
     }
 
     searchEvents() {
-        let max = new Date();
+        //let max = new Date();
 
-        if (this.events) {
-            max = this.events
-                .map(x => x.timestampUtc)
-                .reduce((a, b) => a > b ? a : b);
-        }
+        //if (this.events) {
+        //    max = this.events
+        //        .map(x => x.timestampUtc)
+        //        .reduce((a, b) => a > b ? a : b);
+        //}
 
-        console.log("*** max: " + max);
+        //console.log("*** max: " + max);
 
         this._api.searchEvents(this.criteria).then((res: EventSummary[]) => {
             this.events = res;

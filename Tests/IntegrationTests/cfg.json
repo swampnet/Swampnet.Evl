@@ -4,7 +4,7 @@
 
   "evl": {
     "api-key": "3B94A54F-FDF2-4AFF-AA80-A35ED5836841",
-    //"endpoint": "http://localhost:5000/events"
-    "endpoint": "http://swampnet-evl-staging.azurewebsites.net/api/events"
+    "endpoint": "http://localhost:5000/events"
+    //"endpoint": "http://swampnet-evl-staging.azurewebsites.net/api/events"
   }
 }

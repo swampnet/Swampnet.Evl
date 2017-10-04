@@ -31,7 +31,7 @@ namespace Swampnet.Evl.Controllers
         {
             try
             {
-                Log.Logger.WithPublicProperties(criteria).Information("Get");
+                Log.Logger.WithPublicProperties(criteria).Debug("Get");
 
                 var events = await _dal.SearchAsync(criteria);
 

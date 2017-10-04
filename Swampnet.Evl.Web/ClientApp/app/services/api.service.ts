@@ -157,4 +157,25 @@ export class ApiService {
         });
     }
 
+	getSources() {
+		return new Promise((resolve, reject) => {
+			resolve([
+				"",
+				"Swampnet.Evl",
+				"Swampnet.Evl.Web",
+				"IntegrationTests"
+			]);
+		});
+	}
+
+	getCategories() {
+		return new Promise((resolve, reject) => {
+			resolve([
+				"",
+				"Information",
+				"Error",
+				"Debug"
+			]);
+		});
+	}
 }  

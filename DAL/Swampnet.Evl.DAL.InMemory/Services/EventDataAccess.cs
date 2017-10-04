@@ -93,7 +93,7 @@ namespace Swampnet.Evl.DAL.InMemory.Services
 
                 if (!string.IsNullOrEmpty(criteria.Source))
                 {
-                    query = query.Where(e => e.Source.Contains(criteria.Source));
+                    query = query.Where(e => e.Source == criteria.Source);
 
                     // Version must match exactly
                     if (!string.IsNullOrEmpty(criteria.SourceVersion))
