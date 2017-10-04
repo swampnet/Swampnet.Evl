@@ -80,7 +80,7 @@ namespace UnitTests
                 throw new NotImplementedException();
             }
 
-            public Task<IEnumerable<Rule>> LoadAsync(Application app)
+            public Task<IEnumerable<Rule>> LoadAsync(Organisation org)
             {
                 return Task.Run(() => _rules);
             }

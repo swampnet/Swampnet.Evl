@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Swampnet.Evl;
 using Serilog.Debugging;
 using System.Diagnostics;
+using System.Reflection;
 
 namespace Serilog.Sinks.Evl
 {
@@ -22,11 +23,13 @@ namespace Serilog.Sinks.Evl
 
         private readonly IFormatProvider _formatProvider;
 
-        public EvlSink(IFormatProvider formatProvider, string apiKey, string endpoint)
+        public EvlSink(IFormatProvider formatProvider, string apiKey, string endpoint, string source, string sourceVersion)
             : this(_defaultBatchSize, _defaultPeriod)
         {
             Api.ApiKey = apiKey;
             Api.Endpoint = endpoint;
+            Api.Source = source;
+            Api.SourceVersion = sourceVersion;
 
             _formatProvider = formatProvider;
         }
@@ -84,7 +87,8 @@ namespace Serilog.Sinks.Evl
             foreach(var s in source)
             {
                 var evlEvent = new Event();
-				evlEvent.Source = "@TODO: SOURCE";                  // Although, we infer that from the api-key don't we?
+                evlEvent.Source = Api.Source;
+                evlEvent.SourceVersion = Api.SourceVersion;
                 evlEvent.Summary = s.RenderMessage(_formatProvider);
                 evlEvent.TimestampUtc = s.Timestamp.UtcDateTime;
                 evlEvent.Category = Convert(s.Level);

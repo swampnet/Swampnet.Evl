@@ -19,9 +19,9 @@ namespace Swampnet.Evl
         }
 
 
-        public static string ApiKey(this HttpRequest rq)
+        public static Guid ApiKey(this HttpRequest rq)
         {
-            return rq.Headers[Constants.API_KEY_HEADER].SingleOrDefault();
+            return Guid.Parse(rq.Headers[Constants.API_KEY_HEADER].SingleOrDefault());
         }
 
 

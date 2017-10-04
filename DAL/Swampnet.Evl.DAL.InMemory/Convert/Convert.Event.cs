@@ -22,8 +22,9 @@ namespace Swampnet.Evl.DAL.InMemory
                     Summary = evt.Summary,
                     TimestampUtc = evt.TimestampUtc,
                     LastUpdatedUtc = evt.LastUpdatedUtc.HasValue ? evt.LastUpdatedUtc.Value : evt.TimestampUtc,
-                    Properties = evt.Properties?.Select(p => ToInternalProperty(p)).ToList()
-
+                    Properties = evt.Properties?.Select(p => ToInternalProperty(p)).ToList(),
+                    Source = evt.Source,
+                    SourceVersion = evt.SourceVersion
                 };
         }
 
@@ -56,7 +57,9 @@ namespace Swampnet.Evl.DAL.InMemory
                     Summary = evt.Summary,
                     TimestampUtc = evt.TimestampUtc,
                     LastUpdatedUtc = evt.LastUpdatedUtc,
-                    Properties = evt.Properties?.Select(p => ToProperty(p)).ToList()
+                    Properties = evt.Properties?.Select(p => ToProperty(p)).ToList(),
+                    Source = evt.Source,
+                    SourceVersion = evt.SourceVersion
                 };
         }
 
@@ -70,7 +73,8 @@ namespace Swampnet.Evl.DAL.InMemory
                 Id = evt.Id,
                 Category = Enum.Parse<EventCategory>(evt.Category,true),
                 Summary = evt.Summary,
-                TimestampUtc = evt.TimestampUtc
+                TimestampUtc = evt.TimestampUtc,
+                Source = evt.Source
             };
         }
 

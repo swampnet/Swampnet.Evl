@@ -18,31 +18,15 @@ namespace Swampnet.Evl.DAL.InMemory.Services
         }
 
         // @TODO: Should be current users organisation
-        public async Task<Organisation> LoadOrganisationAsync()
+        public async Task<Organisation> LoadOrganisationAsync(Guid apiKey)
         {
             using (var context = ManagementContext.Create())
             {
-                var org = await context.Organisations
-                    .Include(o => o.Applications)
-                    .FirstOrDefaultAsync();
+                var org = await context.Organisations.FirstOrDefaultAsync(o => o.ApiKey == apiKey);
 
                 return Convert.ToOrganisation(org);
             }
         }
-
-
-        // We might not need this, depends how the front end turns out. We get all the application
-        // stuff in the Organisation object
-        public async Task<Application> LoadApplicationAsync(Guid organisationId, string applicationCode)
-        {
-            using (var context = ManagementContext.Create())
-            {
-                var app = await context.Applications.SingleOrDefaultAsync(a => a.Organisation.Id == organisationId && a.Code == applicationCode);
-
-                return Convert.ToApplication(app);
-            }
-        }
-
 
         private void Seed()
         {
@@ -53,29 +37,9 @@ namespace Swampnet.Evl.DAL.InMemory.Services
 					Id = Guid.NewGuid(),
 					Name = "ACME Ltd",
 					Description = "Some mocked up organisation.\nAuto generated.",
+                    ApiKeys = new List<ApiKey>(_mockedApiKeys),
+                    ApiKey = _mockedApiKeys.First().Id
 				};
-
-				org.Applications.Add(new InternalApplication()
-				{
-					ApiKey = _mockedApiKeys.First().Id,
-					Code = "default-app",
-					Name = "Default",
-					CreatedUtc = DateTime.UtcNow,
-					LastUpdatedUtc = DateTime.UtcNow,
-					Description = "Mocked application",
-					ApiKeys = new List<ApiKey>(_mockedApiKeys)
-				});
-
-				org.Applications.Add(new InternalApplication()
-				{
-					ApiKey = _mockedApiKeys.Last().Id,
-					Code = "second-app",
-					Name = "Some other app",
-					CreatedUtc = DateTime.UtcNow,
-					LastUpdatedUtc = DateTime.UtcNow,
-					Description = "Another mocked application",
-					ApiKeys = new List<ApiKey>(_mockedApiKeys)
-				});
 
 				context.Organisations.Add(org);
                 context.SaveChanges();
@@ -88,7 +52,7 @@ namespace Swampnet.Evl.DAL.InMemory.Services
             new ApiKey()
             {
                 CreatedOnUtc = DateTime.UtcNow,
-                Id = Guid.Parse("3B94A54F-FDF2-4AFF-AA80-A35ED5836841"),
+                Id = Common.Constants.MOCKED_DEFAULT_APIKEY,
                 RevokedOnUtc = null
             },
             new ApiKey()

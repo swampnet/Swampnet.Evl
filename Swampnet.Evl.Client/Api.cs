@@ -19,6 +19,8 @@ namespace Swampnet.Evl
     {
         public static string ApiKey { get; set; }
         public static string Endpoint { get; set; }
+        public static string Source { get; set; }
+        public static string SourceVersion { get; set; }
 
         public static async Task PostAsync(Event e, string apiKey, string endpoint)
         {

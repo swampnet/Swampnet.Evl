@@ -10,6 +10,7 @@ using Swampnet.Evl.Client;
 using Swampnet.Evl.Common.Contracts;
 using Swampnet.Evl.Contracts;
 using System.Diagnostics;
+using System.Reflection;
 
 namespace Swampnet.Evl
 {
@@ -33,6 +34,7 @@ namespace Swampnet.Evl
         /// </summary>
         class LocalSink : EvlSink
         {
+            private readonly Version _version;
             private readonly IEventDataAccess _dal;
             private readonly IEventQueueProcessor _eventProcessor;
 
@@ -40,10 +42,11 @@ namespace Swampnet.Evl
                 IEventDataAccess dal,
                 IEventQueueProcessor eventProcessor,
                 IFormatProvider formatProvider)
-                : base(formatProvider, null, null)
+                : base(formatProvider, null, null, null, null)
             {
                 _dal = dal;
                 _eventProcessor = eventProcessor;
+                _version = Assembly.GetExecutingAssembly().GetName().Version;
             }
 
             /// <summary>
@@ -54,14 +57,20 @@ namespace Swampnet.Evl
             protected override async Task PostAsync(IEnumerable<Event> events)
             {
                 var ids = new List<Guid>();
-
+                
                 await Task.Delay(1); // Just to satisfy our async declaration for now.
 
                 Parallel.ForEach(events, async evt =>
                 {
                     try
                     {
-                        var id = await _dal.CreateAsync(null, evt);
+                        if (string.IsNullOrEmpty(evt.Source))
+                        {
+                            evt.Source = Constants.EVL_SOURCE;
+                            evt.SourceVersion = _version.ToString();
+                        }
+
+                        var id = await _dal.CreateAsync(evt);
 
                         lock (ids)
                         {

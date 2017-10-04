@@ -3,6 +3,7 @@ using Serilog;
 using Swampnet.Evl.Client;
 using Swampnet.Evl.Common.Contracts;
 using Swampnet.Evl.Contracts;
+using Swampnet.Evl.Services;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -16,11 +17,13 @@ namespace Swampnet.Evl.Controllers
 	{
         private readonly IEventQueueProcessor _eventProcessor;
         private readonly IEventDataAccess _dal;
+        private readonly IAuth _auth;
 
-        public EventsController(IEventDataAccess dal, IEventQueueProcessor eventProcessor)
+        public EventsController(IEventDataAccess dal, IEventQueueProcessor eventProcessor, IAuth auth)
         {
             _dal = dal;
             _eventProcessor = eventProcessor;
+            _auth = auth;
         }
 
         [HttpGet]
@@ -77,13 +80,28 @@ namespace Swampnet.Evl.Controllers
 					return BadRequest();
 				}
 
-                var apiKey = Request.ApiKey();
+                //var apiKey = Request.ApiKey();
+                var apiKey = Common.Constants.MOCKED_DEFAULT_APIKEY;
+
+                // @TODO: We drive everything off the API key, we currently don't check if the caller is actually
+                //        the owner of the key.
+
+                // @TODO: Auth
+                // @TODO: Check api key is valid, get organisation
+                var org = await _auth.GetOrganisationAsync(apiKey);
+                if(org == null)
+                {
+                    return Unauthorized();
+                }
+
+                if (string.IsNullOrEmpty(evt.Source))
+                {
+                    evt.Source = org.Name;
+                }
 
                 evt.Properties.AddRange(Request.CommonProperties());
 
-                // @TODO: Auth
-
-                var id = await _dal.CreateAsync(null, evt);
+                var id = await _dal.CreateAsync(evt);
 
                 _eventProcessor.Enqueue(id);
 
@@ -124,7 +142,7 @@ namespace Swampnet.Evl.Controllers
                     try
                     {
                         evt.Properties.AddRange(Request.CommonProperties());
-                        var id = await _dal.CreateAsync(null, evt);
+                        var id = await _dal.CreateAsync(evt);
                         lock (ids)
                         {
                             ids.Add(id);

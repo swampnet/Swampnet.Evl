@@ -18,40 +18,40 @@ namespace Swampnet.Evl.Controllers
 			_managementData = managementData;
 		}
 
-		[HttpGet]
-		public async Task<IActionResult> Get()
-		{
-			try
-			{
-				// @TODO: Auth
-				var org = await _managementData.LoadOrganisationAsync();
+		//[HttpGet]
+		//public async Task<IActionResult> Get()
+		//{
+		//	try
+		//	{
+		//		// @TODO: Auth
+		//		var org = await _managementData.LoadOrganisationAsync();
 
-				return Ok(org.Applications);
-			}
-			catch (Exception ex)
-			{
-				Log.Error(ex, ex.Message);
-				return this.InternalServerError(ex);
-			}
-		}
+		//		return Ok(org.Applications);
+		//	}
+		//	catch (Exception ex)
+		//	{
+		//		Log.Error(ex, ex.Message);
+		//		return this.InternalServerError(ex);
+		//	}
+		//}
 
 
-		[HttpGet("{code}")]
-		public async Task<IActionResult> Get(string code)
-		{
-			try
-			{
-				// @TODO: Auth
-				var org = await _managementData.LoadOrganisationAsync();
-				var app = await _managementData.LoadApplicationAsync(org.Id, code);
+		//[HttpGet("{code}")]
+		//public async Task<IActionResult> Get(string code)
+		//{
+		//	try
+		//	{
+		//		// @TODO: Auth
+		//		var org = await _managementData.LoadOrganisationAsync();
+		//		var app = await _managementData.LoadApplicationAsync(org.Id, code);
 
-				return Ok(app);
-			}
-			catch (Exception ex)
-			{
-				Log.Error(ex, ex.Message);
-				return this.InternalServerError(ex);
-			}
-		}
+		//		return Ok(app);
+		//	}
+		//	catch (Exception ex)
+		//	{
+		//		Log.Error(ex, ex.Message);
+		//		return this.InternalServerError(ex);
+		//	}
+		//}
 	}
 }

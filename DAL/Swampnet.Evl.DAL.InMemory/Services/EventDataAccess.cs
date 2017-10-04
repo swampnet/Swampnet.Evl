@@ -13,7 +13,7 @@ namespace Swampnet.Evl.DAL.InMemory.Services
 {
     class EventDataAccess : IEventDataAccess
     {
-        public async Task<Guid> CreateAsync(Application app, Event evt)
+        public async Task<Guid> CreateAsync(Event evt)
         {
             using(var context = EventContext.Create())
             {

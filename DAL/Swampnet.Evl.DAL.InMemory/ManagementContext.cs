@@ -16,7 +16,6 @@ namespace Swampnet.Evl.DAL.InMemory
         }
 
         public DbSet<InternalOrganisation> Organisations { get; set; }
-        public DbSet<InternalApplication> Applications { get; set; }
 
         public static ManagementContext Create()
         {
