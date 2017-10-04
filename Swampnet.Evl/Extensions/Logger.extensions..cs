@@ -34,7 +34,6 @@ namespace Swampnet.Evl
         /// </summary>
         class LocalSink : EvlSink
         {
-            private readonly Version _version;
             private readonly IEventDataAccess _dal;
             private readonly IEventQueueProcessor _eventProcessor;
 
@@ -46,7 +45,6 @@ namespace Swampnet.Evl
             {
                 _dal = dal;
                 _eventProcessor = eventProcessor;
-                _version = Assembly.GetExecutingAssembly().GetName().Version;
             }
 
             /// <summary>
@@ -64,12 +62,6 @@ namespace Swampnet.Evl
                 {
                     try
                     {
-                        if (string.IsNullOrEmpty(evt.Source))
-                        {
-                            evt.Source = Constants.EVL_SOURCE;
-                            evt.SourceVersion = _version.ToString();
-                        }
-
                         var id = await _dal.CreateAsync(evt);
 
                         lock (ids)

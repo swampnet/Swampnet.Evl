@@ -23,11 +23,27 @@ namespace Serilog.Sinks.Evl
 
         private readonly IFormatProvider _formatProvider;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="formatProvider"></param>
+        /// <param name="apiKey"></param>
+        /// <param name="endpoint"></param>
+        /// <param name="source">Event source. Defaults to executing assembly name</param>
+        /// <param name="sourceVersion">Event source version. Defaults to executing assembly version</param>
         public EvlSink(IFormatProvider formatProvider, string apiKey, string endpoint, string source, string sourceVersion)
             : this(_defaultBatchSize, _defaultPeriod)
         {
             Api.ApiKey = apiKey;
             Api.Endpoint = endpoint;
+
+            if (string.IsNullOrEmpty(source))
+            {
+                var name = Assembly.GetEntryAssembly().GetName();
+                source = name.Name;
+                sourceVersion = name.Version.ToString();
+            }
+
             Api.Source = source;
             Api.SourceVersion = sourceVersion;
 
