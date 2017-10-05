@@ -1,4 +1,5 @@
-﻿export interface RuleSummary {
+﻿
+export interface RuleSummary {
     id: string;
     name: string;
 }

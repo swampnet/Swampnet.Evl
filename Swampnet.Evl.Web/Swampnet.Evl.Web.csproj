@@ -27,6 +27,7 @@
 
   <ItemGroup>
     <None Remove="ClientApp\app\components\events\events.component.ts" />
+    <None Remove="ClientApp\app\services\globals.ts" />
   </ItemGroup>
 
   <ItemGroup>
@@ -37,6 +38,7 @@
 
   <ItemGroup>
     <TypeScriptCompile Include="ClientApp\app\components\events\events.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\services\globals.ts" />
   </ItemGroup>
 
   <Target Name="DebugRunWebpack" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('wwwroot\dist') ">

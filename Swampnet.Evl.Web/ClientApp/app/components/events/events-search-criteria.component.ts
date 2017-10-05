@@ -13,6 +13,7 @@ export class EventsSearchCriteriaComponent {
 	public availableSources: string[] = []
 
 	public availableCategories: string[] = [
+		"",
 		"Information"
 	]
 
@@ -23,11 +24,11 @@ export class EventsSearchCriteriaComponent {
 
 	ngOnInit() {
 		this._api.getSources().then((res: string[]) => {
-			this.availableSources = res;
+			this.availableSources = [""].concat(res);
 		});
 
 		this._api.getCategories().then((res: string[]) => {
-			this.availableCategories = res;
+			this.availableCategories = [""].concat(res);
 		});
 	}
 }
