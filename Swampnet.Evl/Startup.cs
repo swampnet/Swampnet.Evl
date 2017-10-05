@@ -99,6 +99,8 @@ namespace Swampnet.Evl
 				.AllowAnyMethod());
 
 			app.UseMvc();
+
+            Log.Information("Start");
         }
     }
 }
