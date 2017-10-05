@@ -138,5 +138,17 @@ namespace Swampnet.Evl.DAL.InMemory.Services
                 return results.Select(e => Convert.ToEventSummary(e));
             }
         }
+
+        public async Task<IEnumerable<string>> GetSources(Guid org)
+        {
+            IEnumerable<string> sources = null;
+
+            using (var context = EventContext.Create())
+            {
+                sources = await context.Events.Select(e => e.Source).Distinct().ToListAsync();
+            }
+
+            return sources;
+        }
     }
 }

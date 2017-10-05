@@ -27,99 +27,104 @@ export class ApiService {
 
 
     getRules() {
-
-        return new Promise((resolve, reject) => {
-            this._http.get(this._baseUrl + 'rules')
-                .map(res => res.json())
-                .catch((error: any) => {
-                    console.error(error);
-                    reject(error);
-                    return Observable.throw(error.json().error || 'Server error');
-                })
-                .subscribe((data) => {
-                    resolve(data);
-                });
-        });
+        return this.get('rules');
+        //return new Promise((resolve, reject) => {
+        //    this._http.get(this._baseUrl + 'rules')
+        //        .map(res => res.json())
+        //        .catch((error: any) => {
+        //            console.error(error);
+        //            reject(error);
+        //            return Observable.throw(error.json().error || 'Server error');
+        //        })
+        //        .subscribe((data) => {
+        //            resolve(data);
+        //        });
+        //});
     }
 
 
 	getRule(id: string) {
-
-		return new Promise((resolve, reject) => {
-			this._http.get(this._baseUrl + 'rules/' + id)
-				.map(res => res.json())
-				.catch((error: any) => {
-					console.error(error);
-					reject(error);
-					return Observable.throw(error.json().error || 'Server error');
-				})
-				.subscribe((data) => {
-					resolve(data);
-				});
-		});
+        return this.get('rules/' + id);
+		//return new Promise((resolve, reject) => {
+		//	this._http.get(this._baseUrl + 'rules/' + id)
+		//		.map(res => res.json())
+		//		.catch((error: any) => {
+		//			console.error(error);
+		//			reject(error);
+		//			return Observable.throw(error.json().error || 'Server error');
+		//		})
+		//		.subscribe((data) => {
+		//			resolve(data);
+		//		});
+		//});
 	}
 
-    deleteRule(id: string) {        
-        return new Promise((resolve, reject) => {
-            this._http.delete(this._baseUrl + 'rules/' + id)
-                .catch((error: any) => {
-                    console.error(error);
-                    reject(error);
-                    return Observable.throw(error.json().error || 'Server error');
-                })
-                .subscribe((data) => {
-                    resolve(data);
-                });
-        });
+    deleteRule(id: string) {
+        return this.delete('rules/' + id);
+        //return new Promise((resolve, reject) => {
+        //    this._http.delete(this._baseUrl + 'rules/' + id)
+        //        .catch((error: any) => {
+        //            console.error(error);
+        //            reject(error);
+        //            return Observable.throw(error.json().error || 'Server error');
+        //        })
+        //        .subscribe((data) => {
+        //            resolve(data);
+        //        });
+        //});
     }
-        
+
 
     createRule(rule: any) {
-        let body = JSON.stringify(rule);
+        return this.post('rules', rule);
+        //let body = JSON.stringify(rule);
 
-        return new Promise((resolve, reject) => {
-            this._http.post(this._baseUrl + 'rules', body, this.options)
-                .catch((error: any) => {
-                    console.error(error);
-                    reject(error);
-                    return Observable.throw(error.json().error || 'Server error');
-                })
-                .subscribe((data) => {
-                    resolve(data);
-                });
-        });
+        //return new Promise((resolve, reject) => {
+        //    this._http.post(this._baseUrl + 'rules', body, this.options)
+        //        .catch((error: any) => {
+        //            console.error(error);
+        //            reject(error);
+        //            return Observable.throw(error.json().error || 'Server error');
+        //        })
+        //        .subscribe((data) => {
+        //            resolve(data);
+        //        });
+        //});
     }
 
-    updateRule(rule: any) {
-        let body = JSON.stringify(rule);
 
-        return new Promise((resolve, reject) => {
-            this._http.put(this._baseUrl + 'rules/' + rule.id, body, this.options)
-                .catch((error: any) => {
-                    console.error(error);
-                    reject(error);
-                    return Observable.throw(error.json().error || 'Server error');
-                })
-                .subscribe((data) => {
-                    resolve(data);
-                });
-        });
+    updateRule(rule: any) {
+        return this.put('rules/' + rule.id, rule);
+        //let body = JSON.stringify(rule);
+
+        //return new Promise((resolve, reject) => {
+        //    this._http.put(this._baseUrl + 'rules/' + rule.id, body, this.options)
+        //        .catch((error: any) => {
+        //            console.error(error);
+        //            reject(error);
+        //            return Observable.throw(error.json().error || 'Server error');
+        //        })
+        //        .subscribe((data) => {
+        //            resolve(data);
+        //        });
+        //});
     }
 
 
     getMetaData() {
-        return new Promise((resolve, reject) => {
-            this._http.get(this._baseUrl + 'meta')
-                .map(res => res.json())
-                .catch((error: any) => {
-                    console.error(error);
-                    reject(error);
-                    return Observable.throw(error.json().error || 'Server error');
-                })
-                .subscribe((data) => {
-                    resolve(data);
-                });
-        });
+        return this.get('meta');
+        //return new Promise((resolve, reject) => {
+        //    this._http.get(this._baseUrl + 'meta')
+        //        .map(res => res.json())
+        //        .catch((error: any) => {
+        //            console.error(error);
+        //            reject(error);
+        //            return Observable.throw(error.json().error || 'Server error');
+        //        })
+        //        .subscribe((data) => {
+        //            resolve(data);
+        //        });
+        //});
     }
 
     searchEvents(criteria: any) {
@@ -128,23 +133,50 @@ export class ApiService {
             params.set(key, criteria[key])
         }
 
-        return new Promise((resolve, reject) => {
-            this._http.get(this._baseUrl + 'events?' + params.toString())
-                .map(res => res.json())
-                .catch((error: any) => {
-                    console.error(error);
-                    reject(error);
-                    return Observable.throw(error.json().error || 'Server error');
-                })
-                .subscribe((data) => {
-                    resolve(data);
-                });
-        });
+        return this.get('events?' + params.toString());
+
+        //return new Promise((resolve, reject) => {
+        //    this._http.get(this._baseUrl + 'events?' + params.toString())
+        //        .map(res => res.json())
+        //        .catch((error: any) => {
+        //            console.error(error);
+        //            reject(error);
+        //            return Observable.throw(error.json().error || 'Server error');
+        //        })
+        //        .subscribe((data) => {
+        //            resolve(data);
+        //        });
+        //});
     }
 
     getEvent(id: string) {
+        return this.get('events/' + id);
+        //return new Promise((resolve, reject) => {
+        //    this._http.get(this._baseUrl + 'events/' + id)
+        //        .map(res => res.json())
+        //        .catch((error: any) => {
+        //            console.error(error);
+        //            reject(error);
+        //            return Observable.throw(error.json().error || 'Server error');
+        //        })
+        //        .subscribe((data) => {
+        //            resolve(data);
+        //        });
+        //});
+    }
+
+	getSources() {
+        return this.get('sources');
+	}
+
+    getCategories() {
+        return this.get('categories');
+    }
+
+
+    get(resource: string) {
         return new Promise((resolve, reject) => {
-            this._http.get(this._baseUrl + 'events/' + id)
+            this._http.get(this._baseUrl + resource)
                 .map(res => res.json())
                 .catch((error: any) => {
                     console.error(error);
@@ -157,25 +189,49 @@ export class ApiService {
         });
     }
 
-	getSources() {
-		return new Promise((resolve, reject) => {
-			resolve([
-				"",
-				"Swampnet.Evl",
-				"Swampnet.Evl.Web",
-				"IntegrationTests"
-			]);
-		});
-	}
+    post(resource: string, o: any) {
+        let body = JSON.stringify(o);
 
-	getCategories() {
-		return new Promise((resolve, reject) => {
-			resolve([
-				"",
-				"Information",
-				"Error",
-				"Debug"
-			]);
-		});
-	}
+        return new Promise((resolve, reject) => {
+            this._http.post(this._baseUrl + resource, body, this.options)
+                .catch((error: any) => {
+                    console.error(error);
+                    reject(error);
+                    return Observable.throw(error.json().error || 'Server error');
+                })
+                .subscribe((data) => {
+                    resolve(data);
+                });
+        });
+    }
+
+    put(resource: string, o: any) {
+        let body = JSON.stringify(o);
+
+        return new Promise((resolve, reject) => {
+            this._http.put(this._baseUrl + resource, body, this.options)
+                .catch((error: any) => {
+                    console.error(error);
+                    reject(error);
+                    return Observable.throw(error.json().error || 'Server error');
+                })
+                .subscribe((data) => {
+                    resolve(data);
+                });
+        });
+    }
+
+    delete(resource: string) {
+        return new Promise((resolve, reject) => {
+            this._http.delete(this._baseUrl + resource)
+                .catch((error: any) => {
+                    console.error(error);
+                    reject(error);
+                    return Observable.throw(error.json().error || 'Server error');
+                })
+                .subscribe((data) => {
+                    resolve(data);
+                });
+        });
+    }
 }  

@@ -7,7 +7,7 @@ using Swampnet.Evl.Services;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Net;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Swampnet.Evl.Controllers
@@ -25,6 +25,41 @@ namespace Swampnet.Evl.Controllers
             _eventProcessor = eventProcessor;
             _auth = auth;
         }
+
+        [HttpGet("categories")]
+        public IActionResult GetCategories()
+        {
+            try
+            {
+                return Ok(Enum.GetValues(typeof(EventCategory)).Cast<EventCategory>().Select(e => e.ToString()).ToArray());
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, ex.Message);
+
+                return this.InternalServerError(ex);
+            }
+        }
+
+
+        [HttpGet("sources")]
+        public async Task<IActionResult> GetSources()
+        {
+            try
+            {
+                var sources = await _dal.GetSources(Common.Constants.MOCKED_DEFAULT_APIKEY);
+
+                return Ok(sources);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, ex.Message);
+
+                return this.InternalServerError(ex);
+            }
+        }
+
+
 
         [HttpGet]
         public async Task<IActionResult> Get([FromQuery] EventSearchCriteria criteria)
