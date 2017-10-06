@@ -2,6 +2,7 @@
 export interface RuleSummary {
     id: string;
     name: string;
+    actions: string[];
 }
 
 export interface Expression {

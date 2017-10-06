@@ -40,6 +40,24 @@ namespace Swampnet.Evl.DAL.InMemory
                 ActionData = source.Actions.ToXmlString()
             };
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        internal static RuleSummary ToRuleSummary(InternalRule source)
+        {
+            var rule = Convert.ToRule(source);
+            return new Common.Entities.RuleSummary()
+            {
+                Id = source.Id,
+                IsActive = rule.IsActive,
+                Name = rule.Name,
+                Actions = rule.Actions.Where(a => a.IsActive).Select(a => a.Type).ToArray()
+            };
+        }
+
         #endregion
     }
 }

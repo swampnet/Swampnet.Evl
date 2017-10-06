@@ -23,12 +23,7 @@ namespace Swampnet.Evl.DAL.InMemory.Services
             using (var context = RuleContext.Create())
             {
                 var rules = await context.Rules.Where(r => r.IsActive).ToListAsync();
-                return rules.Select(r => new RuleSummary()
-                {
-                    Id = r.Id,
-                    Name = r.Name,
-                    IsActive = r.IsActive
-                });
+                return rules.Select(Convert.ToRuleSummary);
             }
         }
 
