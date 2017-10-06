@@ -1,4 +1,4 @@
-﻿using Swampnet.Evl.DAL.InMemory.Entities;
+using Swampnet.Evl.DAL.InMemory.Entities;
 using System;
 using System.Linq;
 using Swampnet.Evl.Client;
