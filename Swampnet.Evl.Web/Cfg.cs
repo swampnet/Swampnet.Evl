@@ -13,9 +13,12 @@ namespace Swampnet.Evl.Web
     {
         public Cfg(IConfiguration configuration)
         {
-            ApiRoot = "http://localhost:5000/";
-        }
+            //this._baseUrl = "http://localhost:5001/";
+            //this._baseUrl = "http://localhost:5000/";
+            //this._baseUrl = "http://swampnet-evl-staging.azurewebsites.net/api/";
 
+            ApiRoot = configuration["client:apiRoot"];
+        }
 
         public string ApiRoot { get; set; }
     }

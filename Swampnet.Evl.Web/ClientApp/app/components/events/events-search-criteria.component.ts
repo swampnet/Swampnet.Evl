@@ -21,7 +21,6 @@ export class EventsSearchCriteriaComponent {
 		private _api: ApiService) {
 	}
 
-
 	ngOnInit() {
 		this._api.getSources().then((res: string[]) => {
 			this.availableSources = [""].concat(res);

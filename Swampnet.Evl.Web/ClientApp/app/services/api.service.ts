@@ -3,6 +3,7 @@ import { Observable } from 'rxjs/Observable';
 import { Http, Response, Headers, RequestOptions, URLSearchParams } from '@angular/http';
 import 'rxjs/Rx';
 import 'rxjs/add/operator/toPromise';
+import { Globals } from './globals';
 
 @Injectable()
 export class ApiService {
@@ -11,13 +12,9 @@ export class ApiService {
     private _baseUrl: string;
 
     constructor(
+        private globals: Globals,
         private _http: Http) {
 
-        //this._baseUrl = getApiRoot();
-        //this._baseUrl = "http://localhost:5001/";
-		this._baseUrl = "http://localhost:5000/";
-		//this._baseUrl = "http://swampnet-evl-staging.azurewebsites.net/api/";
-        
         this.headers = new Headers({
             'Content-Type': 'application/json',
             'Accept': 'q=0.8;application/json;q=0.9'
@@ -79,7 +76,7 @@ export class ApiService {
 
     get(resource: string) {
         return new Promise((resolve, reject) => {
-            this._http.get(this._baseUrl + resource)
+            this._http.get(this.globals.cfg.apiRoot + resource)
                 .map(res => res.json())
                 .catch((error: any) => {
                     console.error(error);

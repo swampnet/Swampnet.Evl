@@ -17,7 +17,6 @@ export class RulesComponent {
     }
 
     ngOnInit() {
-
         this.api.getRules().then((res: RuleSummary[]) => {
             this.rules = res;
         }, (error) => {

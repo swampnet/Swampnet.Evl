@@ -87,3 +87,7 @@ export interface Event {
     timestampUtc: Date;
     properties: Property[];
 }
+
+export interface Cfg {
+    apiRoot: string;
+}
