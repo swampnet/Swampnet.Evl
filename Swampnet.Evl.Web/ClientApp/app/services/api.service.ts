@@ -9,7 +9,6 @@ import { Globals } from './globals';
 export class ApiService {
     headers: Headers;
     options: RequestOptions;
-    private _baseUrl: string;
 
     constructor(
         private globals: Globals,
@@ -93,7 +92,7 @@ export class ApiService {
         let body = JSON.stringify(o);
 
         return new Promise((resolve, reject) => {
-            this._http.post(this._baseUrl + resource, body, this.options)
+            this._http.post(this.globals.cfg.apiRoot + resource, body, this.options)
                 .catch((error: any) => {
                     console.error(error);
                     reject(error);
@@ -109,7 +108,7 @@ export class ApiService {
         let body = JSON.stringify(o);
 
         return new Promise((resolve, reject) => {
-            this._http.put(this._baseUrl + resource, body, this.options)
+            this._http.put(this.globals.cfg.apiRoot + resource, body, this.options)
                 .catch((error: any) => {
                     console.error(error);
                     reject(error);
@@ -123,7 +122,7 @@ export class ApiService {
 
     delete(resource: string) {
         return new Promise((resolve, reject) => {
-            this._http.delete(this._baseUrl + resource)
+            this._http.delete(this.globals.cfg.apiRoot + resource)
                 .catch((error: any) => {
                     console.error(error);
                     reject(error);

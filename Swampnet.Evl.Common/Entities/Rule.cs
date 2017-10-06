@@ -42,6 +42,7 @@ namespace Swampnet.Evl.Common.Entities
 
         public Guid Id { get; set; }
         public string Name { get; set; }
+        public string[] Actions { get; set; }
         public bool IsActive { get; set; }
     }
 }
