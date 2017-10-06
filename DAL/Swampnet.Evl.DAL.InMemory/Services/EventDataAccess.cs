@@ -13,7 +13,7 @@ namespace Swampnet.Evl.DAL.InMemory.Services
 {
     class EventDataAccess : IEventDataAccess
     {
-        public async Task<Guid> CreateAsync(Application app, Event evt)
+        public async Task<Guid> CreateAsync(Event evt)
         {
             using(var context = EventContext.Create())
             {
@@ -91,6 +91,19 @@ namespace Swampnet.Evl.DAL.InMemory.Services
                     query = query.Where(e => e.Category == criteria.Category.ToString());
                 }
 
+                if (!string.IsNullOrEmpty(criteria.Source))
+                {
+                    query = query.Where(e => e.Source == criteria.Source);
+
+                    // Version must match exactly
+                    if (!string.IsNullOrEmpty(criteria.SourceVersion))
+                    {
+                        query = query.Where(e => e.SourceVersion == criteria.SourceVersion);
+                    }
+                }
+
+
+
                 // Realtime search
                 if (criteria.TimestampUtc.HasValue)
                 {
@@ -124,6 +137,18 @@ namespace Swampnet.Evl.DAL.InMemory.Services
 
                 return results.Select(e => Convert.ToEventSummary(e));
             }
+        }
+
+        public async Task<IEnumerable<string>> GetSources(Guid org)
+        {
+            IEnumerable<string> sources = null;
+
+            using (var context = EventContext.Create())
+            {
+                sources = await context.Events.Select(e => e.Source).Distinct().ToListAsync();
+            }
+
+            return sources;
         }
     }
 }

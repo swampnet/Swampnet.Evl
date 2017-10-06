@@ -63,6 +63,8 @@ namespace Swampnet_Evl_Web
                     name: "spa-fallback",
                     defaults: new { controller = "Home", action = "Index" });
             });
+
+            Log.Information("Start");
         }
     }
 }

@@ -32,5 +32,8 @@ namespace Swampnet.Evl.DAL.InMemory.Entities
         /// Any additional data associated with the event
         /// </summary>
 		public List<InternalProperty> Properties { get; set; }
+
+        public string Source { get; set; }
+        public string SourceVersion { get; set; }
     }
 }

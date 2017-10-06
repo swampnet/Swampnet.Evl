@@ -13,7 +13,7 @@ namespace Swampnet.Evl.Common.Contracts
 
         Task<Rule> LoadAsync(Guid id);
 
-        Task<IEnumerable<Rule>> LoadAsync(Application app);
+        Task<IEnumerable<Rule>> LoadAsync(Organisation org);
 
         Task CreateAsync(Rule rule);
 

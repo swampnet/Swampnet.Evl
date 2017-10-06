@@ -47,7 +47,7 @@ namespace Swampnet.Evl.DAL.InMemory.Services
         }
 
 
-        public async Task<IEnumerable<Rule>> LoadAsync(Application app)
+        public async Task<IEnumerable<Rule>> LoadAsync(Organisation org)
         {
             using (var context = RuleContext.Create())
             {

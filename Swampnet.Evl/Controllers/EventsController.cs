@@ -3,10 +3,11 @@ using Serilog;
 using Swampnet.Evl.Client;
 using Swampnet.Evl.Common.Contracts;
 using Swampnet.Evl.Contracts;
+using Swampnet.Evl.Services;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Net;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Swampnet.Evl.Controllers
@@ -16,19 +17,56 @@ namespace Swampnet.Evl.Controllers
 	{
         private readonly IEventQueueProcessor _eventProcessor;
         private readonly IEventDataAccess _dal;
+        private readonly IAuth _auth;
 
-        public EventsController(IEventDataAccess dal, IEventQueueProcessor eventProcessor)
+        public EventsController(IEventDataAccess dal, IEventQueueProcessor eventProcessor, IAuth auth)
         {
             _dal = dal;
             _eventProcessor = eventProcessor;
+            _auth = auth;
         }
+
+        [HttpGet("categories")]
+        public IActionResult GetCategories()
+        {
+            try
+            {
+                return Ok(Enum.GetValues(typeof(EventCategory)).Cast<EventCategory>().Select(e => e.ToString()).ToArray());
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, ex.Message);
+
+                return this.InternalServerError(ex);
+            }
+        }
+
+
+        [HttpGet("sources")]
+        public async Task<IActionResult> GetSources()
+        {
+            try
+            {
+                var sources = await _dal.GetSources(Common.Constants.MOCKED_DEFAULT_APIKEY);
+
+                return Ok(sources);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, ex.Message);
+
+                return this.InternalServerError(ex);
+            }
+        }
+
+
 
         [HttpGet]
         public async Task<IActionResult> Get([FromQuery] EventSearchCriteria criteria)
         {
             try
             {
-                Log.Logger.WithPublicProperties(criteria).Information("Get");
+                Log.Logger.WithPublicProperties(criteria).Debug("Get");
 
                 var events = await _dal.SearchAsync(criteria);
 
@@ -77,13 +115,28 @@ namespace Swampnet.Evl.Controllers
 					return BadRequest();
 				}
 
-                var apiKey = Request.ApiKey();
+                //var apiKey = Request.ApiKey();
+                var apiKey = Common.Constants.MOCKED_DEFAULT_APIKEY;
+
+                // @TODO: We drive everything off the API key, we currently don't check if the caller is actually
+                //        the owner of the key.
+
+                // @TODO: Auth
+                // @TODO: Check api key is valid, get organisation
+                var org = await _auth.GetOrganisationAsync(apiKey);
+                if(org == null)
+                {
+                    return Unauthorized();
+                }
+
+                if (string.IsNullOrEmpty(evt.Source))
+                {
+                    evt.Source = org.Name;
+                }
 
                 evt.Properties.AddRange(Request.CommonProperties());
 
-                // @TODO: Auth
-
-                var id = await _dal.CreateAsync(null, evt);
+                var id = await _dal.CreateAsync(evt);
 
                 _eventProcessor.Enqueue(id);
 
@@ -124,7 +177,7 @@ namespace Swampnet.Evl.Controllers
                     try
                     {
                         evt.Properties.AddRange(Request.CommonProperties());
-                        var id = await _dal.CreateAsync(null, evt);
+                        var id = await _dal.CreateAsync(evt);
                         lock (ids)
                         {
                             ids.Add(id);

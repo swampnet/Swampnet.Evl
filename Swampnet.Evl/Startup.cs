@@ -37,6 +37,8 @@ namespace Swampnet.Evl
             services.AddEmailActionHandler();
             services.AddSlackActionHandler();
 
+            services.AddSingleton<IAuth, Auth>();
+
             // Add framework services.  
             services.AddMvc().AddJsonOptions(options => {
 				options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
@@ -97,6 +99,8 @@ namespace Swampnet.Evl
 				.AllowAnyMethod());
 
 			app.UseMvc();
+
+            Log.Information("Start");
         }
     }
 }
