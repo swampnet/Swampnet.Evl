@@ -71,6 +71,7 @@ export interface EventSummary {
 
 export interface EventSearchCriteria {
     id?: string;
+    source?: string;
     category?: string;
     summary?: string;
     timestampUtc?: Date;
