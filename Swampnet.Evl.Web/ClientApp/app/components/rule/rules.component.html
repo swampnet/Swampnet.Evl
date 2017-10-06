@@ -3,10 +3,14 @@
 <div *ngIf="rules; else noRulesTemplate">
     <div class="container-fluid">
         <div *ngFor="let r of rules">
-            <div *ngIf="r.isActive" class="row">
-                <div class="col-sm-12 rule_panel mouse-pointer" [routerLink]="['/rules', r.id]">
+            <div *ngIf="r.isActive" class="row rule-panel mouse-pointer" [routerLink]="['/rules', r.id]">
+                <div class="col-sm-6">
                     {{ r.name }}
-                    <span class="rule-action" *ngFor="let a of r.actions">{{a}}</span>
+                </div>
+                <div class="col-sm-6">
+                    <div class="rule-action-container">
+                        <span class="rule-action" *ngFor="let a of r.actions">{{a}}</span>
+                    </div>
                 </div>
             </div>
         </div>            
