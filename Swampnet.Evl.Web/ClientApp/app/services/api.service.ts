@@ -3,6 +3,7 @@ import { Observable } from 'rxjs/Observable';
 import { Http, Response, Headers, RequestOptions, URLSearchParams } from '@angular/http';
 import 'rxjs/Rx';
 import 'rxjs/add/operator/toPromise';
+import { Globals } from './globals';
 
 @Injectable()
 export class ApiService {
@@ -11,12 +12,9 @@ export class ApiService {
     private _baseUrl: string;
 
     constructor(
+        private globals: Globals,
         private _http: Http) {
 
-        //this._baseUrl = "http://localhost:5001/";
-		//this._baseUrl = "http://localhost:5000/";
-		this._baseUrl = "http://swampnet-evl-staging.azurewebsites.net/api/";
-        
         this.headers = new Headers({
             'Content-Type': 'application/json',
             'Accept': 'q=0.8;application/json;q=0.9'
@@ -27,99 +25,31 @@ export class ApiService {
 
 
     getRules() {
-
-        return new Promise((resolve, reject) => {
-            this._http.get(this._baseUrl + 'rules')
-                .map(res => res.json())
-                .catch((error: any) => {
-                    console.error(error);
-                    reject(error);
-                    return Observable.throw(error.json().error || 'Server error');
-                })
-                .subscribe((data) => {
-                    resolve(data);
-                });
-        });
+        return this.get('rules');
     }
 
 
 	getRule(id: string) {
-
-		return new Promise((resolve, reject) => {
-			this._http.get(this._baseUrl + 'rules/' + id)
-				.map(res => res.json())
-				.catch((error: any) => {
-					console.error(error);
-					reject(error);
-					return Observable.throw(error.json().error || 'Server error');
-				})
-				.subscribe((data) => {
-					resolve(data);
-				});
-		});
+        return this.get('rules/' + id);
 	}
 
-    deleteRule(id: string) {        
-        return new Promise((resolve, reject) => {
-            this._http.delete(this._baseUrl + 'rules/' + id)
-                .catch((error: any) => {
-                    console.error(error);
-                    reject(error);
-                    return Observable.throw(error.json().error || 'Server error');
-                })
-                .subscribe((data) => {
-                    resolve(data);
-                });
-        });
+    deleteRule(id: string) {
+        return this.delete('rules/' + id);
     }
-        
+
 
     createRule(rule: any) {
-        let body = JSON.stringify(rule);
-
-        return new Promise((resolve, reject) => {
-            this._http.post(this._baseUrl + 'rules', body, this.options)
-                .catch((error: any) => {
-                    console.error(error);
-                    reject(error);
-                    return Observable.throw(error.json().error || 'Server error');
-                })
-                .subscribe((data) => {
-                    resolve(data);
-                });
-        });
+        return this.post('rules', rule);
     }
 
-    updateRule(rule: any) {
-        let body = JSON.stringify(rule);
 
-        return new Promise((resolve, reject) => {
-            this._http.put(this._baseUrl + 'rules/' + rule.id, body, this.options)
-                .catch((error: any) => {
-                    console.error(error);
-                    reject(error);
-                    return Observable.throw(error.json().error || 'Server error');
-                })
-                .subscribe((data) => {
-                    resolve(data);
-                });
-        });
+    updateRule(rule: any) {
+        return this.put('rules/' + rule.id, rule);
     }
 
 
     getMetaData() {
-        return new Promise((resolve, reject) => {
-            this._http.get(this._baseUrl + 'meta')
-                .map(res => res.json())
-                .catch((error: any) => {
-                    console.error(error);
-                    reject(error);
-                    return Observable.throw(error.json().error || 'Server error');
-                })
-                .subscribe((data) => {
-                    resolve(data);
-                });
-        });
+        return this.get('meta');
     }
 
     searchEvents(criteria: any) {
@@ -128,23 +58,25 @@ export class ApiService {
             params.set(key, criteria[key])
         }
 
-        return new Promise((resolve, reject) => {
-            this._http.get(this._baseUrl + 'events?' + params.toString())
-                .map(res => res.json())
-                .catch((error: any) => {
-                    console.error(error);
-                    reject(error);
-                    return Observable.throw(error.json().error || 'Server error');
-                })
-                .subscribe((data) => {
-                    resolve(data);
-                });
-        });
+        return this.get('events?' + params.toString());
     }
 
     getEvent(id: string) {
+        return this.get('events/' + id);
+    }
+
+	getSources() {
+		return this.get('events/sources');
+	}
+
+    getCategories() {
+        return this.get('events/categories');
+    }
+
+
+    get(resource: string) {
         return new Promise((resolve, reject) => {
-            this._http.get(this._baseUrl + 'events/' + id)
+            this._http.get(this.globals.cfg.apiRoot + resource)
                 .map(res => res.json())
                 .catch((error: any) => {
                     console.error(error);
@@ -157,4 +89,49 @@ export class ApiService {
         });
     }
 
+    post(resource: string, o: any) {
+        let body = JSON.stringify(o);
+
+        return new Promise((resolve, reject) => {
+            this._http.post(this._baseUrl + resource, body, this.options)
+                .catch((error: any) => {
+                    console.error(error);
+                    reject(error);
+                    return Observable.throw(error.json().error || 'Server error');
+                })
+                .subscribe((data) => {
+                    resolve(data);
+                });
+        });
+    }
+
+    put(resource: string, o: any) {
+        let body = JSON.stringify(o);
+
+        return new Promise((resolve, reject) => {
+            this._http.put(this._baseUrl + resource, body, this.options)
+                .catch((error: any) => {
+                    console.error(error);
+                    reject(error);
+                    return Observable.throw(error.json().error || 'Server error');
+                })
+                .subscribe((data) => {
+                    resolve(data);
+                });
+        });
+    }
+
+    delete(resource: string) {
+        return new Promise((resolve, reject) => {
+            this._http.delete(this._baseUrl + resource)
+                .catch((error: any) => {
+                    console.error(error);
+                    reject(error);
+                    return Observable.throw(error.json().error || 'Server error');
+                })
+                .subscribe((data) => {
+                    resolve(data);
+                });
+        });
+    }
 }  

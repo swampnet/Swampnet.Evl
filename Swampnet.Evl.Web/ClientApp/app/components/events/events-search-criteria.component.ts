@@ -8,5 +8,26 @@ import { ApiService } from '../../services/api.service';
     styleUrls: ['./events-search-criteria.component.css']
 })
 export class EventsSearchCriteriaComponent {
-    @Input() criteria: EventSearchCriteria;
+	@Input() criteria: EventSearchCriteria;
+
+	public availableSources: string[] = []
+
+	public availableCategories: string[] = [
+		"",
+		"Information"
+	]
+
+	constructor(
+		private _api: ApiService) {
+	}
+
+	ngOnInit() {
+		this._api.getSources().then((res: string[]) => {
+			this.availableSources = [""].concat(res);
+		});
+
+		this._api.getCategories().then((res: string[]) => {
+			this.availableCategories = [""].concat(res);
+		});
+	}
 }

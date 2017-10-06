@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Swampnet.Evl
 {
+    /// <summary>
+    /// Assembly helpers
+    /// </summary>
     static class AssemblyExtensions
     {
         public static IEnumerable<Type> AllOfType<T>(this IEnumerable<Assembly> assemblies)

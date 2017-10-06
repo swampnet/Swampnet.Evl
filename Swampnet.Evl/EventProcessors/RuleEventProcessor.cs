@@ -2,13 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Swampnet.Evl.Common;
 using System.Diagnostics;
-using Swampnet.Evl.Contracts;
 using Swampnet.Evl.Services;
 using Swampnet.Evl.Client;
 using Serilog;
+using System.Threading.Tasks;
+using Swampnet.Evl.Common.Entities;
 
 namespace Swampnet.Evl.EventProcessors
 {
@@ -25,9 +24,9 @@ namespace Swampnet.Evl.EventProcessors
             _actionHandlers = actionHandlers.ToDictionary(a => a.GetType().Name.Replace("ActionHandler", "").ToLower());
         }
 
-        public void Process(Event evt)
+        public async Task ProcessAsync(Event evt)
         {
-            var rules = _loader.LoadAsync(null).Result.ToList();
+            var rules = new List<Rule>(await _loader.LoadAsync(null));
 
             var expressionEvaluator = new ExpressionEvaluator();
 
@@ -39,6 +38,7 @@ namespace Swampnet.Evl.EventProcessors
                 int count = int.MaxValue;
 
                 // Keep processing the rules until either we run out of rules, or all the rules evaluate to false.
+                // When a rule evaluates to true, run any associated actions and remove the rule from our list.
                 while (count > 0 && rules.Any())
                 {
                     count = 0;
@@ -59,7 +59,7 @@ namespace Swampnet.Evl.EventProcessors
                                         throw new InvalidOperationException($"Unknown action: {action.Type}");
                                     }
 
-                                    _actionHandlers[key].Apply(evt, action, rule);
+                                    await _actionHandlers[key].ApplyAsync(evt, action, rule);
 
                                     evt.Properties.Add(new Property("Internal", "ActionApplied", action.Type));
                                 }

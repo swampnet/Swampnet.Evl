@@ -1,4 +1,5 @@
-﻿export interface RuleSummary {
+﻿
+export interface RuleSummary {
     id: string;
     name: string;
 }
@@ -85,4 +86,8 @@ export interface Event {
     summary: string;
     timestampUtc: Date;
     properties: Property[];
+}
+
+export interface Cfg {
+    apiRoot: string;
 }

@@ -61,15 +61,12 @@ namespace Swampnet.Evl.Client
         /// <summary>
         /// Event source
         /// </summary>
-        /// <remarks>
-        /// @TODO: Not sure about this, the source should probably be infered from whatever api-key was used to
-        ///        generate the event.
-        /// </remarks>
         public string Source { get; set; }
+        public string SourceVersion { get; set; }
 
-		public override string ToString()
+        public override string ToString()
         {
-            return $"{TimestampUtc:s} [{Category}] {Summary}";
+            return $"{TimestampUtc:s} [{Source}] [{Category}] {Summary}";
         }
     }
 

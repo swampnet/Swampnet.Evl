@@ -10,7 +10,7 @@ namespace Swampnet.Evl.Actions
 {
     class AddPropertyActionHandler : IActionHandler
     {
-        public void Apply(Event evt, ActionDefinition actionDefinition, Rule rule)
+        public Task ApplyAsync(Event evt, ActionDefinition actionDefinition, Rule rule)
         {
             if(actionDefinition.Properties != null && actionDefinition.Properties.Any())
             {
@@ -21,6 +21,8 @@ namespace Swampnet.Evl.Actions
 
                 evt.Properties.AddRange(actionDefinition.Properties.Select(p => new Property(p.Category, p.Name, p.Value)));
             }
+
+            return Task.CompletedTask;
         }
     }
 }

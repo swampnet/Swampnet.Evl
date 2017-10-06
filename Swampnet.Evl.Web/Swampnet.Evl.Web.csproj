@@ -5,6 +5,7 @@
     <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
     <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
     <IsPackable>false</IsPackable>
+    <UserSecretsId>c055f6f1-07b6-49e5-bf5b-8dd07c10f7a5</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -26,6 +27,7 @@
 
   <ItemGroup>
     <None Remove="ClientApp\app\components\events\events.component.ts" />
+    <None Remove="ClientApp\app\services\globals.ts" />
   </ItemGroup>
 
   <ItemGroup>
@@ -36,6 +38,7 @@
 
   <ItemGroup>
     <TypeScriptCompile Include="ClientApp\app\components\events\events.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\services\globals.ts" />
   </ItemGroup>
 
   <Target Name="DebugRunWebpack" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('wwwroot\dist') ">

@@ -11,13 +11,15 @@ namespace Swampnet.Evl.Actions
 {
     class ChangeCategoryActionHandler : IActionHandler
     {
-        public void Apply(Event evt, ActionDefinition actionDefinition, Rule rule)
+        public Task ApplyAsync(Event evt, ActionDefinition actionDefinition, Rule rule)
         {
             var cat = actionDefinition.Properties.StringValue("category");
             if(!string.IsNullOrEmpty(cat))
             {
                 evt.Category = Enum.Parse<EventCategory>(cat, true);
             }
+
+            return Task.CompletedTask;
         }
     }
 }

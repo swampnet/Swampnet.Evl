@@ -13,7 +13,7 @@ namespace Swampnet.Evl.DAL.InMemory.Services
 {
     class EventDataAccess : IEventDataAccess
     {
-        public async Task<Guid> CreateAsync(Application app, Event evt)
+        public async Task<Guid> CreateAsync(Event evt)
         {
             using(var context = EventContext.Create())
             {
@@ -53,29 +53,17 @@ namespace Swampnet.Evl.DAL.InMemory.Services
 
                 internalEvent.Category = evt.Category.ToString();
                 internalEvent.Summary = evt.Summary;
-                //internalEvent.TimestampUtc = evt.TimestampUtc; // Not sure we should allow this
                 internalEvent.LastUpdatedUtc = DateTime.UtcNow;
 
-                // We need to update any matching properties, or add new ones
-                // @TODO: Jeez, how will this work for multiple properties with same category/name?
-                // @HACK: I'm going to ignore this ^ for now!
-                foreach(var p in evt.Properties)
+                // Update properties. At the moment we can only add new properties (How would we event match and update changed values? We can have multiple
+                // properties with the same category / name.
+                foreach(var prp in evt.Properties)
                 {
-                    var internalProperty = internalEvent.Properties.Values(p.Category, p.Name).SingleOrDefault();
-
-                    if(internalProperty != null)
+                    if (!internalEvent.Properties.Any(p => p.Category.EqualsNoCase(prp.Category) && p.Name.EqualsNoCase(prp.Name) && p.Value.EqualsNoCase(prp.Value)))
                     {
-                        internalProperty.Value = p.Value;
-                    }
-                    else
-                    {
-                        // Add new
-                        internalEvent.Properties.Add(Convert.ToInternalProperty(p));
+                        internalEvent.Properties.Add(Convert.ToInternalProperty(prp));
                     }
                 }
-
-                // .. and remove any properties no longer present.
-                // @HACK: Ignoring this for now
 
                 await context.SaveChangesAsync();
             }
@@ -102,6 +90,19 @@ namespace Swampnet.Evl.DAL.InMemory.Services
                 {
                     query = query.Where(e => e.Category == criteria.Category.ToString());
                 }
+
+                if (!string.IsNullOrEmpty(criteria.Source))
+                {
+                    query = query.Where(e => e.Source == criteria.Source);
+
+                    // Version must match exactly
+                    if (!string.IsNullOrEmpty(criteria.SourceVersion))
+                    {
+                        query = query.Where(e => e.SourceVersion == criteria.SourceVersion);
+                    }
+                }
+
+
 
                 // Realtime search
                 if (criteria.TimestampUtc.HasValue)
@@ -136,6 +137,18 @@ namespace Swampnet.Evl.DAL.InMemory.Services
 
                 return results.Select(e => Convert.ToEventSummary(e));
             }
+        }
+
+        public async Task<IEnumerable<string>> GetSources(Guid org)
+        {
+            IEnumerable<string> sources = null;
+
+            using (var context = EventContext.Create())
+            {
+                sources = await context.Events.Select(e => e.Source).Distinct().ToListAsync();
+            }
+
+            return sources;
         }
     }
 }
