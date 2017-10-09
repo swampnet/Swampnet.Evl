@@ -1,6 +1,8 @@
 <h1>Home</h1>
 <p>Homepage: {{date}}</p>
 <p>------------------</p>
-<p>Api Version {{stats.apiVersion}}</p>
-<p>Total Events: {{stats.totalEvents}}</p>
+<div *ngIf="stats">
+    <p>Api Version {{stats.apiVersion}}</p>
+    <p>Total Events: {{stats.totalEvents}}</p>
+</div>
 <p>------------------</p>
