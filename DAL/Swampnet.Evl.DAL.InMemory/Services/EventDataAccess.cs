@@ -150,5 +150,14 @@ namespace Swampnet.Evl.DAL.InMemory.Services
 
             return sources;
         }
+
+
+        public Task<long> GetTotalEventCountAsync()
+        {
+            using (var context = EventContext.Create())
+            {
+                return context.Events.LongCountAsync();
+            }
+        }
     }
 }
