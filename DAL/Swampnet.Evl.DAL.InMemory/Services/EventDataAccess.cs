@@ -17,7 +17,7 @@ namespace Swampnet.Evl.DAL.InMemory.Services
         {
             using(var context = EventContext.Create())
             {
-                var internalEvent = Convert.ToInternalEvent(evt);
+                var internalEvent = Convert.ToInternalEvent(evt, context);
                 internalEvent.Id = Guid.NewGuid();
                 context.Events.Add(internalEvent);
 
@@ -33,7 +33,11 @@ namespace Swampnet.Evl.DAL.InMemory.Services
         {
             using (var context = EventContext.Create())
             {
-                var evt = await context.Events.Include(e => e.Properties).SingleOrDefaultAsync(e => e.Id == id);
+                var evt = await context.Events
+                    .Include(e => e.Properties)
+                    .Include(e => e.InternalEventTags)
+                        .ThenInclude(t => t.Tag)
+                    .SingleOrDefaultAsync(e => e.Id == id);
 
                 return Convert.ToEvent(evt);
             }

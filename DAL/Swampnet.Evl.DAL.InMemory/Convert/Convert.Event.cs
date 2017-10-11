@@ -2,6 +2,7 @@
 using System;
 using System.Linq;
 using Swampnet.Evl.Client;
+using System.Collections.Generic;
 
 namespace Swampnet.Evl.DAL.InMemory
 {
@@ -12,11 +13,13 @@ namespace Swampnet.Evl.DAL.InMemory
         /// <summary>
         /// Convert an API Event to an InternalEvent
         /// </summary>
-        internal static InternalEvent ToInternalEvent(Event evt)
+        internal static InternalEvent ToInternalEvent(Event evt, EventContext context)
         {
-            return evt == null
-                ? null
-                : new InternalEvent()
+            InternalEvent e = null;
+
+            if (evt != null)
+            {
+                e = new InternalEvent()
                 {
                     Category = evt.Category.ToString(),
                     Summary = evt.Summary,
@@ -24,9 +27,15 @@ namespace Swampnet.Evl.DAL.InMemory
                     LastUpdatedUtc = evt.LastUpdatedUtc.HasValue ? evt.LastUpdatedUtc.Value : evt.TimestampUtc,
                     Properties = evt.Properties?.Select(p => ToInternalProperty(p)).ToList(),
                     Source = evt.Source,
-                    SourceVersion = evt.SourceVersion
+                    SourceVersion = evt.SourceVersion                    
                 };
+
+                e.AddTags(context, evt.Tags);
+            }
+
+            return e;
         }
+
 
 
         /// <summary>
@@ -59,7 +68,10 @@ namespace Swampnet.Evl.DAL.InMemory
                     LastUpdatedUtc = evt.LastUpdatedUtc,
                     Properties = evt.Properties?.Select(p => ToProperty(p)).ToList(),
                     Source = evt.Source,
-                    SourceVersion = evt.SourceVersion
+                    SourceVersion = evt.SourceVersion,
+                    Tags = evt.InternalEventTags == null
+                        ? null
+                        : evt.InternalEventTags.Select(t => t.Tag.Name).ToArray()
                 };
         }
 
@@ -93,5 +105,37 @@ namespace Swampnet.Evl.DAL.InMemory
             };
         }
         #endregion
+
+
+        // @TODO: Possibly better as .AddTags and just adding tag data to event directly
+        private static List<InternalEventTags> CreateTags(string[] tags, InternalEvent evt, EventContext context)
+        {
+            List<InternalEventTags> links = null;
+
+            if(tags != null && tags.Any())
+            {
+                links = new List<InternalEventTags>();
+                foreach(var tag in tags)
+                {
+                    var link = new InternalEventTags();
+                    link.Event = evt;
+
+                    var t = context.Tags.FirstOrDefault(x => x.Name == tag); // .First() - it *is* possible to have multiple tags with same name (due to syncronisation, or lack of lol!)
+                    if(t == null)
+                    {
+                        t = new InternalTag()
+                        {
+                            Name = tag
+                        };
+                        context.Tags.Add(t);
+                    }
+                    link.Tag = t;
+                    links.Add(link);
+                }
+            }
+
+            return links;
+        }
+
     }
 }

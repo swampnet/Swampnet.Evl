@@ -62,7 +62,13 @@ namespace Swampnet.Evl.Client
         /// Event source
         /// </summary>
         public string Source { get; set; }
+
         public string SourceVersion { get; set; }
+        
+        /// <summary>
+        /// Event tags
+        /// </summary>
+        public string[] Tags { get; set; }
 
         public override string ToString()
         {
