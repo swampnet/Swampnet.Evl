@@ -52,40 +52,52 @@ namespace Swampnet.Evl.DAL.InMemory.Entities
         /// </summary>
         public string SourceVersion { get; set; }
 
+        internal IEnumerable<string> GetTagNames()
+        {
+            var tags = Enumerable.Empty<string>();
+
+            if(InternalEventTags != null && InternalEventTags.Any())
+            {
+                tags = InternalEventTags.Select(t => t.Tag.Name);
+            }
+
+            return tags;
+        }
+
+        internal void AddTag(EventContext context, string tag)
+        {
+            if(!string.IsNullOrEmpty(tag) && !GetTagNames().Contains(tag))
+            {
+                var link = new InternalEventTags();
+                link.Event = this;
+
+                var t = context.Tags.FirstOrDefault(x => x.Name == tag); // .First() - it *is* possible to have multiple tags with same name (due to syncronisation, or lack of lol!)
+                if (t == null)
+                {
+                    t = new InternalTag()
+                    {
+                        Name = tag
+                    };
+                    context.Tags.Add(t);
+                }
+                link.Tag = t;
+
+                if (InternalEventTags == null)
+                {
+                    InternalEventTags = new List<Entities.InternalEventTags>();
+                }
+                InternalEventTags.Add(link);
+            }
+        }
 
         internal void AddTags(EventContext context, IEnumerable<string> tags)
         {
-            List<InternalEventTags> links = null;
-
             if (tags != null && tags.Any())
             {
-                links = new List<InternalEventTags>();
                 foreach (var tag in tags)
                 {
-                    var link = new InternalEventTags();
-                    link.Event = this;
-
-                    var t = context.Tags.FirstOrDefault(x => x.Name == tag); // .First() - it *is* possible to have multiple tags with same name (due to syncronisation, or lack of lol!)
-                    if (t == null)
-                    {
-                        t = new InternalTag()
-                        {
-                            Name = tag
-                        };
-                        context.Tags.Add(t);
-                    }
-                    link.Tag = t;
-                    links.Add(link);
+                    AddTag(context, tag);
                 }
-            }
-
-            if(InternalEventTags == null)
-            {
-                InternalEventTags = links;
-            }
-            else
-            {
-                InternalEventTags.AddRange(links);
             }
         }
     }
