@@ -11,6 +11,8 @@ namespace Swampnet.Evl.Actions
 {
     class ChangeCategoryActionHandler : IActionHandler
     {
+        public string Type => "change-category";
+
         public Task ApplyAsync(Event evt, ActionDefinition actionDefinition, Rule rule)
         {
             var cat = actionDefinition.Properties.StringValue("category");
@@ -21,5 +23,25 @@ namespace Swampnet.Evl.Actions
 
             return Task.CompletedTask;
         }
+
+        public MetaDataCapture[] GetPropertyMetaData()
+        {
+            return new[]
+            {
+                new MetaDataCapture()
+                {
+                    Name = "Category",
+                    IsRequired = true,
+                    DataType = "select",
+                    Options = new[]
+                    {
+                        new Option("Information", "Information"),
+                        new Option("Error", "Error"),
+                        new Option("Debug", "Debug")
+                    }
+                }
+            };
+        }
+
     }
 }

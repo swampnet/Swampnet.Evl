@@ -66,6 +66,7 @@ namespace Swampnet.Evl.Plugins.Email
             _transformer = transformer;
 		}
 
+        public string Type => "email";
 
 		// @TODO: Add some kind of audit against the event to show we sent an email and to who (and what rule triggered it).
 		// @TODO: Apply should really be async
@@ -150,5 +151,39 @@ namespace Swampnet.Evl.Plugins.Email
 				client.Disconnect(true);
 			}
 		}
-	}
+
+        public MetaDataCapture[] GetPropertyMetaData()
+        {
+            return new[]
+            {
+                new MetaDataCapture()
+                {
+                    Name = "to",
+                    IsRequired = true,
+                    Options = new[]
+                    {
+                        new Option(null, ".*@.*")
+                    }
+                },
+                new MetaDataCapture()
+                {
+                    Name = "cc",
+                    IsRequired = false,
+                    Options = new[]
+                    {
+                        new Option(null, ".*@.*")
+                    }
+                },
+                new MetaDataCapture()
+                {
+                    Name = "bcc",
+                    IsRequired = false,
+                    Options = new[]
+                    {
+                        new Option(null, ".*@.*")
+                    }
+                },
+            };
+        }
+    }
 }

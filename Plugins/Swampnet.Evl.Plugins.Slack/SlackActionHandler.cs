@@ -20,6 +20,8 @@ namespace Swampnet.Evl.Plugins.Slack
             _api = api;
         }
 
+        public string Type => "slack";
+
 
         public async Task ApplyAsync(Event evt, ActionDefinition actionDefinition, Rule rule)
         {
@@ -27,6 +29,19 @@ namespace Swampnet.Evl.Plugins.Slack
 
             await _api.PostAsync(msg);
         }
+
+        public MetaDataCapture[] GetPropertyMetaData()
+        {
+            return new[]
+            {
+                new MetaDataCapture()
+                {
+                    Name = "channel",
+                    IsRequired = true
+                }
+            };
+        }
+
 
         // @TODO: Should probably be a service with templating and whatnopt.
         private SlackMessage CreateSlackMessage(Event evt, ActionDefinition actionDefinition, Rule rule)

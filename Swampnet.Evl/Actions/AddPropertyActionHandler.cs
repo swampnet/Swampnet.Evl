@@ -10,6 +10,8 @@ namespace Swampnet.Evl.Actions
 {
     class AddPropertyActionHandler : IActionHandler
     {
+        public string Type => "add-property";
+
         public Task ApplyAsync(Event evt, ActionDefinition actionDefinition, Rule rule)
         {
             if(actionDefinition.Properties != null && actionDefinition.Properties.Any())
@@ -23,6 +25,29 @@ namespace Swampnet.Evl.Actions
             }
 
             return Task.CompletedTask;
+        }
+
+
+        public MetaDataCapture[] GetPropertyMetaData()
+        {
+            return new[]
+            {
+                new MetaDataCapture()
+                {
+                    Name = "category",
+                    IsRequired = false,
+                },
+                new MetaDataCapture()
+                {
+                    Name = "name",
+                    IsRequired = true,
+                },
+                new MetaDataCapture()
+                {
+                    Name = "value",
+                    IsRequired = true,
+                }
+            };
         }
     }
 }
