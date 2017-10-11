@@ -87,7 +87,8 @@ export interface Event {
     category: string;
     summary: string;
     timestampUtc: Date;
-    properties: Property[];
+	properties: Property[];
+	tags: string[];
 }
 
 export interface Cfg {

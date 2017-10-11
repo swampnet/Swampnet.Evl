@@ -186,7 +186,7 @@ namespace Serilog.Sinks.Evl
 		private Tuple<string, string> Split(string key)
 		{
 			string category = "";
-			string name = "key";
+			string name = key;
 
 			if (key.Contains(EvlSink.CATEGORY_SPLIT))
 			{

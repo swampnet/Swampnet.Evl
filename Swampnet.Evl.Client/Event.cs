@@ -89,10 +89,12 @@ namespace Swampnet.Evl.Client
         {
         }
 
+		private readonly static char[] _trim = new char[] { ' ', '\"' };
+
         public Property(string category, string name, object value)
         {
-            Category = category;
-            Name = name;
+            Category = category?.Trim(_trim);
+            Name = name?.Trim(_trim);
             Value = value?.ToString();
         }
 

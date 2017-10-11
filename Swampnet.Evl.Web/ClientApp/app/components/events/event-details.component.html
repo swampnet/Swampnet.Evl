@@ -1,19 +1,29 @@
 ﻿<div class="container-fluid" *ngIf="event; else noResults">
 	<h1>{{event.summary}}</h1>
 	<div class="row">
-		<div class="col-sm-2 property-name">TimestampUtc</div>
-		<div class="col-sm-10">{{event.timestampUtc | date: 'medium'}}</div>
+		<div class="col-sm-4 property-name">TimestampUtc</div>
+		<div class="col-sm-8">{{event.timestampUtc | date: 'medium'}}</div>
 	</div>	
 
 	<div class="row">
-		<div class="col-sm-2 property-name">Category</div>
-		<div class="col-sm-10">{{event.category}}</div>
+		<div class="col-sm-4 property-name">Category</div>
+		<div class="col-sm-8">{{event.category}}</div>
 	</div>	
 
 	<div class="row" *ngFor="let p of event.properties">
-		<div class="col-sm-2 property-name">{{p.name}}</div>
-		<div class="col-sm-10">{{p.value}}</div>
+		<div class="col-sm-4 property-name">{{p.name}}</div>
+		<div class="col-sm-8">{{p.value}}</div>
 	</div>	
+
+	<div *ngIf="event.tags" class="row">
+		<div class="col-sm-4 property-name">Tags</div>
+		<div class="col-sm-8">
+			<div *ngFor="let t of event.tags">
+				{{t}}
+			</div>
+		</div>
+	</div>
+
 </div>
 
 
