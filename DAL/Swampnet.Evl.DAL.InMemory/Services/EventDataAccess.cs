@@ -70,7 +70,7 @@ namespace Swampnet.Evl.DAL.InMemory.Services
                 }
 
                 // Add tags, will ignore any that already exist so we'll only add new tags
-                internalEvent.AddTags(context, evt.Tags);
+                //internalEvent.AddTags(context, evt.Tags);
 
                 // @TODO: We should be able to remove tags that don't exist as well
 

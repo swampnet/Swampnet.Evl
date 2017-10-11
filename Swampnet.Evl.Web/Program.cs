@@ -9,7 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Serilog;
 
-namespace Swampnet_Evl_Web
+namespace Swampnet.Evl.Web
 {
     public class Program
     {

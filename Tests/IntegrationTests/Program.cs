@@ -5,6 +5,7 @@ using System.Threading;
 using Swampnet.Evl;
 using Microsoft.Extensions.Configuration;
 using System.IO;
+using Swampnet.Evl.Client;
 
 namespace IntegrationTests
 {
@@ -73,7 +74,14 @@ namespace IntegrationTests
                     }
 					else if(count % 13 == 0)
 					{
-						Log.Information("Some Properties {Count} {One} {Two} ", count++, 1, 2);
+						Log.Logger
+							.WithTags(new[] { "INTEGRATION-TEST" })
+							.WithProperties(new[] 
+							{
+								new Property("Additional Property", "value 1"),
+								new Property("Another Additional Property", "value 2")
+							})
+							.Information("Some inline properties {Count} {One} {Two} ", count++, 1, 2);
 					}
                 }
                 catch (Exception ex)

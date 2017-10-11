@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Linq;
 
 namespace Swampnet.Evl
 {
@@ -67,5 +68,11 @@ namespace Swampnet.Evl
 
             return logger;
         }
-    }
+
+
+		public static ILogger WithTags(this ILogger logger, IEnumerable<string> tags)
+		{
+			return logger.WithProperties(tags.Select(t => new Property(EvlSink.TAG_CATEGORY, EvlSink.TAG_CATEGORY, t)));
+		}
+	}
 }

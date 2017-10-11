@@ -16,9 +16,11 @@ namespace Serilog.Sinks.Evl
 {
     public class EvlSink : PeriodicBatchingSink
     {
-		public const string CATEGORY_SPLIT = "@@@";
+		public const string CATEGORY_SPLIT = "~CATEGORY~";
+		public const string TAG_CATEGORY = "~TAG~";
 
-        private static readonly int _defaultBatchSize = 50;                        // Maximum number of LogEvents in a batch
+
+		private static readonly int _defaultBatchSize = 50;                        // Maximum number of LogEvents in a batch
         private static readonly TimeSpan _defaultPeriod = TimeSpan.FromSeconds(5); // How often we flush the batch
 
         private readonly IFormatProvider _formatProvider;
@@ -117,10 +119,14 @@ namespace Serilog.Sinks.Evl
                 evlEvent.TimestampUtc = s.Timestamp.UtcDateTime;
                 evlEvent.Category = Convert(s.Level);
 
-                evlEvent.Properties = new List<Property>();
-                Process(evlEvent.Properties, s.Properties);
+				var properties = new List<Property>();
 
-                evlEvents.Add(evlEvent);
+                Process(properties, s.Properties);
+
+				evlEvent.Properties = properties.Where(p => p.Category != TAG_CATEGORY && p.Name != TAG_CATEGORY).ToList();
+				evlEvent.Tags = properties.Where(p => p.Category == TAG_CATEGORY && p.Name == TAG_CATEGORY).Select(p => p.Value).ToList();
+
+				evlEvents.Add(evlEvent);
             }
 
             return evlEvents;

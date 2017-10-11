@@ -7,7 +7,7 @@ using Serilog;
 using Serilog.Exceptions;
 using Serilog.Events;
 
-namespace Swampnet_Evl_Web
+namespace Swampnet.Evl.Web
 {
     public class Startup
     {
@@ -64,7 +64,9 @@ namespace Swampnet_Evl_Web
                     defaults: new { controller = "Home", action = "Index" });
             });
 
-            Log.Information("Start");
+			Log.Logger
+				.WithTags(new[] { "START" })
+				.Information("Start");
         }
     }
 }
