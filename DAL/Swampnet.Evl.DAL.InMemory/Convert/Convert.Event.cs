@@ -71,7 +71,7 @@ namespace Swampnet.Evl.DAL.InMemory
                     SourceVersion = evt.SourceVersion,
                     Tags = evt.InternalEventTags == null
                         ? null
-                        : evt.InternalEventTags.Select(t => t.Tag.Name).ToArray()
+                        : evt.InternalEventTags.Select(t => t.Tag.Name).ToList()
                 };
         }
 
