@@ -100,7 +100,7 @@ namespace Swampnet.Evl
 
 			app.UseMvc();
 
-            Log.Information("Start");
+            Log.Logger.WithTags(new[] { "START" }).Information("Start");
         }
     }
 }

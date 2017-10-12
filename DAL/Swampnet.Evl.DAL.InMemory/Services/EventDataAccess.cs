@@ -111,6 +111,13 @@ namespace Swampnet.Evl.DAL.InMemory.Services
                     }
                 }
 
+                if(criteria.Tags != null)
+                {
+                    foreach(var tag in criteria.Tags)
+                    {
+                        query = query.Where(e => e.InternalEventTags.Any(t => t.Tag.Name == tag));
+                    }
+                }
 
 
                 // Realtime search

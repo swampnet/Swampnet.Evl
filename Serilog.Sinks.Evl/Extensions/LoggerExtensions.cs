@@ -12,6 +12,9 @@ namespace Swampnet.Evl
 {
     public static class LoggerExtensions
     {
+        /// <summary>
+        /// Add current method name to the log
+        /// </summary>
         public static ILogger WithMembername(this ILogger logger, [CallerMemberName] string name = null)
         {
             return logger.ForContext("MemberName", name);
@@ -42,6 +45,27 @@ namespace Swampnet.Evl
         }
 
 
+        /// <summary>
+        /// Add single property to log
+        /// </summary>
+        public static ILogger WithProperty(this ILogger logger, IProperty property)
+        {
+            return logger.WithProperties(new[] { property });
+        }
+
+
+        /// <summary>
+        /// Add single property to log
+        /// </summary>
+        public static ILogger WithProperty(this ILogger logger, string name, object value, string category = null)
+        {
+            return logger.WithProperty(new Property(category, name, value));
+        }
+
+
+        /// <summary>
+        /// Add all public properties on an object to the log
+        /// </summary>
         public static ILogger WithPublicProperties(this ILogger logger, object o)
         {
             if(o == null)
@@ -58,7 +82,12 @@ namespace Swampnet.Evl
             return logger.WithProperties(properties);
         }
 
-
+        /// <summary>
+        /// Add key/value pairs to the log
+        /// </summary>
+        /// <param name="logger"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
         public static ILogger WithKeyValuePairs(this ILogger logger, IEnumerable<KeyValuePair<string, object>> data)
         {
             foreach (var nv in data)
@@ -69,8 +98,18 @@ namespace Swampnet.Evl
             return logger;
         }
 
+        /// <summary>
+        /// Add a tag to the log
+        /// </summary>
+        public static ILogger WithTag(this ILogger logger, string tag)
+        {
+            return logger.WithTags(new[] { tag });
+        }
 
-		public static ILogger WithTags(this ILogger logger, IEnumerable<string> tags)
+        /// <summary>
+        /// Add multiple tags to the log
+        /// </summary>
+        public static ILogger WithTags(this ILogger logger, IEnumerable<string> tags)
 		{
 			return logger.WithProperties(tags.Select(t => new Property(EvlSink.TAG_CATEGORY, EvlSink.TAG_CATEGORY, t)));
 		}
