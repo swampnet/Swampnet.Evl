@@ -20,12 +20,11 @@ export class HomeComponent {
         this.loadStats();
     }
 
-    async loadStats() {
-        try {
-            this.stats = await this._api.getStats();
-        } catch(e) {
-            console.error(e);
-        }
+    loadStats() {
+        this._api.getStats().then((res: any) => {
+            this.stats = res;
+        }, (error) => {
+            console.log("Failed to get stats", error._body, "error");
+        });
     }
-
 }

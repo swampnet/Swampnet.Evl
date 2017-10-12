@@ -48,9 +48,13 @@ namespace Swampnet.Evl.DAL.InMemory.Services
         {
             using (var context = EventContext.Create())
             {
-                var internalEvent = await context.Events.Include(e => e.Properties).SingleOrDefaultAsync(e => e.Id == id);
+                var internalEvent = await context.Events
+                    .Include(e => e.Properties)
+                    .Include(e => e.InternalEventTags)
+                        .ThenInclude(t => t.Tag)
+                    .SingleOrDefaultAsync(e => e.Id == id);
 
-                if(internalEvent == null)
+                if (internalEvent == null)
                 {
                     throw new NullReferenceException($"Event {id} not found");
                 }
@@ -70,7 +74,7 @@ namespace Swampnet.Evl.DAL.InMemory.Services
                 }
 
                 // Add tags, will ignore any that already exist so we'll only add new tags
-                //internalEvent.AddTags(context, evt.Tags);
+                internalEvent.AddTags(context, evt.Tags);
 
                 // @TODO: We should be able to remove tags that don't exist as well
 
@@ -168,12 +172,16 @@ namespace Swampnet.Evl.DAL.InMemory.Services
         }
 
 
-        public Task<long> GetTotalEventCountAsync()
+        public async Task<long> GetTotalEventCountAsync()
         {
+            long count = 0;
+
             using (var context = EventContext.Create())
             {
-                return context.Events.LongCountAsync();
+                count = await context.Events.LongCountAsync();
             }
+
+            return count;
         }
     }
 }

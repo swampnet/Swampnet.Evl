@@ -60,5 +60,21 @@ namespace UnitTests
             Assert.AreEqual($"{EvlSink.TAG_CATEGORY}{EvlSink.CATEGORY_SPLIT}{EvlSink.TAG_CATEGORY}", x.Name);
             Assert.AreEqual($"tag-01", x.Value);
         }
+
+
+        [TestMethod]
+        public void SerilogSink_WithMemberName()
+        {
+            var logger = Mock.Logger();
+
+            logger = logger.WithMembername();
+
+            var result = (MockedLogger)logger;
+
+            var x = result.Properties.Single();
+
+            Assert.AreEqual("SerilogSink_WithMemberName", x.Value);
+        }
+
     }
 }

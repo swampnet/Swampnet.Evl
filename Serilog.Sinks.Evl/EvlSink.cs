@@ -16,7 +16,7 @@ namespace Serilog.Sinks.Evl
 {
     public class EvlSink : PeriodicBatchingSink
     {
-		public const string CATEGORY_SPLIT = "~CATEGORY~";
+		public const string CATEGORY_SPLIT = "~CAT~";
 		public const string TAG_CATEGORY = "~TAG~";
 
 
@@ -26,7 +26,7 @@ namespace Serilog.Sinks.Evl
         private readonly IFormatProvider _formatProvider;
 
         /// <summary>
-        /// 
+        /// ctor
         /// </summary>
         /// <param name="formatProvider"></param>
         /// <param name="apiKey"></param>

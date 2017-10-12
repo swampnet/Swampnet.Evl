@@ -29,7 +29,6 @@ export class EventDetailsComponent {
             }, (error) => {
                 console.log("Failed to get event", error._body, "error");
             });
-
         });
     }
 }
