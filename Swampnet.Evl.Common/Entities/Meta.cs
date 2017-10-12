@@ -52,12 +52,34 @@ namespace Swampnet.Evl.Common.Entities
 		{
 		}
 
-		public ExpressionOperator(RuleOperatorType op, string display, bool isGroup)
+		public ExpressionOperator(RuleOperatorType op, string display)
 			: this()
 		{
 			Code = op;
 			Display = display;
-			IsGroup = isGroup;
+
+            switch (Code)
+            {
+                case RuleOperatorType.MATCH_ALL:
+                case RuleOperatorType.MATCH_ANY:
+                    IsGroup = true;
+                    RequiresOperand = false;
+                    RequiresValue = false;
+                    break;
+
+                case RuleOperatorType.TAGGED:
+                case RuleOperatorType.NOT_TAGGED:
+                    IsGroup = false;
+                    RequiresOperand = false;
+                    RequiresValue = true;
+                    break;
+
+                default:
+                    IsGroup = false;
+                    RequiresOperand = true;
+                    RequiresValue = true;
+                    break;
+            }
 		}
 
 
@@ -65,7 +87,9 @@ namespace Swampnet.Evl.Common.Entities
 		public RuleOperatorType Code { get; set; }
 		public string Display { get; set; }
 		public bool IsGroup { get; set; }
-	}
+        public bool RequiresOperand { get; set; }
+        public bool RequiresValue { get; set; }
+    }
 
 	public class MetaDataCapture
 	{

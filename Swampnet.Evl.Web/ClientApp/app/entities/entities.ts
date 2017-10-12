@@ -55,6 +55,8 @@ export interface ExpressionOperator {
     code: string;
     display: string;
     isGroup: boolean;
+    requiresOperand: boolean;
+    requiresValue: boolean;
 }
 
 export interface MetaData{

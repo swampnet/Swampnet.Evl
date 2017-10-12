@@ -69,6 +69,10 @@ export class ExpressionComponent {
         return this.metaData.operands.find(i => i.name == op);
     }
 
+    getOperatorMetaData(op: string) {
+        return this.metaData.operators.find(i => i.code == op);
+    }
+
     // We don't actually delete stuff, just mark as inactive. We can let the server actually delete stuff if it
     // wants to (if we deleted it here, the server wouldn't even have any way of knowing it had been deleted!)
     deleteExpression() {

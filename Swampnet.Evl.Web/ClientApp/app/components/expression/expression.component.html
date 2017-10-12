@@ -2,13 +2,16 @@
 
     <!-- Expression -->
     <div [ngClass]="isRoot ? 'root-expression' : 'expression'" [class.highlightExpression]="isMouseOverDelete">
-		<span *ngIf="!isContainer">
+		<span *ngIf="getOperatorMetaData(expression.operator).requiresOperand">
 			<select [(ngModel)]="expression.operand">
 				<option *ngFor="let op of operands" [value]="op.name">{{op.name}}</option>
 			</select>
 
             <input *ngIf="getOperandMetaData(expression.operand).dataType == 'require-args'" [(ngModel)]="expression.argument">            
 		</span>
+        <span *ngIf="!getOperatorMetaData(expression.operator).requiresOperand">
+            Event
+        </span>
 
 		<span *ngIf="isContainer">
             <!-- Operators (Group) -->
@@ -26,7 +29,7 @@
 		</select>
 
         <!-- Value -->
-        <span *ngIf="!isContainer" [ngSwitch]="getOperandMetaData(expression.operand).dataType">
+        <span *ngIf="getOperatorMetaData(expression.operator).requiresValue" [ngSwitch]="getOperandMetaData(expression.operand).dataType">
             <select *ngSwitchCase="'select'" [(ngModel)]="expression.value">
                 <option *ngFor="let option of getOperandMetaData(expression.operand).options" [value]="option.value">{{option.display}}</option>
             </select>

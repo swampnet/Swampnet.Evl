@@ -88,15 +88,19 @@ namespace Swampnet.Evl.Controllers
         #region Static data
         private static readonly ExpressionOperator[] _operators = new[]
         {
-            new ExpressionOperator(RuleOperatorType.MATCH_ALL, "Match All", true),
-            new ExpressionOperator(RuleOperatorType.MATCH_ANY, "Match Any", true),
-            new ExpressionOperator(RuleOperatorType.EQ, "=", false),
-            new ExpressionOperator(RuleOperatorType.NOT_EQ, "<>", false),
-            new ExpressionOperator(RuleOperatorType.GT, ">", false),
-            new ExpressionOperator(RuleOperatorType.GTE, ">=", false),
-            new ExpressionOperator(RuleOperatorType.LT, "<", false),
-            new ExpressionOperator(RuleOperatorType.LTE, "<=", false),
-            new ExpressionOperator(RuleOperatorType.REGEX, "Match Expression", false)
+            new ExpressionOperator(RuleOperatorType.MATCH_ALL, "Match All"),
+            new ExpressionOperator(RuleOperatorType.MATCH_ANY, "Match Any"),
+
+            new ExpressionOperator(RuleOperatorType.EQ, "="),
+            new ExpressionOperator(RuleOperatorType.NOT_EQ, "<>"),
+            new ExpressionOperator(RuleOperatorType.GT, ">"),
+            new ExpressionOperator(RuleOperatorType.GTE, ">="),
+            new ExpressionOperator(RuleOperatorType.LT, "<"),
+            new ExpressionOperator(RuleOperatorType.LTE, "<="),
+            new ExpressionOperator(RuleOperatorType.REGEX, "Match Expression"),
+
+            new ExpressionOperator(RuleOperatorType.TAGGED, "Is Tagged"),
+            new ExpressionOperator(RuleOperatorType.NOT_TAGGED, "Is NOT Tagged")
         };
 
 
