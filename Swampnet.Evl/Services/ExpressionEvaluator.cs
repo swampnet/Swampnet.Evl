@@ -3,6 +3,7 @@ using Swampnet.Evl.Common;
 using Swampnet.Evl.Common.Entities;
 using System.Text.RegularExpressions;
 using Swampnet.Evl.Client;
+using System.Linq;
 
 namespace Swampnet.Evl.Services
 {
@@ -53,6 +54,14 @@ namespace Swampnet.Evl.Services
                 case RuleOperatorType.GTE:
                     result = Eq(GetOperand(expression, evt), expression.Value) 
                           || Gt(GetOperand(expression, evt), expression.Value);
+                    break;
+
+                case RuleOperatorType.TAGGED:
+                    result = IsTagged(evt, expression.Value);
+                    break;
+
+                case RuleOperatorType.NOT_TAGGED:
+                    result = !IsTagged(evt, expression.Value);
                     break;
 
                 default:
@@ -183,6 +192,22 @@ namespace Swampnet.Evl.Services
                 }
             }
             return false;
+        }
+
+        /// <summary>
+        /// Return true f event has the specified tag
+        /// </summary>
+        /// <param name="evt"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        private bool IsTagged(Event evt, string value)
+        {
+            if(evt.Tags == null || !evt.Tags.Any())
+            {
+                return false;
+            }
+
+            return evt.Tags.Select(t => t.ToUpperInvariant()).Contains(value.ToUpperInvariant());
         }
     }
 }

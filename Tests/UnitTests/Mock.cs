@@ -19,7 +19,8 @@ namespace UnitTests
                 Source = "source",
                 Category = EventCategory.Information,
                 Summary = "test-summary",
-                Properties = new List<Property>(Mock.Properties())
+                Properties = new List<Property>(Mock.Properties()),
+                Tags = new List<string>(Mock.Tags())
             };
         }
 
@@ -44,6 +45,13 @@ namespace UnitTests
             };
         }
 
+        private static IEnumerable<string> Tags()
+        {
+            return new[] {
+                "tag-01",
+                "tag-02"
+            };
+        }
 
         public static IEnumerable<IActionHandler> ActionHandlers()
         {

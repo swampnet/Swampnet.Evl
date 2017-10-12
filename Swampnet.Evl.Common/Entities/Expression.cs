@@ -28,8 +28,13 @@ namespace Swampnet.Evl.Common.Entities
 		{
 		}
 
+        public Expression(RuleOperatorType op, object value)
+            : this(op, RuleOperandType.Null, null, value)
+        {
+        }
 
-		public Expression(RuleOperatorType op)
+
+        public Expression(RuleOperatorType op)
 			: this(op, RuleOperandType.Null, null, null)
 		{
 		}
