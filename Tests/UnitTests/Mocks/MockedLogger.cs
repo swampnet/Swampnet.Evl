@@ -1,6 +1,7 @@
 ﻿using Serilog;
 using Serilog.Core;
 using Serilog.Events;
+using Serilog.Sinks.Evl;
 using Swampnet.Evl.Client;
 using System;
 using System.Collections.Generic;
@@ -189,6 +190,10 @@ namespace UnitTests.Mocks
         /// </summary>
         public ILogger ForContext(string propertyName, object value, bool destructureObjects = false)
         {
+			if (propertyName.Contains(EvlSink.ID))
+			{
+				propertyName = propertyName.Substring(propertyName.IndexOf(EvlSink.ID) + EvlSink.ID.Length);
+			}
             _properties.Add(new Property(propertyName, value));
 
             return this;
