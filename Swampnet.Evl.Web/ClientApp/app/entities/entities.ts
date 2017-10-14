@@ -76,7 +76,8 @@ export interface EventSearchCriteria {
     id?: string;
     source?: string;
     category?: string;
-    summary?: string;
+	summary?: string;
+	tags?: string;
     timestampUtc?: Date;
     fromUtc?: Date;
     toUtc?: Date;
