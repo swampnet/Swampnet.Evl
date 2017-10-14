@@ -13,11 +13,14 @@ namespace Swampnet.Evl.DAL.InMemory.Services
 {
     class EventDataAccess : IEventDataAccess
     {
-        public async Task<Guid> CreateAsync(Event evt)
+		private static readonly char[] _splitTags = new[] { ',' };
+
+
+		public async Task<Guid> CreateAsync(Event evt)
         {
             using(var context = EventContext.Create())
             {
-                var internalEvent = Convert.ToInternalEvent(evt);
+                var internalEvent = Convert.ToInternalEvent(evt, context);
                 internalEvent.Id = Guid.NewGuid();
                 context.Events.Add(internalEvent);
 
@@ -33,7 +36,11 @@ namespace Swampnet.Evl.DAL.InMemory.Services
         {
             using (var context = EventContext.Create())
             {
-                var evt = await context.Events.Include(e => e.Properties).SingleOrDefaultAsync(e => e.Id == id);
+                var evt = await context.Events
+                    .Include(e => e.Properties)
+                    .Include(e => e.InternalEventTags)
+                        .ThenInclude(t => t.Tag)
+                    .SingleOrDefaultAsync(e => e.Id == id);
 
                 return Convert.ToEvent(evt);
             }
@@ -44,9 +51,13 @@ namespace Swampnet.Evl.DAL.InMemory.Services
         {
             using (var context = EventContext.Create())
             {
-                var internalEvent = await context.Events.Include(e => e.Properties).SingleOrDefaultAsync(e => e.Id == id);
+                var internalEvent = await context.Events
+                    .Include(e => e.Properties)
+                    .Include(e => e.InternalEventTags)
+                        .ThenInclude(t => t.Tag)
+                    .SingleOrDefaultAsync(e => e.Id == id);
 
-                if(internalEvent == null)
+                if (internalEvent == null)
                 {
                     throw new NullReferenceException($"Event {id} not found");
                 }
@@ -64,6 +75,11 @@ namespace Swampnet.Evl.DAL.InMemory.Services
                         internalEvent.Properties.Add(Convert.ToInternalProperty(prp));
                     }
                 }
+
+                // Add tags, will ignore any that already exist so we'll only add new tags
+                internalEvent.AddTags(context, evt.Tags);
+
+                // @TODO: We should be able to remove tags that don't exist as well
 
                 await context.SaveChangesAsync();
             }
@@ -102,6 +118,13 @@ namespace Swampnet.Evl.DAL.InMemory.Services
                     }
                 }
 
+                if(!string.IsNullOrEmpty(criteria.Tags))
+                {
+                    foreach(var tag in criteria.Tags.Split(_splitTags, StringSplitOptions.RemoveEmptyEntries))
+                    {
+                        query = query.Where(e => e.InternalEventTags.Any(t => t.Tag.Name == tag.Trim()));
+                    }
+                }
 
 
                 // Realtime search
@@ -149,6 +172,30 @@ namespace Swampnet.Evl.DAL.InMemory.Services
             }
 
             return sources;
+        }
+
+		public async Task<IEnumerable<string>> GetTags(Guid org)
+		{
+			IEnumerable<string> tags = null;
+
+			using (var context = EventContext.Create())
+			{
+				tags = await context.Tags.Select(t => t.Name).Distinct().ToListAsync();
+			}
+
+			return tags;
+		}
+
+		public async Task<long> GetTotalEventCountAsync()
+        {
+            long count = 0;
+
+            using (var context = EventContext.Create())
+            {
+                count = await context.Events.LongCountAsync();
+            }
+
+            return count;
         }
     }
 }

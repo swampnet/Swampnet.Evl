@@ -25,11 +25,16 @@ namespace Swampnet.Evl.Common.Entities
 
 		public Expression(RuleOperatorType op, RuleOperandType operand, object value)
 			: this(op, operand, null, value)
-		{			
+		{
 		}
 
+        public Expression(RuleOperatorType op, object value)
+            : this(op, RuleOperandType.Null, null, value)
+        {
+        }
 
-		public Expression(RuleOperatorType op)
+
+        public Expression(RuleOperatorType op)
 			: this(op, RuleOperandType.Null, null, null)
 		{
 		}
@@ -66,12 +71,14 @@ namespace Swampnet.Evl.Common.Entities
 		Source,
 		Category,
 		Summary,
-		Property
+		Property,
+        Tag
 	}
 
 	public enum RuleOperatorType
 	{
-		NULL,
+        //[Display(Name = "@TODO: Friendly name")]
+        NULL,
 
 		EQ,
 		NOT_EQ,
@@ -80,6 +87,9 @@ namespace Swampnet.Evl.Common.Entities
 		GTE,
 		LT,
 		LTE,
+
+        TAGGED,
+        NOT_TAGGED,
 
 		MATCH_ALL,
 		MATCH_ANY

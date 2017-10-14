@@ -14,6 +14,7 @@ namespace Swampnet.Evl.DAL.InMemory
         }
 
         public DbSet<InternalEvent> Events { get; set; }
+        public DbSet<InternalTag> Tags { get; set; }
 
         public static EventContext Create()
         {
@@ -22,6 +23,13 @@ namespace Swampnet.Evl.DAL.InMemory
                 .Options;
 
             return new EventContext(options);
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<InternalEventTags>().HasKey(x => new { x.EventId, x.InternalTagId });
         }
     }
 }

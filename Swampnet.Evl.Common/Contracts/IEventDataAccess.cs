@@ -40,5 +40,8 @@ namespace Swampnet.Evl.Common.Contracts
         /// </summary>
         /// <returns></returns>
         Task<IEnumerable<string>> GetSources(Guid org);
+		Task<IEnumerable<string>> GetTags(Guid org);
+
+		Task<long> GetTotalEventCountAsync();
     }
 }

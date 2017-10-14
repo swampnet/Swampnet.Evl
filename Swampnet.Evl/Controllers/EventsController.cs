@@ -59,9 +59,25 @@ namespace Swampnet.Evl.Controllers
             }
         }
 
+		[HttpGet("tags")]
+		public async Task<IActionResult> GetTags()
+		{
+			try
+			{
+				var tags = await _dal.GetTags(Common.Constants.MOCKED_DEFAULT_APIKEY);
+
+				return Ok(tags);
+			}
+			catch (Exception ex)
+			{
+				Log.Error(ex, ex.Message);
+
+				return this.InternalServerError(ex);
+			}
+		}
 
 
-        [HttpGet]
+		[HttpGet]
         public async Task<IActionResult> Get([FromQuery] EventSearchCriteria criteria)
         {
             try
@@ -133,6 +149,11 @@ namespace Swampnet.Evl.Controllers
                 {
                     evt.Source = org.Name;
                 }
+
+				if(evt.Properties == null)
+				{
+					evt.Properties = new List<Property>();
+				}
 
                 evt.Properties.AddRange(Request.CommonProperties());
 

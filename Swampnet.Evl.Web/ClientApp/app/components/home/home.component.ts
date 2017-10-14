@@ -6,6 +6,7 @@ import { ApiService } from '../../services/api.service';
     templateUrl: './home.component.html'
 })
 export class HomeComponent {
+    public stats: any;
 
     constructor(
         private _api: ApiService) {
@@ -13,5 +14,17 @@ export class HomeComponent {
 
     get date(): Date {
         return new Date();
+    }
+
+    ngOnInit() {
+        this.loadStats();
+    }
+
+    loadStats() {
+        this._api.getStats().then((res: any) => {
+            this.stats = res;
+        }, (error) => {
+            console.log("Failed to get stats", error._body, "error");
+        });
     }
 }

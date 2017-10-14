@@ -2,13 +2,16 @@
 
     <!-- Expression -->
     <div [ngClass]="isRoot ? 'root-expression' : 'expression'" [class.highlightExpression]="isMouseOverDelete">
-		<span *ngIf="!isContainer">
+		<span *ngIf="getOperatorMetaData(expression.operator).requiresOperand">
 			<select [(ngModel)]="expression.operand">
 				<option *ngFor="let op of operands" [value]="op.name">{{op.name}}</option>
 			</select>
 
             <input *ngIf="getOperandMetaData(expression.operand).dataType == 'require-args'" [(ngModel)]="expression.argument">            
 		</span>
+        <span *ngIf="!isContainer && !getOperatorMetaData(expression.operator).requiresOperand">
+            Event
+        </span>
 
 		<span *ngIf="isContainer">
             <!-- Operators (Group) -->
@@ -26,13 +29,16 @@
 		</select>
 
         <!-- Value -->
-        <span *ngIf="!isContainer" [ngSwitch]="getOperandMetaData(expression.operand).dataType">
+        <span *ngIf="getOperatorMetaData(expression.operator).requiresValue && getOperatorMetaData(expression.operator).requiresOperand" [ngSwitch]="getOperandMetaData(expression.operand).dataType">
             <select *ngSwitchCase="'select'" [(ngModel)]="expression.value">
                 <option *ngFor="let option of getOperandMetaData(expression.operand).options" [value]="option.value">{{option.display}}</option>
             </select>
             <label *ngSwitchCase="'datetime'">@TODO: DateTime picker</label>
             <input *ngSwitchDefault [(ngModel)]="expression.value">
         </span>
+		<span *ngIf="getOperatorMetaData(expression.operator).requiresValue && !getOperatorMetaData(expression.operator).requiresOperand">
+			<input [(ngModel)]="expression.value">
+		</span>
 
         <!-- Delete node -->
         <div *ngIf="!isRoot" class="link delete" (mouseenter)="delMouseEnter()" (mouseleave)="delMouseLeave()" (click)="deleteExpression()">
@@ -50,7 +56,7 @@
 		</div>
     </div>
 
-    <!--<div><pre>{{metaData | json}}</pre></div>-->
+    <!--<div><pre>{{expression | json}}</pre></div>-->
 </div>
 
 <div *ngIf="!expression">

@@ -12,11 +12,19 @@ namespace Swampnet.Evl.Actions
 {
     class DebugActionHandler : IActionHandler
     {
+        public string Type => "debug";
+
         public Task ApplyAsync(Event evt, ActionDefinition actionDefinition, Rule rule)
         {
             Log.Information("Debug Action Handler");
 
             return Task.CompletedTask;
         }
+
+        public MetaDataCapture[] GetPropertyMetaData()
+        {
+            return null;
+        }
+
     }
 }

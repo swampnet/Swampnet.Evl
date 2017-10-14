@@ -4,7 +4,7 @@
 </div>
 
 <div *ngIf="events; else noResults" class="container-fluid">
-    <div class="row" *ngFor="let e of events">
+    <div class="row" *ngFor="let e of events" [ngClass]="e.category">
         <div class="col-sm-2">{{e.timestampUtc | date: 'mediumTime'}}</div>
 		<div class="col-sm-3">{{e.source}}</div>
         <div class="col-sm-6">{{e.summary}}</div>

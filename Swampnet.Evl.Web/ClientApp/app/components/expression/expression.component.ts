@@ -36,7 +36,7 @@ export class ExpressionComponent {
 
 		this.expression.children.push({
 			operator: "MATCH_ALL",
-			operand: "",
+			operand: "NULL",
 			argument: "",
 			value: "",
 			isActive: true,
@@ -67,6 +67,10 @@ export class ExpressionComponent {
 
     getOperandMetaData(op: string) {
         return this.metaData.operands.find(i => i.name == op);
+    }
+
+    getOperatorMetaData(op: string) {
+        return this.metaData.operators.find(i => i.code == op);
     }
 
     // We don't actually delete stuff, just mark as inactive. We can let the server actually delete stuff if it

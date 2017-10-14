@@ -70,7 +70,12 @@ namespace Swampnet.Evl.Controllers
         {
             try
             {
-                Log.Information("Create rule {ruleName}", rule.Name);
+				if(rule == null)
+				{
+					return BadRequest();
+				}
+
+				Log.Information("Create rule {ruleName}", rule.Name);
 
                 // @TODO: Auth
 
@@ -92,16 +97,22 @@ namespace Swampnet.Evl.Controllers
         {
             try
             {
-                Log.Information("Put rule {ruleId} {ruleName}", id, rule.Name);
+				if (rule == null)
+				{
+					return BadRequest();
+				}
 
-                // @TODO: Auth
+				Log.Information("Put rule {ruleId} {ruleName}", id, rule.Name);
 
-                if (rule.Id.HasValue && rule.Id.Value != id)
+				// @TODO: Auth
+
+				// Something off here: We might be trying to update the wrong rule.
+				if (rule.Id.HasValue && rule.Id.Value != id)
                 {
-                    // @TODO: Something off here: We might be trying to update the wrong rule.
-                }
+					return BadRequest("id and Rule.Id do not match");
+				}
 
-                await _rulesData.UpdateAsync(rule);
+				await _rulesData.UpdateAsync(rule);
 
                 // Not sure I should be returning this for an update?
                 return CreatedAtRoute("RuleDetails", new { id = id }, rule);

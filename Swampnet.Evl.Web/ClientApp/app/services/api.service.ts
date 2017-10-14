@@ -72,6 +72,9 @@ export class ApiService {
         return this.get('events/categories');
     }
 
+    getStats() {
+        return this.get('stats');
+    }
 
     get(resource: string) {
         return new Promise((resolve, reject) => {

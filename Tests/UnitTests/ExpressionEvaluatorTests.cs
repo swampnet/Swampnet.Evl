@@ -213,5 +213,69 @@ namespace UnitTests
 
 			Assert.AreEqual(expected, actual);
 		}
-	}
+
+
+        [TestMethod]
+        public void Expression_TAGGED_01()
+        {
+            var evt = Mock.Event();
+            var evaluator = new ExpressionEvaluator();
+            var expected = true;
+
+            var expression = new Expression(RuleOperatorType.TAGGED, "tag-01");
+            Assert.AreEqual(expected, evaluator.Evaluate(expression, evt));
+
+            expression = new Expression(RuleOperatorType.TAGGED, "TAG-01");
+            Assert.AreEqual(expected, evaluator.Evaluate(expression, evt));
+
+            expression = new Expression(RuleOperatorType.TAGGED, "TaG-01");
+            Assert.AreEqual(expected, evaluator.Evaluate(expression, evt));
+        }
+
+        [TestMethod]
+        public void Expression_TAGGED_02()
+        {
+            var evt = Mock.Event();
+            var evaluator = new ExpressionEvaluator();
+
+            var expression = new Expression(RuleOperatorType.TAGGED, "tag-01");
+            Assert.AreEqual(true, evaluator.Evaluate(expression, evt));
+
+            expression = new Expression(RuleOperatorType.TAGGED, "MADE_UP");
+            Assert.AreEqual(false, evaluator.Evaluate(expression, evt));
+        }
+
+        [TestMethod]
+        public void Expression_TAGGED_03()
+        {
+            var evt = Mock.Event();
+            var evaluator = new ExpressionEvaluator();
+
+            var expression = new Expression(RuleOperatorType.MATCH_ALL)
+            {
+                Children = new[]
+                {
+                    new Expression(RuleOperatorType.TAGGED, "tag-01"),
+                    new Expression(RuleOperatorType.TAGGED, "tag-02"),
+                    new Expression(RuleOperatorType.NOT_TAGGED, "MADE_UP")
+                }
+            };
+            Assert.AreEqual(true, evaluator.Evaluate(expression, evt));
+        }
+
+
+        [TestMethod]
+        public void Expression_NOT_TAGGED_01()
+        {
+            var evt = Mock.Event();
+            var evaluator = new ExpressionEvaluator();
+
+            var expression = new Expression(RuleOperatorType.NOT_TAGGED, "MADE_UP");
+            Assert.AreEqual(true, evaluator.Evaluate(expression, evt));
+
+            expression = new Expression(RuleOperatorType.NOT_TAGGED, "TAG-01");
+            Assert.AreEqual(false, evaluator.Evaluate(expression, evt));
+        }
+
+    }
 }

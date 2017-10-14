@@ -7,6 +7,8 @@ using Swampnet.Evl.Common.Entities;
 using Swampnet.Evl.Actions;
 using Swampnet.Evl.Client;
 using System.Threading.Tasks;
+using Serilog;
+using UnitTests.Mocks;
 
 namespace UnitTests
 {
@@ -19,8 +21,14 @@ namespace UnitTests
                 Source = "source",
                 Category = EventCategory.Information,
                 Summary = "test-summary",
-                Properties = new List<Property>(Mock.Properties())
+                Properties = new List<Property>(Mock.Properties()),
+                Tags = new List<string>(Mock.Tags())
             };
+        }
+
+        internal static ILogger Logger()
+        {
+            return new MockedLogger();
         }
 
 
@@ -44,6 +52,13 @@ namespace UnitTests
             };
         }
 
+        private static IEnumerable<string> Tags()
+        {
+            return new[] {
+                "tag-01",
+                "tag-02"
+            };
+        }
 
         public static IEnumerable<IActionHandler> ActionHandlers()
         {

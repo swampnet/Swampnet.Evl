@@ -55,6 +55,8 @@ export interface ExpressionOperator {
     code: string;
     display: string;
     isGroup: boolean;
+    requiresOperand: boolean;
+    requiresValue: boolean;
 }
 
 export interface MetaData{
@@ -87,7 +89,8 @@ export interface Event {
     category: string;
     summary: string;
     timestampUtc: Date;
-    properties: Property[];
+	properties: Property[];
+	tags: string[];
 }
 
 export interface Cfg {
