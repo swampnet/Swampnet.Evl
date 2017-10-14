@@ -58,6 +58,8 @@ namespace IntegrationTests
         private static void RaiseEvents()
         {
             int count = 1;
+			Random rnd = new Random();
+
             while (true)
             {
                 try
@@ -74,14 +76,35 @@ namespace IntegrationTests
                     }
 					else if(count % 13 == 0)
 					{
-						Log.Logger
+						//Log.Logger
+						//	.WithTags(new[] { "INTEGRATION-TEST" })
+						//	.WithTags(new[] { "TAG-01", "TAG-02" })
+						//	.WithProperty("xxx", "yyy")
+						//	.WithProperty("~TAG~", "TAG-03", "~TAG~")
+						//	.WithProperties(new[]
+						//	{
+						//		new Property("Additional Property", "value 1"),
+						//		new Property("Another Additional Property", "value 2")
+						//	}).Information("Some inline properties {Count} {One} {Two} ", count++, 1, 2);
+
+						var l = Log.Logger
 							.WithTags(new[] { "INTEGRATION-TEST" })
-							.WithProperties(new[] 
+							.WithProperties(new[]
 							{
 								new Property("Additional Property", "value 1"),
 								new Property("Another Additional Property", "value 2")
-							})
-							.Information("Some inline properties {Count} {One} {Two} ", count++, 1, 2);
+							});
+
+						if (rnd.NextDouble() > 0.5)
+						{
+							l = l.WithTag("TAG-01");
+						}
+						if (rnd.NextDouble() > 0.5)
+						{
+							l = l.WithTag("TAG-02");
+						}
+
+						l.Information("Some inline properties {Count} {One} {Two} ", count++, 1, 2);
 					}
                 }
                 catch (Exception ex)

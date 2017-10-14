@@ -18,6 +18,7 @@ namespace Serilog.Sinks.Evl
     {
 		public const string CATEGORY_SPLIT = "~CAT~";
 		public const string TAG_CATEGORY = "~TAG~";
+		public const string ID = "~ID~";
 
 
 		private static readonly int _defaultBatchSize = 50;                        // Maximum number of LogEvents in a batch
@@ -189,15 +190,19 @@ namespace Serilog.Sinks.Evl
         }
 
 
-		private Tuple<string, string> Split(string key)
+		private Tuple<string, string> Split(string name)
 		{
 			string category = "";
-			string name = key;
 
-			if (key.Contains(EvlSink.CATEGORY_SPLIT))
+			if (name.Contains(EvlSink.ID))
 			{
-				category = key.Substring(0, key.IndexOf(EvlSink.CATEGORY_SPLIT));
-				name = key.Substring(key.IndexOf(EvlSink.CATEGORY_SPLIT) + EvlSink.CATEGORY_SPLIT.Length);
+				name = name.Substring(name.IndexOf(EvlSink.ID) + EvlSink.ID.Length);
+			}
+
+			if (name.Contains(EvlSink.CATEGORY_SPLIT))
+			{
+				category = name.Substring(0, name.IndexOf(EvlSink.CATEGORY_SPLIT));
+				name = name.Substring(name.IndexOf(EvlSink.CATEGORY_SPLIT) + EvlSink.CATEGORY_SPLIT.Length);
 			}
 
 			return new Tuple<string, string>(category, name);

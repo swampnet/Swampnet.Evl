@@ -21,7 +21,7 @@ namespace Swampnet.Evl.Client
 
         public string SourceVersion { get; set; }
 
-		public string[] Tags { get; set; }
+		public string Tags { get; set; }
 
 		#region Advanced
 		public DateTime? FromUtc { get; set; }

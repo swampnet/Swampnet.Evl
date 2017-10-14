@@ -39,11 +39,17 @@ namespace Swampnet.Evl
         {
             foreach (var p in properties)
             {
-                logger = logger.ForContext(string.IsNullOrEmpty(p.Category) ? p.Name : p.Category + EvlSink.CATEGORY_SPLIT + p.Name, p.Value);
+                logger = logger.ForContext(GetName(p), p.Value);
             }
             return logger;
         }
 
+		private static string GetName(IProperty p)
+		{
+			return (_id++).ToString() + EvlSink.ID + (string.IsNullOrEmpty(p.Category) ? p.Name : p.Category + EvlSink.CATEGORY_SPLIT + p.Name);
+		}
+
+		private static long _id = 0;
 
         /// <summary>
         /// Add single property to log

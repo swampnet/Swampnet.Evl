@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
+using Serilog.Exceptions;
 using Swashbuckle.AspNetCore.Swagger;
 using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
@@ -70,7 +71,8 @@ namespace Swampnet.Evl
         {
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Verbose()
-                .Enrich.FromLogContext()
+				.Enrich.WithExceptionDetails()
+				.Enrich.FromLogContext()
                 .WriteTo.LocalEvlSink(dal, eventProcessor)
                 .WriteTo.Console()
                 .CreateLogger();

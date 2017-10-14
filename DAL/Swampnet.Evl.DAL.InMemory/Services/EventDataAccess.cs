@@ -13,7 +13,10 @@ namespace Swampnet.Evl.DAL.InMemory.Services
 {
     class EventDataAccess : IEventDataAccess
     {
-        public async Task<Guid> CreateAsync(Event evt)
+		private static readonly char[] _splitTags = new[] { ',' };
+
+
+		public async Task<Guid> CreateAsync(Event evt)
         {
             using(var context = EventContext.Create())
             {
@@ -115,11 +118,11 @@ namespace Swampnet.Evl.DAL.InMemory.Services
                     }
                 }
 
-                if(criteria.Tags != null)
+                if(!string.IsNullOrEmpty(criteria.Tags))
                 {
-                    foreach(var tag in criteria.Tags)
+                    foreach(var tag in criteria.Tags.Split(_splitTags, StringSplitOptions.RemoveEmptyEntries))
                     {
-                        query = query.Where(e => e.InternalEventTags.Any(t => t.Tag.Name == tag));
+                        query = query.Where(e => e.InternalEventTags.Any(t => t.Tag.Name == tag.Trim()));
                     }
                 }
 
@@ -171,8 +174,19 @@ namespace Swampnet.Evl.DAL.InMemory.Services
             return sources;
         }
 
+		public async Task<IEnumerable<string>> GetTags(Guid org)
+		{
+			IEnumerable<string> tags = null;
 
-        public async Task<long> GetTotalEventCountAsync()
+			using (var context = EventContext.Create())
+			{
+				tags = await context.Tags.Select(t => t.Name).Distinct().ToListAsync();
+			}
+
+			return tags;
+		}
+
+		public async Task<long> GetTotalEventCountAsync()
         {
             long count = 0;
 

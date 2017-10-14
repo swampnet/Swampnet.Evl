@@ -36,7 +36,7 @@ export class ExpressionComponent {
 
 		this.expression.children.push({
 			operator: "MATCH_ALL",
-			operand: "",
+			operand: "NULL",
 			argument: "",
 			value: "",
 			isActive: true,
