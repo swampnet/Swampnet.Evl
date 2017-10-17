@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DAL\Swampnet.Evl.DAL.InMemory\Swampnet.Evl.DAL.InMemory.csproj" />
+    <ProjectReference Include="..\DAL\Swampnet.Evl.DAL.MSSQL\Swampnet.Evl.DAL.MSSQL.csproj" />
     <ProjectReference Include="..\Plugins\Swampnet.Evl.Plugins.Email\Swampnet.Evl.Plugins.Email.csproj" />
     <ProjectReference Include="..\Plugins\Swampnet.Evl.Plugins.Slack\Swampnet.Evl.Plugins.Slack.csproj" />
     <ProjectReference Include="..\Serilog.Sinks.Evl\Serilog.Sinks.Evl.csproj" />

@@ -7,20 +7,24 @@ using Swampnet.Evl.Common.Entities;
 using System.Threading.Tasks;
 using System.Linq;
 using Swampnet.Evl.DAL.MSSQL.Entities;
+using Microsoft.Extensions.Configuration;
 
 namespace Swampnet.Evl.DAL.MSSQL.Services
 {
     class ManagementDataAccess : IManagementDataAccess
     {
-        public ManagementDataAccess()
+        private readonly IConfiguration _cfg;
+
+        public ManagementDataAccess(IConfiguration cfg)
         {
+            _cfg = cfg;
             Seed();
         }
 
 
         public async Task<Organisation> LoadOrganisationAsync(Guid apiKey)
         {
-            using (var context = ManagementContext.Create())
+            using (var context = ManagementContext.Create(_cfg.GetConnectionString("dbmain")))
             {
                 var org = await context.Organisations.FirstOrDefaultAsync(o => o.ApiKey == apiKey);
 
@@ -31,19 +35,22 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
 
         private void Seed()
         {
-            using (var context = ManagementContext.Create())
+            using (var context = ManagementContext.Create(_cfg.GetConnectionString("dbmain")))
             {
-				var org = new InternalOrganisation()
-				{
-					Id = Guid.NewGuid(),
-					Name = "ACME Ltd",
-					Description = "Some mocked up organisation.\nAuto generated.",
-                    ApiKeys = new List<ApiKey>(_mockedApiKeys),
-                    ApiKey = _mockedApiKeys.First().Id
-				};
+                if (!context.Organisations.Any())
+                {
+                    var org = new InternalOrganisation()
+                    {
+                        Id = Guid.NewGuid(),
+                        Name = "ACME Ltd",
+                        Description = "Some mocked up organisation.\nAuto generated.",
+                        ApiKeys = new List<ApiKey>(_mockedApiKeys),
+                        ApiKey = _mockedApiKeys.First().Id
+                    };
 
-				context.Organisations.Add(org);
-                context.SaveChanges();
+                    context.Organisations.Add(org);
+                    context.SaveChanges();
+                }
             }
         }
 

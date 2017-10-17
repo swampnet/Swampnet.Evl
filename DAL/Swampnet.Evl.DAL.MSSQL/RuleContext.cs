@@ -1,8 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Swampnet.Evl.DAL.MSSQL.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace Swampnet.Evl.DAL.InMemory.Entities
 {
@@ -15,10 +17,10 @@ namespace Swampnet.Evl.DAL.InMemory.Entities
 
         public DbSet<InternalRule> Rules { get; set; }
 
-        public static RuleContext Create()
+        public static RuleContext Create(string connectionString)
         {
             var options = new DbContextOptionsBuilder<RuleContext>()
-                //.UseInMemoryDatabase("evl-database")
+                .UseSqlServer(connectionString)
                 .Options;
 
             return new RuleContext(options);
