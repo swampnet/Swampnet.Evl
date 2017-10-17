@@ -47,7 +47,7 @@ namespace Swampnet.Evl.DAL.MSSQL
             {
                 Category = property.Category.Truncate(2000),
                 Name = property.Name.Truncate(2000),
-                Value = property.Value.Truncate(2000)
+                Value = property.Value == null ? "null" : property.Value.Truncate(2000)
             };
         }
 

@@ -177,7 +177,7 @@ namespace Swampnet.Evl.Controllers
 
 
         [HttpPost("bulk")]
-        public async Task<IActionResult> PostBulk([FromBody] IEnumerable<Event> evts)
+        public IActionResult PostBulk([FromBody] IEnumerable<Event> evts)
         {
             try
             {
@@ -186,10 +186,7 @@ namespace Swampnet.Evl.Controllers
                     return BadRequest();
                 }
 
-                await Task.Delay(1); // Just to satisfy our async declaration for now.
-
                 var apiKey = Request.ApiKey();
-                var ids = new List<Guid>();
 
                 // @TODO: Auth
 
@@ -199,10 +196,7 @@ namespace Swampnet.Evl.Controllers
                     {
                         evt.Properties.AddRange(Request.CommonProperties());
                         var id = await _dal.CreateAsync(evt);
-                        lock (ids)
-                        {
-                            ids.Add(id);
-                        }
+						_eventProcessor.Enqueue(id);
                     }
                     catch (Exception ex)
                     {
@@ -210,10 +204,7 @@ namespace Swampnet.Evl.Controllers
                     }
                 });
 
-                _eventProcessor.Enqueue(ids);
-
                 return Ok();
-                //return CreatedAtRoute("GetEventDetails", new { id = 0 }, evt);
             }
             catch (UnauthorizedAccessException ex)
             {

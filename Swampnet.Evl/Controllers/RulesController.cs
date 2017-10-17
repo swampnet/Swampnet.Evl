@@ -75,7 +75,7 @@ namespace Swampnet.Evl.Controllers
 					return BadRequest();
 				}
 
-				Log.Information("Create rule {ruleName}", rule.Name);
+				Log.Debug("POST rule {ruleName}", rule.Name);
 
                 // @TODO: Auth
 
@@ -102,7 +102,7 @@ namespace Swampnet.Evl.Controllers
 					return BadRequest();
 				}
 
-				Log.Information("Put rule {ruleId} {ruleName}", id, rule.Name);
+				Log.Debug("PUT rule {ruleId} {ruleName}", id, rule.Name);
 
 				// @TODO: Auth
 
@@ -138,7 +138,7 @@ namespace Swampnet.Evl.Controllers
         {
 			try
 			{
-				Log.Information("Delete rule {ruleId}", id);
+				Log.Information("DEL rule {ruleId}", id);
 
 				// @TODO: Auth
 

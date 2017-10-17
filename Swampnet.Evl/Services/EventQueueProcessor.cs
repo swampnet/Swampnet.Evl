@@ -41,7 +41,7 @@ namespace Swampnet.Evl.Services
 
         public void Enqueue(IEnumerable<Guid> ids)
         {
-            foreach(var id in ids)
+            foreach(var id in ids.ToArray())
             {
                 _queue.Enqueue(id);
             }
