@@ -8,17 +8,23 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using Swampnet.Evl.Client;
+using Microsoft.Extensions.Configuration;
 
-namespace Swampnet.Evl.DAL.InMemory.Services
+namespace Swampnet.Evl.DAL.MSSQL.Services
 {
     class EventDataAccess : IEventDataAccess
     {
 		private static readonly char[] _splitTags = new[] { ',' };
+        private readonly IConfiguration _cfg;
 
+        public EventDataAccess(IConfiguration cfg)
+        {
+            _cfg = cfg;
+        }
 
 		public async Task<Guid> CreateAsync(Event evt)
         {
-            using(var context = EventContext.Create())
+            using(var context = EventContext.Create(_cfg.GetConnectionString("dbmain")))
             {
                 var internalEvent = Convert.ToInternalEvent(evt, context);
                 internalEvent.Id = Guid.NewGuid();
@@ -34,7 +40,7 @@ namespace Swampnet.Evl.DAL.InMemory.Services
 
         public async Task<Event> ReadAsync(Guid id)
         {
-            using (var context = EventContext.Create())
+            using (var context = EventContext.Create(_cfg.GetConnectionString("dbmain")))
             {
                 var evt = await context.Events
                     .Include(e => e.InternalEventProperties)
@@ -50,7 +56,7 @@ namespace Swampnet.Evl.DAL.InMemory.Services
 
         public async Task UpdateAsync(Guid id, Event evt)
         {
-            using (var context = EventContext.Create())
+            using (var context = EventContext.Create(_cfg.GetConnectionString("dbmain")))
             {
                 var internalEvent = await context.Events
                     .Include(e => e.InternalEventProperties)
@@ -91,7 +97,7 @@ namespace Swampnet.Evl.DAL.InMemory.Services
 
         public async Task<IEnumerable<EventSummary>> SearchAsync(EventSearchCriteria criteria)
         {
-            using (var context = EventContext.Create())
+            using (var context = EventContext.Create(_cfg.GetConnectionString("dbmain")))
             {
                 var query = context.Events.AsQueryable();
 
@@ -169,7 +175,7 @@ namespace Swampnet.Evl.DAL.InMemory.Services
         {
             IEnumerable<string> sources = null;
 
-            using (var context = EventContext.Create())
+            using (var context = EventContext.Create(_cfg.GetConnectionString("dbmain")))
             {
                 sources = await context.Events.Select(e => e.Source).Distinct().ToListAsync();
             }
@@ -181,7 +187,7 @@ namespace Swampnet.Evl.DAL.InMemory.Services
 		{
 			IEnumerable<string> tags = null;
 
-			using (var context = EventContext.Create())
+			using (var context = EventContext.Create(_cfg.GetConnectionString("dbmain")))
 			{
 				tags = await context.Tags.Select(t => t.Name).Distinct().ToListAsync();
 			}
@@ -193,7 +199,7 @@ namespace Swampnet.Evl.DAL.InMemory.Services
         {
             long count = 0;
 
-            using (var context = EventContext.Create())
+            using (var context = EventContext.Create(_cfg.GetConnectionString("dbmain")))
             {
                 count = await context.Events.LongCountAsync();
             }

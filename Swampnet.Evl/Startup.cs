@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using Swampnet.Evl.Services;
 using Swampnet.Evl.Contracts;
 using Swampnet.Evl.Common.Contracts;
+using System;
 
 namespace Swampnet.Evl
 {
@@ -27,7 +28,8 @@ namespace Swampnet.Evl
         {
             services.AddSingleton<IEventQueueProcessor, EventQueueProcessor>();
 
-            services.AddInMemoryDataProvider();
+            //services.AddInMemoryDataProvider();
+            services.AddSqlServerDataProvider();
 
             // Add default Event Processors
             services.AddDefaultEventProcessors();
@@ -102,7 +104,10 @@ namespace Swampnet.Evl
 
 			app.UseMvc();
 
-            Log.Logger.WithTags(new[] { "START" }).Information("Start");
+            Log.Logger
+                .WithTag("START")
+                .WithProperty("StartTime", DateTime.UtcNow)
+                .Information("Start");
         }
     }
 }

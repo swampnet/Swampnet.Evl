@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Swampnet.Evl.DAL.InMemory.Entities
+namespace Swampnet.Evl.DAL.MSSQL.Entities
 {
     /// <summary>
     /// Entity used internally to persist a generic Property

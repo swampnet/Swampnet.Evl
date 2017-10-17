@@ -4,7 +4,7 @@ using System.Text;
 using System.Linq;
 using Swampnet.Evl.Client;
 
-namespace Swampnet.Evl.DAL.InMemory.Entities
+namespace Swampnet.Evl.DAL.MSSQL.Entities
 {
     /// <summary>
     /// Entity used internally to persist event data
@@ -62,7 +62,7 @@ namespace Swampnet.Evl.DAL.InMemory.Entities
                 {
                     t = new InternalTag()
                     {
-                        Name = tag
+                        Name = tag.Truncate(100)
                     };
                     context.Tags.Add(t);
                 }
@@ -75,7 +75,6 @@ namespace Swampnet.Evl.DAL.InMemory.Entities
                 InternalEventTags.Add(link);
             }
         }
-
 
         internal void AddTags(EventContext context, IEnumerable<string> tags)
         {
