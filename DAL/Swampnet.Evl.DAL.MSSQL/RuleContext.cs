@@ -10,13 +10,6 @@ namespace Swampnet.Evl.DAL.InMemory.Entities
 {
     class RuleContext : DbContext
     {
-        static RuleContext()
-        {
-            //var context = new RuleContext(options);
-            //var databaseCreator = (RelationalDatabaseCreator)context.Database.GetService<IDatabaseCreator>();
-            //databaseCreator.CreateTables();
-        }
-
         public RuleContext(DbContextOptions options)
             : base(options)
         {
@@ -26,11 +19,38 @@ namespace Swampnet.Evl.DAL.InMemory.Entities
 
         public static RuleContext Create(string connectionString)
         {
+            //Init(connectionString);
+
             var options = new DbContextOptionsBuilder<RuleContext>()
                 .UseSqlServer(connectionString)
                 .Options;
 
             return new RuleContext(options);
         }
+
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<InternalRule>().ToTable("Rule");
+        }
+
+        #region HACK: Create tables and whatnot
+        private static bool _init = false;
+
+        private static void Init(string connectionString)
+        {
+            if (!_init)
+            {
+                var context = new RuleContext(new DbContextOptionsBuilder<RuleContext>()
+                    .UseSqlServer(connectionString)
+                    .Options);
+                var databaseCreator = (RelationalDatabaseCreator)context.Database.GetService<IDatabaseCreator>();
+                databaseCreator.CreateTables();
+                _init = true;
+            }
+        }
+        #endregion
     }
 }

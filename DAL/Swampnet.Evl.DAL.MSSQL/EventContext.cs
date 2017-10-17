@@ -10,13 +10,6 @@ namespace Swampnet.Evl.DAL.MSSQL
 {
     class EventContext : DbContext
     {
-        static EventContext()
-        {
-            //var context = new EventContext(options);
-            //var databaseCreator = (RelationalDatabaseCreator)context.Database.GetService<IDatabaseCreator>();
-            //databaseCreator.CreateTables();
-        }
-
         public EventContext(DbContextOptions options)
             : base(options)
         {
@@ -28,6 +21,8 @@ namespace Swampnet.Evl.DAL.MSSQL
 
         public static EventContext Create(string connectionString)
         {
+            //Init(connectionString);
+
             var options = new DbContextOptionsBuilder<EventContext>()
                 .UseSqlServer(connectionString)
                 .Options;
@@ -39,8 +34,31 @@ namespace Swampnet.Evl.DAL.MSSQL
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<InternalProperty>().ToTable("Property");
+            modelBuilder.Entity<InternalEvent>().ToTable("Event");
+            modelBuilder.Entity<InternalEventProperties>().ToTable("EventProperties");
+            modelBuilder.Entity<InternalEventTags>().ToTable("EventTags");
+            modelBuilder.Entity<InternalTag>().ToTable("Tag");
+
             modelBuilder.Entity<InternalEventTags>().HasKey(x => new { x.EventId, x.InternalTagId });
             modelBuilder.Entity<InternalEventProperties>().HasKey(x => new { x.EventId, x.InternalPropertyId });
         }
+
+        #region HACK: Create tables and whatnot
+        private static bool _init = false;
+
+        private static void Init(string connectionString)
+        {
+            if (!_init)
+            {
+                var context = new EventContext(new DbContextOptionsBuilder<EventContext>()
+                    .UseSqlServer(connectionString)
+                    .Options);
+                var databaseCreator = (RelationalDatabaseCreator)context.Database.GetService<IDatabaseCreator>();
+                databaseCreator.CreateTables();
+                _init = true;
+            }
+        }
+        #endregion
     }
 }

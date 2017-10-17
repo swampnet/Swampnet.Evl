@@ -12,14 +12,6 @@ namespace Swampnet.Evl.DAL.MSSQL
 {
     class ManagementContext : DbContext
     {
-        static ManagementContext()
-        {
-            //using Microsoft.EntityFrameworkCore.Infrastructure;
-            //var context = new ManagementContext(options);
-            //var databaseCreator = (RelationalDatabaseCreator)context.Database.GetService<IDatabaseCreator>();
-            //databaseCreator.CreateTables();
-        }
-
         public ManagementContext(DbContextOptions options)
             : base(options)
         {
@@ -29,11 +21,40 @@ namespace Swampnet.Evl.DAL.MSSQL
 
         public static ManagementContext Create(string connectionString)
         {
+            //Init(connectionString);
+
             var options = new DbContextOptionsBuilder<ManagementContext>()
                 .UseSqlServer(connectionString)
                 .Options;
 
             return new ManagementContext(options);
         }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<InternalOrganisation>().ToTable("Organisation");
+            modelBuilder.Entity<ApiKey>().ToTable("ApiKey");
+        }
+
+
+        #region HACK: Create tables and whatnot
+        private static bool _init = false;
+
+        private static void Init(string connectionString)
+        {
+            if (!_init)
+            {
+                var context = new ManagementContext(new DbContextOptionsBuilder<ManagementContext>()
+                    .UseSqlServer(connectionString)
+                    .Options);
+                var databaseCreator = (RelationalDatabaseCreator)context.Database.GetService<IDatabaseCreator>();
+                databaseCreator.CreateTables();
+                _init = true;
+            }
+        }
+        #endregion
+
     }
 }
