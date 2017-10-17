@@ -28,8 +28,8 @@ namespace Swampnet.Evl
         {
             services.AddSingleton<IEventQueueProcessor, EventQueueProcessor>();
 
-            //services.AddInMemoryDataProvider();
-            services.AddSqlServerDataProvider();
+            services.AddInMemoryDataProvider();
+            //services.AddSqlServerDataProvider();
 
             // Add default Event Processors
             services.AddDefaultEventProcessors();
