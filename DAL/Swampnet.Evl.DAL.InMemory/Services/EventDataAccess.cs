@@ -37,7 +37,8 @@ namespace Swampnet.Evl.DAL.InMemory.Services
             using (var context = EventContext.Create())
             {
                 var evt = await context.Events
-                    .Include(e => e.Properties)
+                    .Include(e => e.InternalEventProperties)
+                        .ThenInclude(p => p.Property)
                     .Include(e => e.InternalEventTags)
                         .ThenInclude(t => t.Tag)
                     .SingleOrDefaultAsync(e => e.Id == id);
@@ -52,7 +53,8 @@ namespace Swampnet.Evl.DAL.InMemory.Services
             using (var context = EventContext.Create())
             {
                 var internalEvent = await context.Events
-                    .Include(e => e.Properties)
+                    .Include(e => e.InternalEventProperties)
+                        .ThenInclude(p => p.Property)
                     .Include(e => e.InternalEventTags)
                         .ThenInclude(t => t.Tag)
                     .SingleOrDefaultAsync(e => e.Id == id);
@@ -68,13 +70,14 @@ namespace Swampnet.Evl.DAL.InMemory.Services
 
                 // Update properties. At the moment we can only add new properties (How would we event match and update changed values? We can have multiple
                 // properties with the same category / name.
-                foreach(var prp in evt.Properties)
-                {
-                    if (!internalEvent.Properties.Any(p => p.Category.EqualsNoCase(prp.Category) && p.Name.EqualsNoCase(prp.Name) && p.Value.EqualsNoCase(prp.Value)))
-                    {
-                        internalEvent.Properties.Add(Convert.ToInternalProperty(prp));
-                    }
-                }
+                //foreach (var prp in evt.Properties)
+                //{
+                //    if (!internalEvent.Properties.Any(p => p.Category.EqualsNoCase(prp.Category) && p.Name.EqualsNoCase(prp.Name) && p.Value.EqualsNoCase(prp.Value)))
+                //    {
+                //        internalEvent.Properties.Add(Convert.ToInternalProperty(prp));
+                //    }
+                //}
+                internalEvent.AddProperties(evt.Properties);
 
                 // Add tags, will ignore any that already exist so we'll only add new tags
                 internalEvent.AddTags(context, evt.Tags);

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
+using Swampnet.Evl.Client;
 
 namespace Swampnet.Evl.DAL.InMemory.Entities
 {
@@ -17,9 +18,6 @@ namespace Swampnet.Evl.DAL.InMemory.Entities
         /// </summary>
         public DateTime TimestampUtc { get; set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public DateTime LastUpdatedUtc { get; set; }
 
         /// <summary>
@@ -32,24 +30,12 @@ namespace Swampnet.Evl.DAL.InMemory.Entities
         /// </summary>
 		public string Summary { get; set; }
 
-        /// <summary>
-        /// Any additional data associated with the event
-        /// </summary>
-		public List<InternalProperty> Properties { get; set; }
+		public List<InternalEventProperties> InternalEventProperties { get; set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public List<InternalEventTags> InternalEventTags { get; set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public string Source { get; set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public string SourceVersion { get; set; }
 
         internal IEnumerable<string> GetTagNames()
@@ -90,6 +76,7 @@ namespace Swampnet.Evl.DAL.InMemory.Entities
             }
         }
 
+
         internal void AddTags(EventContext context, IEnumerable<string> tags)
         {
             if (tags != null && tags.Any())
@@ -99,6 +86,42 @@ namespace Swampnet.Evl.DAL.InMemory.Entities
                     AddTag(context, tag);
                 }
             }
+        }
+
+
+        internal void AddProperty(IProperty property)
+        {
+            // Don't add dups
+            if (GetProperties().Any(x => x.Category == property.Category && x.Name == property.Name && x.Value == property.Value))
+            {
+                return;
+            }
+            
+            if(InternalEventProperties == null)
+            {
+                InternalEventProperties = new List<Entities.InternalEventProperties>();
+            }
+
+            InternalEventProperties.Add(new InternalEventProperties(this, Convert.ToInternalProperty(property)));
+        }
+
+
+        internal void AddProperties(IEnumerable<IProperty> properties)
+        {
+            if (properties != null && properties.Any())
+            {
+                foreach (var prp in properties)
+                {
+                    AddProperty(prp);
+                }
+            }
+        }
+
+        internal IEnumerable<InternalProperty> GetProperties()
+        {
+            return InternalEventProperties == null
+                ? Enumerable.Empty<InternalProperty>()
+                : InternalEventProperties.Select(p => p.Property);
         }
     }
 }

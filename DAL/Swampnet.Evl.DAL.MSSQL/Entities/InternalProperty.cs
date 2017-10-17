@@ -26,6 +26,6 @@ namespace Swampnet.Evl.DAL.MSSQL.Entities
         }
 
 
-        public InternalEvent Event { get; set; }
+        //public InternalEvent Event { get; set; }
     }
 }

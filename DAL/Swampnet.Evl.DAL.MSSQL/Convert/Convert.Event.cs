@@ -25,11 +25,11 @@ namespace Swampnet.Evl.DAL.MSSQL
                     Summary = evt.Summary,
                     TimestampUtc = evt.TimestampUtc,
                     LastUpdatedUtc = evt.LastUpdatedUtc.HasValue ? evt.LastUpdatedUtc.Value : evt.TimestampUtc,
-                    Properties = evt.Properties?.Select(p => ToInternalProperty(p)).ToList(),
                     Source = evt.Source,
                     SourceVersion = evt.SourceVersion                    
                 };
 
+                e.AddProperties(evt.Properties);
                 e.AddTags(context, evt.Tags);
             }
 
@@ -66,7 +66,9 @@ namespace Swampnet.Evl.DAL.MSSQL
                     Summary = evt.Summary,
                     TimestampUtc = evt.TimestampUtc,
                     LastUpdatedUtc = evt.LastUpdatedUtc,
-                    Properties = evt.Properties?.Select(p => ToProperty(p)).ToList(),
+                    Properties = evt.InternalEventProperties == null
+                        ? null
+                        : evt.InternalEventProperties.Select(p => Convert.ToProperty(p.Property)).ToList(),
                     Source = evt.Source,
                     SourceVersion = evt.SourceVersion,
                     Tags = evt.InternalEventTags == null
