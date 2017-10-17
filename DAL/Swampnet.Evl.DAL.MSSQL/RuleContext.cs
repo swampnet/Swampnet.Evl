@@ -10,6 +10,13 @@ namespace Swampnet.Evl.DAL.InMemory.Entities
 {
     class RuleContext : DbContext
     {
+        static RuleContext()
+        {
+            //var context = new RuleContext(options);
+            //var databaseCreator = (RelationalDatabaseCreator)context.Database.GetService<IDatabaseCreator>();
+            //databaseCreator.CreateTables();
+        }
+
         public RuleContext(DbContextOptions options)
             : base(options)
         {

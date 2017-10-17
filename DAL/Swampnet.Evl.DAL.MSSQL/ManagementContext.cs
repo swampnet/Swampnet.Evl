@@ -12,6 +12,14 @@ namespace Swampnet.Evl.DAL.MSSQL
 {
     class ManagementContext : DbContext
     {
+        static ManagementContext()
+        {
+            //using Microsoft.EntityFrameworkCore.Infrastructure;
+            //var context = new ManagementContext(options);
+            //var databaseCreator = (RelationalDatabaseCreator)context.Database.GetService<IDatabaseCreator>();
+            //databaseCreator.CreateTables();
+        }
+
         public ManagementContext(DbContextOptions options)
             : base(options)
         {
@@ -26,10 +34,6 @@ namespace Swampnet.Evl.DAL.MSSQL
                 .Options;
 
             return new ManagementContext(options);
-
-            //using Microsoft.EntityFrameworkCore.Infrastructure;
-            //RelationalDatabaseCreator databaseCreator = (RelationalDatabaseCreator)context.Database.GetService<IDatabaseCreator>();
-            //databaseCreator.CreateTables();
         }
     }
 }
