@@ -34,6 +34,10 @@ namespace Swampnet.Evl.DAL.InMemory.Entities
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<InternalRule>().ToTable("Rule");
+            modelBuilder.Entity<InternalRule>().Property(f => f.ActionData).IsRequired();
+            modelBuilder.Entity<InternalRule>().Property(f => f.ExpressionData).IsRequired();
+            modelBuilder.Entity<InternalRule>().Property(f => f.Name).IsRequired();
+            modelBuilder.Entity<InternalRule>().Property(f => f.IsActive).IsRequired();
         }
 
         #region HACK: Create tables and whatnot

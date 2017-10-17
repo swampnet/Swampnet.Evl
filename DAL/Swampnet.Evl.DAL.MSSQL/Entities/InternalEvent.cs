@@ -62,7 +62,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Entities
                 {
                     t = new InternalTag()
                     {
-                        Name = tag
+                        Name = tag.Truncate(100)
                     };
                     context.Tags.Add(t);
                 }

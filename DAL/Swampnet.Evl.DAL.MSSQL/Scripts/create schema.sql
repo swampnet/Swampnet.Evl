@@ -1,4 +1,8 @@
-﻿/****** Object:  Table [dbo].[ApiKey]    Script Date: 17/10/2017 16:21:07 ******/
+﻿/*
+	This is all out of date now!
+*/
+
+/****** Object:  Table [dbo].[ApiKey]    Script Date: 17/10/2017 16:21:07 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON

@@ -56,5 +56,47 @@ namespace UnitTests
             double i = 1.234;
             Assert.AreEqual("1.234", i.AsString());
         }
+
+
+        [TestMethod]
+        public void String_Truncate()
+        {
+            string value = "ABCDEFGH";
+            string actual = value.Truncate(5);
+            string expected = "ABCDE";
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void String_TruncateWithEllipses()
+        {
+            string value = "ABCDEFGH";
+            string actual = value.Truncate(5, true);
+            string expected = "ABCDE...";
+
+            Assert.AreEqual(expected, actual);
+        }
+
+
+        [TestMethod]
+        public void String_Truncate_TruncateLengthLargerThanStringLength()
+        {
+            string value = "ABCDEFGH";
+            string actual = value.Truncate(10);
+            string expected = "ABCDEFGH";
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void String_Truncate_TruncateLengthEqualsStringLength()
+        {
+            string value = "ABCDEFGH";
+            string actual = value.Truncate(8);
+            string expected = "ABCDEFGH";
+
+            Assert.AreEqual(expected, actual);
+        }
     }
 }

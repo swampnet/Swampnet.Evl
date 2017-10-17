@@ -21,5 +21,19 @@ namespace Swampnet.Evl
 
             return rtn;
         }
+
+
+        /// <summary>
+        /// Truncate a string
+        /// </summary>
+        public static string Truncate(this string value, int maxLength, bool withEllipses = false)
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                return value;
+            }
+
+            return value.Length <= maxLength ? value : (value.Substring(0, maxLength) + (withEllipses ? "..." : ""));
+        }
     }
 }

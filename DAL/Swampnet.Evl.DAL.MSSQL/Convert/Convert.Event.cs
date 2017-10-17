@@ -22,11 +22,11 @@ namespace Swampnet.Evl.DAL.MSSQL
                 e = new InternalEvent()
                 {
                     Category = evt.Category.ToString(),
-                    Summary = evt.Summary,
+                    Summary = evt.Summary.Truncate(2000, true),
                     TimestampUtc = evt.TimestampUtc,
                     LastUpdatedUtc = evt.LastUpdatedUtc.HasValue ? evt.LastUpdatedUtc.Value : evt.TimestampUtc,
-                    Source = evt.Source,
-                    SourceVersion = evt.SourceVersion                    
+                    Source = evt.Source.Truncate(2000),
+                    SourceVersion = evt.SourceVersion.Truncate(2000)                    
                 };
 
                 e.AddProperties(evt.Properties);
@@ -45,9 +45,9 @@ namespace Swampnet.Evl.DAL.MSSQL
         {
             return new InternalProperty()
             {
-                Category = property.Category,
-                Name = property.Name,
-                Value = property.Value
+                Category = property.Category.Truncate(2000),
+                Name = property.Name.Truncate(2000),
+                Value = property.Value.Truncate(2000)
             };
         }
 
@@ -107,37 +107,5 @@ namespace Swampnet.Evl.DAL.MSSQL
             };
         }
         #endregion
-
-
-        // @TODO: Possibly better as .AddTags and just adding tag data to event directly
-        private static List<InternalEventTags> CreateTags(string[] tags, InternalEvent evt, EventContext context)
-        {
-            List<InternalEventTags> links = null;
-
-            if(tags != null && tags.Any())
-            {
-                links = new List<InternalEventTags>();
-                foreach(var tag in tags)
-                {
-                    var link = new InternalEventTags();
-                    link.Event = evt;
-
-                    var t = context.Tags.FirstOrDefault(x => x.Name == tag); // .First() - it *is* possible to have multiple tags with same name (due to syncronisation, or lack of lol!)
-                    if(t == null)
-                    {
-                        t = new InternalTag()
-                        {
-                            Name = tag
-                        };
-                        context.Tags.Add(t);
-                    }
-                    link.Tag = t;
-                    links.Add(link);
-                }
-            }
-
-            return links;
-        }
-
     }
 }

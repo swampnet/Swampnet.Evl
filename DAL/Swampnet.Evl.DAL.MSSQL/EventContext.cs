@@ -35,13 +35,25 @@ namespace Swampnet.Evl.DAL.MSSQL
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<InternalProperty>().ToTable("Property");
-            modelBuilder.Entity<InternalEvent>().ToTable("Event");
-            modelBuilder.Entity<InternalEventProperties>().ToTable("EventProperties");
-            modelBuilder.Entity<InternalEventTags>().ToTable("EventTags");
-            modelBuilder.Entity<InternalTag>().ToTable("Tag");
+            modelBuilder.Entity<InternalProperty>().Property(f => f.Name).IsRequired().HasMaxLength(2000);
+            modelBuilder.Entity<InternalProperty>().Property(f => f.Value).IsRequired().HasMaxLength(2000);
+            modelBuilder.Entity<InternalProperty>().Property(f => f.Category).HasMaxLength(2000);
+            modelBuilder.Entity<InternalProperty>().HasIndex(f => new { f.Name, f.Value }); // This a thing? Can I do this?
 
-            modelBuilder.Entity<InternalEventTags>().HasKey(x => new { x.EventId, x.InternalTagId });
+            modelBuilder.Entity<InternalEvent>().ToTable("Event");
+            modelBuilder.Entity<InternalEvent>().Property(f => f.Category).IsRequired().HasMaxLength(2000);
+            modelBuilder.Entity<InternalEvent>().Property(f => f.Source).IsRequired().HasMaxLength(2000);
+            modelBuilder.Entity<InternalEvent>().Property(f => f.Summary).IsRequired().HasMaxLength(2000);
+
+            modelBuilder.Entity<InternalEventProperties>().ToTable("EventProperties");
             modelBuilder.Entity<InternalEventProperties>().HasKey(x => new { x.EventId, x.InternalPropertyId });
+
+            modelBuilder.Entity<InternalEventTags>().ToTable("EventTags");
+            modelBuilder.Entity<InternalEventTags>().HasKey(x => new { x.EventId, x.InternalTagId });
+
+            modelBuilder.Entity<InternalTag>().ToTable("Tag");
+            modelBuilder.Entity<InternalTag>().Property(f => f.Name).IsRequired().HasMaxLength(100);
+            modelBuilder.Entity<InternalTag>().HasIndex(x => x.Name);
         }
 
         #region HACK: Create tables and whatnot

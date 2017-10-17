@@ -35,6 +35,9 @@ namespace Swampnet.Evl.DAL.MSSQL
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<InternalOrganisation>().ToTable("Organisation");
+            modelBuilder.Entity<InternalOrganisation>().Property(f => f.Description).IsRequired();
+            modelBuilder.Entity<InternalOrganisation>().Property(f => f.Name).IsRequired();
+
             modelBuilder.Entity<ApiKey>().ToTable("ApiKey");
         }
 
