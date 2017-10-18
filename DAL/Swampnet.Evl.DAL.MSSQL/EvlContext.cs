@@ -3,31 +3,36 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Swampnet.Evl.DAL.MSSQL.Entities;
 using System;
+using Swampnet.Evl.Common.Entities;
 using System.Collections.Generic;
-using System.Text;
+using Swampnet.Evl.Client;
 
 namespace Swampnet.Evl.DAL.MSSQL
 {
-    class EventContext : DbContext
+    class EvlContext : DbContext
     {
-        public EventContext(DbContextOptions options)
+        public EvlContext(DbContextOptions options)
             : base(options)
         {
         }
 
+
         public DbSet<InternalEvent> Events { get; set; }
         public DbSet<InternalTag> Tags { get; set; }
 
+        public DbSet<InternalOrganisation> Organisations { get; set; }
+        public DbSet<InternalRule> Rules { get; set; }
 
-        public static EventContext Create(string connectionString)
+
+        public static EvlContext Create(string connectionString)
         {
-            //Init(connectionString);
-
-            var options = new DbContextOptionsBuilder<EventContext>()
+            var options = new DbContextOptionsBuilder<EvlContext>()
                 .UseSqlServer(connectionString)
                 .Options;
 
-            return new EventContext(options);
+            //Seed.Init(connectionString);
+
+            return new EvlContext(options);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -55,23 +60,19 @@ namespace Swampnet.Evl.DAL.MSSQL
             modelBuilder.Entity<InternalTag>().ToTable("Tag");
             modelBuilder.Entity<InternalTag>().Property(f => f.Name).IsRequired().HasMaxLength(100);
             modelBuilder.Entity<InternalTag>().HasIndex(x => x.Name);
-        }
 
-        #region HACK: Create tables and whatnot
-        private static bool _init = false;
+            modelBuilder.Entity<InternalOrganisation>().ToTable("Organisation");
+            modelBuilder.Entity<InternalOrganisation>().Property(f => f.Description).IsRequired();
+            modelBuilder.Entity<InternalOrganisation>().Property(f => f.Name).IsRequired();
 
-        private static void Init(string connectionString)
-        {
-            if (!_init)
-            {
-                var context = new EventContext(new DbContextOptionsBuilder<EventContext>()
-                    .UseSqlServer(connectionString)
-                    .Options);
-                var databaseCreator = (RelationalDatabaseCreator)context.Database.GetService<IDatabaseCreator>();
-                databaseCreator.CreateTables();
-                _init = true;
-            }
+            modelBuilder.Entity<ApiKey>().ToTable("ApiKey");
+            modelBuilder.Entity<ApiKey>().Property(f => f.OrganisationId).IsRequired();
+
+            modelBuilder.Entity<InternalRule>().ToTable("Rule");
+            modelBuilder.Entity<InternalRule>().Property(f => f.ActionData).IsRequired().HasColumnType("xml");
+            modelBuilder.Entity<InternalRule>().Property(f => f.ExpressionData).IsRequired().HasColumnType("xml");
+            modelBuilder.Entity<InternalRule>().Property(f => f.Name).IsRequired();
+            modelBuilder.Entity<InternalRule>().Property(f => f.IsActive).IsRequired();
         }
-        #endregion
     }
 }

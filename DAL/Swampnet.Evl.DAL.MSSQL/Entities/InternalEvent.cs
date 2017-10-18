@@ -13,6 +13,8 @@ namespace Swampnet.Evl.DAL.MSSQL.Entities
     {
         public Guid Id { get; set; }
 
+        public Guid OrganisationId { get; set; }
+
         /// <summary>
         /// Event timestamp (UTC)
         /// </summary>
@@ -38,6 +40,8 @@ namespace Swampnet.Evl.DAL.MSSQL.Entities
 
         public string SourceVersion { get; set; }
 
+        public InternalOrganisation Organisation { get; set; }
+
         internal IEnumerable<string> GetTagNames()
         {
             var tags = Enumerable.Empty<string>();
@@ -50,7 +54,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Entities
             return tags;
         }
 
-        internal void AddTag(EventContext context, string tag)
+        internal void AddTag(EvlContext context, string tag)
         {
             if(!string.IsNullOrEmpty(tag) && !GetTagNames().Contains(tag))
             {
@@ -76,7 +80,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Entities
             }
         }
 
-        internal void AddTags(EventContext context, IEnumerable<string> tags)
+        internal void AddTags(EvlContext context, IEnumerable<string> tags)
         {
             if (tags != null && tags.Any())
             {

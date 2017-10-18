@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Swampnet.Evl.Common.Contracts;
 using Swampnet.Evl.Common.Entities;
+using Swampnet.Evl.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,15 +15,18 @@ namespace Swampnet.Evl.Controllers
         private readonly IEventDataAccess _eventDataAccess;
         private readonly IRuleDataAccess _ruleDataAccess;
         private readonly IEnumerable<IActionHandler> _actionHandlers;
+        private readonly IAuth _auth;
 
         public MetaController(
             IEventDataAccess eventDataAccess,
             IRuleDataAccess ruleDataAccess,
-            IEnumerable<IActionHandler> actionHandlers)
+            IEnumerable<IActionHandler> actionHandlers,
+            IAuth auth)
         {
             _eventDataAccess = eventDataAccess;
             _ruleDataAccess = ruleDataAccess;
             _actionHandlers = actionHandlers;
+            _auth = auth;
         }
 
 
@@ -30,13 +34,14 @@ namespace Swampnet.Evl.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var metaData = await GetMetaData(Common.Constants.MOCKED_DEFAULT_APIKEY);
+            var org = await _auth.GetOrganisationAsync(Common.Constants.MOCKED_DEFAULT_APIKEY);
+            var metaData = await GetMetaData(org);
 
             return Ok(metaData);
         }
 
 
-        private async Task<MetaData> GetMetaData(Guid org)
+        private async Task<MetaData> GetMetaData(Organisation org)
         {
             return new MetaData()
             {
@@ -47,13 +52,13 @@ namespace Swampnet.Evl.Controllers
         }
 
 
-        private Task<ExpressionOperator[]> GetOperators(Guid org)
+        private Task<ExpressionOperator[]> GetOperators(Organisation org)
         {
             return Task.FromResult(_operators);
         }
 
 
-        private async Task<MetaDataCapture[]> GetOperands(Guid org)
+        private async Task<MetaDataCapture[]> GetOperands(Organisation org)
         {
             var sources = await _eventDataAccess.GetSources(org);
 
@@ -72,7 +77,7 @@ namespace Swampnet.Evl.Controllers
         }
 
 
-        private Task<ActionMetaData[]> GetActionMetaData(Guid org)
+        private Task<ActionMetaData[]> GetActionMetaData(Organisation org)
         {
             return Task.FromResult(
                 _actionHandlers

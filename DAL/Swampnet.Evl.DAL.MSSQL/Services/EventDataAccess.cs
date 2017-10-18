@@ -22,12 +22,16 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
             _cfg = cfg;
         }
 
-		public async Task<Guid> CreateAsync(Event evt)
+		public async Task<Guid> CreateAsync(Organisation org, Event evt)
         {
-            using(var context = EventContext.Create(_cfg.GetConnectionString("dbmain")))
+            using(var context = EvlContext.Create(_cfg.GetConnectionString("dbmain")))
             {
                 var internalEvent = Convert.ToInternalEvent(evt, context);
                 internalEvent.Id = Guid.NewGuid();
+                internalEvent.OrganisationId = org == null 
+                                                ? Constants.MOCKED_DEFAULT_ORGANISATION 
+                                                : org.Id;
+
                 context.Events.Add(internalEvent);
 
                 await context.SaveChangesAsync();
@@ -38,9 +42,9 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
             }
         }
 
-        public async Task<Event> ReadAsync(Guid id)
+        public async Task<Event> ReadAsync(Organisation org, Guid id)
         {
-            using (var context = EventContext.Create(_cfg.GetConnectionString("dbmain")))
+            using (var context = EvlContext.Create(_cfg.GetConnectionString("dbmain")))
             {
                 var evt = await context.Events
                     .Include(e => e.InternalEventProperties)
@@ -54,9 +58,9 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
         }
 
 
-        public async Task UpdateAsync(Guid id, Event evt)
+        public async Task UpdateAsync(Organisation org, Guid id, Event evt)
         {
-            using (var context = EventContext.Create(_cfg.GetConnectionString("dbmain")))
+            using (var context = EvlContext.Create(_cfg.GetConnectionString("dbmain")))
             {
                 var internalEvent = await context.Events
                     .Include(e => e.InternalEventProperties)
@@ -74,18 +78,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
                 internalEvent.Summary = evt.Summary;
                 internalEvent.LastUpdatedUtc = DateTime.UtcNow;
 
-                // Update properties. At the moment we can only add new properties (How would we event match and update changed values? We can have multiple
-                // properties with the same category / name.
-                //foreach (var prp in evt.Properties)
-                //{
-                //    if (!internalEvent.Properties.Any(p => p.Category.EqualsNoCase(prp.Category) && p.Name.EqualsNoCase(prp.Name) && p.Value.EqualsNoCase(prp.Value)))
-                //    {
-                //        internalEvent.Properties.Add(Convert.ToInternalProperty(prp));
-                //    }
-                //}
                 internalEvent.AddProperties(evt.Properties);
-
-                // Add tags, will ignore any that already exist so we'll only add new tags
                 internalEvent.AddTags(context, evt.Tags);
 
                 // @TODO: We should be able to remove tags that don't exist as well
@@ -95,9 +88,9 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
         }
 
 
-        public async Task<IEnumerable<EventSummary>> SearchAsync(EventSearchCriteria criteria)
+        public async Task<IEnumerable<EventSummary>> SearchAsync(Organisation org, EventSearchCriteria criteria)
         {
-            using (var context = EventContext.Create(_cfg.GetConnectionString("dbmain")))
+            using (var context = EvlContext.Create(_cfg.GetConnectionString("dbmain")))
             {
                 var query = context.Events.AsQueryable();
 
@@ -171,11 +164,11 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
             }
         }
 
-        public async Task<IEnumerable<string>> GetSources(Guid org)
+        public async Task<IEnumerable<string>> GetSources(Organisation org)
         {
             IEnumerable<string> sources = null;
 
-            using (var context = EventContext.Create(_cfg.GetConnectionString("dbmain")))
+            using (var context = EvlContext.Create(_cfg.GetConnectionString("dbmain")))
             {
                 sources = await context.Events.Select(e => e.Source).Distinct().ToListAsync();
             }
@@ -183,11 +176,11 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
             return sources;
         }
 
-		public async Task<IEnumerable<string>> GetTags(Guid org)
+		public async Task<IEnumerable<string>> GetTags(Organisation org)
 		{
 			IEnumerable<string> tags = null;
 
-			using (var context = EventContext.Create(_cfg.GetConnectionString("dbmain")))
+			using (var context = EvlContext.Create(_cfg.GetConnectionString("dbmain")))
 			{
 				tags = await context.Tags.Select(t => t.Name).Distinct().ToListAsync();
 			}
@@ -195,11 +188,11 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
 			return tags;
 		}
 
-		public async Task<long> GetTotalEventCountAsync()
+		public async Task<long> GetTotalEventCountAsync(Organisation org)
         {
             long count = 0;
 
-            using (var context = EventContext.Create(_cfg.GetConnectionString("dbmain")))
+            using (var context = EvlContext.Create(_cfg.GetConnectionString("dbmain")))
             {
                 count = await context.Events.LongCountAsync();
             }

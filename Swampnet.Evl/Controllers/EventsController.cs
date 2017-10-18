@@ -47,7 +47,9 @@ namespace Swampnet.Evl.Controllers
         {
             try
             {
-                var sources = await _dal.GetSources(Common.Constants.MOCKED_DEFAULT_APIKEY);
+                var org = await _auth.GetOrganisationAsync(Common.Constants.MOCKED_DEFAULT_APIKEY);
+
+                var sources = await _dal.GetSources(org);
 
                 return Ok(sources);
             }
@@ -64,7 +66,9 @@ namespace Swampnet.Evl.Controllers
 		{
 			try
 			{
-				var tags = await _dal.GetTags(Common.Constants.MOCKED_DEFAULT_APIKEY);
+                var org = await _auth.GetOrganisationAsync(Common.Constants.MOCKED_DEFAULT_APIKEY);
+
+                var tags = await _dal.GetTags(org);
 
 				return Ok(tags);
 			}
@@ -84,7 +88,9 @@ namespace Swampnet.Evl.Controllers
             {
                 Log.Logger.WithPublicProperties(criteria).Debug("Get");
 
-                var events = await _dal.SearchAsync(criteria);
+                var org = await _auth.GetOrganisationAsync(Common.Constants.MOCKED_DEFAULT_APIKEY);
+
+                var events = await _dal.SearchAsync(org, criteria);
 
                 return Ok(events);
             }
@@ -102,7 +108,8 @@ namespace Swampnet.Evl.Controllers
         {
             try
             {
-                var evt = await _dal.ReadAsync(id);
+                var org = await _auth.GetOrganisationAsync(Common.Constants.MOCKED_DEFAULT_APIKEY);
+                var evt = await _dal.ReadAsync(org, id);
 
                 if (evt == null)
                 {
@@ -157,7 +164,7 @@ namespace Swampnet.Evl.Controllers
 
                 evt.Properties.AddRange(Request.CommonProperties());
 
-                var id = await _dal.CreateAsync(evt);
+                var id = await _dal.CreateAsync(org, evt);
 
                 _eventProcessor.Enqueue(id);
 
@@ -177,7 +184,7 @@ namespace Swampnet.Evl.Controllers
 
 
         [HttpPost("bulk")]
-        public IActionResult PostBulk([FromBody] IEnumerable<Event> evts)
+        public async Task<IActionResult> PostBulk([FromBody] IEnumerable<Event> evts)
         {
             try
             {
@@ -189,13 +196,14 @@ namespace Swampnet.Evl.Controllers
                 var apiKey = Request.ApiKey();
 
                 // @TODO: Auth
+                var org = await _auth.GetOrganisationAsync(apiKey);
 
                 Parallel.ForEach(evts, async evt =>
                 {
                     try
                     {
                         evt.Properties.AddRange(Request.CommonProperties());
-                        var id = await _dal.CreateAsync(evt);
+                        var id = await _dal.CreateAsync(org, evt);
 						_eventProcessor.Enqueue(id);
                     }
                     catch (Exception ex)

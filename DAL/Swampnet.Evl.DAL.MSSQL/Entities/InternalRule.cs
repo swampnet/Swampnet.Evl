@@ -11,6 +11,10 @@ namespace Swampnet.Evl.DAL.MSSQL.Entities
     {
         public Guid Id { get; set; }
 
+        public Guid OrganisationId { get; set; }
+
+        public InternalOrganisation Organisation { get; set; }
+
         public bool IsActive { get; set; }
 
         public string Name { get; set; }

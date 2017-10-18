@@ -11,6 +11,7 @@ using Swampnet.Evl.Common.Contracts;
 using Swampnet.Evl.Contracts;
 using System.Diagnostics;
 using System.Reflection;
+using Swampnet.Evl.Common.Entities;
 
 namespace Swampnet.Evl
 {
@@ -62,7 +63,7 @@ namespace Swampnet.Evl
                 {
                     try
                     {
-                        var id = await _dal.CreateAsync(evt);
+                        var id = await _dal.CreateAsync(null, evt);
 
                         lock (ids)
                         {
