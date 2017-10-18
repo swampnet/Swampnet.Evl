@@ -1,6 +1,7 @@
 ﻿using Swampnet.Evl.Common.Contracts;
 using Swampnet.Evl.Common.Entities;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,7 +10,7 @@ namespace Swampnet.Evl.Services
 {
     public interface IAuth
     {
-        Task<Organisation> GetOrganisationAsync(Guid apiKey);
+        Task<Organisation> GetOrganisationByApiKeyAsync(Guid apiKey);
     }
 
 
@@ -17,6 +18,7 @@ namespace Swampnet.Evl.Services
     class Auth : IAuth
     {
         private readonly IManagementDataAccess _managementData;
+        private readonly ConcurrentDictionary<Guid, Organisation> _cache = new ConcurrentDictionary<Guid, Organisation>();
 
         public Auth(IManagementDataAccess managementData)
         {
@@ -24,10 +26,25 @@ namespace Swampnet.Evl.Services
         }
 
 
-        public Task<Organisation> GetOrganisationAsync(Guid apiKey)
+        public async Task<Organisation> GetOrganisationByApiKeyAsync(Guid apiKey)
         {
-            // @TODO: Implement a cache!
-            return _managementData.LoadOrganisationAsync(apiKey);
+            Organisation org = null;
+
+            if (_cache.ContainsKey(apiKey))
+            {
+                org = _cache[apiKey];
+            }
+            else
+            {
+                org = await _managementData.LoadOrganisationByApiKeyAsync(apiKey);
+
+                if (org != null)
+                {
+                    _cache.TryAdd(apiKey, org);
+                }
+            }
+
+            return org;
         }
     }
 }

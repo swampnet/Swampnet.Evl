@@ -19,10 +19,8 @@ namespace Swampnet.Evl.DAL.MSSQL
 
         public DbSet<InternalEvent> Events { get; set; }
         public DbSet<InternalTag> Tags { get; set; }
-
         public DbSet<InternalOrganisation> Organisations { get; set; }
         public DbSet<InternalRule> Rules { get; set; }
-
 
         public static EvlContext Create(string connectionString)
         {

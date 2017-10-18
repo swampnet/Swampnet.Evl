@@ -13,7 +13,7 @@ namespace Swampnet.Evl.DAL.MSSQL
         /// <summary>
         /// Convert an API Event to an InternalEvent
         /// </summary>
-        internal static InternalEvent ToInternalEvent(Event evt, EvlContext context)
+        internal static InternalEvent ToEvent(Event evt, EvlContext context)
         {
             InternalEvent e = null;
 

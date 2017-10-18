@@ -29,7 +29,7 @@ namespace Swampnet.Evl.Controllers
             try
             {
                 var stats = new Stats();
-                var org = await _auth.GetOrganisationAsync(Common.Constants.MOCKED_DEFAULT_APIKEY);
+                var org = await _auth.GetOrganisationByApiKeyAsync(Common.Constants.MOCKED_DEFAULT_APIKEY);
                 stats.ApiVersion = Assembly.GetEntryAssembly().GetName().Version.ToString();
                 stats.TotalEvents = await _dal.GetTotalEventCountAsync(org);
 

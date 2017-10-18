@@ -47,7 +47,7 @@ namespace Swampnet.Evl.Controllers
         {
             try
             {
-                var org = await _auth.GetOrganisationAsync(Common.Constants.MOCKED_DEFAULT_APIKEY);
+                var org = await _auth.GetOrganisationByApiKeyAsync(Common.Constants.MOCKED_DEFAULT_APIKEY);
 
                 var sources = await _dal.GetSources(org);
 
@@ -66,7 +66,7 @@ namespace Swampnet.Evl.Controllers
 		{
 			try
 			{
-                var org = await _auth.GetOrganisationAsync(Common.Constants.MOCKED_DEFAULT_APIKEY);
+                var org = await _auth.GetOrganisationByApiKeyAsync(Common.Constants.MOCKED_DEFAULT_APIKEY);
 
                 var tags = await _dal.GetTags(org);
 
@@ -88,7 +88,7 @@ namespace Swampnet.Evl.Controllers
             {
                 Log.Logger.WithPublicProperties(criteria).Debug("Get");
 
-                var org = await _auth.GetOrganisationAsync(Common.Constants.MOCKED_DEFAULT_APIKEY);
+                var org = await _auth.GetOrganisationByApiKeyAsync(Common.Constants.MOCKED_DEFAULT_APIKEY);
 
                 var events = await _dal.SearchAsync(org, criteria);
 
@@ -108,7 +108,7 @@ namespace Swampnet.Evl.Controllers
         {
             try
             {
-                var org = await _auth.GetOrganisationAsync(Common.Constants.MOCKED_DEFAULT_APIKEY);
+                var org = await _auth.GetOrganisationByApiKeyAsync(Common.Constants.MOCKED_DEFAULT_APIKEY);
                 var evt = await _dal.ReadAsync(org, id);
 
                 if (evt == null)
@@ -146,7 +146,7 @@ namespace Swampnet.Evl.Controllers
 
                 // @TODO: Auth
                 // @TODO: Check api key is valid, get organisation
-                var org = await _auth.GetOrganisationAsync(apiKey);
+                var org = await _auth.GetOrganisationByApiKeyAsync(apiKey);
                 if(org == null)
                 {
                     return Unauthorized();
@@ -196,7 +196,7 @@ namespace Swampnet.Evl.Controllers
                 var apiKey = Request.ApiKey();
 
                 // @TODO: Auth
-                var org = await _auth.GetOrganisationAsync(apiKey);
+                var org = await _auth.GetOrganisationByApiKeyAsync(apiKey);
 
                 Parallel.ForEach(evts, async evt =>
                 {

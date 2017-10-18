@@ -21,7 +21,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
         }
 
 
-        public async Task<Organisation> LoadOrganisationAsync(Guid apiKey)
+        public async Task<Organisation> LoadOrganisationByApiKeyAsync(Guid apiKey)
         {
             using (var context = EvlContext.Create(_cfg.GetConnectionString("dbmain")))
             {

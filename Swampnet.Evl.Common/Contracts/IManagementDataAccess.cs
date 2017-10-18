@@ -8,6 +8,6 @@ namespace Swampnet.Evl.Common.Contracts
 {
     public interface IManagementDataAccess
     {
-        Task<Organisation> LoadOrganisationAsync(Guid apiKey);
+        Task<Organisation> LoadOrganisationByApiKeyAsync(Guid apiKey);
     }
 }

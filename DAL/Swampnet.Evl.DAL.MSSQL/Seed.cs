@@ -14,6 +14,10 @@ namespace Swampnet.Evl.DAL.MSSQL
     {
         private static bool _init = false;
 
+        /// <summary>
+        /// Create tables and populate with some default / mocked data
+        /// </summary>
+        /// <param name="connectionString"></param>
         public static void Init(string connectionString)
         {
             if (!_init)
@@ -22,8 +26,7 @@ namespace Swampnet.Evl.DAL.MSSQL
                     .UseSqlServer(connectionString)
                     .Options);
 
-                var databaseCreator = (RelationalDatabaseCreator)context.Database.GetService<IDatabaseCreator>();
-                databaseCreator.CreateTables();
+                ((RelationalDatabaseCreator)context.Database.GetService<IDatabaseCreator>()).CreateTables();
 
                 // Organisation
                 var org = new InternalOrganisation()
@@ -70,14 +73,22 @@ namespace Swampnet.Evl.DAL.MSSQL
         private static IEnumerable<Rule> _mockedRules = new[] {
             new Rule("Test Email")
             {
-                Id = Guid.NewGuid(),
+                Id = Guid.NewGuid(),                
                 IsActive = true,
 
                 Expression = new Expression(RuleOperatorType.MATCH_ALL)
                 {
                     Children = new[]
                     {
-                        new Expression(RuleOperatorType.REGEX, RuleOperandType.Summary, @".*TEST-EMAIL.*")
+                        new Expression(RuleOperatorType.REGEX, RuleOperandType.Summary, @".*TEST-EMAIL.*"),
+                        new Expression(RuleOperatorType.MATCH_ANY)
+                        {
+                            Children = new[]
+                            {
+                                new Expression(RuleOperatorType.EQ, RuleOperandType.Category, EventCategory.Debug),
+                                new Expression(RuleOperatorType.EQ, RuleOperandType.Category, EventCategory.Information)
+                            }
+                        }
                     }
                 },
                 Actions = new[]
@@ -99,7 +110,15 @@ namespace Swampnet.Evl.DAL.MSSQL
                 {
                     Children = new[]
                     {
-                        new Expression(RuleOperatorType.REGEX, RuleOperandType.Summary, @".*TEST-SLACK.*")
+                        new Expression(RuleOperatorType.REGEX, RuleOperandType.Summary, @".*TEST-SLACK.*"),
+                        new Expression(RuleOperatorType.MATCH_ANY)
+                        {
+                            Children = new[]
+                            {
+                                new Expression(RuleOperatorType.EQ, RuleOperandType.Category, EventCategory.Debug),
+                                new Expression(RuleOperatorType.EQ, RuleOperandType.Category, EventCategory.Information)
+                            }
+                        }
                     }
                 },
                 Actions = new[]
@@ -119,7 +138,7 @@ namespace Swampnet.Evl.DAL.MSSQL
                 {
                     Children = new []
                     {
-                        new Expression(RuleOperatorType.EQ, RuleOperandType.Category, "Error"),
+                        new Expression(RuleOperatorType.EQ, RuleOperandType.Category, EventCategory.Error),
                         new Expression(RuleOperatorType.REGEX, RuleOperandType.Summary, @".*not-an-error.*")
                     }
                 },
@@ -127,7 +146,7 @@ namespace Swampnet.Evl.DAL.MSSQL
                 {
                     new ActionDefinition("change-category", new[]
                     {
-                        new Property("Category", "Information")
+                        new Property("Category", EventCategory.Warning)
                     })
                 }
             }

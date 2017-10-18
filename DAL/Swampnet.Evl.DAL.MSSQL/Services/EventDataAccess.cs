@@ -26,7 +26,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
         {
             using(var context = EvlContext.Create(_cfg.GetConnectionString("dbmain")))
             {
-                var internalEvent = Convert.ToInternalEvent(evt, context);
+                var internalEvent = Convert.ToEvent(evt, context);
                 internalEvent.Id = Guid.NewGuid();
                 internalEvent.OrganisationId = org == null 
                                                 ? Constants.MOCKED_DEFAULT_ORGANISATION 
