@@ -22,7 +22,7 @@ namespace Swampnet.Evl.DAL.MSSQL
                 e = new InternalEvent()
                 {
                     Category = evt.Category.ToString(),
-                    Summary = evt.Summary.Truncate(2000, true),
+                    Summary = evt.Summary,
                     TimestampUtc = evt.TimestampUtc,
                     LastUpdatedUtc = evt.LastUpdatedUtc.HasValue ? evt.LastUpdatedUtc.Value : evt.TimestampUtc,
                     Source = evt.Source.Truncate(2000),
@@ -45,9 +45,9 @@ namespace Swampnet.Evl.DAL.MSSQL
         {
             return new InternalProperty()
             {
-                Category = property.Category.Truncate(2000),
-                Name = property.Name.Truncate(2000),
-                Value = property.Value == null ? "null" : property.Value.Truncate(2000)
+                Category = property.Category.Truncate(225),
+                Name = property.Name.Truncate(225),
+                Value = property.Value == null ? "null" : property.Value
             };
         }
 

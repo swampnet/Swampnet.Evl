@@ -35,15 +35,16 @@ namespace Swampnet.Evl.DAL.MSSQL
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<InternalProperty>().ToTable("Property");
-            modelBuilder.Entity<InternalProperty>().Property(f => f.Name).IsRequired().HasMaxLength(2000);
-            modelBuilder.Entity<InternalProperty>().Property(f => f.Value).IsRequired().HasMaxLength(2000);
-            modelBuilder.Entity<InternalProperty>().Property(f => f.Category).HasMaxLength(2000);
-            modelBuilder.Entity<InternalProperty>().HasIndex(f => new { f.Name, f.Value }); // This a thing? Can I do this?
+            modelBuilder.Entity<InternalProperty>().Property(f => f.Name).IsRequired().HasMaxLength(225);
+            modelBuilder.Entity<InternalProperty>().Property(f => f.Value).IsRequired();
+            modelBuilder.Entity<InternalProperty>().Property(f => f.Category).HasMaxLength(225);
+            modelBuilder.Entity<InternalProperty>().HasIndex(f => new { f.Category, f.Name });
+            modelBuilder.Entity<InternalProperty>().HasIndex(f => f.Name);
 
             modelBuilder.Entity<InternalEvent>().ToTable("Event");
             modelBuilder.Entity<InternalEvent>().Property(f => f.Category).IsRequired().HasMaxLength(2000);
             modelBuilder.Entity<InternalEvent>().Property(f => f.Source).IsRequired().HasMaxLength(2000);
-            modelBuilder.Entity<InternalEvent>().Property(f => f.Summary).IsRequired().HasMaxLength(2000);
+            modelBuilder.Entity<InternalEvent>().Property(f => f.Summary).IsRequired();
 
             modelBuilder.Entity<InternalEventProperties>().ToTable("EventProperties");
             modelBuilder.Entity<InternalEventProperties>().HasKey(x => new { x.EventId, x.InternalPropertyId });
