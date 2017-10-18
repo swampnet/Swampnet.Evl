@@ -24,13 +24,12 @@ namespace Swampnet.Evl.DAL.MSSQL
 
         public static EvlContext Create(string connectionString)
         {
-            var options = new DbContextOptionsBuilder<EvlContext>()
-                .UseSqlServer(connectionString)
-                .Options;
-
             //Seed.Init(connectionString);
 
-            return new EvlContext(options);
+            return new EvlContext(
+                new DbContextOptionsBuilder<EvlContext>()
+                    .UseSqlServer(connectionString)
+                    .Options);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
