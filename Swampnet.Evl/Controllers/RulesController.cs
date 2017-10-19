@@ -3,6 +3,7 @@ using Serilog;
 using Swampnet.Evl.Client;
 using Swampnet.Evl.Common.Contracts;
 using Swampnet.Evl.Common.Entities;
+using Swampnet.Evl.Services;
 using System;
 using System.Net;
 using System.Threading.Tasks;
@@ -13,9 +14,12 @@ namespace Swampnet.Evl.Controllers
     public class RulesController : Controller
     {
         private readonly IRuleDataAccess _rulesData;
+		private readonly IAuth _auth;
 
-        public RulesController(IRuleDataAccess rulesData)
+
+		public RulesController(IAuth auth, IRuleDataAccess rulesData)
         {
+			_auth = auth;
             _rulesData = rulesData;
         }
 
@@ -26,9 +30,11 @@ namespace Swampnet.Evl.Controllers
         {
             try
             {
-                // @TODO: Auth
+				// @TODO: Auth
+				var org = await _auth.GetOrganisationByApiKeyAsync(Common.Constants.MOCKED_DEFAULT_APIKEY);
+
                 // @TODO: Just want rules that we're allowed to see.
-                var rules = await _rulesData.SearchAsync();
+                var rules = await _rulesData.SearchAsync(org);
 
                 return Ok(rules);
             }
@@ -46,7 +52,10 @@ namespace Swampnet.Evl.Controllers
         {
             try
             {
-                var rule = await _rulesData.LoadAsync(id);
+				// @TODO: Auth
+				var org = await _auth.GetOrganisationByApiKeyAsync(Common.Constants.MOCKED_DEFAULT_APIKEY);
+
+				var rule = await _rulesData.LoadAsync(org, id);
 
                 if(rule == null)
                 {
@@ -77,9 +86,11 @@ namespace Swampnet.Evl.Controllers
 
 				Log.Debug("POST rule {ruleName}", rule.Name);
 
-                // @TODO: Auth
+				// @TODO: Auth
+				// @TODO: Auth
+				var org = await _auth.GetOrganisationByApiKeyAsync(Common.Constants.MOCKED_DEFAULT_APIKEY);
 
-                await _rulesData.CreateAsync(rule);
+				await _rulesData.CreateAsync(org, rule);
 
                 return CreatedAtRoute("RuleDetails", new { id = rule.Id }, rule);
             }
@@ -104,15 +115,16 @@ namespace Swampnet.Evl.Controllers
 
 				Log.Debug("PUT rule {ruleId} {ruleName}", id, rule.Name);
 
-				// @TODO: Auth
-
 				// Something off here: We might be trying to update the wrong rule.
 				if (rule.Id.HasValue && rule.Id.Value != id)
                 {
 					return BadRequest("id and Rule.Id do not match");
 				}
 
-				await _rulesData.UpdateAsync(rule);
+				// @TODO: Auth
+				var org = await _auth.GetOrganisationByApiKeyAsync(Common.Constants.MOCKED_DEFAULT_APIKEY);
+
+				await _rulesData.UpdateAsync(org, rule);
 
                 // Not sure I should be returning this for an update?
                 return CreatedAtRoute("RuleDetails", new { id = id }, rule);
@@ -141,8 +153,9 @@ namespace Swampnet.Evl.Controllers
 				Log.Information("DEL rule {ruleId}", id);
 
 				// @TODO: Auth
+				var org = await _auth.GetOrganisationByApiKeyAsync(Common.Constants.MOCKED_DEFAULT_APIKEY);
 
-				await _rulesData.DeleteAsync(id);
+				await _rulesData.DeleteAsync(org, id);
 
 				return Ok();
 			}

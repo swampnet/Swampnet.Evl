@@ -18,7 +18,7 @@ namespace Swampnet.Evl.DAL.InMemory.Services
         }
 
 
-        public async Task<IEnumerable<RuleSummary>> SearchAsync()
+        public async Task<IEnumerable<RuleSummary>> SearchAsync(Organisation org)
         {
             using (var context = RuleContext.Create())
             {
@@ -28,7 +28,7 @@ namespace Swampnet.Evl.DAL.InMemory.Services
         }
 
 
-        public async Task<Rule> LoadAsync(Guid id)
+        public async Task<Rule> LoadAsync(Organisation org, Guid id)
         {
             using (var context = RuleContext.Create())
             {
@@ -53,7 +53,7 @@ namespace Swampnet.Evl.DAL.InMemory.Services
         }
 
 
-        public async Task CreateAsync(Rule rule)
+        public async Task CreateAsync(Organisation org, Rule rule)
         {
             using (var context = RuleContext.Create())
             {
@@ -64,7 +64,7 @@ namespace Swampnet.Evl.DAL.InMemory.Services
         }
 
 
-        public async Task UpdateAsync(Rule rule)
+        public async Task UpdateAsync(Organisation org, Rule rule)
         {
             using (var context = RuleContext.Create())
             {
@@ -83,7 +83,7 @@ namespace Swampnet.Evl.DAL.InMemory.Services
             }
         }
 
-        public async Task DeleteAsync(Guid id)
+        public async Task DeleteAsync(Organisation org, Guid id)
         {
 			// @TODO: Now, do we really want to delete stuff or just flag it as so?
 			//        A: Well, flag it as so, obv. Question is, do we use the active flag for that?
