@@ -80,17 +80,17 @@ namespace UnitTests
                 _rules = rules;
             }
 
-            public Task CreateAsync(Rule rule)
+            public Task CreateAsync(Organisation org, Rule rule)
             {
                 throw new NotImplementedException();
             }
 
-            public Task DeleteAsync(Guid id)
+            public Task DeleteAsync(Organisation org, Guid id)
             {
                 throw new NotImplementedException();
             }
 
-            public Task<Rule> LoadAsync(Guid id)
+            public Task<Rule> LoadAsync(Organisation org, Guid id)
             {
                 throw new NotImplementedException();
             }
@@ -100,12 +100,12 @@ namespace UnitTests
                 return Task.Run(() => _rules);
             }
 
-            public Task<IEnumerable<RuleSummary>> SearchAsync()
+            public Task<IEnumerable<RuleSummary>> SearchAsync(Organisation org)
             {
                 throw new NotImplementedException();
             }
 
-            public Task UpdateAsync(Rule rule)
+            public Task UpdateAsync(Organisation org, Rule rule)
             {
                 throw new NotImplementedException();
             }

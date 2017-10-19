@@ -47,7 +47,9 @@ namespace Swampnet.Evl.Controllers
         {
             try
             {
-                var sources = await _dal.GetSources(Common.Constants.MOCKED_DEFAULT_APIKEY);
+                var org = await _auth.GetOrganisationByApiKeyAsync(Common.Constants.MOCKED_DEFAULT_APIKEY);
+
+                var sources = await _dal.GetSources(org);
 
                 return Ok(sources);
             }
@@ -64,7 +66,9 @@ namespace Swampnet.Evl.Controllers
 		{
 			try
 			{
-				var tags = await _dal.GetTags(Common.Constants.MOCKED_DEFAULT_APIKEY);
+                var org = await _auth.GetOrganisationByApiKeyAsync(Common.Constants.MOCKED_DEFAULT_APIKEY);
+
+                var tags = await _dal.GetTags(org);
 
 				return Ok(tags);
 			}
@@ -84,7 +88,9 @@ namespace Swampnet.Evl.Controllers
             {
                 Log.Logger.WithPublicProperties(criteria).Debug("Get");
 
-                var events = await _dal.SearchAsync(criteria);
+                var org = await _auth.GetOrganisationByApiKeyAsync(Common.Constants.MOCKED_DEFAULT_APIKEY);
+
+                var events = await _dal.SearchAsync(org, criteria);
 
                 return Ok(events);
             }
@@ -102,7 +108,8 @@ namespace Swampnet.Evl.Controllers
         {
             try
             {
-                var evt = await _dal.ReadAsync(id);
+                var org = await _auth.GetOrganisationByApiKeyAsync(Common.Constants.MOCKED_DEFAULT_APIKEY);
+                var evt = await _dal.ReadAsync(org, id);
 
                 if (evt == null)
                 {
@@ -139,7 +146,7 @@ namespace Swampnet.Evl.Controllers
 
                 // @TODO: Auth
                 // @TODO: Check api key is valid, get organisation
-                var org = await _auth.GetOrganisationAsync(apiKey);
+                var org = await _auth.GetOrganisationByApiKeyAsync(apiKey);
                 if(org == null)
                 {
                     return Unauthorized();
@@ -157,7 +164,7 @@ namespace Swampnet.Evl.Controllers
 
                 evt.Properties.AddRange(Request.CommonProperties());
 
-                var id = await _dal.CreateAsync(evt);
+                var id = await _dal.CreateAsync(org, evt);
 
                 _eventProcessor.Enqueue(id);
 
@@ -186,23 +193,18 @@ namespace Swampnet.Evl.Controllers
                     return BadRequest();
                 }
 
-                await Task.Delay(1); // Just to satisfy our async declaration for now.
-
                 var apiKey = Request.ApiKey();
-                var ids = new List<Guid>();
 
                 // @TODO: Auth
+                var org = await _auth.GetOrganisationByApiKeyAsync(apiKey);
 
                 Parallel.ForEach(evts, async evt =>
                 {
                     try
                     {
                         evt.Properties.AddRange(Request.CommonProperties());
-                        var id = await _dal.CreateAsync(evt);
-                        lock (ids)
-                        {
-                            ids.Add(id);
-                        }
+                        var id = await _dal.CreateAsync(org, evt);
+						_eventProcessor.Enqueue(id);
                     }
                     catch (Exception ex)
                     {
@@ -210,10 +212,7 @@ namespace Swampnet.Evl.Controllers
                     }
                 });
 
-                _eventProcessor.Enqueue(ids);
-
                 return Ok();
-                //return CreatedAtRoute("GetEventDetails", new { id = 0 }, evt);
             }
             catch (UnauthorizedAccessException ex)
             {

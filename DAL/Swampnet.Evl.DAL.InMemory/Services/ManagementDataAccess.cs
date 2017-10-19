@@ -18,7 +18,7 @@ namespace Swampnet.Evl.DAL.InMemory.Services
         }
 
 
-        public async Task<Organisation> LoadOrganisationAsync(Guid apiKey)
+        public async Task<Organisation> LoadOrganisationByApiKeyAsync(Guid apiKey)
         {
             using (var context = ManagementContext.Create())
             {

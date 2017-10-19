@@ -16,7 +16,7 @@ namespace Swampnet.Evl.DAL.InMemory.Services
 		private static readonly char[] _splitTags = new[] { ',' };
 
 
-		public async Task<Guid> CreateAsync(Event evt)
+		public async Task<Guid> CreateAsync(Organisation org, Event evt)
         {
             using(var context = EventContext.Create())
             {
@@ -32,7 +32,7 @@ namespace Swampnet.Evl.DAL.InMemory.Services
             }
         }
 
-        public async Task<Event> ReadAsync(Guid id)
+        public async Task<Event> ReadAsync(Organisation org, Guid id)
         {
             using (var context = EventContext.Create())
             {
@@ -48,7 +48,7 @@ namespace Swampnet.Evl.DAL.InMemory.Services
         }
 
 
-        public async Task UpdateAsync(Guid id, Event evt)
+        public async Task UpdateAsync(Organisation org, Guid id, Event evt)
         {
             using (var context = EventContext.Create())
             {
@@ -89,7 +89,7 @@ namespace Swampnet.Evl.DAL.InMemory.Services
         }
 
 
-        public async Task<IEnumerable<EventSummary>> SearchAsync(EventSearchCriteria criteria)
+        public async Task<IEnumerable<EventSummary>> SearchAsync(Organisation org, EventSearchCriteria criteria)
         {
             using (var context = EventContext.Create())
             {
@@ -165,7 +165,7 @@ namespace Swampnet.Evl.DAL.InMemory.Services
             }
         }
 
-        public async Task<IEnumerable<string>> GetSources(Guid org)
+        public async Task<IEnumerable<string>> GetSources(Organisation org)
         {
             IEnumerable<string> sources = null;
 
@@ -177,7 +177,7 @@ namespace Swampnet.Evl.DAL.InMemory.Services
             return sources;
         }
 
-		public async Task<IEnumerable<string>> GetTags(Guid org)
+		public async Task<IEnumerable<string>> GetTags(Organisation org)
 		{
 			IEnumerable<string> tags = null;
 
@@ -189,7 +189,7 @@ namespace Swampnet.Evl.DAL.InMemory.Services
 			return tags;
 		}
 
-		public async Task<long> GetTotalEventCountAsync()
+		public async Task<long> GetTotalEventCountAsync(Organisation org)
         {
             long count = 0;
 

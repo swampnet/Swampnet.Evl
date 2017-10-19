@@ -123,7 +123,7 @@ namespace Swampnet.Evl.Plugins.Email
 			}
 
 			var template = _templateLoader.Load();
-            var doc = _transformer.Transform(evt, template);
+            var doc = _transformer.Transform(evt, rule, actionDefinition, template);
 
 			var subject = doc.Element("email").Element("subject");
 			var html = doc.Element("email").Element("html");

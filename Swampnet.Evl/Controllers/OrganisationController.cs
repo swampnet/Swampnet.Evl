@@ -26,7 +26,7 @@ namespace Swampnet.Evl.Controllers
             try
             {
                 // @TODO: Auth
-                var org = await _managementData.LoadOrganisationAsync(Common.Constants.MOCKED_DEFAULT_APIKEY);
+                var org = await _managementData.LoadOrganisationByApiKeyAsync(Common.Constants.MOCKED_DEFAULT_APIKEY);
 
                 return Ok(org);
             }

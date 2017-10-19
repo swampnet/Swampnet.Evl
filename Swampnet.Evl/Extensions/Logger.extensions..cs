@@ -11,6 +11,7 @@ using Swampnet.Evl.Common.Contracts;
 using Swampnet.Evl.Contracts;
 using System.Diagnostics;
 using System.Reflection;
+using Swampnet.Evl.Common.Entities;
 
 namespace Swampnet.Evl
 {
@@ -53,29 +54,22 @@ namespace Swampnet.Evl
             /// <param name="events"></param>
             /// <returns></returns>
             protected override async Task PostAsync(IEnumerable<Event> events)
-            {
-                var ids = new List<Guid>();
-                
+            {                
                 await Task.Delay(1); // Just to satisfy our async declaration for now.
 
                 Parallel.ForEach(events, async evt =>
                 {
                     try
                     {
-                        var id = await _dal.CreateAsync(evt);
+                        var id = await _dal.CreateAsync(null, evt);
 
-                        lock (ids)
-                        {
-                            ids.Add(id);
-                        }
+						_eventProcessor.Enqueue(id);
                     }
                     catch (Exception ex)
                     {
                         Debug.WriteLine(ex.Message);
                     }
                 });
-
-                _eventProcessor.Enqueue(ids);
             }
         }
     }

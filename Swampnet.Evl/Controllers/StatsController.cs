@@ -2,6 +2,7 @@
 using Serilog;
 using Swampnet.Evl.Common.Contracts;
 using Swampnet.Evl.Common.Entities;
+using Swampnet.Evl.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,10 +15,12 @@ namespace Swampnet.Evl.Controllers
     public class StatsController : Controller
     {
         private readonly IEventDataAccess _dal;
+        private readonly IAuth _auth;
 
-        public StatsController(IEventDataAccess dal)
+        public StatsController(IEventDataAccess dal, IAuth auth)
         {
             _dal = dal;
+            _auth = auth;
         }
 
         [HttpGet]
@@ -26,9 +29,9 @@ namespace Swampnet.Evl.Controllers
             try
             {
                 var stats = new Stats();
-
+                var org = await _auth.GetOrganisationByApiKeyAsync(Common.Constants.MOCKED_DEFAULT_APIKEY);
                 stats.ApiVersion = Assembly.GetEntryAssembly().GetName().Version.ToString();
-                stats.TotalEvents = await _dal.GetTotalEventCountAsync();
+                stats.TotalEvents = await _dal.GetTotalEventCountAsync(org);
 
                 return Ok(stats);
             }

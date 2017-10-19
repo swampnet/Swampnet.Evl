@@ -41,7 +41,7 @@ namespace Swampnet.Evl.Services
 
         public void Enqueue(IEnumerable<Guid> ids)
         {
-            foreach(var id in ids)
+            foreach(var id in ids.ToArray())
             {
                 _queue.Enqueue(id);
             }
@@ -73,7 +73,7 @@ namespace Swampnet.Evl.Services
                 {
                     try
                     {
-                        var evt = _dal.ReadAsync(eventId).Result;
+                        var evt = _dal.ReadAsync(null, eventId).Result;
 
                         foreach (var processor in _processors.OrderBy(p => p.Priority))
                         {
@@ -88,7 +88,7 @@ namespace Swampnet.Evl.Services
                             }
                         }
 
-                        _dal.UpdateAsync(eventId, evt).Wait();
+                        _dal.UpdateAsync(null, eventId, evt).Wait();
                     }
                     catch (Exception ex)
                     {

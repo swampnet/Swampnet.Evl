@@ -1,4 +1,5 @@
 ﻿using Swampnet.Evl.Client;
+using Swampnet.Evl.Common.Entities;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -15,13 +16,36 @@ namespace Swampnet.Evl.Plugins.Email
     {
         // In: Event, ActionDefinition, Rule
         // Out: Subject, Html Body, Plain Body
-        XDocument Transform(Event evt, string template);
+        XDocument Transform(Event evt, Rule rule, ActionDefinition action, string template);
     }
 
+	[XmlRoot("Data")]
+	public class TemplateData
+	{
+		public TemplateData()
+		{
 
-    class TemplateTransformer : ITemplateTransformer
+		}
+
+		public TemplateData(Event e, Rule rule, ActionDefinition action)
+			: this()
+		{
+			Event = e;
+			Rule = rule;
+			Action = action;
+		}
+
+		public Event Event { get; set; }
+		public Rule Rule { get; set; }
+		public ActionDefinition Action { get; set; }
+	}
+
+
+
+	class TemplateTransformer : ITemplateTransformer
     {
-        public XDocument Transform(Event evt, string template)
+
+        public XDocument Transform(Event evt, Rule rule, ActionDefinition action, string template)
         {
             string transformed = null;
 
@@ -33,11 +57,11 @@ namespace Swampnet.Evl.Plugins.Email
 
             using (var results = new StringWriter())
             {
-                using (var reader = XmlReader.Create(new StringReader(ToXmlString(evt))))
-                {
-                    transform.Transform(reader, null, results);
-                    transformed = results.ToString();
-                }
+				using (var reader = XmlReader.Create(new StringReader(ToXmlString(new TemplateData(evt, rule, action)))))
+				{
+					transform.Transform(reader, null, results);
+					transformed = results.ToString();
+				}
             }
 
             return XDocument.Parse(transformed);
