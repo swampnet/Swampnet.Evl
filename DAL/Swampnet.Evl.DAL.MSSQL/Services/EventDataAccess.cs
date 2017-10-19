@@ -24,7 +24,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
 
 		public async Task<Guid> CreateAsync(Organisation org, Event evt)
         {
-            using(var context = EvlContext.Create(_cfg.GetConnectionString("dbmain")))
+            using(var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))
             {
                 var internalEvent = Convert.ToEvent(evt, context);
                 internalEvent.Id = Guid.NewGuid();
@@ -44,7 +44,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
 
         public async Task<Event> ReadAsync(Organisation org, Guid id)
         {
-            using (var context = EvlContext.Create(_cfg.GetConnectionString("dbmain")))
+            using (var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))
             {
                 var evt = await context.Events
                     .Include(e => e.InternalEventProperties)
@@ -60,7 +60,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
 
         public async Task UpdateAsync(Organisation org, Guid id, Event evt)
         {
-            using (var context = EvlContext.Create(_cfg.GetConnectionString("dbmain")))
+            using (var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))
             {
                 var internalEvent = await context.Events
                     .Include(e => e.InternalEventProperties)
@@ -90,7 +90,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
 
         public async Task<IEnumerable<EventSummary>> SearchAsync(Organisation org, EventSearchCriteria criteria)
         {
-            using (var context = EvlContext.Create(_cfg.GetConnectionString("dbmain")))
+            using (var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))
             {
                 var query = context.Events.AsQueryable();
 
@@ -168,7 +168,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
         {
             IEnumerable<string> sources = null;
 
-            using (var context = EvlContext.Create(_cfg.GetConnectionString("dbmain")))
+            using (var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))
             {
                 sources = await context.Events.Select(e => e.Source).Distinct().ToListAsync();
             }
@@ -180,7 +180,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
 		{
 			IEnumerable<string> tags = null;
 
-			using (var context = EvlContext.Create(_cfg.GetConnectionString("dbmain")))
+			using (var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))
 			{
 				tags = await context.Tags.Select(t => t.Name).Distinct().ToListAsync();
 			}
@@ -192,7 +192,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
         {
             long count = 0;
 
-            using (var context = EvlContext.Create(_cfg.GetConnectionString("dbmain")))
+            using (var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))
             {
                 count = await context.Events.LongCountAsync();
             }

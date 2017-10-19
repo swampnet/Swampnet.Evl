@@ -11,7 +11,10 @@ namespace Swampnet.Evl.DAL.MSSQL
 {
     class EvlContext : DbContext
     {
-        public EvlContext(DbContextOptions options)
+		public const string CONNECTION_NAME = "swampnet-evl";
+		public const string SCHEMA = "evl";
+
+		public EvlContext(DbContextOptions options)
             : base(options)
         {
         }
@@ -36,36 +39,36 @@ namespace Swampnet.Evl.DAL.MSSQL
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<InternalProperty>().ToTable("Property");
+            modelBuilder.Entity<InternalProperty>().ToTable("Property", EvlContext.SCHEMA);
             modelBuilder.Entity<InternalProperty>().Property(f => f.Name).IsRequired().HasMaxLength(225);
             modelBuilder.Entity<InternalProperty>().Property(f => f.Value).IsRequired();
             modelBuilder.Entity<InternalProperty>().Property(f => f.Category).HasMaxLength(225);
             modelBuilder.Entity<InternalProperty>().HasIndex(f => new { f.Category, f.Name });
             modelBuilder.Entity<InternalProperty>().HasIndex(f => f.Name);
 
-            modelBuilder.Entity<InternalEvent>().ToTable("Event");
+            modelBuilder.Entity<InternalEvent>().ToTable("Event", EvlContext.SCHEMA);
             modelBuilder.Entity<InternalEvent>().Property(f => f.Category).IsRequired().HasMaxLength(2000);
             modelBuilder.Entity<InternalEvent>().Property(f => f.Source).IsRequired().HasMaxLength(2000);
             modelBuilder.Entity<InternalEvent>().Property(f => f.Summary).IsRequired();
 
-            modelBuilder.Entity<InternalEventProperties>().ToTable("EventProperties");
+            modelBuilder.Entity<InternalEventProperties>().ToTable("EventProperties", EvlContext.SCHEMA);
             modelBuilder.Entity<InternalEventProperties>().HasKey(x => new { x.EventId, x.InternalPropertyId });
 
-            modelBuilder.Entity<InternalEventTags>().ToTable("EventTags");
+            modelBuilder.Entity<InternalEventTags>().ToTable("EventTags", EvlContext.SCHEMA);
             modelBuilder.Entity<InternalEventTags>().HasKey(x => new { x.EventId, x.InternalTagId });
 
-            modelBuilder.Entity<InternalTag>().ToTable("Tag");
+            modelBuilder.Entity<InternalTag>().ToTable("Tag", EvlContext.SCHEMA);
             modelBuilder.Entity<InternalTag>().Property(f => f.Name).IsRequired().HasMaxLength(100);
             modelBuilder.Entity<InternalTag>().HasIndex(x => x.Name);
 
-            modelBuilder.Entity<InternalOrganisation>().ToTable("Organisation");
+            modelBuilder.Entity<InternalOrganisation>().ToTable("Organisation", EvlContext.SCHEMA);
             modelBuilder.Entity<InternalOrganisation>().Property(f => f.Description).IsRequired();
             modelBuilder.Entity<InternalOrganisation>().Property(f => f.Name).IsRequired();
 
-            modelBuilder.Entity<ApiKey>().ToTable("ApiKey");
+            modelBuilder.Entity<ApiKey>().ToTable("ApiKey", EvlContext.SCHEMA);
             modelBuilder.Entity<ApiKey>().Property(f => f.OrganisationId).IsRequired();
 
-            modelBuilder.Entity<InternalRule>().ToTable("Rule");
+            modelBuilder.Entity<InternalRule>().ToTable("Rule", EvlContext.SCHEMA);
             modelBuilder.Entity<InternalRule>().Property(f => f.ActionData).IsRequired().HasColumnType("xml");
             modelBuilder.Entity<InternalRule>().Property(f => f.ExpressionData).IsRequired().HasColumnType("xml");
             modelBuilder.Entity<InternalRule>().Property(f => f.Name).IsRequired();

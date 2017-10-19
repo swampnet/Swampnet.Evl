@@ -23,7 +23,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
 
         public async Task<Organisation> LoadOrganisationByApiKeyAsync(Guid apiKey)
         {
-            using (var context = EvlContext.Create(_cfg.GetConnectionString("dbmain")))
+            using (var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))
             {
                 var org = await context.Organisations.FirstOrDefaultAsync(o => o.ApiKey == apiKey);
 

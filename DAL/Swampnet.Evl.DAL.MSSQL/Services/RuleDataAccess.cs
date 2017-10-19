@@ -23,7 +23,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
 
         public async Task<IEnumerable<RuleSummary>> SearchAsync()
         {
-            using (var context = EvlContext.Create(_cfg.GetConnectionString("dbmain")))
+            using (var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))
             {
                 var rules = await context.Rules.Where(r => r.IsActive).ToListAsync();
                 return rules.Select(Convert.ToRuleSummary);
@@ -33,7 +33,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
 
         public async Task<Rule> LoadAsync(Guid id)
         {
-            using (var context = EvlContext.Create(_cfg.GetConnectionString("dbmain")))
+            using (var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))
             {
                 var rule = await context.Rules.SingleOrDefaultAsync(r => r.IsActive && r.Id == id);
                 if(rule == null)
@@ -47,7 +47,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
 
         public async Task<IEnumerable<Rule>> LoadAsync(Organisation org)
         {
-            using (var context = EvlContext.Create(_cfg.GetConnectionString("dbmain")))
+            using (var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))
             {
                 var rules = await context.Rules.Where(r => r.IsActive).ToListAsync();
 
@@ -58,7 +58,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
 
         public async Task CreateAsync(Rule rule)
         {
-            using (var context = EvlContext.Create(_cfg.GetConnectionString("dbmain")))
+            using (var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))
             {
                 rule.Id = Guid.NewGuid();
                 context.Rules.Add(Convert.ToRule(rule));
@@ -69,7 +69,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
 
         public async Task UpdateAsync(Rule rule)
         {
-            using (var context = EvlContext.Create(_cfg.GetConnectionString("dbmain")))
+            using (var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))
             {
                 var r = context.Rules.SingleOrDefault(x => x.Id == rule.Id);
                 if(r == null)
@@ -90,7 +90,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
         {
 			// @TODO: Now, do we really want to delete stuff or just flag it as so?
 			//        A: Well, flag it as so, obv. Question is, do we use the active flag for that?
-			using (var context = EvlContext.Create(_cfg.GetConnectionString("dbmain")))
+			using (var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))
 			{
 				var r = context.Rules.SingleOrDefault(x => x.Id == id);
 				if (r == null)
