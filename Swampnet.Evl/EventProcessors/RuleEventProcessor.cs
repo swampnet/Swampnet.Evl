@@ -48,7 +48,7 @@ namespace Swampnet.Evl.EventProcessors
                         if (expressionEvaluator.Evaluate(rule.Expression, evt))
                         {
                             evt.Properties.Add(new Property("Internal", "Rule Triggered", rule.Name));
-                            var trigger = new Trigger(rule.Name);
+                            var trigger = new Trigger(rule.Id.Value, rule.Name);
 
                             foreach (var action in rule.Actions)
                             {

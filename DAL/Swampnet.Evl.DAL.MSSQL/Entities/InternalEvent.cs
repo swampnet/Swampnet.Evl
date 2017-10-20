@@ -59,6 +59,13 @@ namespace Swampnet.Evl.DAL.MSSQL.Entities
 
         internal void AddTriggers(IEnumerable<Trigger> triggers)
         {
+			if(triggers != null)
+			{
+				foreach(var trigger in triggers)
+				{
+					AddTrigger(trigger);
+				}
+			}
         }
 
         internal void AddTrigger(Trigger trigger)

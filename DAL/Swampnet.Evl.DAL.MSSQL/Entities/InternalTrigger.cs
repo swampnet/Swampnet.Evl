@@ -17,13 +17,15 @@ namespace Swampnet.Evl.DAL.MSSQL.Entities
 
         public string RuleName { get; set; }
 
-        public ICollection<InternalAction> Actions { get; set; }
+		public Guid RuleId { get; set; }
+
+		public ICollection<InternalAction> Actions { get; set; }
 
         #region FK Stuff
 
         public InternalEvent Event { get; set; }
         public Guid EventId { get; set; }
 
-        #endregion
-    }
+		#endregion
+	}
 }

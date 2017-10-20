@@ -24,5 +24,5 @@ namespace Swampnet.Evl.DAL.MSSQL.Entities
 
         // Serialised action data
         public string ActionData { get; set; }
-    }
+	}
 }

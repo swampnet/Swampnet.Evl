@@ -27,15 +27,17 @@ namespace Swampnet.Evl.Common.Entities
             Actions = new List<TriggerAction>();
         }
 
-        public Trigger(string ruleName)
+        public Trigger(Guid ruleId, string ruleName)
             : this()
         {
             RuleName = ruleName;
+			RuleId = ruleId;
         }
 
         public DateTime TimestampUtc { get; set; }
         public string RuleName { get; set; }
-        public List<TriggerAction> Actions { get; set; }
+		public Guid RuleId { get; set; }
+		public List<TriggerAction> Actions { get; set; }
     }
 
 
