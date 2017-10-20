@@ -13,7 +13,7 @@ namespace Swampnet.Evl.Actions
     {
         public string Type => "change-category";
 
-        public Task ApplyAsync(Event evt, ActionDefinition actionDefinition, Rule rule)
+        public Task ApplyAsync(EventDetails evt, ActionDefinition actionDefinition, Rule rule)
         {
             var cat = actionDefinition.Properties.StringValue("category");
             if(!string.IsNullOrEmpty(cat))

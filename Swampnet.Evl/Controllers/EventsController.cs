@@ -127,12 +127,18 @@ namespace Swampnet.Evl.Controllers
             }
         }
 
-
+        /// <summary>
+        /// Main POST
+        /// </summary>
+        /// <param name="e"></param>
+        /// <returns></returns>
         [HttpPost]
-		public async Task<IActionResult> Post([FromBody] Event evt)
+		public async Task<IActionResult> Post([FromBody] Event e)
 		{
 			try
 			{
+                var evt = Common.Convert.ToEventDetails(e);
+
 				if (evt == null)
 				{
 					return BadRequest();
@@ -164,11 +170,11 @@ namespace Swampnet.Evl.Controllers
 
                 evt.Properties.AddRange(Request.CommonProperties());
 
-                var id = await _dal.CreateAsync(org, evt);
+                evt.Id = await _dal.CreateAsync(org, evt);
 
-                _eventProcessor.Enqueue(id);
+                _eventProcessor.Enqueue(evt.Id);
 
-				return CreatedAtRoute("EventDetails", new { id = id }, evt);
+				return CreatedAtRoute("EventDetails", new { id = evt.Id }, evt);
 			}
 			catch (UnauthorizedAccessException ex)
 			{
@@ -203,7 +209,7 @@ namespace Swampnet.Evl.Controllers
                     try
                     {
                         evt.Properties.AddRange(Request.CommonProperties());
-                        var id = await _dal.CreateAsync(org, evt);
+                        var id = await _dal.CreateAsync(org, Common.Convert.ToEventDetails(evt));
 						_eventProcessor.Enqueue(id);
                     }
                     catch (Exception ex)

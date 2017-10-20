@@ -24,7 +24,7 @@ namespace Swampnet.Evl.EventProcessors
             _actionHandlers = actionHandlers.ToDictionary(a => a.GetType().Name.Replace("ActionHandler", "").ToLower());
         }
 
-        public async Task ProcessAsync(Event evt)
+        public async Task ProcessAsync(EventDetails evt)
         {
             var rules = new List<Rule>(await _loader.LoadAsync(null));
 

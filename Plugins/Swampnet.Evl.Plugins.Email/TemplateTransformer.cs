@@ -16,7 +16,7 @@ namespace Swampnet.Evl.Plugins.Email
     {
         // In: Event, ActionDefinition, Rule
         // Out: Subject, Html Body, Plain Body
-        XDocument Transform(Event evt, Rule rule, ActionDefinition action, string template);
+        XDocument Transform(EventDetails evt, Rule rule, ActionDefinition action, string template);
     }
 
 	[XmlRoot("Data")]
@@ -27,7 +27,7 @@ namespace Swampnet.Evl.Plugins.Email
 
 		}
 
-		public TemplateData(Event e, Rule rule, ActionDefinition action)
+		public TemplateData(EventDetails e, Rule rule, ActionDefinition action)
 			: this()
 		{
 			Event = e;
@@ -35,7 +35,7 @@ namespace Swampnet.Evl.Plugins.Email
 			Action = action;
 		}
 
-		public Event Event { get; set; }
+		public EventDetails Event { get; set; }
 		public Rule Rule { get; set; }
 		public ActionDefinition Action { get; set; }
 	}
@@ -45,7 +45,7 @@ namespace Swampnet.Evl.Plugins.Email
 	class TemplateTransformer : ITemplateTransformer
     {
 
-        public XDocument Transform(Event evt, Rule rule, ActionDefinition action, string template)
+        public XDocument Transform(EventDetails evt, Rule rule, ActionDefinition action, string template)
         {
             string transformed = null;
 

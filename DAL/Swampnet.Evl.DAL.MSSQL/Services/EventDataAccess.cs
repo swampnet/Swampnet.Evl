@@ -22,7 +22,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
             _cfg = cfg;
         }
 
-		public async Task<Guid> CreateAsync(Organisation org, Event evt)
+		public async Task<Guid> CreateAsync(Organisation org, EventDetails evt)
         {
             using(var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))
             {
@@ -36,13 +36,11 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
 
                 await context.SaveChangesAsync();
 
-                evt.Id = internalEvent.Id;
-
                 return internalEvent.Id;
             }
         }
 
-        public async Task<Event> ReadAsync(Organisation org, Guid id)
+        public async Task<EventDetails> ReadAsync(Organisation org, Guid id)
         {
             using (var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))
             {
@@ -58,7 +56,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
         }
 
 
-        public async Task UpdateAsync(Organisation org, Guid id, Event evt)
+        public async Task UpdateAsync(Organisation org, Guid id, EventDetails evt)
         {
             using (var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))
             {

@@ -3,6 +3,7 @@ using System.Linq;
 using Swampnet.Evl.Client;
 using System.Collections.Generic;
 using Swampnet.Evl.DAL.MSSQL.Entities;
+using Swampnet.Evl.Common.Entities;
 
 namespace Swampnet.Evl.DAL.MSSQL
 {
@@ -55,11 +56,11 @@ namespace Swampnet.Evl.DAL.MSSQL
         /// <summary>
         /// Convert an InternalEvent to an API Event 
         /// </summary>
-        internal static Event ToEvent(InternalEvent evt)
+        internal static EventDetails ToEvent(InternalEvent evt)
         {
             return evt == null 
                 ? null 
-                : new Event()
+                : new EventDetails()
                 {
                     Id = evt.Id,
                     Category = Enum.Parse<EventCategory>(evt.Category, true),

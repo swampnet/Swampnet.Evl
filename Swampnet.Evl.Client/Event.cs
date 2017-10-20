@@ -16,12 +16,15 @@ namespace Swampnet.Evl.Client
     /// <summary>
     /// An event
     /// </summary>
+    /// <remarks>
+    /// This is what the service receives from the client
+    /// </remarks>
 	public class Event
 	{
         /// <summary>
         /// Event Id
         /// </summary>
-        public Guid? Id { get; set; }
+        //public Guid? Id { get; set; }
 
         /// <summary>
         /// Event timestamp (UTC)

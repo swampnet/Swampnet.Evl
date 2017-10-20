@@ -57,6 +57,9 @@ namespace Swampnet.Evl.DAL.MSSQL
             modelBuilder.Entity<InternalEventTags>().ToTable("EventTags", EvlContext.SCHEMA);
             modelBuilder.Entity<InternalEventTags>().HasKey(x => new { x.EventId, x.InternalTagId });
 
+            modelBuilder.Entity<InternalActionProperties>().ToTable("ActionProperties", EvlContext.SCHEMA);
+            modelBuilder.Entity<InternalActionProperties>().HasKey(x => new { x.ActionId, x.InternalPropertyId });
+
             modelBuilder.Entity<InternalTag>().ToTable("Tag", EvlContext.SCHEMA);
             modelBuilder.Entity<InternalTag>().Property(f => f.Name).IsRequired().HasMaxLength(100);
             modelBuilder.Entity<InternalTag>().HasIndex(x => x.Name);
@@ -73,6 +76,14 @@ namespace Swampnet.Evl.DAL.MSSQL
             modelBuilder.Entity<InternalRule>().Property(f => f.ExpressionData).IsRequired().HasColumnType("xml");
             modelBuilder.Entity<InternalRule>().Property(f => f.Name).IsRequired();
             modelBuilder.Entity<InternalRule>().Property(f => f.IsActive).IsRequired();
+
+            modelBuilder.Entity<InternalTrigger>().ToTable("Trigger", EvlContext.SCHEMA);
+            modelBuilder.Entity<InternalTrigger>().Property(f => f.RuleName).IsRequired();
+            modelBuilder.Entity<InternalTrigger>().Property(f => f.TimestampUtc).IsRequired();
+
+            modelBuilder.Entity<InternalAction>().ToTable("Action", EvlContext.SCHEMA);
+            modelBuilder.Entity<InternalAction>().Property(f => f.Type).IsRequired();
+            modelBuilder.Entity<InternalAction>().Property(f => f.TimestampUtc).IsRequired();
         }
     }
 }

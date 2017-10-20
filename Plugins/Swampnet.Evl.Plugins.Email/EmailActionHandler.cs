@@ -72,7 +72,7 @@ namespace Swampnet.Evl.Plugins.Email
 		// @TODO: Apply should really be async
 		// @TODO: Actually, we really need the event ID as well (So we can reference it in the email template)
         //          - Sooner or later you're just going to have to have the ID on the event itself...
-		public async Task ApplyAsync(Event evt, ActionDefinition actionDefinition, Rule rule)
+		public async Task ApplyAsync(EventDetails evt, ActionDefinition actionDefinition, Rule rule)
 		{
 			var to = actionDefinition.Properties.StringValue("to");
 			var cc = actionDefinition.Properties.StringValue("cc");
@@ -138,7 +138,7 @@ namespace Swampnet.Evl.Plugins.Email
 			using (var client = new SmtpClient())
 			{
 				client.ServerCertificateValidationCallback = (s, c, h, e) => true;
-				client.Connect(host, Convert.ToInt32(port), true);
+				client.Connect(host, System.Convert.ToInt32(port), true);
 				client.AuthenticationMechanisms.Remove("XOAUTH2");
 
 				if(!string.IsNullOrEmpty(usr) && !string.IsNullOrEmpty(pwd))
