@@ -14,7 +14,7 @@ namespace Swampnet.Evl.DAL.MSSQL
         /// <summary>
         /// Convert an API Event to an InternalEvent
         /// </summary>
-        internal static InternalEvent ToEvent(Event evt, EvlContext context)
+        internal static InternalEvent ToEvent(EventDetails evt, EvlContext context)
         {
             InternalEvent e = null;
 
@@ -32,6 +32,7 @@ namespace Swampnet.Evl.DAL.MSSQL
 
                 e.AddProperties(evt.Properties);
                 e.AddTags(context, evt.Tags);
+                e.AddTriggers(evt.Triggers);
             }
 
             return e;
@@ -76,7 +77,45 @@ namespace Swampnet.Evl.DAL.MSSQL
                         ? null
                         : evt.InternalEventTags.Select(t => t.Tag.Name).ToList()
                 };
+            // @TODO: Triggers
         }
+
+
+        internal static InternalTrigger ToTrigger(Trigger source)
+        {
+            var trigger = new InternalTrigger();
+
+            trigger.RuleName = source.RuleName;
+            trigger.TimestampUtc = source.TimestampUtc;
+            trigger.Actions = source.Actions?.Select(a => Convert.ToAction(a)).ToList();
+
+            return trigger;
+        }
+
+
+        internal static InternalAction ToAction(TriggerAction source)
+        {
+            var action = new InternalAction();
+
+            action.TimestampUtc = source.TimestampUtc;
+            action.Type = source.Type;
+            action.Error = source.Error;
+
+            if(source.Properties != null)
+            {
+                foreach(var p in source.Properties)
+                {
+                    action.InternalActionProperties.Add(new InternalActionProperties()
+                    {
+                        Action = action,
+                        Property = Convert.ToInternalProperty(p)
+                    });
+                }
+            }
+
+            return action;
+        }
+
 
         /// <summary>
         /// Convert an InternalEvent to an EventSummary

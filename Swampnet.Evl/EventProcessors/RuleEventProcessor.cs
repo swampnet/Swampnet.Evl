@@ -48,9 +48,13 @@ namespace Swampnet.Evl.EventProcessors
                         if (expressionEvaluator.Evaluate(rule.Expression, evt))
                         {
                             evt.Properties.Add(new Property("Internal", "Rule Triggered", rule.Name));
+                            var trigger = new Trigger(rule.Name);
+
                             foreach (var action in rule.Actions)
                             {
                                 var key = action.Type.Replace("-", "").ToLower();
+
+                                var a = new TriggerAction(action);
 
                                 try
                                 {
@@ -60,17 +64,24 @@ namespace Swampnet.Evl.EventProcessors
                                     }
 
                                     await _actionHandlers[key].ApplyAsync(evt, action, rule);
-
-                                    evt.Properties.Add(new Property("Internal", "ActionApplied", action.Type));
                                 }
                                 catch (Exception ex)
                                 {
                                     ex.AddData("Action", action.Type);
                                     Log.Error(ex, ex.Message);
 
-                                    evt.Properties.Add(new Property("Internal", "ActionFailed", action.Type + $" ({ex.Message})"));
+                                    a.Error = ex.Message;
                                 }
+                                finally
+                                {
+                                    a.TimestampUtc = DateTime.UtcNow;
+                                }
+
+                                trigger.Actions.Add(a);
                             }
+
+                            // Add trigger to event
+                            evt.Triggers.Add(trigger);
 
                             // Stop processing a rule if it comes back true
                             rules.Remove(rule);
