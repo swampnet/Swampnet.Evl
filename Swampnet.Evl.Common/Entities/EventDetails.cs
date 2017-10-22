@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 
 namespace Swampnet.Evl.Common.Entities
 {
@@ -52,7 +53,7 @@ namespace Swampnet.Evl.Common.Entities
             : this()
         {
             Type = action.Type;
-            Properties = new List<Property>(action.Properties);
+            Properties = new List<Property>(action.Properties?.Where(p => !string.IsNullOrEmpty(p.Value)));
         }
 
         public DateTime TimestampUtc { get; set; }
