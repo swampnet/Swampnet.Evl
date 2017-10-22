@@ -1,6 +1,6 @@
 ﻿import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Event } from '../../entities/entities';
+import { EventDetails } from '../../entities/entities';
 import { ApiService } from '../../services/api.service';
 
 @Component({
@@ -8,7 +8,7 @@ import { ApiService } from '../../services/api.service';
     templateUrl: './event-details.component.html'
 })
 export class EventDetailsComponent {
-    event: Event;
+	event: EventDetails;
     private sub: any;
 
     constructor(
@@ -24,7 +24,7 @@ export class EventDetailsComponent {
         this.sub = this._route.params.subscribe(params => {
             let id = params['id'];
 
-            this._api.getEvent(id).then((res: Event) => {
+            this._api.getEvent(id).then((res: EventDetails) => {
                 this.event = res;
             }, (error) => {
                 console.log("Failed to get event", error._body, "error");

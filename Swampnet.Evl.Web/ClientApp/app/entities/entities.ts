@@ -85,13 +85,28 @@ export interface EventSearchCriteria {
     page?: number;
 }
 
-export interface Event {
+export interface TriggerAction{
+	timestampUtc: Date;
+	type: string;
+	error: string;
+	properties: Property[];
+}
+
+export interface Trigger {
+	timestampUtc: Date;
+	ruleName: string;
+	ruleId: string;
+	actions: TriggerAction[];
+}
+
+export interface EventDetails {
     id: string;
     category: string;
     summary: string;
     timestampUtc: Date;
 	properties: Property[];
 	tags: string[];
+	triggers: Trigger[];
 }
 
 export interface Cfg {
