@@ -26,6 +26,10 @@ namespace Swampnet.Evl.Controllers
             _auth = auth;
         }
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
         [HttpGet("categories")]
         public IActionResult GetCategories()
         {
@@ -103,7 +107,14 @@ namespace Swampnet.Evl.Controllers
             }
         }
 
-        [HttpGet("{id}", Name = "EventDetails")]
+		/// <summary>
+		/// Retrieves a specific event by unique id
+		/// </summary>
+		/// <remarks>Awesomeness!</remarks>
+		/// <response code="200">Event found</response>
+		/// <response code="400">Event has missing/invalid values</response>
+		/// <response code="500">Oops! Can't find your event right now</response>
+		[HttpGet("{id}", Name = "EventDetails")]
         public async Task<IActionResult> Get(Guid id)
         {
             try

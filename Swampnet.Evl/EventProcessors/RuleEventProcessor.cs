@@ -33,7 +33,6 @@ namespace Swampnet.Evl.EventProcessors
             if (rules.Any())
             {
                 var sw = Stopwatch.StartNew();
-                evt.Properties.Add(new Property("Internal", "Rules evaluated", rules.Count));
 
                 int count = int.MaxValue;
 
@@ -47,7 +46,6 @@ namespace Swampnet.Evl.EventProcessors
                     {
                         if (expressionEvaluator.Evaluate(rule.Expression, evt))
                         {
-                            evt.Properties.Add(new Property("Internal", "Rule Triggered", rule.Name));
                             var trigger = new Trigger(rule.Id.Value, rule.Name);
 
                             foreach (var action in rule.Actions)
@@ -91,8 +89,6 @@ namespace Swampnet.Evl.EventProcessors
                         }
                     }
                 }
-
-                evt.Properties.Add(new Property("Internal", "Rules evaluated (elapsed ms)", sw.Elapsed.TotalMilliseconds));
             }
         }
     }
