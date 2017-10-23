@@ -31,6 +31,14 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
             }
         }
 
+        public async Task<Organisation> LoadOrganisationAsync(Guid orgId)
+        {
+            using (var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))
+            {
+                var org = await context.Organisations.FirstOrDefaultAsync(o => o.Id == orgId);
 
+                return Convert.ToOrganisation(org);
+            }
+        }
     }
 }

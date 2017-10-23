@@ -8,9 +8,24 @@ using System.Threading.Tasks;
 
 namespace Swampnet.Evl.Services
 {
+    /// <summary>
+    /// Authentication
+    /// </summary>
     public interface IAuth
     {
+        /// <summary>
+        /// Get organisation from an api-key
+        /// </summary>
+        /// <param name="apiKey"></param>
+        /// <returns></returns>
         Task<Organisation> GetOrganisationByApiKeyAsync(Guid apiKey);
+
+        /// <summary>
+        /// Get organisation by id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        Task<Organisation> GetOrganisationAsync(Guid id);
     }
 
 
@@ -18,7 +33,8 @@ namespace Swampnet.Evl.Services
     class Auth : IAuth
     {
         private readonly IManagementDataAccess _managementData;
-        private readonly ConcurrentDictionary<Guid, Organisation> _cache = new ConcurrentDictionary<Guid, Organisation>();
+        private readonly ConcurrentDictionary<Guid, Organisation> _apiKeyCache = new ConcurrentDictionary<Guid, Organisation>();
+        private readonly ConcurrentDictionary<Guid, Organisation> _idCache = new ConcurrentDictionary<Guid, Organisation>();
 
         public Auth(IManagementDataAccess managementData)
         {
@@ -30,9 +46,9 @@ namespace Swampnet.Evl.Services
         {
             Organisation org = null;
 
-            if (_cache.ContainsKey(apiKey))
+            if (_apiKeyCache.ContainsKey(apiKey))
             {
-                org = _cache[apiKey];
+                org = _apiKeyCache[apiKey];
             }
             else
             {
@@ -40,7 +56,29 @@ namespace Swampnet.Evl.Services
 
                 if (org != null)
                 {
-                    _cache.TryAdd(apiKey, org);
+                    _apiKeyCache.TryAdd(apiKey, org);
+                }
+            }
+
+            return org;
+        }
+
+
+        public async Task<Organisation> GetOrganisationAsync(Guid id)
+        {
+            Organisation org = null;
+
+            if (_idCache.ContainsKey(id))
+            {
+                org = _idCache[id];
+            }
+            else
+            {
+                org = await _managementData.LoadOrganisationAsync(id);
+
+                if (org != null)
+                {
+                    _idCache.TryAdd(id, org);
                 }
             }
 

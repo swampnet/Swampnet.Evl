@@ -12,6 +12,9 @@ using System.Threading.Tasks;
 
 namespace Swampnet.Evl.Controllers
 {
+    /// <summary>
+    /// All thinkgs Event based
+    /// </summary>
     [Route("events")]
 	public class EventsController : Controller
 	{
@@ -19,6 +22,9 @@ namespace Swampnet.Evl.Controllers
         private readonly IEventDataAccess _dal;
         private readonly IAuth _auth;
 
+        /// <summary>
+        /// construction
+        /// </summary>
         public EventsController(IEventDataAccess dal, IEventQueueProcessor eventProcessor, IAuth auth)
         {
             _dal = dal;
@@ -27,7 +33,7 @@ namespace Swampnet.Evl.Controllers
         }
 
 		/// <summary>
-		/// 
+		/// Get all valid event categories
 		/// </summary>
 		/// <returns></returns>
         [HttpGet("categories")]
@@ -46,6 +52,13 @@ namespace Swampnet.Evl.Controllers
         }
 
 
+        /// <summary>
+        /// Get all event source values
+        /// </summary>
+        /// <remarks>
+        /// This is per-organisation
+        /// </remarks>
+        /// <returns></returns>
         [HttpGet("sources")]
         public async Task<IActionResult> GetSources()
         {
@@ -65,6 +78,13 @@ namespace Swampnet.Evl.Controllers
             }
         }
 
+        /// <summary>
+        /// Get all tags
+        /// </summary>
+        /// <remarks>
+        /// Enumerated all the tags used by this organisation
+        /// </remarks>
+        /// <returns></returns>
 		[HttpGet("tags")]
 		public async Task<IActionResult> GetTags()
 		{
@@ -85,6 +105,11 @@ namespace Swampnet.Evl.Controllers
 		}
 
 
+        /// <summary>
+        /// Event search
+        /// </summary>
+        /// <param name="criteria"></param>
+        /// <returns></returns>
 		[HttpGet]
         public async Task<IActionResult> Get([FromQuery] EventSearchCriteria criteria)
         {
@@ -110,7 +135,7 @@ namespace Swampnet.Evl.Controllers
 		/// <summary>
 		/// Retrieves a specific event by unique id
 		/// </summary>
-		/// <remarks>Awesomeness!</remarks>
+		/// <remarks>Returns an EventDetail object</remarks>
 		/// <response code="200">Event found</response>
 		/// <response code="400">Event has missing/invalid values</response>
 		/// <response code="500">Oops! Can't find your event right now</response>
@@ -139,8 +164,11 @@ namespace Swampnet.Evl.Controllers
         }
 
         /// <summary>
-        /// Main POST
+        /// Log an event
         /// </summary>
+        /// <remarks>
+        /// Event is inspected and processed offline
+        /// </remarks>
         /// <param name="e"></param>
         /// <returns></returns>
         [HttpPost]
@@ -200,6 +228,11 @@ namespace Swampnet.Evl.Controllers
         }
 
 
+        /// <summary>
+        /// Submit a batch of events
+        /// </summary>
+        /// <param name="evts"></param>
+        /// <returns></returns>
         [HttpPost("bulk")]
         public async Task<IActionResult> PostBulk([FromBody] IEnumerable<Event> evts)
         {

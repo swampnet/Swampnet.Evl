@@ -73,7 +73,7 @@ namespace Swampnet.Evl.DAL.MSSQL
         private static IEnumerable<Rule> _mockedRules = new[] {
             new Rule("Test Email")
             {
-                Id = Guid.NewGuid(),                
+                Id = Guid.NewGuid(),
                 IsActive = true,
 
                 Expression = new Expression(RuleOperatorType.MATCH_ALL)
@@ -127,6 +127,23 @@ namespace Swampnet.Evl.DAL.MSSQL
                     {
                         new Property("channel", "#general")
                     })
+                }
+            },
+
+            new Rule("Startup")
+            {
+                Id = Guid.NewGuid(),
+                IsActive = true,
+                Expression = new Expression(RuleOperatorType.MATCH_ALL)
+                {
+                    Children = new[]
+                    {
+                        new Expression(RuleOperatorType.TAGGED, "START")
+                    }
+                },
+                Actions = new[]
+                {
+                    new ActionDefinition("email", new[]{ new Property("to", "pj@theswamp.co.uk") })
                 }
             },
 

@@ -10,13 +10,20 @@ using System.Threading.Tasks;
 
 namespace Swampnet.Evl.Controllers
 {
+    /// <summary>
+    /// All things rule based
+    /// </summary>
     [Route("rules")]
     public class RulesController : Controller
     {
         private readonly IRuleDataAccess _rulesData;
 		private readonly IAuth _auth;
 
-
+        /// <summary>
+        /// Construction
+        /// </summary>
+        /// <param name="auth"></param>
+        /// <param name="rulesData"></param>
 		public RulesController(IAuth auth, IRuleDataAccess rulesData)
         {
 			_auth = auth;
@@ -24,7 +31,10 @@ namespace Swampnet.Evl.Controllers
         }
 
         
-        // GET rules
+        /// <summary>
+        /// Get all rules for the current organisation
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> Get()
         {
@@ -46,7 +56,11 @@ namespace Swampnet.Evl.Controllers
         }
 
 
-        // GET rules/<id>
+        /// <summary>
+        /// Get rule details
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("{id}", Name = "RuleDetails")]
         public async Task<IActionResult> Get(Guid id)
         {
@@ -73,7 +87,11 @@ namespace Swampnet.Evl.Controllers
         }
 
 
-        // POST rules
+        /// <summary>
+        /// Create a new rule
+        /// </summary>
+        /// <param name="rule"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] Rule rule)
         {
@@ -102,7 +120,14 @@ namespace Swampnet.Evl.Controllers
         }
 
 
-        // PUT rules/<id>
+        /// <summary>
+        /// Update an existing rule
+        /// 
+        /// PUT rules/{id}
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="rule"></param>
+        /// <returns></returns>
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(Guid id, [FromBody] Rule rule)
         {
@@ -144,7 +169,13 @@ namespace Swampnet.Evl.Controllers
         }
 
 
-        // DELETE rules/<id>
+        /// <summary>
+        /// Delete a rule
+        /// 
+        /// DELETE rules/{id}
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {

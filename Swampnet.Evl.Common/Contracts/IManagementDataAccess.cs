@@ -9,5 +9,6 @@ namespace Swampnet.Evl.Common.Contracts
     public interface IManagementDataAccess
     {
         Task<Organisation> LoadOrganisationByApiKeyAsync(Guid apiKey);
+        Task<Organisation> LoadOrganisationAsync(Guid orgId);
     }
 }

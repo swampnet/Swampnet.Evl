@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace Swampnet.Evl.Controllers
 {
+    /// <summary>
+    /// Meta data
+    /// </summary>
     [Route("meta")]
     public class MetaController : Controller
     {
@@ -17,6 +20,13 @@ namespace Swampnet.Evl.Controllers
         private readonly IEnumerable<IActionHandler> _actionHandlers;
         private readonly IAuth _auth;
 
+        /// <summary>
+        /// Construction
+        /// </summary>
+        /// <param name="eventDataAccess"></param>
+        /// <param name="ruleDataAccess"></param>
+        /// <param name="actionHandlers"></param>
+        /// <param name="auth"></param>
         public MetaController(
             IEventDataAccess eventDataAccess,
             IRuleDataAccess ruleDataAccess,
@@ -30,7 +40,10 @@ namespace Swampnet.Evl.Controllers
         }
 
 
-        // GET meta
+        /// <summary>
+        /// GET meta
+        /// </summary>
+        /// <returns>MetaData</returns>
         [HttpGet]
         public async Task<IActionResult> Get()
         {

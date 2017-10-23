@@ -11,18 +11,31 @@ using System.Threading.Tasks;
 
 namespace Swampnet.Evl.Controllers
 {
+    /// <summary>
+    /// Generic stats / debug info
+    /// </summary>
     [Route("stats")]
     public class StatsController : Controller
     {
         private readonly IEventDataAccess _dal;
         private readonly IAuth _auth;
 
+        /// <summary>
+        /// Construction
+        /// </summary>
+        /// <param name="dal"></param>
+        /// <param name="auth"></param>
         public StatsController(IEventDataAccess dal, IAuth auth)
         {
             _dal = dal;
             _auth = auth;
         }
 
+
+        /// <summary>
+        /// Get all current stats
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> Get()
         {

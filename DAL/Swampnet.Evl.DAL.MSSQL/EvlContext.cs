@@ -52,12 +52,15 @@ namespace Swampnet.Evl.DAL.MSSQL
             modelBuilder.Entity<InternalEvent>().Property(f => f.Summary).IsRequired();
 
             modelBuilder.Entity<InternalEventProperties>().ToTable("EventProperties", EvlContext.SCHEMA);
+            modelBuilder.Entity<InternalEventProperties>().Property(f => f.InternalPropertyId).HasColumnName("PropertyId");
             modelBuilder.Entity<InternalEventProperties>().HasKey(x => new { x.EventId, x.InternalPropertyId });
 
             modelBuilder.Entity<InternalEventTags>().ToTable("EventTags", EvlContext.SCHEMA);
+            modelBuilder.Entity<InternalEventTags>().Property(f => f.InternalTagId).HasColumnName("TagId");
             modelBuilder.Entity<InternalEventTags>().HasKey(x => new { x.EventId, x.InternalTagId });
 
             modelBuilder.Entity<InternalActionProperties>().ToTable("ActionProperties", EvlContext.SCHEMA);
+            modelBuilder.Entity<InternalActionProperties>().Property(f => f.InternalPropertyId).HasColumnName("PropertyId");
             modelBuilder.Entity<InternalActionProperties>().HasKey(x => new { x.ActionId, x.InternalPropertyId });
 
             modelBuilder.Entity<InternalTag>().ToTable("Tag", EvlContext.SCHEMA);
