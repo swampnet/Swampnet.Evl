@@ -12,7 +12,7 @@ namespace Swampnet.Evl.Actions
     {
         public string Type => "add-property";
 
-        public Task ApplyAsync(Event evt, ActionDefinition actionDefinition, Rule rule)
+        public Task ApplyAsync(EventDetails evt, ActionDefinition actionDefinition, Rule rule)
         {
             if(actionDefinition.Properties != null && actionDefinition.Properties.Any())
             {

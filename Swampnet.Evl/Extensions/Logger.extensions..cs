@@ -61,7 +61,7 @@ namespace Swampnet.Evl
                 {
                     try
                     {
-                        var id = await _dal.CreateAsync(null, evt);
+                        var id = await _dal.CreateAsync(null, Common.Convert.ToEventDetails(evt));
 
 						_eventProcessor.Enqueue(id);
                     }

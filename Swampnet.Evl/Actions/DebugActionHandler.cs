@@ -14,7 +14,7 @@ namespace Swampnet.Evl.Actions
     {
         public string Type => "debug";
 
-        public Task ApplyAsync(Event evt, ActionDefinition actionDefinition, Rule rule)
+        public Task ApplyAsync(EventDetails evt, ActionDefinition actionDefinition, Rule rule)
         {
             Log.Information("Debug Action Handler");
 

@@ -1,19 +1,21 @@
-﻿<div class="criteria">
-    <events-search-criteria [criteria]="criteria"></events-search-criteria>
-    <button type="button" class="btn btn-default" (click)="searchEvents()">search</button>
+﻿<div class="container-fluid">
+	<div class="criteria">
+		<events-search-criteria [criteria]="criteria"></events-search-criteria>
+		<button type="button" class="btn btn-default" (click)="searchEvents()">search</button>
+	</div>
+
+	<div *ngIf="events; else noResults">
+		<div class="row" *ngFor="let e of events" [ngClass]="e.category">
+			<div class="col-sm-2">{{e.timestampUtc | date: 'mediumTime'}}</div>
+			<div class="col-sm-3">{{e.source}}</div>
+			<div class="col-sm-6">{{e.summary}}</div>
+			<div class="col-sm-1"><a [routerLink]="['/events', e.id]">details</a></div>
+		</div>
+	</div>
+
+	<ng-template #noResults>
+		<div>No Results</div>
+	</ng-template>
+
+	<div><pre>{{criteria | json}}</pre></div>
 </div>
-
-<div *ngIf="events; else noResults" class="container-fluid">
-    <div class="row" *ngFor="let e of events" [ngClass]="e.category">
-        <div class="col-sm-2">{{e.timestampUtc | date: 'mediumTime'}}</div>
-		<div class="col-sm-3">{{e.source}}</div>
-        <div class="col-sm-6">{{e.summary}}</div>
-        <div class="col-sm-1"><a [routerLink]="['/events', e.id]">details</a></div>
-    </div>
-</div>
-
-<ng-template #noResults>
-    <div>No Results</div>
-</ng-template>
-
-<div><pre>{{criteria | json}}</pre></div>

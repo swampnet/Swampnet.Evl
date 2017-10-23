@@ -16,14 +16,14 @@ namespace Swampnet.Evl.Common.Contracts
         /// <param name="app"></param>
         /// <param name="evt"></param>
         /// <returns></returns>
-        Task<Guid> CreateAsync(Organisation org, Event evt);
+        Task<Guid> CreateAsync(Organisation org, EventDetails evt);
 
         /// <summary>
         /// Read an existing event from the backing store
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        Task<Event> ReadAsync(Organisation org, Guid id);
+        Task<EventDetails> ReadAsync(Organisation org, Guid id);
 
         /// <summary>
         /// Update an existing event
@@ -31,7 +31,7 @@ namespace Swampnet.Evl.Common.Contracts
         /// <param name="id"></param>
         /// <param name="evt"></param>
         /// <returns></returns>
-        Task UpdateAsync(Organisation org, Guid id, Event evt);
+        Task UpdateAsync(Organisation org, Guid id, EventDetails evt);
 
         Task<IEnumerable<EventSummary>> SearchAsync(Organisation org, EventSearchCriteria criteria);
 
@@ -41,7 +41,6 @@ namespace Swampnet.Evl.Common.Contracts
         /// <returns></returns>
         Task<IEnumerable<string>> GetSources(Organisation org);
 		Task<IEnumerable<string>> GetTags(Organisation org);
-
 		Task<long> GetTotalEventCountAsync(Organisation org);
     }
 }

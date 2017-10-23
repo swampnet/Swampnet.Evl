@@ -16,7 +16,7 @@ namespace Swampnet.Evl.DAL.InMemory.Services
 		private static readonly char[] _splitTags = new[] { ',' };
 
 
-		public async Task<Guid> CreateAsync(Organisation org, Event evt)
+		public async Task<Guid> CreateAsync(Organisation org, EventDetails evt)
         {
             using(var context = EventContext.Create())
             {
@@ -26,13 +26,11 @@ namespace Swampnet.Evl.DAL.InMemory.Services
 
                 await context.SaveChangesAsync();
 
-                evt.Id = internalEvent.Id;
-
                 return internalEvent.Id;
             }
         }
 
-        public async Task<Event> ReadAsync(Organisation org, Guid id)
+        public async Task<EventDetails> ReadAsync(Organisation org, Guid id)
         {
             using (var context = EventContext.Create())
             {
@@ -48,7 +46,7 @@ namespace Swampnet.Evl.DAL.InMemory.Services
         }
 
 
-        public async Task UpdateAsync(Organisation org, Guid id, Event evt)
+        public async Task UpdateAsync(Organisation org, Guid id, EventDetails evt)
         {
             using (var context = EventContext.Create())
             {

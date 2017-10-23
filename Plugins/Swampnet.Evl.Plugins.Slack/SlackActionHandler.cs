@@ -23,7 +23,7 @@ namespace Swampnet.Evl.Plugins.Slack
         public string Type => "slack";
 
 
-        public async Task ApplyAsync(Event evt, ActionDefinition actionDefinition, Rule rule)
+        public async Task ApplyAsync(EventDetails evt, ActionDefinition actionDefinition, Rule rule)
         {
             var msg = CreateSlackMessage(evt, actionDefinition, rule);
 
@@ -44,7 +44,7 @@ namespace Swampnet.Evl.Plugins.Slack
 
 
         // @TODO: Should probably be a service with templating and whatnopt.
-        private SlackMessage CreateSlackMessage(Event evt, ActionDefinition actionDefinition, Rule rule)
+        private SlackMessage CreateSlackMessage(EventDetails evt, ActionDefinition actionDefinition, Rule rule)
         {
 			return new SlackMessage()
 			{

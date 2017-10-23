@@ -5,6 +5,7 @@ using Swampnet.Evl.Common.Entities;
 using Swampnet.Evl.Services;
 using Swampnet.Evl.EventProcessors;
 using Swampnet.Evl.Client;
+using System;
 
 namespace UnitTests
 {
@@ -21,7 +22,8 @@ namespace UnitTests
                     // Rule: Change 'information' category to 'debug'
                     new Rule()
                     {
-                        Expression = new Expression(RuleOperatorType.EQ, RuleOperandType.Category, EventCategory.Information),
+						Id = Guid.NewGuid(),
+						Expression = new Expression(RuleOperatorType.EQ, RuleOperandType.Category, EventCategory.Information),
                         Actions = new[]
                         {
                             new ActionDefinition(
@@ -57,6 +59,7 @@ namespace UnitTests
                     //       rule to actually *change* the category to that!
                     new Rule()
                     {
+						Id = Guid.NewGuid(),
                         Expression = new Expression(RuleOperatorType.EQ, RuleOperandType.Category, EventCategory.Debug),
                         Actions = new[]
                         {
@@ -72,7 +75,8 @@ namespace UnitTests
                     // Rule: Change 'information' category to 'debug'
                     new Rule()
                     {
-                        Expression = new Expression(RuleOperatorType.EQ, RuleOperandType.Category, EventCategory.Information),
+						Id = Guid.NewGuid(),
+						Expression = new Expression(RuleOperatorType.EQ, RuleOperandType.Category, EventCategory.Information),
                         Actions = new[]
                         {
                             new ActionDefinition(

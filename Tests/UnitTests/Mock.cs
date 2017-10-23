@@ -14,9 +14,9 @@ namespace UnitTests
 {
     static class Mock
     {
-        public static Event Event()
+        public static EventDetails Event()
         {
-            return new Event()
+            return new EventDetails()
             {
                 Source = "source",
                 Category = EventCategory.Information,

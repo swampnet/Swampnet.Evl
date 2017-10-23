@@ -24,7 +24,7 @@ namespace Swampnet.Evl.EventProcessors
             _actionHandlers = actionHandlers.ToDictionary(a => a.GetType().Name.Replace("ActionHandler", "").ToLower());
         }
 
-        public async Task ProcessAsync(Event evt)
+        public async Task ProcessAsync(EventDetails evt)
         {
             var rules = new List<Rule>(await _loader.LoadAsync(null));
 
@@ -33,7 +33,6 @@ namespace Swampnet.Evl.EventProcessors
             if (rules.Any())
             {
                 var sw = Stopwatch.StartNew();
-                evt.Properties.Add(new Property("Internal", "Rules evaluated", rules.Count));
 
                 int count = int.MaxValue;
 
@@ -47,10 +46,13 @@ namespace Swampnet.Evl.EventProcessors
                     {
                         if (expressionEvaluator.Evaluate(rule.Expression, evt))
                         {
-                            evt.Properties.Add(new Property("Internal", "Rule Triggered", rule.Name));
+                            var trigger = new Trigger(rule.Id.Value, rule.Name);
+
                             foreach (var action in rule.Actions)
                             {
                                 var key = action.Type.Replace("-", "").ToLower();
+
+                                var a = new TriggerAction(action);
 
                                 try
                                 {
@@ -60,17 +62,24 @@ namespace Swampnet.Evl.EventProcessors
                                     }
 
                                     await _actionHandlers[key].ApplyAsync(evt, action, rule);
-
-                                    evt.Properties.Add(new Property("Internal", "ActionApplied", action.Type));
                                 }
                                 catch (Exception ex)
                                 {
                                     ex.AddData("Action", action.Type);
                                     Log.Error(ex, ex.Message);
 
-                                    evt.Properties.Add(new Property("Internal", "ActionFailed", action.Type + $" ({ex.Message})"));
+                                    a.Error = ex.Message;
                                 }
+                                finally
+                                {
+                                    a.TimestampUtc = DateTime.UtcNow;
+                                }
+
+                                trigger.Actions.Add(a);
                             }
+
+                            // Add trigger to event
+                            evt.Triggers.Add(trigger);
 
                             // Stop processing a rule if it comes back true
                             rules.Remove(rule);
@@ -80,8 +89,6 @@ namespace Swampnet.Evl.EventProcessors
                         }
                     }
                 }
-
-                evt.Properties.Add(new Property("Internal", "Rules evaluated (elapsed ms)", sw.Elapsed.TotalMilliseconds));
             }
         }
     }

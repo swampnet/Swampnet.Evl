@@ -1,6 +1,4 @@
-﻿<h1>Rules</h1>
-
-<div *ngIf="rules; else noRulesTemplate">
+﻿<div *ngIf="rules; else noRulesTemplate">
     <div class="container-fluid">
         <div *ngFor="let r of rules">
             <div *ngIf="r.isActive" class="row rule-panel mouse-pointer" [routerLink]="['/rules', r.id]">

@@ -24,6 +24,24 @@
 		</div>
 	</div>
 
+	<div *ngIf="event.triggers && event.triggers.length > 0">
+		<h3>Triggers</h3>
+		<div *ngFor="let t of event.triggers">
+			<div class="row">
+				<div class="col-sm-4 property-name">{{t.ruleName}}</div>
+				<div class="col-sm-8">
+					<div *ngFor="let a of t.actions">
+						<div><h4>{{a.type}}</h4></div>
+						<div *ngFor="let p of a.properties">
+							<span>{{p.name}}:</span>
+							<span>{{p.value}}</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
 </div>
 
 

@@ -22,7 +22,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
             _cfg = cfg;
         }
 
-		public async Task<Guid> CreateAsync(Organisation org, Event evt)
+		public async Task<Guid> CreateAsync(Organisation org, EventDetails evt)
         {
             using(var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))
             {
@@ -36,13 +36,11 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
 
                 await context.SaveChangesAsync();
 
-                evt.Id = internalEvent.Id;
-
                 return internalEvent.Id;
             }
         }
 
-        public async Task<Event> ReadAsync(Organisation org, Guid id)
+        public async Task<EventDetails> ReadAsync(Organisation org, Guid id)
         {
             using (var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))
             {
@@ -51,14 +49,18 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
                         .ThenInclude(p => p.Property)
                     .Include(e => e.InternalEventTags)
                         .ThenInclude(t => t.Tag)
-                    .SingleOrDefaultAsync(e => e.Id == id);
+					.Include(e => e.Triggers)
+						.ThenInclude(t => t.Actions)
+						.ThenInclude(t => t.InternalActionProperties)
+						.ThenInclude(t => t.Property)
+					.SingleOrDefaultAsync(e => e.Id == id);
 
                 return Convert.ToEvent(evt);
             }
         }
 
 
-        public async Task UpdateAsync(Organisation org, Guid id, Event evt)
+        public async Task UpdateAsync(Organisation org, Guid id, EventDetails evt)
         {
             using (var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))
             {
@@ -67,6 +69,10 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
                         .ThenInclude(p => p.Property)
                     .Include(e => e.InternalEventTags)
                         .ThenInclude(t => t.Tag)
+					.Include(e => e.Triggers)
+						.ThenInclude(t => t.Actions)
+						.ThenInclude(t => t.InternalActionProperties)
+						.ThenInclude(t => t.Property)
                     .SingleOrDefaultAsync(e => e.Id == id);
 
                 if (internalEvent == null)
@@ -80,7 +86,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
 
                 internalEvent.AddProperties(evt.Properties);
                 internalEvent.AddTags(context, evt.Tags);
-
+				internalEvent.AddTriggers(evt.Triggers);
                 // @TODO: We should be able to remove tags that don't exist as well
 
                 await context.SaveChangesAsync();

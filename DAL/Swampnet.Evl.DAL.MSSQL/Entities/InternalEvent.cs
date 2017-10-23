@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 using Swampnet.Evl.Client;
+using Swampnet.Evl.Common.Entities;
 
 namespace Swampnet.Evl.DAL.MSSQL.Entities
 {
@@ -36,6 +37,8 @@ namespace Swampnet.Evl.DAL.MSSQL.Entities
 
         public List<InternalEventTags> InternalEventTags { get; set; }
 
+        public List<InternalTrigger> Triggers { get; set; }
+
         public string Source { get; set; }
 
         public string SourceVersion { get; set; }
@@ -53,6 +56,28 @@ namespace Swampnet.Evl.DAL.MSSQL.Entities
 
             return tags;
         }
+
+        internal void AddTriggers(IEnumerable<Trigger> triggers)
+        {
+			if(triggers != null)
+			{
+				foreach(var trigger in triggers)
+				{
+					AddTrigger(trigger);
+				}
+			}
+        }
+
+        internal void AddTrigger(Trigger trigger)
+        {
+            if(Triggers == null)
+            {
+                Triggers = new List<InternalTrigger>();
+            }
+
+            Triggers.Add(Convert.ToTrigger(trigger));
+        }
+
 
         internal void AddTag(EvlContext context, string tag)
         {

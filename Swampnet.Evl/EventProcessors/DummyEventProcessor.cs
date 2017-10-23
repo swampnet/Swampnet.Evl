@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Swampnet.Evl.Client;
 using Serilog;
+using Swampnet.Evl.Common.Entities;
 
 namespace Swampnet.Evl.EventProcessors
 {
@@ -12,7 +13,7 @@ namespace Swampnet.Evl.EventProcessors
     {
         public int Priority => 0;
 
-        public Task ProcessAsync(Event evt)
+        public Task ProcessAsync(EventDetails evt)
         {
             //Log.Information("Processing evt {EventSummary} {Processor}", evt.Summary, this.GetType().Name);
             return Task.CompletedTask;
@@ -23,7 +24,7 @@ namespace Swampnet.Evl.EventProcessors
     {
         public int Priority => 0;
 
-        public Task ProcessAsync(Event evt)
+        public Task ProcessAsync(EventDetails evt)
         {
             //Log.Information("Processing evt {EventSummary} {Processor}", evt.Summary, this.GetType().Name);
             return Task.CompletedTask;
