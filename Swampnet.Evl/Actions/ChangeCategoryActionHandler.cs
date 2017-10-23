@@ -31,6 +31,7 @@ namespace Swampnet.Evl.Actions
                 new MetaDataCapture()
                 {
                     Name = "Category",
+                    Description = "Category",
                     IsRequired = true,
                     DataType = "select",
                     Options = new[]

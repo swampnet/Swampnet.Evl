@@ -37,6 +37,7 @@ namespace Swampnet.Evl.Plugins.Slack
                 new MetaDataCapture()
                 {
                     Name = "channel",
+                    Description = "Slack #channel or @usr",
                     IsRequired = true
                 }
             };

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Swampnet.Evl.Services
@@ -32,9 +33,34 @@ namespace Swampnet.Evl.Services
 
     class Auth : IAuth
     {
+        class CachedOrganisation
+        {
+            private TimeSpan _ttl = TimeSpan.FromMinutes(5);
+
+            public CachedOrganisation(Organisation org)
+            {
+                Organisation = org;
+                CreatedOn = DateTime.UtcNow;
+            }
+
+
+            public Organisation Organisation { get; private set; }
+            public DateTime CreatedOn { get; set; }
+
+            public bool IsExpired
+            {
+                get { return Age > _ttl; }
+            }
+
+            public TimeSpan Age
+            {
+                get { return (DateTime.UtcNow - CreatedOn); }
+            }
+        }
+
         private readonly IManagementDataAccess _managementData;
-        private readonly ConcurrentDictionary<Guid, Organisation> _apiKeyCache = new ConcurrentDictionary<Guid, Organisation>();
-        private readonly ConcurrentDictionary<Guid, Organisation> _idCache = new ConcurrentDictionary<Guid, Organisation>();
+        private readonly ConcurrentDictionary<Guid, CachedOrganisation> _apiKeyCache = new ConcurrentDictionary<Guid, CachedOrganisation>();
+        private readonly ConcurrentDictionary<Guid, CachedOrganisation> _idCache = new ConcurrentDictionary<Guid, CachedOrganisation>();
 
         public Auth(IManagementDataAccess managementData)
         {
@@ -44,7 +70,7 @@ namespace Swampnet.Evl.Services
 
         public async Task<Organisation> GetOrganisationByApiKeyAsync(Guid apiKey)
         {
-            Organisation org = null;
+            CachedOrganisation org = null;
 
             if (_apiKeyCache.ContainsKey(apiKey))
             {
@@ -52,37 +78,37 @@ namespace Swampnet.Evl.Services
             }
             else
             {
-                org = await _managementData.LoadOrganisationByApiKeyAsync(apiKey);
+                var o = await _managementData.LoadOrganisationByApiKeyAsync(apiKey);
 
-                if (org != null)
+                if (o != null)
                 {
-                    _apiKeyCache.TryAdd(apiKey, org);
+                    _apiKeyCache.TryAdd(apiKey, new CachedOrganisation(o));
                 }
             }
 
-            return org;
+            return org?.Organisation;
         }
 
 
         public async Task<Organisation> GetOrganisationAsync(Guid id)
         {
-            Organisation org = null;
+            CachedOrganisation org = null;
 
-            if (_idCache.ContainsKey(id))
+            if (_apiKeyCache.ContainsKey(id))
             {
-                org = _idCache[id];
+                org = _apiKeyCache[id];
             }
             else
             {
-                org = await _managementData.LoadOrganisationAsync(id);
+                var o = await _managementData.LoadOrganisationByApiKeyAsync(id);
 
-                if (org != null)
+                if (o != null)
                 {
-                    _idCache.TryAdd(id, org);
+                    _apiKeyCache.TryAdd(id, new CachedOrganisation(o));
                 }
             }
 
-            return org;
+            return org?.Organisation;
         }
     }
 }

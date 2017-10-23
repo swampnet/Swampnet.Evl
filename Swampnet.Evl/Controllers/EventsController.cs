@@ -32,10 +32,10 @@ namespace Swampnet.Evl.Controllers
             _auth = auth;
         }
 
-		/// <summary>
-		/// Get all valid event categories
-		/// </summary>
-		/// <returns></returns>
+        /// <summary>
+        /// Get all valid event categories
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("categories")]
         public IActionResult GetCategories()
         {
@@ -77,6 +77,7 @@ namespace Swampnet.Evl.Controllers
                 return this.InternalServerError(ex);
             }
         }
+
 
         /// <summary>
         /// Get all tags
@@ -132,10 +133,11 @@ namespace Swampnet.Evl.Controllers
             }
         }
 
+
 		/// <summary>
 		/// Retrieves a specific event by unique id
 		/// </summary>
-		/// <remarks>Returns an EventDetail object</remarks>
+		/// <remarks>EventDetail</remarks>
 		/// <response code="200">Event found</response>
 		/// <response code="400">Event has missing/invalid values</response>
 		/// <response code="500">Oops! Can't find your event right now</response>
@@ -162,6 +164,7 @@ namespace Swampnet.Evl.Controllers
                 return this.InternalServerError(ex);
             }
         }
+
 
         /// <summary>
         /// Log an event

@@ -68,10 +68,6 @@ namespace Swampnet.Evl.Plugins.Email
 
         public string Type => "email";
 
-		// @TODO: Add some kind of audit against the event to show we sent an email and to who (and what rule triggered it).
-		// @TODO: Apply should really be async
-		// @TODO: Actually, we really need the event ID as well (So we can reference it in the email template)
-        //          - Sooner or later you're just going to have to have the ID on the event itself...
 		public async Task ApplyAsync(EventDetails evt, ActionDefinition actionDefinition, Rule rule)
 		{
 			var to = actionDefinition.Properties.StringValue("to");
@@ -159,6 +155,7 @@ namespace Swampnet.Evl.Plugins.Email
                 new MetaDataCapture()
                 {
                     Name = "to",
+                    Description = "To",
                     IsRequired = true,
                     Options = new[]
                     {
@@ -168,6 +165,7 @@ namespace Swampnet.Evl.Plugins.Email
                 new MetaDataCapture()
                 {
                     Name = "cc",
+                    Description = "CC",
                     IsRequired = false,
                     Options = new[]
                     {
@@ -177,12 +175,50 @@ namespace Swampnet.Evl.Plugins.Email
                 new MetaDataCapture()
                 {
                     Name = "bcc",
+                    Description = "BCC",
                     IsRequired = false,
                     Options = new[]
                     {
                         new Option(null, ".*@.*")
                     }
                 },
+
+                new MetaDataCapture()
+                {
+                    Name = "from-address",
+                    Description = "From (email)",
+                    IsRequired = false
+                },
+                new MetaDataCapture()
+                {
+                    Name = "from-name",
+                    Description = "From (name)",
+                    IsRequired = false
+                },
+                new MetaDataCapture()
+                {
+                    Name = "host",
+                    Description = "SMTP Host",
+                    IsRequired = false
+                },
+                new MetaDataCapture()
+                {
+                    Name = "port",
+                    Description = "SMTP Port",
+                    IsRequired = false
+                },
+                new MetaDataCapture()
+                {
+                    Name = "usr",
+                    Description = "SMTP Username",
+                    IsRequired = false
+                },
+                new MetaDataCapture()
+                {
+                    Name = "pwd",
+                    Description = "SMTP Password",
+                    IsRequired = false
+                }
             };
         }
     }

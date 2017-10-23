@@ -34,6 +34,7 @@ namespace Swampnet.Evl.Actions
                 new MetaDataCapture()
                 {
                     Name = "tag",
+                    Description = "Tag",
                     IsRequired = true,
                 }
             };
@@ -64,6 +65,7 @@ namespace Swampnet.Evl.Actions
                 new MetaDataCapture()
                 {
                     Name = "tag",
+                    Description = "Tag",
                     IsRequired = true,
                 }
             };
