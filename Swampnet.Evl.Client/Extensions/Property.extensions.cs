@@ -56,7 +56,7 @@ namespace Swampnet.Evl
             if(properties != null && properties.Any())
             {
                 var p = properties.SingleOrDefault(x => x.Name.EqualsNoCase(name));
-                if (p != null)
+                if (p != null && !string.IsNullOrEmpty(p.Value))
                 {
                     v = p.Value;
                 }

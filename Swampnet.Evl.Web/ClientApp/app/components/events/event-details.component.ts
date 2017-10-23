@@ -5,7 +5,8 @@ import { ApiService } from '../../services/api.service';
 
 @Component({
     selector: 'event-details',
-    templateUrl: './event-details.component.html'
+	templateUrl: './event-details.component.html',
+	styleUrls: ['./event-details.component.css']
 })
 export class EventDetailsComponent {
 	event: EventDetails;

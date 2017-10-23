@@ -2,24 +2,24 @@
 	<h1>{{event.summary}}</h1>
 	<div class="row">
 		<div class="col-sm-4 property-name">TimestampUtc</div>
-		<div class="col-sm-8">{{event.timestampUtc | date: 'medium'}}</div>
+		<div class="col-sm-8 property-value">{{event.timestampUtc | date: 'medium'}}</div>
 	</div>	
 
 	<div class="row">
 		<div class="col-sm-4 property-name">Category</div>
-		<div class="col-sm-8">{{event.category}}</div>
+		<div class="col-sm-8 property-value">{{event.category}}</div>
 	</div>	
 
-	<div class="row" *ngFor="let p of event.properties">
+	<div class="row properties" *ngFor="let p of event.properties">
 		<div class="col-sm-4 property-name">{{p.name}}</div>
-		<div class="col-sm-8">{{p.value}}</div>
+		<div class="col-sm-8 property-value">{{p.value}}</div>
 	</div>	
 
-	<div *ngIf="event.tags" class="row">
+	<div *ngIf="event.tags" class="row tags">
 		<div class="col-sm-4 property-name">Tags</div>
 		<div class="col-sm-8">
 			<div *ngFor="let t of event.tags">
-				{{t}}
+				<div class="property-value">{{t}}</div>
 			</div>
 		</div>
 	</div>
@@ -27,14 +27,18 @@
 	<div *ngIf="event.triggers && event.triggers.length > 0">
 		<h3>Triggers</h3>
 		<div *ngFor="let t of event.triggers">
-			<div class="row">
-				<div class="col-sm-4 property-name">{{t.ruleName}}</div>
-				<div class="col-sm-8">
+			<div class="panel panel-default">
+				<div class="panel-heading mouse-pointer" [routerLink]="['/rules', t.ruleId]">{{t.ruleName}}</div>
+				<div class="panel-body">
 					<div *ngFor="let a of t.actions">
-						<div><h4>{{a.type}}</h4></div>
-						<div *ngFor="let p of a.properties">
-							<span>{{p.name}}:</span>
-							<span>{{p.value}}</span>
+						<div class="row action">
+							<div class="col-sm-2"><strong>{{a.type}}</strong></div>
+							<div class="col-sm-10 properties">
+								<div class="row" *ngFor="let p of a.properties">
+									<div class="col-sm-4 property-name">{{p.name}}</div>
+									<div class="col-sm-8 property-value">{{p.value}}</div>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
