@@ -12,6 +12,8 @@ namespace Swampnet.Evl.Actions
     {
         public string Type => "add-tag";
 
+        public string Description => "Add a tag to the event";
+
         public Task ApplyAsync(EventDetails evt, ActionDefinition actionDefinition, Rule rule)
         {
             if (actionDefinition.Properties != null && actionDefinition.Properties.Any())
@@ -44,6 +46,8 @@ namespace Swampnet.Evl.Actions
     class RemoveTagActionHandler : IActionHandler
     {
         public string Type => "remove-tag";
+
+        public string Description => "Remove a tag from the event";
 
         public Task ApplyAsync(EventDetails evt, ActionDefinition actionDefinition, Rule rule)
         {

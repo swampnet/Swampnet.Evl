@@ -21,7 +21,6 @@ namespace Swampnet.Evl.Controllers
         /// <summary>
         /// Construction
         /// </summary>
-        /// <param name="managementData"></param>
         public OrganisationController(IManagementDataAccess managementData, IAuth auth)
         {
             _managementData = managementData;

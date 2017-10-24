@@ -18,7 +18,7 @@ namespace Swampnet.Evl
     /// <summary>
     /// Logging / Serilog extensions
     /// </summary>
-    public static class LoggerExtensions
+    internal static class LoggerExtensions
     {
         public static LoggerConfiguration LocalEvlSink(
                 this LoggerSinkConfiguration loggerConfiguration,

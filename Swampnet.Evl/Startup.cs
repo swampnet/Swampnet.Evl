@@ -19,16 +19,28 @@ using System.Collections.Generic;
 
 namespace Swampnet.Evl
 {
+    /// <summary>
+    /// Swampnet.Evl startup
+    /// </summary>
     public class Startup
     {
+        private readonly IConfiguration _configuration;
+
+        /// <summary>
+        /// Called by the runtime
+        /// </summary>
+        /// <param name="configuration"></param>
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            _configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
+
+        /// <summary>
+        /// This method gets called by the runtime. Use this method to add services to the container.
+        /// </summary>
+        /// <param name="services"></param>
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<IEventQueueProcessor, EventQueueProcessor>();
@@ -72,15 +84,10 @@ namespace Swampnet.Evl
 			});
 		}
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="app"></param>
-		/// <param name="env"></param>
-		/// <param name="appLifetime"></param>
-		/// <param name="dal"></param>
-		/// <param name="eventProcessor"></param>
+
+        /// <summary>
+        /// This method gets called by the runtime. Use this method to configure the HTTP request pipeline. 
+        /// </summary>
         public void Configure(
             IApplicationBuilder app,
             IHostingEnvironment env,
@@ -128,33 +135,4 @@ namespace Swampnet.Evl
                 .Information("Start");
         }
     }
-
-	//class MyOpFil : IOperationFilter
-	//{
-	//	public void Apply(Operation operation, OperationFilterContext context)
-	//	{
-	//		if (operation.Parameters == null)
-	//		{
-	//			operation.Parameters = new List<IParameter>();
-	//		}
-
-	//		operation.Parameters.Add(new Peepee()
-	//		{
-	//			Name = "Foo-Header",
-	//			In = "header",
-	//			Description = "some description",
-	//			Required = false
-	//		});
-	//	}
-	//}
-
-	//class Peepee : IParameter
-	//{
-	//	public string Name { get; set; }
-	//	public string In { get; set; }
-	//	public string Description { get; set; }
-	//	public bool Required { get; set; }
-
-	//	public Dictionary<string, object> Extensions => null;
-	//}
 }

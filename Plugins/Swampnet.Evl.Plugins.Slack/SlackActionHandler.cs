@@ -22,6 +22,7 @@ namespace Swampnet.Evl.Plugins.Slack
 
         public string Type => "slack";
 
+        public string Description => "Send a notification to a slack channel or user";
 
         public async Task ApplyAsync(EventDetails evt, ActionDefinition actionDefinition, Rule rule)
         {

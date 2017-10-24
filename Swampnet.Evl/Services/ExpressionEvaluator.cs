@@ -112,7 +112,7 @@ namespace Swampnet.Evl.Services
         /// LT - Less than
         /// </summary>
         /// <remarks>
-        /// Currently only supports numeric & dates
+        /// Currently only supports numeric and dates
         /// </remarks>
         private bool Lt(string operand, string value)
         {
@@ -133,7 +133,7 @@ namespace Swampnet.Evl.Services
         /// GT - Greater than
         /// </summary>
         /// <remarks>
-        /// Currently only supports numeric & dates
+        /// Currently only supports numeric and dates
         /// </remarks>
         private bool Gt(string operand, string value)
         {
