@@ -68,8 +68,6 @@ namespace Swampnet.Evl.Plugins.Email
 
         public string Type => "email";
 
-        public string Description => "Send an email to one or more recipients";
-
         public async Task ApplyAsync(EventDetails evt, ActionDefinition actionDefinition, Rule rule)
 		{
 			var to = actionDefinition.Properties.StringValue("to");

@@ -12,8 +12,6 @@ namespace Swampnet.Evl.Actions
     {
         public string Type => "add-property";
 
-        public string Description => "Add a property to the event";
-
         public Task ApplyAsync(EventDetails evt, ActionDefinition actionDefinition, Rule rule)
         {
             if(actionDefinition.Properties != null && actionDefinition.Properties.Any())

@@ -13,8 +13,6 @@ namespace Swampnet.Evl.Actions
     {
         public string Type => "change-category";
 
-        public string Description => "Change the event category";
-
 
         public Task ApplyAsync(EventDetails evt, ActionDefinition actionDefinition, Rule rule)
         {

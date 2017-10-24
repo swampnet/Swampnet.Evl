@@ -25,7 +25,7 @@ namespace Swampnet.Evl.Controllers
         /// <summary>
         /// construction
         /// </summary>
-        internal EventsController(IEventDataAccess dal, IEventQueueProcessor eventProcessor, IAuth auth)
+        public EventsController(IEventDataAccess dal, IEventQueueProcessor eventProcessor, IAuth auth)
         {
             _dal = dal;
             _eventProcessor = eventProcessor;

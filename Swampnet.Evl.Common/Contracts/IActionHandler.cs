@@ -15,11 +15,6 @@ namespace Swampnet.Evl.Common.Contracts
         string Type { get; }
 
         /// <summary>
-        /// Action description
-        /// </summary>
-        string Description { get; }
-
-        /// <summary>
         /// 
         /// </summary>
         /// <param name="evt">The event that triggered this action</param>
