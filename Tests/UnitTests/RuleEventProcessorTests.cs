@@ -1,8 +1,7 @@
-﻿using System.Linq;
+﻿using UnitTests.Mocks;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Swampnet.Evl.Common;
 using Swampnet.Evl.Common.Entities;
-using Swampnet.Evl.Services;
 using Swampnet.Evl.EventProcessors;
 using Swampnet.Evl.Client;
 using System;

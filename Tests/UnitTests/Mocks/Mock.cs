@@ -8,9 +8,10 @@ using Swampnet.Evl.Actions;
 using Swampnet.Evl.Client;
 using System.Threading.Tasks;
 using Serilog;
-using UnitTests.Mocks;
+using Swampnet.Evl.Services;
+using Swampnet.Evl.Contracts;
 
-namespace UnitTests
+namespace UnitTests.Mocks
 {
     static class Mock
     {
@@ -25,6 +26,7 @@ namespace UnitTests
                 Tags = new List<string>(Mock.Tags())
             };
         }
+
 
         internal static ILogger Logger()
         {
@@ -70,45 +72,30 @@ namespace UnitTests
             };
         }
 
-
-        private class MockedRuleLoader : IRuleDataAccess
+        internal static IEventQueueProcessor EventQueueProcessor()
         {
-            private readonly IEnumerable<Rule> _rules;
+            return new MockedEventQueueProcessor();
+        }
 
-            public MockedRuleLoader(IEnumerable<Rule> rules)
-            {
-                _rules = rules;
-            }
+        internal static IAuth Auth()
+        {
+            return new MockedAuth();
+        }
 
-            public Task CreateAsync(Organisation org, Rule rule)
-            {
-                throw new NotImplementedException();
-            }
+        internal static IEventDataAccess EventDataAccess()
+        {
+            return new MockedEventDataAccess();
+        }
 
-            public Task DeleteAsync(Organisation org, Guid id)
+        internal static Organisation MockedOrganisation()
+        {
+            return new Organisation()
             {
-                throw new NotImplementedException();
-            }
-
-            public Task<Rule> LoadAsync(Organisation org, Guid id)
-            {
-                throw new NotImplementedException();
-            }
-
-            public Task<IEnumerable<Rule>> LoadAsync(Organisation org)
-            {
-                return Task.Run(() => _rules);
-            }
-
-            public Task<IEnumerable<RuleSummary>> SearchAsync(Organisation org)
-            {
-                throw new NotImplementedException();
-            }
-
-            public Task UpdateAsync(Organisation org, Rule rule)
-            {
-                throw new NotImplementedException();
-            }
+                ApiKey = Guid.NewGuid(),
+                Id = Guid.NewGuid(),
+                Name = "mocked-org",
+                Description = "Mocked Organisation"
+            };
         }
     }
 }

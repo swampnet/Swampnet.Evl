@@ -1,7 +1,6 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using UnitTests.Mocks;
+﻿using UnitTests.Mocks;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Swampnet.Evl;
-using Serilog;
 using Swampnet.Evl.Client;
 using System.Linq;
 using Serilog.Sinks.Evl;

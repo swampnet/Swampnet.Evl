@@ -1,10 +1,9 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using UnitTests.Mocks;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Swampnet.Evl;
 using Swampnet.Evl.Client;
-using Swampnet.Evl.Common;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace UnitTests
 {

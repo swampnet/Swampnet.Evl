@@ -1,15 +1,12 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using UnitTests.Mocks;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Swampnet.Evl.Client;
-using Swampnet.Evl.Common;
 using Swampnet.Evl.Common.Entities;
 using Swampnet.Evl.Services;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace UnitTests
 {
-	[TestClass]
+    [TestClass]
 	public class ExpressionEvaluatorTests
     {
 		// Test basic EQ operator
