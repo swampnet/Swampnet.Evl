@@ -26,11 +26,9 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
         {
             using(var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))
             {
-                var internalEvent = Convert.ToEvent(evt, context);
+                var internalEvent = Convert.ToEvent(org, evt, context);
+
                 internalEvent.Id = Guid.NewGuid();
-                internalEvent.OrganisationId = org == null 
-                                                ? Constants.MOCKED_DEFAULT_ORGANISATION 
-                                                : org.Id;
 
                 context.Events.Add(internalEvent);
 
@@ -40,6 +38,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
             }
         }
 
+        // @TODO: We're not using org.id atm - reason being that for some internal operations we don't have an organisation
         public async Task<EventDetails> ReadAsync(Organisation org, Guid id)
         {
             using (var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))
@@ -59,7 +58,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
             }
         }
 
-
+        // @TODO: We're not using org.id atm - reason being that for some internal operations we don't have an organisation
         public async Task UpdateAsync(Organisation org, Guid id, EventDetails evt)
         {
             using (var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))
@@ -82,10 +81,10 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
 
                 internalEvent.Category = evt.Category.ToString();
                 internalEvent.Summary = evt.Summary;
-                internalEvent.LastUpdatedUtc = DateTime.UtcNow;
+                internalEvent.ModifiedOnUtc = DateTime.UtcNow;
 
                 internalEvent.AddProperties(evt.Properties);
-                internalEvent.AddTags(context, evt.Tags);
+                internalEvent.AddTags(context, evt.Tags, org);
 				internalEvent.AddTriggers(evt.Triggers);
                 // @TODO: We should be able to remove tags that don't exist as well
 
@@ -99,6 +98,8 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
             using (var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))
             {
                 var query = context.Events.AsQueryable();
+
+                query = query.Where(e => e.OrganisationId == org.Id);
 
                 if (criteria.Id.HasValue)
                 {
@@ -138,7 +139,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
                 // Realtime search
                 if (criteria.TimestampUtc.HasValue)
                 {
-                    query = query.Where(e => e.LastUpdatedUtc >= criteria.TimestampUtc);
+                    query = query.Where(e => e.ModifiedOnUtc >= criteria.TimestampUtc);
                 }
 
                 // Advanced search
@@ -176,7 +177,11 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
 
             using (var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))
             {
-                sources = await context.Events.Select(e => e.Source).Distinct().ToListAsync();
+                sources = await context.Events
+                    .Where(e => e.OrganisationId == org.Id)
+                    .Select(e => e.Source)
+                    .Distinct()
+                    .ToListAsync();
             }
 
             return sources;
@@ -188,6 +193,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
 
 			using (var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))
 			{
+                //@TODO: Filter by org (this sounds like a pita - at the moment we have to go via events)
 				tags = await context.Tags.Select(t => t.Name).Distinct().ToListAsync();
 			}
 
@@ -200,7 +206,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
 
             using (var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))
             {
-                count = await context.Events.LongCountAsync();
+                count = await context.Events.Where(e => e.OrganisationId == org.Id).LongCountAsync();
             }
 
             return count;

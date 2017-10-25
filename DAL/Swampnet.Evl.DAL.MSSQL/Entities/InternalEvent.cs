@@ -21,7 +21,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Entities
         /// </summary>
         public DateTime TimestampUtc { get; set; }
 
-        public DateTime LastUpdatedUtc { get; set; }
+        public DateTime ModifiedOnUtc { get; set; }
 
         /// <summary>
         /// Event category
@@ -79,19 +79,20 @@ namespace Swampnet.Evl.DAL.MSSQL.Entities
         }
 
 
-        internal void AddTag(EvlContext context, string tag)
+        internal void AddTag(EvlContext context, string tag, Organisation org)
         {
             if(!string.IsNullOrEmpty(tag) && !GetTagNames().Contains(tag))
             {
                 var link = new InternalEventTags();
                 link.Event = this;
 
-                var t = context.Tags.FirstOrDefault(x => x.Name == tag); // .First() - it *is* possible to have multiple tags with same name (due to syncronisation, or lack of lol!)
+                var t = context.Tags.FirstOrDefault(x => x.OrganisationId == org.Id && x.Name == tag); // .First() - it *is* possible to have multiple tags with same name (due to syncronisation, or lack of lol!)
                 if (t == null)
                 {
                     t = new InternalTag()
                     {
-                        Name = tag.Truncate(100)
+                        Name = tag.Truncate(100),
+                        OrganisationId = org.Id
                     };
                     context.Tags.Add(t);
                 }
@@ -105,13 +106,13 @@ namespace Swampnet.Evl.DAL.MSSQL.Entities
             }
         }
 
-        internal void AddTags(EvlContext context, IEnumerable<string> tags)
+        internal void AddTags(EvlContext context, IEnumerable<string> tags, Organisation org)
         {
             if (tags != null && tags.Any())
             {
                 foreach (var tag in tags)
                 {
-                    AddTag(context, tag);
+                    AddTag(context, tag, org);
                 }
             }
         }

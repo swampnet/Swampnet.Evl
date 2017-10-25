@@ -93,6 +93,7 @@ namespace Swampnet.Evl
             IHostingEnvironment env,
             //ILoggerFactory loggerFactory,
             IApplicationLifetime appLifetime,
+            IAuth auth,
             IEventDataAccess dal,
             IEventQueueProcessor eventProcessor)
         {
@@ -100,7 +101,7 @@ namespace Swampnet.Evl
                 .MinimumLevel.Verbose()
 				.Enrich.WithExceptionDetails()
 				.Enrich.FromLogContext()
-                .WriteTo.LocalEvlSink(dal, eventProcessor)
+                .WriteTo.LocalEvlSink(auth.GetEvlOrganisation(), dal, eventProcessor)
                 .WriteTo.Console()
                 .CreateLogger();
 

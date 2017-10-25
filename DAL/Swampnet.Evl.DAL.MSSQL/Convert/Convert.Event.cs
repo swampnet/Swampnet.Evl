@@ -4,6 +4,7 @@ using Swampnet.Evl.Client;
 using System.Collections.Generic;
 using Swampnet.Evl.DAL.MSSQL.Entities;
 using Swampnet.Evl.Common.Entities;
+using Swampnet.Evl.Common;
 
 namespace Swampnet.Evl.DAL.MSSQL
 {
@@ -14,7 +15,7 @@ namespace Swampnet.Evl.DAL.MSSQL
         /// <summary>
         /// Convert an API Event to an InternalEvent
         /// </summary>
-        internal static InternalEvent ToEvent(EventDetails source, EvlContext context)
+        internal static InternalEvent ToEvent(Organisation org, EventDetails source, EvlContext context)
         {
             InternalEvent e = null;
 
@@ -22,16 +23,19 @@ namespace Swampnet.Evl.DAL.MSSQL
             {
                 e = new InternalEvent()
                 {
+                    OrganisationId = org == null
+                                ? Constants.MOCKED_DEFAULT_ORGANISATION
+                                : org.Id,
                     Category = source.Category.ToString(),
                     Summary = source.Summary,
                     TimestampUtc = source.TimestampUtc,
-                    LastUpdatedUtc = source.LastUpdatedUtc.HasValue ? source.LastUpdatedUtc.Value : source.TimestampUtc,
+                    ModifiedOnUtc = source.LastUpdatedUtc.HasValue ? source.LastUpdatedUtc.Value : source.TimestampUtc,
                     Source = source.Source.Truncate(2000),
                     SourceVersion = source.SourceVersion.Truncate(2000)                    
                 };
 
                 e.AddProperties(source.Properties);
-                e.AddTags(context, source.Tags);
+                e.AddTags(context, source.Tags, org);
                 e.AddTriggers(source.Triggers);
             }
 
@@ -67,7 +71,7 @@ namespace Swampnet.Evl.DAL.MSSQL
                     Category = Enum.Parse<EventCategory>(source.Category, true),
                     Summary = source.Summary,
                     TimestampUtc = source.TimestampUtc,
-                    LastUpdatedUtc = source.LastUpdatedUtc,
+                    LastUpdatedUtc = source.ModifiedOnUtc,
                     Properties = source.InternalEventProperties == null
                         ? null
                         : source.InternalEventProperties.Select(p => Convert.ToProperty(p.Property)).ToList(),

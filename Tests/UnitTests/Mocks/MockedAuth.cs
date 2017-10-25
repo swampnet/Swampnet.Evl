@@ -11,6 +11,10 @@ namespace UnitTests.Mocks
     {
         public Organisation Organisation { get; set; }
 
+        public Organisation GetEvlOrganisation()
+        {
+            return Organisation;
+        }
 
         public Task<Organisation> GetOrganisationAsync(Guid id)
         {

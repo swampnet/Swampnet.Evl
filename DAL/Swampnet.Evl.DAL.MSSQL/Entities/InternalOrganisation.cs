@@ -11,6 +11,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Entities
             ApiKeys = new List<ApiKey>();
             Events = new List<InternalEvent>();
             Rules = new List<InternalRule>();
+            Tags = new List<InternalTag>();
         }
 
         public Guid Id { get; set; }
@@ -25,6 +26,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Entities
         public ICollection<ApiKey> ApiKeys { get; set; }
         public ICollection<InternalEvent> Events { get; set; }
         public ICollection<InternalRule> Rules { get; set; }
+        public ICollection<InternalTag> Tags { get; set; }
     }
 
 

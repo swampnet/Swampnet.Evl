@@ -6,6 +6,7 @@ using Serilog;
 using System.Collections.Concurrent;
 using System.Threading;
 using Swampnet.Evl.Contracts;
+using Swampnet.Evl.Common.Entities;
 
 namespace Swampnet.Evl.Services
 {
@@ -16,11 +17,14 @@ namespace Swampnet.Evl.Services
         private readonly Thread _monitorThread;
         private readonly IEnumerable<IEventProcessor> _processors;
         private readonly IEventDataAccess _dal;
+        private readonly Organisation _evlOrganisation;
 
-        public EventQueueProcessor(IEventDataAccess dal, IEnumerable<IEventProcessor> processors)
+        public EventQueueProcessor(IAuth auth, IEventDataAccess dal, IEnumerable<IEventProcessor> processors)
         {
             _dal = dal;
             _processors = processors;
+
+            _evlOrganisation = auth.GetEvlOrganisation();
 
             _monitorThread = new Thread(MonitorThread)
             {
@@ -73,7 +77,7 @@ namespace Swampnet.Evl.Services
                 {
                     try
                     {
-                        var evt = _dal.ReadAsync(null, eventId).Result;
+                        var evt = _dal.ReadAsync(_evlOrganisation, eventId).Result;
 
                         foreach (var processor in _processors.OrderBy(p => p.Priority))
                         {
@@ -88,7 +92,7 @@ namespace Swampnet.Evl.Services
                             }
                         }
 
-                        _dal.UpdateAsync(null, eventId, evt).Wait();
+                        _dal.UpdateAsync(_evlOrganisation, eventId, evt).Wait();
                     }
                     catch (Exception ex)
                     {

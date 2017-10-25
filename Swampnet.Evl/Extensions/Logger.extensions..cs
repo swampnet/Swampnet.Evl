@@ -22,11 +22,12 @@ namespace Swampnet.Evl
     {
         public static LoggerConfiguration LocalEvlSink(
                 this LoggerSinkConfiguration loggerConfiguration,
+                Organisation org,
                 IEventDataAccess dal, 
                 IEventQueueProcessor eventProcessor,
                 IFormatProvider formatProvider = null)
         {
-            return loggerConfiguration.Sink(new LocalSink(dal, eventProcessor, formatProvider));
+            return loggerConfiguration.Sink(new LocalSink(org, dal, eventProcessor, formatProvider));
         }
 
        
@@ -37,13 +38,16 @@ namespace Swampnet.Evl
         {
             private readonly IEventDataAccess _dal;
             private readonly IEventQueueProcessor _eventProcessor;
+            private readonly Organisation _org;
 
             public LocalSink(
+                Organisation org,
                 IEventDataAccess dal,
                 IEventQueueProcessor eventProcessor,
                 IFormatProvider formatProvider)
                 : base(formatProvider, null, null, null, null)
             {
+                _org = org;
                 _dal = dal;
                 _eventProcessor = eventProcessor;
             }
@@ -54,14 +58,14 @@ namespace Swampnet.Evl
             /// <param name="events"></param>
             /// <returns></returns>
             protected override async Task PostAsync(IEnumerable<Event> events)
-            {                
-                await Task.Delay(1); // Just to satisfy our async declaration for now.
+            {
+                await Task.CompletedTask; // Just to satisfy our async declaration for now.
 
                 Parallel.ForEach(events, async evt =>
                 {
                     try
                     {
-                        var id = await _dal.CreateAsync(null, Common.Convert.ToEventDetails(evt));
+                        var id = await _dal.CreateAsync(_org, Common.Convert.ToEventDetails(evt));
 
 						_eventProcessor.Enqueue(id);
                     }

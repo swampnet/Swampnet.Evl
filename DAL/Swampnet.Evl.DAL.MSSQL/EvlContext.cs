@@ -1,11 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
+﻿using Microsoft.EntityFrameworkCore;
 using Swampnet.Evl.DAL.MSSQL.Entities;
-using System;
-using Swampnet.Evl.Common.Entities;
-using System.Collections.Generic;
-using Swampnet.Evl.Client;
+using System.Linq;
 
 namespace Swampnet.Evl.DAL.MSSQL
 {
@@ -66,6 +61,7 @@ namespace Swampnet.Evl.DAL.MSSQL
             modelBuilder.Entity<InternalTag>().ToTable("Tag", EvlContext.SCHEMA);
             modelBuilder.Entity<InternalTag>().Property(f => f.Name).IsRequired().HasMaxLength(100);
             modelBuilder.Entity<InternalTag>().HasIndex(x => x.Name);
+            modelBuilder.Entity<InternalTag>().HasMany(f => f.InternalEventTags).WithOne(f => f.Tag).OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<InternalOrganisation>().ToTable("Organisation", EvlContext.SCHEMA);
             modelBuilder.Entity<InternalOrganisation>().Property(f => f.Description).IsRequired();

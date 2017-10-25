@@ -27,6 +27,7 @@ namespace Swampnet.Evl.Services
         /// <param name="id"></param>
         /// <returns></returns>
         Task<Organisation> GetOrganisationAsync(Guid id);
+        Organisation GetEvlOrganisation();
     }
 
 
@@ -100,7 +101,7 @@ namespace Swampnet.Evl.Services
             }
             else
             {
-                var o = await _managementData.LoadOrganisationByApiKeyAsync(id);
+                var o = await _managementData.LoadOrganisationAsync(id);
 
                 if (o != null)
                 {
@@ -109,6 +110,12 @@ namespace Swampnet.Evl.Services
             }
 
             return org?.Organisation;
+        }
+
+
+        public Organisation GetEvlOrganisation()
+        {
+            return GetOrganisationAsync(Common.Constants.MOCKED_DEFAULT_ORGANISATION).Result;
         }
     }
 }
