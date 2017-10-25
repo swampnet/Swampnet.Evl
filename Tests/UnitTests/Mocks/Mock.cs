@@ -72,17 +72,20 @@ namespace UnitTests.Mocks
             };
         }
 
-        internal static IEventQueueProcessor EventQueueProcessor()
+        internal static MockedEventQueueProcessor EventQueueProcessor()
         {
             return new MockedEventQueueProcessor();
         }
 
-        internal static IAuth Auth()
+        internal static IAuth Auth(Organisation org)
         {
-            return new MockedAuth();
+            return new MockedAuth()
+            {
+                Organisation = org
+            };
         }
 
-        internal static IEventDataAccess EventDataAccess()
+        internal static MockedEventDataAccess EventDataAccess()
         {
             return new MockedEventDataAccess();
         }

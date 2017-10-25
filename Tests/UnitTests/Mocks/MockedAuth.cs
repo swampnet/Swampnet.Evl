@@ -9,14 +9,17 @@ namespace UnitTests.Mocks
 {
     class MockedAuth : IAuth
     {
+        public Organisation Organisation { get; set; }
+
+
         public Task<Organisation> GetOrganisationAsync(Guid id)
         {
-            return Task.FromResult(Mock.MockedOrganisation());
+            return Task.FromResult(Organisation);
         }
 
         public Task<Organisation> GetOrganisationByApiKeyAsync(Guid apiKey)
         {
-            return Task.FromResult(Mock.MockedOrganisation());
+            return Task.FromResult(Organisation);
         }
     }
 }

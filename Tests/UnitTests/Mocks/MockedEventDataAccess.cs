@@ -11,9 +11,25 @@ namespace UnitTests.Mocks
 {
     class MockedEventDataAccess : IEventDataAccess
     {
+        private object _lock = new object();
+
+        public int CreateCount { get; private set; }
+        public int UpdateCount { get; private set; }
+
+        public MockedEventDataAccess()
+        {
+            CreateCount = 0;
+            UpdateCount = 0;
+        }
+
         public Task<Guid> CreateAsync(Organisation org, EventDetails evt)
         {
-            throw new NotImplementedException();
+            lock (_lock)
+            {
+                CreateCount++;
+
+                return Task.FromResult(Guid.Empty);
+            }
         }
 
         public Task<IEnumerable<string>> GetSources(Organisation org)
@@ -47,9 +63,15 @@ namespace UnitTests.Mocks
             } ));
         }
 
+
         public Task UpdateAsync(Organisation org, Guid id, EventDetails evt)
         {
-            throw new NotImplementedException();
+            lock (_lock)
+            {
+                UpdateCount++;
+
+                return Task.CompletedTask;
+            }
         }
 
 

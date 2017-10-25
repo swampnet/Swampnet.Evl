@@ -246,18 +246,37 @@ namespace Swampnet.Evl.Controllers
                     return BadRequest();
                 }
 
-                var apiKey = Request.ApiKey();
+                //var apiKey = Request.ApiKey();
+                var apiKey = Common.Constants.MOCKED_DEFAULT_APIKEY;
 
                 // @TODO: Auth
                 var org = await _auth.GetOrganisationByApiKeyAsync(apiKey);
+                if (org == null)
+                {
+                    return Unauthorized();
+                }
 
-                Parallel.ForEach(evts, async evt =>
+                Parallel.ForEach(evts, async e =>
                 {
                     try
                     {
+                        var evt = Common.Convert.ToEventDetails(e);
+
+                        if (string.IsNullOrEmpty(evt.Source))
+                        {
+                            evt.Source = org.Name;
+                        }
+
+                        if (evt.Properties == null)
+                        {
+                            evt.Properties = new List<Property>();
+                        }
+
                         evt.Properties.AddRange(Request.CommonProperties());
-                        var id = await _dal.CreateAsync(org, Common.Convert.ToEventDetails(evt));
-						_eventProcessor.Enqueue(id);
+
+                        var id = await _dal.CreateAsync(org, evt);
+
+                        _eventProcessor.Enqueue(id);
                     }
                     catch (Exception ex)
                     {

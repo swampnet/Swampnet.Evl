@@ -29,7 +29,10 @@ namespace Swampnet.Evl
         {
             var properties = new List<Property>();
 
-            properties.Add(new Property("Internal", "Remote Ip Address", rq.RemoteIpAddress()));
+            if(rq != null)
+            {
+                properties.Add(new Property("Internal", "Remote Ip Address", rq.RemoteIpAddress()));
+            }
 
             return properties;
         }

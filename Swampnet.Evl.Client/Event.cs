@@ -22,11 +22,6 @@ namespace Swampnet.Evl.Client
 	public class Event
 	{
         /// <summary>
-        /// Event Id
-        /// </summary>
-        //public Guid? Id { get; set; }
-
-        /// <summary>
         /// Event timestamp (UTC)
         /// </summary>
         public DateTime TimestampUtc { get; set; }

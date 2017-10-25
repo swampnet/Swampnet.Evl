@@ -7,14 +7,26 @@ namespace UnitTests.Mocks
 {
     class MockedEventQueueProcessor : IEventQueueProcessor
     {
+        public Queue<Guid> Queue { get; private set; }
+
+        public MockedEventQueueProcessor()
+        {
+            Queue = new Queue<Guid>();
+        }
+
+
         public void Enqueue(Guid id)
         {
-            throw new NotImplementedException();
+            Queue.Enqueue(id);
         }
+
 
         public void Enqueue(IEnumerable<Guid> ids)
         {
-            throw new NotImplementedException();
+            foreach(var id in ids)
+            {
+                Enqueue(id);
+            }
         }
     }
 }
