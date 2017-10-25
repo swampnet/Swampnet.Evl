@@ -133,23 +133,23 @@ namespace Swampnet.Evl.DAL.MSSQL
                 }
             },
 
-            new Rule("Startup")
-            {
-                Id = Guid.NewGuid(),
-                IsActive = true,
-                Order = 3,
-                Expression = new Expression(RuleOperatorType.MATCH_ALL)
-                {
-                    Children = new[]
-                    {
-                        new Expression(RuleOperatorType.TAGGED, "START")
-                    }
-                },
-                Actions = new[]
-                {
-                    new ActionDefinition("email", new[]{ new Property("to", "pj@theswamp.co.uk") })
-                }
-            },
+            //new Rule("Startup")
+            //{
+            //    Id = Guid.NewGuid(),
+            //    IsActive = true,
+            //    Order = 3,
+            //    Expression = new Expression(RuleOperatorType.MATCH_ALL)
+            //    {
+            //        Children = new[]
+            //        {
+            //            new Expression(RuleOperatorType.TAGGED, "START")
+            //        }
+            //    },
+            //    Actions = new[]
+            //    {
+            //        new ActionDefinition("email", new[]{ new Property("to", "pj@theswamp.co.uk") })
+            //    }
+            //},
 
             new Rule("Test error downgrade")
             {

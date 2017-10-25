@@ -26,7 +26,7 @@ namespace Swampnet.Evl.EventProcessors
 
         public async Task ProcessAsync(EventDetails evt)
         {
-            var rules = new List<Rule>(await _loader.LoadAsync(null));
+			var rules = new List<Rule>(await _loader.LoadAsync(null));
 
             var expressionEvaluator = new ExpressionEvaluator();
 
@@ -42,7 +42,7 @@ namespace Swampnet.Evl.EventProcessors
                 {
                     count = 0;
                     
-                    foreach (var rule in rules.ToArray())
+                    foreach (var rule in rules.ToArray().OrderBy(r => r.Order))
                     {
                         if (expressionEvaluator.Evaluate(rule.Expression, evt))
                         {

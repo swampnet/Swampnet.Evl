@@ -83,7 +83,9 @@ namespace Swampnet.Evl.Services
 
                 if (o != null)
                 {
-                    _apiKeyCache.TryAdd(apiKey, new CachedOrganisation(o));
+					org = new CachedOrganisation(o);
+
+					_apiKeyCache.TryAdd(apiKey, org);
                 }
             }
 
