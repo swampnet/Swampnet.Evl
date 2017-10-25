@@ -5,6 +5,7 @@ using Swampnet.Evl.Common.Contracts;
 using Swampnet.Evl.Common.Entities;
 using Swampnet.Evl.Services;
 using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -43,7 +44,6 @@ namespace Swampnet.Evl.Controllers
 				// @TODO: Auth
 				var org = await _auth.GetOrganisationByApiKeyAsync(Common.Constants.MOCKED_DEFAULT_APIKEY);
 
-                // @TODO: Just want rules that we're allowed to see.
                 var rules = await _rulesData.SearchAsync(org);
 
                 return Ok(rules);
@@ -90,6 +90,9 @@ namespace Swampnet.Evl.Controllers
         /// <summary>
         /// Create a new rule
         /// </summary>
+        /// <remarks>
+        /// POST /rules
+        /// </remarks>
         /// <param name="rule"></param>
         /// <returns></returns>
         [HttpPost]
@@ -104,7 +107,6 @@ namespace Swampnet.Evl.Controllers
 
 				Log.Debug("POST rule {ruleName}", rule.Name);
 
-				// @TODO: Auth
 				// @TODO: Auth
 				var org = await _auth.GetOrganisationByApiKeyAsync(Common.Constants.MOCKED_DEFAULT_APIKEY);
 
@@ -121,6 +123,38 @@ namespace Swampnet.Evl.Controllers
 
 
         /// <summary>
+        /// Reorder rules.
+        /// 
+        /// We're slipping into command/query here, where 'reorder' is the command. Not sure if the REST
+        /// guys will kill me for this sort of stuff.
+        /// </summary>
+        /// <remarks>
+        /// POST /rules/reorder
+        /// </remarks>
+        /// <param name="rules"></param>
+        /// <returns></returns>
+        [HttpPost("reorder")]
+        public async Task<IActionResult> Reorder([FromBody] IEnumerable<RuleOrder> rules)
+        {
+            try
+            {
+                // @TODO: Auth
+                var org = await _auth.GetOrganisationByApiKeyAsync(Common.Constants.MOCKED_DEFAULT_APIKEY);
+
+                await _rulesData.ReorderAsync(org, rules);
+
+                var reordered = await _rulesData.SearchAsync(org);
+
+                return Ok(reordered);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, ex.Message);
+                return this.InternalServerError(ex);
+            }
+        }
+
+        /// <summary>
         /// Update an existing rule
         /// 
         /// PUT rules/{id}
@@ -133,7 +167,10 @@ namespace Swampnet.Evl.Controllers
         {
             try
             {
-				if (rule == null)
+                // @TODO: Auth
+                var org = await _auth.GetOrganisationByApiKeyAsync(Common.Constants.MOCKED_DEFAULT_APIKEY);
+
+                if (rule == null)
 				{
 					return BadRequest();
 				}
@@ -145,9 +182,6 @@ namespace Swampnet.Evl.Controllers
                 {
 					return BadRequest("id and Rule.Id do not match");
 				}
-
-				// @TODO: Auth
-				var org = await _auth.GetOrganisationByApiKeyAsync(Common.Constants.MOCKED_DEFAULT_APIKEY);
 
 				await _rulesData.UpdateAsync(org, rule);
 

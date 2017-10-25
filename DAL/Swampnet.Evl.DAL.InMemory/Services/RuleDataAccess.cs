@@ -101,6 +101,26 @@ namespace Swampnet.Evl.DAL.InMemory.Services
 			}
         }
 
+        public async Task ReorderAsync(Organisation org, IEnumerable<RuleOrder> rules)
+        {
+            using (var context = RuleContext.Create())
+            {
+                // Grab all relevent rules
+                var ids = rules.Select(r => r.RuleId);
+                var internalRules = await context.Rules.Where(r => ids.Contains(r.Id)).ToListAsync();
+
+                // Update order
+                foreach (var ro in rules)
+                {
+                    var rule = internalRules.Single(r => r.Id == ro.RuleId);
+                    rule.Order = ro.Order;
+                }
+
+                await context.SaveChangesAsync();
+            }
+        }
+
+
         private void Seed()
         {
             using(var context = RuleContext.Create())

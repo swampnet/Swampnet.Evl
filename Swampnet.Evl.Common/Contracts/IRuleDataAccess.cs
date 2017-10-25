@@ -20,5 +20,7 @@ namespace Swampnet.Evl.Common.Contracts
         Task UpdateAsync(Organisation org, Rule rule);
 
         Task DeleteAsync(Organisation org, Guid id);
+
+        Task ReorderAsync(Organisation org, IEnumerable<RuleOrder> rules);
     }
 }

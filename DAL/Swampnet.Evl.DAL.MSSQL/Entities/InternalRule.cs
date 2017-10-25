@@ -9,20 +9,54 @@ namespace Swampnet.Evl.DAL.MSSQL.Entities
     /// </summary>
     internal class InternalRule
     {
+        /// <summary>
+        /// PK
+        /// </summary>
         public Guid Id { get; set; }
 
+        /// <summary>
+        /// FK -> Organisation
+        /// </summary>
         public Guid OrganisationId { get; set; }
 
+        /// <summary>
+        /// Navigate -> Organisation
+        /// </summary>
         public InternalOrganisation Organisation { get; set; }
 
+        /// <summary>
+        /// Is the rule active
+        /// </summary>
         public bool IsActive { get; set; }
 
+        /// <summary>
+        /// Rule name
+        /// </summary>
         public string Name { get; set; }
 
-        // Serialised expression data
+        /// <summary>
+        /// Execution order
+        /// </summary>
+        public int Order { get; set; }
+
+        /// <summary>
+        /// Serialised expression data
+        /// </summary>
         public string ExpressionData { get; set; }
 
-        // Serialised action data
+        /// <summary>
+        /// Serialised action data
+        /// </summary>
         public string ActionData { get; set; }
-	}
+
+        /// <summary>
+        /// When the rule was created
+        /// </summary>
+        public DateTime CreatedOnUtc { get; set; }
+
+        /// <summary>
+        /// When the rule was last updated
+        /// </summary>
+        public DateTime ModifiedOnUtc { get; set; }
+    }
 }

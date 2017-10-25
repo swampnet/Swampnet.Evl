@@ -44,6 +44,8 @@ namespace Swampnet.Evl.DAL.MSSQL
                 {
                     var rule = Convert.ToRule(r);
                     rule.OrganisationId = Common.Constants.MOCKED_DEFAULT_ORGANISATION;
+                    rule.CreatedOnUtc = DateTime.UtcNow;
+                    rule.ModifiedOnUtc = DateTime.UtcNow;
 
                     context.Rules.Add(rule);
                 }
@@ -75,7 +77,7 @@ namespace Swampnet.Evl.DAL.MSSQL
             {
                 Id = Guid.NewGuid(),
                 IsActive = true,
-
+                Order = 1,
                 Expression = new Expression(RuleOperatorType.MATCH_ALL)
                 {
                     Children = new[]
@@ -106,6 +108,7 @@ namespace Swampnet.Evl.DAL.MSSQL
             {
                 Id = Guid.NewGuid(),
                 IsActive = true,
+                Order = 2,
                 Expression = new Expression(RuleOperatorType.MATCH_ALL)
                 {
                     Children = new[]
@@ -134,6 +137,7 @@ namespace Swampnet.Evl.DAL.MSSQL
             {
                 Id = Guid.NewGuid(),
                 IsActive = true,
+                Order = 3,
                 Expression = new Expression(RuleOperatorType.MATCH_ALL)
                 {
                     Children = new[]
@@ -151,6 +155,7 @@ namespace Swampnet.Evl.DAL.MSSQL
             {
                 Id = Guid.NewGuid(),
                 IsActive = true,
+                Order = 0,
                 Expression = new Expression(RuleOperatorType.MATCH_ALL)
                 {
                     Children = new []

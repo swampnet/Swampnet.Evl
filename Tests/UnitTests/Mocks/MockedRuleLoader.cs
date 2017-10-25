@@ -45,5 +45,11 @@ namespace UnitTests.Mocks
         {
             throw new NotImplementedException();
         }
+
+
+        public Task ReorderAsync(Organisation org, IEnumerable<RuleOrder> rules)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

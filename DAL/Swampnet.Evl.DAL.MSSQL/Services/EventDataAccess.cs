@@ -166,7 +166,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
 
 				var results = await query.ToArrayAsync();
 
-                return results.Select(e => Convert.ToEventSummary(e));
+                return results.Select(Convert.ToEventSummary);
             }
         }
 

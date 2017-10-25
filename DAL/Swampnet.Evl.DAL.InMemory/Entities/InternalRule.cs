@@ -15,6 +15,8 @@ namespace Swampnet.Evl.DAL.InMemory.Entities
 
         public string Name { get; set; }
 
+        public int Order { get; set; }
+
         // Serialised expression data
         public string ExpressionData { get; set; }
 

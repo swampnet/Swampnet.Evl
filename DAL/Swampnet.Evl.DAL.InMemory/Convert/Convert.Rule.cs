@@ -20,6 +20,7 @@ namespace Swampnet.Evl.DAL.InMemory
                 Id = source.Id,
                 IsActive = source.IsActive,
                 Name = source.Name,
+                Order = source.Order,
                 Expression = source.ExpressionData.Deserialize<Expression>(),
                 Actions = source.ActionData.Deserialize<ActionDefinition[]>()
             };
@@ -35,6 +36,7 @@ namespace Swampnet.Evl.DAL.InMemory
             {
                 Id = source.Id.HasValue ? source.Id.Value : Guid.Empty,
                 Name = source.Name,
+                Order = source.Order,
                 IsActive = source.IsActive,
                 ExpressionData = source.Expression.ToXmlString(),
                 ActionData = source.Actions.ToXmlString()
@@ -54,6 +56,7 @@ namespace Swampnet.Evl.DAL.InMemory
                 Id = source.Id,
                 IsActive = rule.IsActive,
                 Name = rule.Name,
+                Order = rule.Order,
                 Actions = rule.Actions.Where(a => a.IsActive).Select(a => a.Type).ToArray()
             };
         }

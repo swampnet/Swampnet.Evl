@@ -62,7 +62,9 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
             {
                 rule.Id = Guid.NewGuid();
 				var r = Convert.ToRule(rule);
-				r.OrganisationId = org.Id;
+                r.CreatedOnUtc = DateTime.UtcNow;
+                r.ModifiedOnUtc = DateTime.UtcNow;
+                r.OrganisationId = org.Id;
 
 				context.Rules.Add(r);
                 await context.SaveChangesAsync();
@@ -84,6 +86,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
                 r.IsActive = rule.IsActive;
                 r.ActionData = rule.Actions.ToXmlString();
                 r.ExpressionData = rule.Expression.ToXmlString();
+                r.ModifiedOnUtc = DateTime.UtcNow;
 
                 await context.SaveChangesAsync();
             }
@@ -102,9 +105,34 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
 				}
 
 				r.IsActive = false;
+                r.ModifiedOnUtc = DateTime.UtcNow;
 
 				await context.SaveChangesAsync();
 			}
+        }
+
+
+        public async Task ReorderAsync(Organisation org, IEnumerable<RuleOrder> rules)
+        {
+            using (var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))
+            {
+                // Grab all relevent rules
+                var ids = rules.Select(r => r.RuleId);
+                var internalRules = await context.Rules.Where(r => ids.Contains(r.Id)).ToListAsync();
+                
+                // Update order
+                foreach(var ro in rules)
+                {
+                    var rule = internalRules.Single(r => r.Id == ro.RuleId);
+                    if(rule.Order != ro.Order)
+                    {
+                        rule.Order = ro.Order;
+                        rule.ModifiedOnUtc = DateTime.UtcNow;
+                    }
+                }
+
+                await context.SaveChangesAsync();
+            }
         }
     }
 }
