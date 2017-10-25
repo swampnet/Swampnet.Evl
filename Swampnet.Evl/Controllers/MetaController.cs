@@ -75,7 +75,7 @@ namespace Swampnet.Evl.Controllers
         {
             var sources = await _eventDataAccess.GetSources(org);
 
-            // Start of with our static list
+            // Start off with our static list
             var operands = new List<MetaDataCapture>(_operands);
 
             // Add in dynamic source

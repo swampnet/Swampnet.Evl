@@ -191,7 +191,7 @@ namespace UnitTests
             Assert.IsNotNull(evt);
 
             // Source should default to organisation name
-            Assert.AreEqual(auth.GetOrganisationAsync(Guid.Empty).Result.Name, evt.Source);
+            Assert.AreEqual(auth.Organisation.Name, evt.Source);
         }
 
 

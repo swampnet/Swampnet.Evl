@@ -2,6 +2,7 @@
 using Serilog;
 using Swampnet.Evl.Client;
 using Swampnet.Evl.Common.Contracts;
+using Swampnet.Evl.Common.Entities;
 using Swampnet.Evl.Contracts;
 using Swampnet.Evl.Services;
 using System;
@@ -13,7 +14,7 @@ using System.Threading.Tasks;
 namespace Swampnet.Evl.Controllers
 {
     /// <summary>
-    /// All thinkgs Event based
+    /// All things Event based
     /// </summary>
     [Route("events")]
 	public class EventsController : Controller
@@ -179,9 +180,7 @@ namespace Swampnet.Evl.Controllers
 		{
 			try
 			{
-                var evt = Common.Convert.ToEventDetails(e);
-
-				if (evt == null)
+				if (e == null)
 				{
 					return BadRequest();
 				}
@@ -200,23 +199,11 @@ namespace Swampnet.Evl.Controllers
                     return Unauthorized();
                 }
 
-                if (string.IsNullOrEmpty(evt.Source))
-                {
-                    evt.Source = org.Name;
-                }
-
-				if(evt.Properties == null)
-				{
-					evt.Properties = new List<Property>();
-				}
-
-                evt.Properties.AddRange(Request.CommonProperties());
-
-                evt.Id = await _dal.CreateAsync(org, evt);
+                var evt = await CreateEventAsync(org, e);
 
                 _eventProcessor.Enqueue(evt.Id);
 
-				return CreatedAtRoute("EventDetails", new { id = evt.Id }, evt);
+                return CreatedAtRoute("EventDetails", new { id = evt.Id }, evt);
 			}
 			catch (UnauthorizedAccessException ex)
 			{
@@ -260,23 +247,9 @@ namespace Swampnet.Evl.Controllers
                 {
                     try
                     {
-                        var evt = Common.Convert.ToEventDetails(e);
+                        var evt = await CreateEventAsync(org, e);
 
-                        if (string.IsNullOrEmpty(evt.Source))
-                        {
-                            evt.Source = org.Name;
-                        }
-
-                        if (evt.Properties == null)
-                        {
-                            evt.Properties = new List<Property>();
-                        }
-
-                        evt.Properties.AddRange(Request.CommonProperties());
-
-                        var id = await _dal.CreateAsync(org, evt);
-
-                        _eventProcessor.Enqueue(id);
+                        _eventProcessor.Enqueue(evt.Id);
                     }
                     catch (Exception ex)
                     {
@@ -297,5 +270,31 @@ namespace Swampnet.Evl.Controllers
                 return this.InternalServerError(ex);
             }
         }
+
+
+        /// <summary>
+        /// Create event
+        /// </summary>
+        private async Task<EventDetails> CreateEventAsync(Organisation org, Event e)
+        {
+            var evt = Common.Convert.ToEventDetails(e);
+
+            if (string.IsNullOrEmpty(evt.Source))
+            {
+                evt.Source = org.Name;
+            }
+
+            if (evt.Properties == null)
+            {
+                evt.Properties = new List<Property>();
+            }
+
+            evt.Properties.AddRange(Request.CommonProperties());
+
+            evt.Id = await _dal.CreateAsync(org, evt);
+
+            return evt;
+        }
+
     }
 }

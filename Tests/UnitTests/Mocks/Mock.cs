@@ -77,7 +77,7 @@ namespace UnitTests.Mocks
             return new MockedEventQueueProcessor();
         }
 
-        internal static IAuth Auth(Organisation org)
+        internal static MockedAuth Auth(Organisation org)
         {
             return new MockedAuth()
             {
