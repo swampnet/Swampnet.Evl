@@ -41,8 +41,11 @@ namespace Swampnet.Evl.Controllers
         {
             try
             {
-				// @TODO: Auth
-				var org = await _auth.GetOrganisationByApiKeyAsync(Common.Constants.MOCKED_DEFAULT_APIKEY);
+                var org = await _auth.GetOrganisationAsync(User);
+                if (org == null)
+                {
+                    return Unauthorized();
+                }
 
                 var rules = await _rulesData.SearchAsync(org);
 
@@ -66,10 +69,13 @@ namespace Swampnet.Evl.Controllers
         {
             try
             {
-				// @TODO: Auth
-				var org = await _auth.GetOrganisationByApiKeyAsync(Common.Constants.MOCKED_DEFAULT_APIKEY);
+                var org = await _auth.GetOrganisationAsync(User);
+                if (org == null)
+                {
+                    return Unauthorized();
+                }
 
-				var rule = await _rulesData.LoadAsync(org, id);
+                var rule = await _rulesData.LoadAsync(org, id);
 
                 if(rule == null)
                 {
@@ -100,15 +106,18 @@ namespace Swampnet.Evl.Controllers
         {
             try
             {
-				if(rule == null)
+                var org = await _auth.GetOrganisationAsync(User);
+                if (org == null)
+                {
+                    return Unauthorized();
+                }
+
+                if (rule == null)
 				{
 					return BadRequest();
 				}
 
 				Log.Debug("POST rule {ruleName}", rule.Name);
-
-				// @TODO: Auth
-				var org = await _auth.GetOrganisationByApiKeyAsync(Common.Constants.MOCKED_DEFAULT_APIKEY);
 
 				await _rulesData.CreateAsync(org, rule);
 
@@ -138,8 +147,11 @@ namespace Swampnet.Evl.Controllers
         {
             try
             {
-                // @TODO: Auth
-                var org = await _auth.GetOrganisationByApiKeyAsync(Common.Constants.MOCKED_DEFAULT_APIKEY);
+                var org = await _auth.GetOrganisationAsync(User);
+                if (org == null)
+                {
+                    return Unauthorized();
+                }
 
                 await _rulesData.ReorderAsync(org, rules);
 
@@ -167,8 +179,11 @@ namespace Swampnet.Evl.Controllers
         {
             try
             {
-                // @TODO: Auth
-                var org = await _auth.GetOrganisationByApiKeyAsync(Common.Constants.MOCKED_DEFAULT_APIKEY);
+                var org = await _auth.GetOrganisationAsync(User);
+                if (org == null)
+                {
+                    return Unauthorized();
+                }
 
                 if (rule == null)
 				{
@@ -215,10 +230,13 @@ namespace Swampnet.Evl.Controllers
         {
 			try
 			{
-				Log.Information("DEL rule {ruleId}", id);
+                var org = await _auth.GetOrganisationAsync(User);
+                if (org == null)
+                {
+                    return Unauthorized();
+                }
 
-				// @TODO: Auth
-				var org = await _auth.GetOrganisationByApiKeyAsync(Common.Constants.MOCKED_DEFAULT_APIKEY);
+                Log.Information("DEL rule {ruleId}", id);
 
 				await _rulesData.DeleteAsync(org, id);
 

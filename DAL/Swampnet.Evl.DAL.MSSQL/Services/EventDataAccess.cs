@@ -193,8 +193,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
 
 			using (var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))
 			{
-                //@TODO: Filter by org (this sounds like a pita - at the moment we have to go via events)
-				tags = await context.Tags.Select(t => t.Name).Distinct().ToListAsync();
+				tags = await context.Tags.Where(t => t.OrganisationId == org.Id).Select(t => t.Name).Distinct().ToListAsync();
 			}
 
 			return tags;

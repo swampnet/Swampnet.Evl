@@ -41,12 +41,17 @@ namespace Swampnet.Evl.Controllers
         {
             try
             {
-                var stats = new Stats();
-                var org = await _auth.GetOrganisationByApiKeyAsync(Common.Constants.MOCKED_DEFAULT_APIKEY);
-                stats.ApiVersion = Assembly.GetEntryAssembly().GetName().Version.ToString();
-                stats.TotalEvents = await _dal.GetTotalEventCountAsync(org);
+                var org = await _auth.GetOrganisationAsync(User);
+                if (org == null)
+                {
+                    return Unauthorized();
+                }
 
-                return Ok(stats);
+                return Ok(new Stats()
+                {
+                    ApiVersion = Assembly.GetEntryAssembly().GetName().Version.ToString(),
+                    TotalEvents = await _dal.GetTotalEventCountAsync(org)
+                });
             }
             catch (Exception ex)
             {

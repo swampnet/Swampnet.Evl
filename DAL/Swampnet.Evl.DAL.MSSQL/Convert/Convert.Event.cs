@@ -17,15 +17,23 @@ namespace Swampnet.Evl.DAL.MSSQL
         /// </summary>
         internal static InternalEvent ToEvent(Organisation org, EventDetails source, EvlContext context)
         {
+            if(org == null)
+            {
+                throw new ArgumentNullException("org");
+            }
+
             InternalEvent e = null;
 
             if (source != null)
             {
+                if (context == null)
+                {
+                    throw new ArgumentNullException("context");
+                }
+
                 e = new InternalEvent()
                 {
-                    OrganisationId = org == null
-                                ? Constants.MOCKED_DEFAULT_ORGANISATION
-                                : org.Id,
+                    OrganisationId = org.Id,
                     Category = source.Category.ToString(),
                     Summary = source.Summary,
                     TimestampUtc = source.TimestampUtc,

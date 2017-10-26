@@ -37,8 +37,11 @@ namespace Swampnet.Evl.Controllers
         {
             try
             {
-                // @TODO: Auth
-                var org = await _auth.GetOrganisationAsync(Common.Constants.MOCKED_DEFAULT_ORGANISATION);
+                var org = await _auth.GetOrganisationAsync(User);
+                if(org == null)
+                {
+                    return Unauthorized();
+                }
 
                 return Ok(org);
             }

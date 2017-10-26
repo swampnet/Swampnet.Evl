@@ -47,7 +47,12 @@ namespace Swampnet.Evl.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var org = await _auth.GetOrganisationByApiKeyAsync(Common.Constants.MOCKED_DEFAULT_APIKEY);
+            var org = await _auth.GetOrganisationAsync(User);
+            if (org == null)
+            {
+                return Unauthorized();
+            }
+
             var metaData = await GetMetaData(org);
 
             return Ok(metaData);
