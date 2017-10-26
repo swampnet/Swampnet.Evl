@@ -32,7 +32,7 @@ namespace UnitTests
                 Mock.EventQueueProcessor(),
                 Mock.Auth(Mock.MockedOrganisation()));
 
-            var rs = events.GetCategories() as OkObjectResult;
+            var rs = events.GetCategories().Result as OkObjectResult;
 
             Assert.IsNotNull(rs);
             Assert.AreEqual(200, rs.StatusCode);

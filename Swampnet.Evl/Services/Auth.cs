@@ -5,6 +5,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Principal;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -28,6 +29,18 @@ namespace Swampnet.Evl.Services
         /// <param name="id"></param>
         /// <returns></returns>
         Task<Organisation> GetOrganisationAsync(Guid id);
+
+        /// <summary>
+        /// Get organisation based on principal
+        /// </summary>
+        /// <param name="principle"></param>
+        /// <returns></returns>
+        Task<Organisation> GetOrganisationAsync(IPrincipal principle);
+
+        /// <summary>
+        /// Get the organisation that represents the EVL service itself
+        /// </summary>
+        /// <returns></returns>
         Organisation GetEvlOrganisation();
     }
 
@@ -110,11 +123,23 @@ namespace Swampnet.Evl.Services
 
                 if (o != null)
                 {
-                    _apiKeyCache.TryAdd(id, new CachedOrganisation(o));
+                    org = new CachedOrganisation(o);
+                    _apiKeyCache.TryAdd(id, org);
                 }
             }
 
             return org?.Organisation;
+        }
+
+        /// <summary>
+        /// Get the organisation of the supplied principal. Generally the authenticated user
+        /// </summary>
+        /// <param name="principle"></param>
+        /// <returns></returns>
+        public Task<Organisation> GetOrganisationAsync(IPrincipal principle)
+        {
+            // Mocked out for now.
+            return GetOrganisationAsync(Common.Constants.MOCKED_DEFAULT_ORGANISATION);
         }
 
 

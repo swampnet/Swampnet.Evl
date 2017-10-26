@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using Swampnet.Evl.Common.Entities;
 using System.Threading.Tasks;
+using System.Security.Principal;
 
 namespace UnitTests.Mocks
 {
@@ -17,6 +18,11 @@ namespace UnitTests.Mocks
         }
 
         public Task<Organisation> GetOrganisationAsync(Guid id)
+        {
+            return Task.FromResult(Organisation);
+        }
+
+        public Task<Organisation> GetOrganisationAsync(IPrincipal principle)
         {
             return Task.FromResult(Organisation);
         }

@@ -38,10 +38,16 @@ namespace Swampnet.Evl.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("categories")]
-        public IActionResult GetCategories()
+        public async Task<IActionResult> GetCategories()
         {
             try
             {
+                var org = await _auth.GetOrganisationAsync(User);
+                if (org == null)
+                {
+                    return Unauthorized();
+                }
+
                 return Ok(Enum.GetValues(typeof(EventCategory)).Cast<EventCategory>().Select(e => e.ToString()).ToArray());
             }
             catch (Exception ex)
@@ -65,7 +71,11 @@ namespace Swampnet.Evl.Controllers
         {
             try
             {
-                var org = await _auth.GetOrganisationByApiKeyAsync(Common.Constants.MOCKED_DEFAULT_APIKEY);
+                var org = await _auth.GetOrganisationAsync(User);
+                if (org == null)
+                {
+                    return Unauthorized();
+                }
 
                 var sources = await _dal.GetSources(org);
 
@@ -92,7 +102,11 @@ namespace Swampnet.Evl.Controllers
 		{
 			try
 			{
-                var org = await _auth.GetOrganisationByApiKeyAsync(Common.Constants.MOCKED_DEFAULT_APIKEY);
+                var org = await _auth.GetOrganisationAsync(User);
+                if (org == null)
+                {
+                    return Unauthorized();
+                }
 
                 var tags = await _dal.GetTags(org);
 
@@ -117,9 +131,13 @@ namespace Swampnet.Evl.Controllers
         {
             try
             {
-                Log.Logger.WithPublicProperties(criteria).Debug("Get");
+                var org = await _auth.GetOrganisationAsync(User);
+                if (org == null)
+                {
+                    return Unauthorized();
+                }
 
-                var org = await _auth.GetOrganisationByApiKeyAsync(Common.Constants.MOCKED_DEFAULT_APIKEY);
+                Log.Logger.WithPublicProperties(criteria).Debug("Get");
 
                 var events = await _dal.SearchAsync(org, criteria);
 
@@ -147,7 +165,12 @@ namespace Swampnet.Evl.Controllers
         {
             try
             {
-                var org = await _auth.GetOrganisationByApiKeyAsync(Common.Constants.MOCKED_DEFAULT_APIKEY);
+                var org = await _auth.GetOrganisationAsync(User);
+                if(org == null)
+                {
+                    return Unauthorized();
+                }
+
                 var evt = await _dal.ReadAsync(org, id);
 
                 if (evt == null)
