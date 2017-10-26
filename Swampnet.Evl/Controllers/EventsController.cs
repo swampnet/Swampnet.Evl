@@ -276,7 +276,7 @@ namespace Swampnet.Evl.Controllers
                     }
                     catch (Exception ex)
                     {
-                        Debug.WriteLine(ex.Message);
+						Log.Error(ex, ex.Message);
                     }
                 });
 

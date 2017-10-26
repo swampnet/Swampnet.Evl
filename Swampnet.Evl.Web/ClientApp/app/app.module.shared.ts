@@ -17,6 +17,7 @@ import { ActionDefinitionComponent } from './components/action-definition/action
 import { EventsComponent } from './components/events/events.component';
 import { EventDetailsComponent } from './components/events/event-details.component';
 import { EventsSearchCriteriaComponent } from './components/events/events-search-criteria.component';
+import { ProfileComponent } from './components/profile/profile.component';
 
 
 @NgModule({
@@ -30,7 +31,8 @@ import { EventsSearchCriteriaComponent } from './components/events/events-search
         ActionDefinitionComponent,
         EventsComponent,
 		EventDetailsComponent,
-        EventsSearchCriteriaComponent
+		EventsSearchCriteriaComponent,
+		ProfileComponent
     ],
     imports: [
         CommonModule,
@@ -46,7 +48,9 @@ import { EventsSearchCriteriaComponent } from './components/events/events-search
             { path: 'events', component: EventsComponent },
 			{ path: 'events/:id', component: EventDetailsComponent },
 
-            { path: '**', redirectTo: 'home' }
+			{ path: 'profile', component: ProfileComponent },
+
+			{ path: '**', redirectTo: 'home' }
         ])
     ],
     providers: [

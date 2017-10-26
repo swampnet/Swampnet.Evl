@@ -23,7 +23,11 @@ export class ApiService {
     }
 
 
-    getRules() {
+	getOrganisation() {
+		return this.get('organisation');
+	}
+
+	getRules() {
         return this.get('rules');
     }
 

@@ -93,10 +93,6 @@ namespace Swampnet.Evl.Services
                 case RuleOperandType.Summary:
                     op = evt.Summary;
                     break;
-
-                // TODO: What do we do here then?
-                case RuleOperandType.Tag:
-                    break;
             }
 
             return op;
