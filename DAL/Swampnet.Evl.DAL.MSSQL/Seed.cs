@@ -28,17 +28,20 @@ namespace Swampnet.Evl.DAL.MSSQL
 
                 ((RelationalDatabaseCreator)context.Database.GetService<IDatabaseCreator>()).CreateTables();
 
-                // Organisation
-                var org = new InternalOrganisation()
+                foreach(var o in _mockedOrganisations)
                 {
-                    Id = _mockedOrganisation.Id,
-                    Name = _mockedOrganisation.Name,
-                    Description = _mockedOrganisation.Description,
-                    ApiKeys = new List<ApiKey>(_mockedApiKeys),
-                    ApiKey = _mockedOrganisation.ApiKey
-                };
+                    var org = new InternalOrganisation()
+                    {
+                        Id = o.Id,
+                        Name = o.Name,
+                        Description = o.Description,
+                        ApiKeys = new List<ApiKey>(_mockedApiKeys),
+                        ApiKey = o.ApiKey
+                    };
 
-                context.Organisations.Add(org);
+                    context.Organisations.Add(org);
+                }
+
 
                 foreach (var r in _mockedRules)
                 {
@@ -68,6 +71,12 @@ namespace Swampnet.Evl.DAL.MSSQL
             {
                 CreatedOnUtc = DateTime.UtcNow,
                 Id = Guid.Parse("58BAD582-C6CF-407A-B482-502FB423CD55"),
+                RevokedOnUtc = null
+            },
+            new ApiKey()
+            {
+                CreatedOnUtc = DateTime.UtcNow,
+                Id = Guid.Parse("25C135A0-B574-4A9B-BC37-4F0694017896"),
                 RevokedOnUtc = null
             }
         };
@@ -175,12 +184,22 @@ namespace Swampnet.Evl.DAL.MSSQL
         };
 
 
-        private static Organisation _mockedOrganisation = new Organisation()
+        private static Organisation[] _mockedOrganisations = new[]
         {
-            Id = Common.Constants.MOCKED_DEFAULT_ORGANISATION,
-            Description = "Event Logging",
-            Name = "Evl",
-            ApiKey = Common.Constants.MOCKED_DEFAULT_APIKEY
+            new Organisation()
+            {
+                Id = Common.Constants.MOCKED_DEFAULT_ORGANISATION,
+                Description = "Mocked organisation",
+                Name = "Mocked",
+                ApiKey = Common.Constants.MOCKED_DEFAULT_APIKEY
+            },
+            new Organisation()
+            {
+                Id = Guid.Parse("60FACD3A-2232-4E15-9F3C-61289CDDD544"),
+                Description = "Event Logging",
+                Name = "Evl",
+                ApiKey = Guid.Parse("25C135A0-B574-4A9B-BC37-4F0694017896")
+            }
         };
     }
 }

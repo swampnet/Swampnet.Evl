@@ -1,4 +1,5 @@
-﻿using Swampnet.Evl.Common.Contracts;
+﻿using Microsoft.Extensions.Configuration;
+using Swampnet.Evl.Common.Contracts;
 using Swampnet.Evl.Common.Entities;
 using System;
 using System.Collections.Concurrent;
@@ -60,12 +61,14 @@ namespace Swampnet.Evl.Services
         }
 
         private readonly IManagementDataAccess _managementData;
+        private readonly IConfiguration _cfg;
         private readonly ConcurrentDictionary<Guid, CachedOrganisation> _apiKeyCache = new ConcurrentDictionary<Guid, CachedOrganisation>();
         private readonly ConcurrentDictionary<Guid, CachedOrganisation> _idCache = new ConcurrentDictionary<Guid, CachedOrganisation>();
 
-        public Auth(IManagementDataAccess managementData)
+        public Auth(IManagementDataAccess managementData, IConfiguration cfg)
         {
             _managementData = managementData;
+            _cfg = cfg;
         }
 
 
@@ -117,7 +120,13 @@ namespace Swampnet.Evl.Services
 
         public Organisation GetEvlOrganisation()
         {
-            return GetOrganisationAsync(Common.Constants.MOCKED_DEFAULT_ORGANISATION).Result;
+            var id = _cfg["evl:org-id"];
+            if (string.IsNullOrEmpty(id))
+            {
+                throw new ApplicationException("evl:org-id undefined");
+            }
+
+            return GetOrganisationAsync(Guid.Parse(id)).Result;
         }
     }
 }
