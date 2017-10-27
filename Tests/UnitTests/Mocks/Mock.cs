@@ -77,17 +77,38 @@ namespace UnitTests.Mocks
             return new MockedEventQueueProcessor();
         }
 
-        internal static MockedAuth Auth(Organisation org)
+        internal static MockedAuth Auth(Profile profile)
         {
             return new MockedAuth()
             {
-                Organisation = org
+                Profile = profile
             };
         }
 
         internal static MockedEventDataAccess EventDataAccess()
         {
             return new MockedEventDataAccess();
+        }
+
+        internal static Profile MockedProfile()
+        {
+            return new Profile()
+            {
+                Id = 1,
+                Key = "@profile-key",
+                Groups = new List<Group>()
+                {
+                    new Group(){ Name = "tester" }
+                },
+                Name = new Name()
+                {
+                    Title = "Mr",
+                    Firstname = "First",
+                    Lastname = "Last",
+                    KnownAs = "Testy Mc Test Face"
+                },
+                Organisation = MockedOrganisation()
+            };
         }
 
         internal static Organisation MockedOrganisation()
