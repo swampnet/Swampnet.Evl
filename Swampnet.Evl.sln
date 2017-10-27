@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.3
+VisualStudioVersion = 15.0.27004.2002
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Serilog.Sinks.Evl", "Serilog.Sinks.Evl\Serilog.Sinks.Evl.csproj", "{1FE9C888-BC5C-4843-A9E4-F811C5092D44}"
 EndProject
@@ -27,6 +27,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Swampnet.Evl.Plugins.Email"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{13039D43-A38F-47B8-9A70-9377974B691F}"
 	ProjectSection(SolutionItems) = preProject
+		Docs\notes.txt = Docs\notes.txt
 		readme.md = readme.md
 	EndProjectSection
 EndProject
@@ -34,7 +35,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Swampnet.Evl.Web", "Swampne
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Swampnet.Evl.Plugins.Slack", "Plugins\Swampnet.Evl.Plugins.Slack\Swampnet.Evl.Plugins.Slack.csproj", "{A6C5720F-C305-46A3-81E4-A11EA65418ED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Swampnet.Evl.DAL.MSSQL", "DAL\Swampnet.Evl.DAL.MSSQL\Swampnet.Evl.DAL.MSSQL.csproj", "{63B9F7B6-4F3D-44BA-B33D-7BEC7646DC00}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Swampnet.Evl.DAL.MSSQL", "DAL\Swampnet.Evl.DAL.MSSQL\Swampnet.Evl.DAL.MSSQL.csproj", "{63B9F7B6-4F3D-44BA-B33D-7BEC7646DC00}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{8BB0FCE6-CAA3-49A7-B135-BECA8E57AE6D}"
+	ProjectSection(SolutionItems) = preProject
+		Docs\notes.txt = Docs\notes.txt
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -97,6 +103,7 @@ Global
 		{D62BA268-666F-45DD-A396-BD457AF95108} = {B46E28DE-6890-4BB4-B962-DB59ECFCE207}
 		{A6C5720F-C305-46A3-81E4-A11EA65418ED} = {B46E28DE-6890-4BB4-B962-DB59ECFCE207}
 		{63B9F7B6-4F3D-44BA-B33D-7BEC7646DC00} = {45C0730E-6BBE-4265-9F47-75B0DBF8C29A}
+		{8BB0FCE6-CAA3-49A7-B135-BECA8E57AE6D} = {13039D43-A38F-47B8-9A70-9377974B691F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7662AB53-CF97-4F2F-863E-20F3110E5EFF}

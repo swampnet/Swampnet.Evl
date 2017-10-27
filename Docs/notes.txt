@@ -1,0 +1,32 @@
+** Nuget publish settings **
+
+Swampnet.Evl - Develop
+
+Options
+	Build number format
+		1.0$(Rev:.r)
+
+Tasks
+	publish
+		Command: publish
+		Uncheck 'Publish Web Projects'
+		Projects
+			Swampnet.Evl.Client\Swampnet.Evl.Client.csproj
+			Serilog.Sinks.Evl\Serilog.Sinks.Evl.csproj
+
+	pack
+		Comand: pack
+		Projects:
+			Swampnet.Evl.Client\Swampnet.Evl.Client.csproj
+			Serilog.Sinks.Evl\Serilog.Sinks.Evl.csproj
+		Arguments:
+			--no-build --output $(Build.ArtifactStagingDirectory) /p:Version="$(Build.BuildNumber)"
+
+	Nuget PUSH
+		Command: push
+		Path to NuGet packages
+			$(Build.ArtifactStagingDirectory)/*.nupkg
+		Target feed location:
+			-This account/collection
+		Target feed:
+			Swampnet-Evl

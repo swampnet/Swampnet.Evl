@@ -28,11 +28,11 @@ namespace Swampnet.Evl.DAL.InMemory.Services
             }
         }
 
-        public async Task<Organisation> LoadOrganisationAsync(Guid orgId)
+        public async Task<Organisation> LoadOrganisationAsync(Guid id)
         {
             using (var context = ManagementContext.Create())
             {
-                var org = await context.Organisations.FirstOrDefaultAsync(o => o.Id == orgId);
+                var org = await context.Organisations.FirstOrDefaultAsync(o => o.Id == id);
 
                 return Convert.ToOrganisation(org);
             }
