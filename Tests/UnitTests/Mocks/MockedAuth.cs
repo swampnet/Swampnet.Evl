@@ -31,5 +31,10 @@ namespace UnitTests.Mocks
         {
             return Task.FromResult(Organisation);
         }
+
+        public Task<Profile> GetProfileAsync(IPrincipal principle)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

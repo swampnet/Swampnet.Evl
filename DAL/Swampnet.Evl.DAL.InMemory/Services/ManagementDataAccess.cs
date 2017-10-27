@@ -17,6 +17,11 @@ namespace Swampnet.Evl.DAL.InMemory.Services
             Seed();
         }
 
+        public Task<Profile> LoadProfileAsync(string key)
+        {
+            throw new NotImplementedException();
+        }
+
 
         public async Task<Organisation> LoadOrganisationByApiKeyAsync(Guid apiKey)
         {

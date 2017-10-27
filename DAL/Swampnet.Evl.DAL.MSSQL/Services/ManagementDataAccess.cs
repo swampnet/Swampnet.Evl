@@ -20,6 +20,11 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
             _cfg = cfg;
         }
 
+        public Task<Profile> LoadProfileAsync(string key)
+        {
+            throw new NotImplementedException();
+        }
+
 
         public async Task<Organisation> LoadOrganisationByApiKeyAsync(Guid apiKey)
         {

@@ -6,6 +6,7 @@ using System;
 using Swampnet.Evl.Common.Entities;
 using System.Collections.Generic;
 using Swampnet.Evl.Client;
+using System.Linq;
 
 
 namespace Swampnet.Evl.DAL.MSSQL
@@ -28,20 +29,49 @@ namespace Swampnet.Evl.DAL.MSSQL
 
                 ((RelationalDatabaseCreator)context.Database.GetService<IDatabaseCreator>()).CreateTables();
 
-                foreach(var o in _mockedOrganisations)
+                context.Organisations.AddRange(_mockedOrganisations.Select(o => new InternalOrganisation()
                 {
-                    var org = new InternalOrganisation()
+                    Id = o.Id,
+                    Name = o.Name,
+                    Description = o.Description,
+                    ApiKeys = new List<ApiKey>(_mockedApiKeys),
+                    ApiKey = o.ApiKey
+                }));
+
+                context.Groups.AddRange(new[]
+                {
+                    new InternalGroup() { Name = "owner" },
+                    new InternalGroup() { Name = "admin" },
+                    new InternalGroup() { Name = "user" }
+                });
+
+                context.SaveChanges();
+
+                foreach(var p in _mockedProfiles)
+                {
+                    var profile = new InternalProfile()
                     {
-                        Id = o.Id,
-                        Name = o.Name,
-                        Description = o.Description,
-                        ApiKeys = new List<ApiKey>(_mockedApiKeys),
-                        ApiKey = o.ApiKey
+                        Title = p.Name.Firstname,
+                        Firstname = p.Name.Firstname,
+                        Lastname = p.Name.Lastname,
+                        KnownAs = p.Name.KnownAs,
+                        Key = p.Key,
+                        Organisation = context.Organisations.Single(o => o.Id == Common.Constants.MOCKED_DEFAULT_ORGANISATION),
+                        InternalProfileGroups = new List<InternalProfileGroup>()
                     };
 
-                    context.Organisations.Add(org);
+                    foreach(var g in p.Groups)
+                    {
+                        profile.InternalProfileGroups.Add(new InternalProfileGroup() {
+                            Profile = profile,
+                            Group = context.Groups.Single(x => x.Name == g.Name)
+                        });
+                    }
+
+                    context.Profiles.Add(profile);
                 }
 
+                context.SaveChanges();
 
                 foreach (var r in _mockedRules)
                 {
@@ -199,6 +229,27 @@ namespace Swampnet.Evl.DAL.MSSQL
                 Description = "Event Logging",
                 Name = "Evl",
                 ApiKey = Guid.Parse("25C135A0-B574-4A9B-BC37-4F0694017896")
+            }
+        };
+
+
+        private static Profile[] _mockedProfiles = new[]
+        {
+            new Profile()
+            {
+                Name = new Name()
+                {
+                    Firstname = "Pete",
+                    Lastname = "Whitby",
+                    Title = "Mr",
+                    KnownAs = "pj"
+                },
+                Key = "@todo-pjw-001",
+                Groups = new List<Group>()
+                {
+                    new Group(){ Name = "admin"},
+                    new Group(){ Name = "user"}
+                }
             }
         };
     }

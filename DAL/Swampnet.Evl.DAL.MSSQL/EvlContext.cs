@@ -17,12 +17,14 @@ namespace Swampnet.Evl.DAL.MSSQL
 
         public DbSet<InternalEvent> Events { get; set; }
         public DbSet<InternalTag> Tags { get; set; }
+        public DbSet<InternalProfile> Profiles { get; set; }
         public DbSet<InternalOrganisation> Organisations { get; set; }
         public DbSet<InternalRule> Rules { get; set; }
+        public DbSet<InternalGroup> Groups { get; set; }
 
         public static EvlContext Create(string connectionString)
         {
-            //Seed.Init(connectionString);
+            Seed.Init(connectionString);
 
             return new EvlContext(
                 new DbContextOptionsBuilder<EvlContext>()
@@ -66,6 +68,16 @@ namespace Swampnet.Evl.DAL.MSSQL
             modelBuilder.Entity<InternalOrganisation>().ToTable("Organisation", EvlContext.SCHEMA);
             modelBuilder.Entity<InternalOrganisation>().Property(f => f.Description).IsRequired();
             modelBuilder.Entity<InternalOrganisation>().Property(f => f.Name).IsRequired();
+
+            modelBuilder.Entity<InternalProfile>().ToTable("Profile", EvlContext.SCHEMA);
+            modelBuilder.Entity<InternalProfile>().Property(f => f.Key).HasMaxLength(512).IsRequired();
+            modelBuilder.Entity<InternalProfile>().HasKey(f => f.Id);
+            modelBuilder.Entity<InternalProfile>().HasIndex(f => f.Key);
+
+            modelBuilder.Entity<InternalGroup>().ToTable("Group", EvlContext.SCHEMA);
+
+            modelBuilder.Entity<InternalProfileGroup>().ToTable("ProfileGroups", EvlContext.SCHEMA);
+            modelBuilder.Entity<InternalProfileGroup>().HasKey(x => new { x.ProfileId, x.GroupId });
 
             modelBuilder.Entity<ApiKey>().ToTable("ApiKey", EvlContext.SCHEMA);
             modelBuilder.Entity<ApiKey>().Property(f => f.OrganisationId).IsRequired();

@@ -8,6 +8,9 @@ namespace Swampnet.Evl.Common.Entities
     {
         public long Id { get; set; }
 
+        // Some kind of unique key we get from the JWT I expect
+        public string Key { get; set; }
+
         public List<Group> Groups { get; set; }
 
         public Name Name { get; set; }
