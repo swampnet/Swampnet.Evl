@@ -53,7 +53,9 @@ namespace Swampnet.Evl.Actions
             {
                 if (evt.Tags != null && evt.Tags.Any())
                 {
-                    evt.Tags.Remove(actionDefinition.Properties.StringValue("tag"));
+                    var tag = actionDefinition.Properties.StringValue("tag");
+
+                    evt.Tags.RemoveAll(t => t == tag);
                 }
             }
 
