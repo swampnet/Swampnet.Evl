@@ -26,4 +26,15 @@ namespace Swampnet.Evl.Common.Entities
         public string Lastname { get; set; }
         public string KnownAs { get; set; }
     }
+
+
+    public class ProfileSummary
+    {
+        public long Id { get; set; }
+
+        // Some kind of unique key we get from the JWT I expect
+        public string Key { get; set; }
+
+        public Name Name { get; set; }
+    }
 }

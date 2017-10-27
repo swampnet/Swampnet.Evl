@@ -35,13 +35,6 @@ namespace Swampnet.Evl.Services
         Task<Organisation> GetOrganisationAsync(Guid id);
 
         /// <summary>
-        /// Get organisation based on principal
-        /// </summary>
-        /// <param name="principle"></param>
-        /// <returns></returns>
-        Task<Organisation> GetOrganisationAsync(IPrincipal principle);
-
-        /// <summary>
         /// Get the organisation that represents the EVL service itself
         /// </summary>
         /// <returns></returns>
@@ -130,18 +123,6 @@ namespace Swampnet.Evl.Services
             }
 
             return profile?.Profile;
-        }
-
-
-        /// <summary>
-        /// Get the organisation of the supplied principal. Generally the authenticated user
-        /// </summary>
-        /// <param name="principle"></param>
-        /// <returns></returns>
-        public Task<Organisation> GetOrganisationAsync(IPrincipal principle)
-        {
-            // Mocked out for now.
-            return GetOrganisationAsync(Common.Constants.MOCKED_DEFAULT_ORGANISATION);
         }
 
 

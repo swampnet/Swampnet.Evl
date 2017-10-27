@@ -51,6 +51,36 @@ namespace Swampnet.Evl.DAL.MSSQL
         }
 
 
+        internal static Profile ToProfile(InternalProfile source)
+        {
+            return new Profile()
+            {
+                Id = source.Id,
+                Key = source.Key,
+                Name = new Name()
+                {
+                    Title = source.Title,
+                    Firstname = source.Firstname,
+                    Lastname = source.Lastname,
+                    KnownAs = source.KnownAs
+                },
+                Organisation = source.Organisation == null
+                    ? null
+                    : Convert.ToOrganisation(source.Organisation),
+                Groups = source.InternalProfileGroups == null 
+                    ? null
+                    : source.InternalProfileGroups.Select(pg => Convert.ToGroup(pg.Group)).ToList()
+            };
+        }
+
+        internal static Group ToGroup(InternalGroup source)
+        {
+            return new Group()
+            {
+                Name = source.Name
+            };
+        }
+
 
         /// <summary>
         /// Convert an API IProperty to an InternalProperty

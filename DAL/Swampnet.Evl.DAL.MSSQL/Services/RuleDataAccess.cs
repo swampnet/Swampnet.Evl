@@ -56,7 +56,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
         }
 
 
-        public async Task CreateAsync(Organisation org, Rule rule)
+        public async Task CreateAsync(Profile profile, Rule rule)
         {
             using (var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))
             {
@@ -64,7 +64,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
 				var r = Convert.ToRule(rule);
                 r.CreatedOnUtc = DateTime.UtcNow;
                 r.ModifiedOnUtc = DateTime.UtcNow;
-                r.OrganisationId = org.Id;
+                r.OrganisationId = profile.Organisation.Id;
 
 				context.Rules.Add(r);
                 await context.SaveChangesAsync();
@@ -72,7 +72,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
         }
 
 
-        public async Task UpdateAsync(Organisation org, Rule rule)
+        public async Task UpdateAsync(Profile profile, Rule rule)
         {
             using (var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))
             {
@@ -92,7 +92,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
             }
         }
 
-        public async Task DeleteAsync(Organisation org, Guid id)
+        public async Task DeleteAsync(Profile profile, Guid id)
         {
 			// @TODO: Now, do we really want to delete stuff or just flag it as so?
 			//        A: Well, flag it as so, obv. Question is, do we use the active flag for that?
@@ -112,7 +112,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
         }
 
 
-        public async Task ReorderAsync(Organisation org, IEnumerable<RuleOrder> rules)
+        public async Task ReorderAsync(Profile profile, IEnumerable<RuleOrder> rules)
         {
             using (var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))
             {

@@ -22,6 +22,15 @@ namespace Swampnet.Evl.DAL.InMemory.Services
             throw new NotImplementedException();
         }
 
+        public Task<Profile> LoadProfileAsync(Organisation org, long id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<Profile>> LoadProfilesAsync(Organisation org)
+        {
+            throw new NotImplementedException();
+        }
 
         public async Task<Organisation> LoadOrganisationByApiKeyAsync(Guid apiKey)
         {
@@ -42,8 +51,6 @@ namespace Swampnet.Evl.DAL.InMemory.Services
                 return Convert.ToOrganisation(org);
             }
         }
-
-
 
         private void Seed()
         {

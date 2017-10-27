@@ -244,7 +244,7 @@ namespace Swampnet.Evl.DAL.MSSQL
                     Title = "Mr",
                     KnownAs = "pj"
                 },
-                Key = "@todo-pjw-001",
+                Key = Common.Constants.MOCKED_PROFILE_KEY,
                 Groups = new List<Group>()
                 {
                     new Group(){ Name = "admin"},

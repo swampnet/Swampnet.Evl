@@ -11,5 +11,7 @@ namespace Swampnet.Evl.Common.Contracts
         Task<Organisation> LoadOrganisationByApiKeyAsync(Guid apiKey);
         Task<Organisation> LoadOrganisationAsync(Guid id);
         Task<Profile> LoadProfileAsync(string key);
+        Task<Profile> LoadProfileAsync(Organisation org, long id);
+        Task<IEnumerable<Profile>> LoadProfilesAsync(Organisation org);
     }
 }

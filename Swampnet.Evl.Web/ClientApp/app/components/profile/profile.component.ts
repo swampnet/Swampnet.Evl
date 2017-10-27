@@ -8,7 +8,7 @@ import { ApiService } from '../../services/api.service';
 })
 export class ProfileComponent {
 
-	org: any;
+	profile: any;
 
     constructor(
         private api: ApiService) {
@@ -17,7 +17,7 @@ export class ProfileComponent {
 
 	async ngOnInit() {
 		try {
-			this.org = await this.api.getOrganisation();
+            this.profile = await this.api.getProfile();
 		} catch (e) {
 			console.error(e);
 		}

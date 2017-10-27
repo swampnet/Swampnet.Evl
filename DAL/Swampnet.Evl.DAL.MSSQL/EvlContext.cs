@@ -24,7 +24,7 @@ namespace Swampnet.Evl.DAL.MSSQL
 
         public static EvlContext Create(string connectionString)
         {
-            Seed.Init(connectionString);
+            //Seed.Init(connectionString);
 
             return new EvlContext(
                 new DbContextOptionsBuilder<EvlContext>()

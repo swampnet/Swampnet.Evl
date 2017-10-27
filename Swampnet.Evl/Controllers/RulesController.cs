@@ -41,13 +41,13 @@ namespace Swampnet.Evl.Controllers
         {
             try
             {
-                var org = await _auth.GetOrganisationAsync(User);
-                if (org == null)
+                var profile = await _auth.GetProfileAsync(User);
+                if (profile == null)
                 {
                     return Unauthorized();
                 }
 
-                var rules = await _rulesData.SearchAsync(org);
+                var rules = await _rulesData.SearchAsync(profile.Organisation);
 
                 return Ok(rules);
             }
@@ -69,13 +69,13 @@ namespace Swampnet.Evl.Controllers
         {
             try
             {
-                var org = await _auth.GetOrganisationAsync(User);
-                if (org == null)
+                var profile = await _auth.GetProfileAsync(User);
+                if (profile == null)
                 {
                     return Unauthorized();
                 }
 
-                var rule = await _rulesData.LoadAsync(org, id);
+                var rule = await _rulesData.LoadAsync(profile.Organisation, id);
 
                 if(rule == null)
                 {
@@ -106,8 +106,8 @@ namespace Swampnet.Evl.Controllers
         {
             try
             {
-                var org = await _auth.GetOrganisationAsync(User);
-                if (org == null)
+                var profile = await _auth.GetProfileAsync(User);
+                if (profile == null)
                 {
                     return Unauthorized();
                 }
@@ -119,7 +119,7 @@ namespace Swampnet.Evl.Controllers
 
 				Log.Debug("POST rule {ruleName}", rule.Name);
 
-				await _rulesData.CreateAsync(org, rule);
+				await _rulesData.CreateAsync(profile, rule);
 
                 return CreatedAtRoute("RuleDetails", new { id = rule.Id }, rule);
             }
@@ -147,15 +147,15 @@ namespace Swampnet.Evl.Controllers
         {
             try
             {
-                var org = await _auth.GetOrganisationAsync(User);
-                if (org == null)
+                var profile = await _auth.GetProfileAsync(User);
+                if (profile == null)
                 {
                     return Unauthorized();
                 }
 
-                await _rulesData.ReorderAsync(org, rules);
+                await _rulesData.ReorderAsync(profile, rules);
 
-                var reordered = await _rulesData.SearchAsync(org);
+                var reordered = await _rulesData.SearchAsync(profile.Organisation);
 
                 return Ok(reordered);
             }
@@ -179,8 +179,8 @@ namespace Swampnet.Evl.Controllers
         {
             try
             {
-                var org = await _auth.GetOrganisationAsync(User);
-                if (org == null)
+                var profile = await _auth.GetProfileAsync(User);
+                if (profile == null)
                 {
                     return Unauthorized();
                 }
@@ -198,7 +198,7 @@ namespace Swampnet.Evl.Controllers
 					return BadRequest("id and Rule.Id do not match");
 				}
 
-				await _rulesData.UpdateAsync(org, rule);
+				await _rulesData.UpdateAsync(profile, rule);
 
                 // Not sure I should be returning this for an update?
                 return CreatedAtRoute("RuleDetails", new { id = id }, rule);
@@ -230,15 +230,15 @@ namespace Swampnet.Evl.Controllers
         {
 			try
 			{
-                var org = await _auth.GetOrganisationAsync(User);
-                if (org == null)
+                var profile = await _auth.GetProfileAsync(User);
+                if (profile == null)
                 {
                     return Unauthorized();
                 }
 
                 Log.Information("DEL rule {ruleId}", id);
 
-				await _rulesData.DeleteAsync(org, id);
+				await _rulesData.DeleteAsync(profile, id);
 
 				return Ok();
 			}

@@ -23,8 +23,8 @@ export class ApiService {
     }
 
 
-	getOrganisation() {
-		return this.get('organisation');
+	getProfile() {
+		return this.get('profiles/current');
 	}
 
 	getRules() {
