@@ -77,7 +77,7 @@ namespace Swampnet.Evl.Controllers
                     return Unauthorized();
                 }
 
-                var sources = await _dal.GetSources(profile.Organisation);
+                var sources = await _dal.GetSources(profile);
 
                 return Ok(sources);
             }
@@ -108,7 +108,7 @@ namespace Swampnet.Evl.Controllers
                     return Unauthorized();
                 }
 
-                var tags = await _dal.GetTags(profile.Organisation);
+                var tags = await _dal.GetTags(profile);
 
 				return Ok(tags);
 			}
@@ -139,7 +139,7 @@ namespace Swampnet.Evl.Controllers
 
                 Log.Logger.WithPublicProperties(criteria).Debug("Get");
 
-                var events = await _dal.SearchAsync(profile.Organisation, criteria);
+                var events = await _dal.SearchAsync(profile, criteria);
 
                 return Ok(events);
             }

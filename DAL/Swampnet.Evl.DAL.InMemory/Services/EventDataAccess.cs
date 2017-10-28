@@ -87,7 +87,7 @@ namespace Swampnet.Evl.DAL.InMemory.Services
         }
 
 
-        public async Task<IEnumerable<EventSummary>> SearchAsync(Organisation org, EventSearchCriteria criteria)
+        public async Task<IEnumerable<EventSummary>> SearchAsync(Profile profile, EventSearchCriteria criteria)
         {
             using (var context = EventContext.Create())
             {
@@ -163,7 +163,7 @@ namespace Swampnet.Evl.DAL.InMemory.Services
             }
         }
 
-        public async Task<IEnumerable<string>> GetSources(Organisation org)
+        public async Task<IEnumerable<string>> GetSources(Profile profile)
         {
             IEnumerable<string> sources = null;
 
@@ -175,7 +175,7 @@ namespace Swampnet.Evl.DAL.InMemory.Services
             return sources;
         }
 
-		public async Task<IEnumerable<string>> GetTags(Organisation org)
+		public async Task<IEnumerable<string>> GetTags(Profile profile)
 		{
 			IEnumerable<string> tags = null;
 
@@ -187,7 +187,7 @@ namespace Swampnet.Evl.DAL.InMemory.Services
 			return tags;
 		}
 
-		public async Task<long> GetTotalEventCountAsync(Organisation org)
+		public async Task<long> GetTotalEventCountAsync(Profile profile)
         {
             long count = 0;
 

@@ -32,17 +32,17 @@ namespace UnitTests.Mocks
             }
         }
 
-        public Task<IEnumerable<string>> GetSources(Organisation org)
+        public Task<IEnumerable<string>> GetSources(Profile profile)
         {
             return Task.FromResult(_events.Select(e => e.Source).Distinct());
         }
 
-        public Task<IEnumerable<string>> GetTags(Organisation org)
+        public Task<IEnumerable<string>> GetTags(Profile profile)
         {
             return Task.FromResult(_events.SelectMany(e => e.Tags).Distinct());
         }
 
-        public Task<long> GetTotalEventCountAsync(Organisation org)
+        public Task<long> GetTotalEventCountAsync(Profile profile)
         {
             return Task.FromResult(_events.LongCount());
         }
@@ -52,7 +52,7 @@ namespace UnitTests.Mocks
             return Task.FromResult(_events.SingleOrDefault(e => e.Id == id));
         }
 
-        public Task<IEnumerable<EventSummary>> SearchAsync(Organisation org, EventSearchCriteria criteria)
+        public Task<IEnumerable<EventSummary>> SearchAsync(Profile profile, EventSearchCriteria criteria)
         {
             return Task.FromResult(_events.Select(e => new EventSummary() {
                 Id = e.Id,

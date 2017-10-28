@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System.Linq;
 using System.Collections.Generic;
 using System.Text;
 
@@ -16,7 +17,25 @@ namespace Swampnet.Evl.Common.Entities
         public Name Name { get; set; }
 
         public Organisation Organisation { get; set; }
-    }
+
+		/// <summary>
+		/// Return true if any of the groups profile belongs to has the sa permission
+		/// </summary>
+		/// <param name="permission"></param>
+		/// <returns></returns>
+		public bool HasPermission(string permission)
+		{
+			// HACK: Always true
+			return true;
+		}
+
+		public bool IsInGroup(string group)
+		{
+			return Groups == null
+				? false
+				: Groups.Any(g => g.Name.EqualsNoCase(group));
+		}
+	}
 
 
     public class Name

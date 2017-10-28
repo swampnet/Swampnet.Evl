@@ -117,7 +117,7 @@ namespace UnitTests
             Assert.IsNotNull(actual);
 
             Assert.AreEqual(
-                dal.GetTotalEventCountAsync(auth.GetOrganisationAsync(Guid.Empty).Result).Result,
+                dal.GetTotalEventCountAsync(Mock.MockedProfile()).Result,
                 actual.Count());
         }
 

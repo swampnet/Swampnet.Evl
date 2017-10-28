@@ -50,7 +50,7 @@ namespace Swampnet.Evl.Controllers
                 return Ok(new Stats()
                 {
                     ApiVersion = Assembly.GetEntryAssembly().GetName().Version.ToString(),
-                    TotalEvents = await _dal.GetTotalEventCountAsync(profile.Organisation)
+                    TotalEvents = await _dal.GetTotalEventCountAsync(profile)
                 });
             }
             catch (Exception ex)
