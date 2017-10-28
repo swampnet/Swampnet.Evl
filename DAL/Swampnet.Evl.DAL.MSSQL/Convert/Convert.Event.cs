@@ -67,25 +67,39 @@ namespace Swampnet.Evl.DAL.MSSQL
                 Organisation = source.Organisation == null
                     ? null
                     : Convert.ToOrganisation(source.Organisation),
-                Groups = source.InternalProfileGroups == null 
+                Roles = source.InternalProfileRoles == null 
                     ? null
-                    : source.InternalProfileGroups.Select(pg => Convert.ToGroup(pg.Group)).ToList()
+                    : source.InternalProfileRoles.Select(pg => Convert.ToRole(pg.Role)).ToList()
             };
         }
 
-        internal static Group ToGroup(InternalGroup source)
+        internal static Role ToRole(InternalRole source)
         {
-            return new Group()
+            return new Role()
             {
-                Name = source.Name
+                Name = source.Name,
+				Permissions = source.InternalRolePermissions == null 
+					? Enumerable.Empty<Permission>()
+					: source.InternalRolePermissions.Select(rp => Convert.ToPermission(rp.Permission))
+
             };
         }
 
 
-        /// <summary>
-        /// Convert an API IProperty to an InternalProperty
-        /// </summary>
-        internal static InternalProperty ToInternalProperty(IProperty source)
+		internal static Permission ToPermission(InternalPermission source)
+		{
+			return new Permission()
+			{
+				IsEnabled = source.IsEnabled,
+				Name = source.Name
+			};
+		}
+
+
+		/// <summary>
+		/// Convert an API IProperty to an InternalProperty
+		/// </summary>
+		internal static InternalProperty ToInternalProperty(IProperty source)
         {
             return new InternalProperty()
             {

@@ -16,7 +16,7 @@ drop table [evl].[Trigger]
 
 drop table [evl].[profilegroups]
 drop table [evl].[profile]
-drop table [evl].[group]
+drop table [evl].[role]
 
 
 drop table [evl].[Event]

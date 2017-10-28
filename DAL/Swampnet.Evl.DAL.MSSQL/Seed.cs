@@ -38,16 +38,32 @@ namespace Swampnet.Evl.DAL.MSSQL
                     ApiKey = o.ApiKey
                 }));
 
-                context.Groups.AddRange(new[]
+				context.Permissions.AddRange(new[]
+				{
+					new InternalPermission() { Name = "organisation.view-all", IsEnabled = true }
+				});
+
+				context.SaveChanges();
+
+				context.Roles.AddRange(new[]
                 {
-                    new InternalGroup() { Name = "owner" },
-                    new InternalGroup() { Name = "admin" },
-                    new InternalGroup() { Name = "user" }
+                    new InternalRole() { Name = "owner" },
+                    new InternalRole() { Name = "admin" },
+                    new InternalRole() { Name = "user" }
                 });
 
-                context.SaveChanges();
+				context.SaveChanges();
 
-                foreach(var p in _mockedProfiles)
+				var admin = context.Roles.Single(r => r.Name == "admin");
+				admin.InternalRolePermissions.Add(new InternalRolePermission()
+				{
+					Role = admin,
+					Permission = context.Permissions.Single(p => p.Name == "organisation.view-all")
+				});
+
+				context.SaveChanges();
+
+				foreach (var p in _mockedProfiles)
                 {
                     var profile = new InternalProfile()
                     {
@@ -57,14 +73,14 @@ namespace Swampnet.Evl.DAL.MSSQL
                         KnownAs = p.Name.KnownAs,
                         Key = p.Key,
                         Organisation = context.Organisations.Single(o => o.Id == Common.Constants.MOCKED_DEFAULT_ORGANISATION),
-                        InternalProfileGroups = new List<InternalProfileGroup>()
+                        InternalProfileRoles = new List<InternalProfileRole>()
                     };
 
-                    foreach(var g in p.Groups)
+                    foreach(var g in p.Roles)
                     {
-                        profile.InternalProfileGroups.Add(new InternalProfileGroup() {
+                        profile.InternalProfileRoles.Add(new InternalProfileRole() {
                             Profile = profile,
-                            Group = context.Groups.Single(x => x.Name == g.Name)
+                            Role = context.Roles.Single(x => x.Name == g.Name)
                         });
                     }
 
@@ -245,10 +261,10 @@ namespace Swampnet.Evl.DAL.MSSQL
                     KnownAs = "pj"
                 },
                 Key = Common.Constants.MOCKED_PROFILE_KEY,
-                Groups = new List<Group>()
+                Roles = new List<Role>()
                 {
-                    new Group(){ Name = "admin"},
-                    new Group(){ Name = "user"}
+                    new Role(){ Name = "admin"},
+                    new Role(){ Name = "user"}
                 }
             }
         };

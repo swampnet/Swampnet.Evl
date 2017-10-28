@@ -20,13 +20,15 @@ namespace Swampnet.Evl.DAL.MSSQL
         public DbSet<InternalProfile> Profiles { get; set; }
         public DbSet<InternalOrganisation> Organisations { get; set; }
         public DbSet<InternalRule> Rules { get; set; }
-        public DbSet<InternalGroup> Groups { get; set; }
+        public DbSet<InternalRole> Roles { get; set; }
+		public DbSet<InternalPermission> Permissions { get; set; }
 
-        public static EvlContext Create(string connectionString)
+
+		public static EvlContext Create(string connectionString)
         {
-            //Seed.Init(connectionString);
+			//Seed.Init(connectionString);
 
-            return new EvlContext(
+			return new EvlContext(
                 new DbContextOptionsBuilder<EvlContext>()
                     .UseSqlServer(connectionString)
                     .Options);
@@ -74,12 +76,17 @@ namespace Swampnet.Evl.DAL.MSSQL
             modelBuilder.Entity<InternalProfile>().HasKey(f => f.Id);
             modelBuilder.Entity<InternalProfile>().HasIndex(f => f.Key);
 
-            modelBuilder.Entity<InternalGroup>().ToTable("Group", EvlContext.SCHEMA);
+            modelBuilder.Entity<InternalRole>().ToTable("Role", EvlContext.SCHEMA);
 
-            modelBuilder.Entity<InternalProfileGroup>().ToTable("ProfileGroups", EvlContext.SCHEMA);
-            modelBuilder.Entity<InternalProfileGroup>().HasKey(x => new { x.ProfileId, x.GroupId });
+            modelBuilder.Entity<InternalProfileRole>().ToTable("ProfileGroups", EvlContext.SCHEMA);
+            modelBuilder.Entity<InternalProfileRole>().HasKey(x => new { x.ProfileId, x.RoleId });
 
-            modelBuilder.Entity<ApiKey>().ToTable("ApiKey", EvlContext.SCHEMA);
+			modelBuilder.Entity<InternalPermission>().ToTable("Permission", EvlContext.SCHEMA);
+			modelBuilder.Entity<InternalRolePermission>().ToTable("RolePermissions", EvlContext.SCHEMA);
+			modelBuilder.Entity<InternalRolePermission>().HasKey(x => new { x.PermissionId, x.RoleId });
+
+
+			modelBuilder.Entity<ApiKey>().ToTable("ApiKey", EvlContext.SCHEMA);
             modelBuilder.Entity<ApiKey>().Property(f => f.OrganisationId).IsRequired();
 
             modelBuilder.Entity<InternalRule>().ToTable("Rule", EvlContext.SCHEMA);

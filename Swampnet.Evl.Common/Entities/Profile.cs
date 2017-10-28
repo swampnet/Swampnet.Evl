@@ -12,7 +12,7 @@ namespace Swampnet.Evl.Common.Entities
         // Some kind of unique key we get from the JWT I expect
         public string Key { get; set; }
 
-        public List<Group> Groups { get; set; }
+        public IEnumerable<Role> Roles { get; set; }
 
         public Name Name { get; set; }
 
@@ -25,15 +25,16 @@ namespace Swampnet.Evl.Common.Entities
 		/// <returns></returns>
 		public bool HasPermission(string permission)
 		{
-			// HACK: Always true
-			return true;
+			return Roles == null
+				? false
+				: Roles.Any(r => r.HasPermission(permission));
 		}
 
-		public bool IsInGroup(string group)
+		public bool HasRole(string role)
 		{
-			return Groups == null
+			return Roles == null
 				? false
-				: Groups.Any(g => g.Name.EqualsNoCase(group));
+				: Roles.Any(r => r.Name.EqualsNoCase(role));
 		}
 	}
 

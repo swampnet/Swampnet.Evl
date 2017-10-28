@@ -2,5 +2,5 @@
 	<h1>{{profile.name.knownAs}}</h1>
 	<div>id: {{profile.id}} - {{profile.name.title}} {{profile.name.firstName}} {{profile.name.lastName}}</div>
 	<div>org: {{profile.organisation.id}} - {{profile.organisation.name}}</div>
-	<div *ngFor="let g of profile.groups">{{g.name}}</div>
+	<span *ngFor="let r of profile.roles">{{r.name}}, </span>
 </div>

@@ -96,9 +96,9 @@ namespace UnitTests.Mocks
             {
                 Id = 1,
                 Key = "@profile-key",
-                Groups = new List<Group>()
+                Roles = new List<Role>()
                 {
-                    new Group(){ Name = "tester" }
+                    new Role(){ Name = "tester" }
                 },
                 Name = new Name()
                 {
@@ -121,5 +121,39 @@ namespace UnitTests.Mocks
                 Description = "Mocked Organisation"
             };
         }
+
+		internal static Profile Profile()
+		{
+			return new Profile()
+			{
+				Roles = new List<Role>()
+				{
+					new Role()
+					{
+						Name = "test-role",
+						Permissions = new[]
+						{
+							new Permission()
+							{
+								Name = "test.permission",
+								IsEnabled = true,
+							}
+						}
+					},
+					new Role()
+					{
+						Name = "admin-role",
+						Permissions = new[]
+						{
+							new Permission()
+							{
+								Name = "admin.permission",
+								IsEnabled = true,
+							}
+						}
+					}
+				}
+			};
+		}
     }
 }

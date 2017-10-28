@@ -26,9 +26,11 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
             {
                 var p = await context.Profiles
                     .Include(x => x.Organisation)
-                    .Include(x => x.InternalProfileGroups)
-                        .ThenInclude(pg => pg.Group)
-                    .SingleOrDefaultAsync(x => x.Organisation.Id == org.Id && x.Id == id);
+                    .Include(x => x.InternalProfileRoles)
+                        .ThenInclude(pg => pg.Role)
+							.ThenInclude(r => r.InternalRolePermissions)
+								.ThenInclude(r => r.Permission)
+					.SingleOrDefaultAsync(x => x.Organisation.Id == org.Id && x.Id == id);
 
                 return Convert.ToProfile(p);
             }
@@ -41,9 +43,11 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
             {
                 var p = await context.Profiles
                     .Include(x => x.Organisation)
-                    .Include(x => x.InternalProfileGroups)
-                        .ThenInclude(pg => pg.Group)
-                    .SingleOrDefaultAsync(x => x.Key == key);
+                    .Include(x => x.InternalProfileRoles)
+                        .ThenInclude(pg => pg.Role)
+							.ThenInclude(r => r.InternalRolePermissions)
+								.ThenInclude(r => r.Permission)
+					.SingleOrDefaultAsync(x => x.Key == key);
 
                 return Convert.ToProfile(p);
             }
