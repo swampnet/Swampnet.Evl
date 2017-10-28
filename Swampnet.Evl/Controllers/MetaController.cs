@@ -47,25 +47,25 @@ namespace Swampnet.Evl.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var org = await _auth.GetOrganisationAsync(User);
-            if (org == null)
+            var profile = await _auth.GetProfileAsync(User);
+            if (profile == null)
             {
                 return Unauthorized();
             }
 
-            var metaData = await GetMetaData(org);
+            var metaData = await GetMetaData(profile);
 
             return Ok(metaData);
         }
 
 
-        private async Task<MetaData> GetMetaData(Organisation org)
+        private async Task<MetaData> GetMetaData(Profile profile)
         {
             return new MetaData()
             {
-                ActionMetaData = await GetActionMetaData(org),
-                Operands = await GetOperands(org),
-                Operators = await GetOperators(org)
+                ActionMetaData = await GetActionMetaData(profile.Organisation),
+                Operands = await GetOperands(profile),
+                Operators = await GetOperators(profile.Organisation)
             };
         }
 
@@ -76,9 +76,9 @@ namespace Swampnet.Evl.Controllers
         }
 
 
-        private async Task<MetaDataCapture[]> GetOperands(Organisation org)
+        private async Task<MetaDataCapture[]> GetOperands(Profile profile)
         {
-            var sources = await _eventDataAccess.GetSources(org);
+            var sources = await _eventDataAccess.GetSources(profile);
 
             // Start off with our static list
             var operands = new List<MetaDataCapture>(_operands);

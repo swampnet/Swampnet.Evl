@@ -51,11 +51,55 @@ namespace Swampnet.Evl.DAL.MSSQL
         }
 
 
+        internal static Profile ToProfile(InternalProfile source)
+        {
+            return new Profile()
+            {
+                Id = source.Id,
+                Key = source.Key,
+                Name = new Name()
+                {
+                    Title = source.Title,
+                    Firstname = source.Firstname,
+                    Lastname = source.Lastname,
+                    KnownAs = source.KnownAs
+                },
+                Organisation = source.Organisation == null
+                    ? null
+                    : Convert.ToOrganisation(source.Organisation),
+                Roles = source.InternalProfileRoles == null 
+                    ? null
+                    : source.InternalProfileRoles.Select(pg => Convert.ToRole(pg.Role)).ToList()
+            };
+        }
 
-        /// <summary>
-        /// Convert an API IProperty to an InternalProperty
-        /// </summary>
-        internal static InternalProperty ToInternalProperty(IProperty source)
+        internal static Role ToRole(InternalRole source)
+        {
+            return new Role()
+            {
+                Name = source.Name,
+				Permissions = source.InternalRolePermissions == null 
+					? Enumerable.Empty<Permission>()
+					: source.InternalRolePermissions.Select(rp => Convert.ToPermission(rp.Permission))
+
+            };
+        }
+
+
+		internal static Permission ToPermission(InternalPermission source)
+		{
+			return new Permission()
+			{
+				IsEnabled = source.IsEnabled,
+				Name = source.Name
+			};
+		}
+
+
+		/// <summary>
+		/// Convert an API IProperty to an InternalProperty
+		/// </summary>
+		internal static InternalProperty ToInternalProperty(IProperty source)
         {
             return new InternalProperty()
             {

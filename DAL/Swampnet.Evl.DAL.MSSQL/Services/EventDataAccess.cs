@@ -93,15 +93,18 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
         }
 
 
-        public async Task<IEnumerable<EventSummary>> SearchAsync(Organisation org, EventSearchCriteria criteria)
+        public async Task<IEnumerable<EventSummary>> SearchAsync(Profile profile, EventSearchCriteria criteria)
         {
             using (var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))
             {
                 var query = context.Events.AsQueryable();
 
-                query = query.Where(e => e.OrganisationId == org.Id);
+				if (!profile.HasPermission("organisation.view-all"))
+				{
+					query = query.Where(e => e.OrganisationId == profile.Organisation.Id);
+				}
 
-                if (criteria.Id.HasValue)
+				if (criteria.Id.HasValue)
                 {
                     query = query.Where(e => e.Id == criteria.Id);
                 }
@@ -171,14 +174,20 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
             }
         }
 
-        public async Task<IEnumerable<string>> GetSources(Organisation org)
+        public async Task<IEnumerable<string>> GetSources(Profile profile)
         {
             IEnumerable<string> sources = null;
 
             using (var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))
             {
-                sources = await context.Events
-                    .Where(e => e.OrganisationId == org.Id)
+				var query = context.Events.AsQueryable();
+
+				if (!profile.HasPermission("organisation.view-all"))
+				{
+					query = query.Where(e => e.OrganisationId == profile.Organisation.Id);
+				}
+
+				sources = await query
                     .Select(e => e.Source)
                     .Distinct()
                     .ToListAsync();
@@ -187,25 +196,42 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
             return sources;
         }
 
-		public async Task<IEnumerable<string>> GetTags(Organisation org)
+
+		public async Task<IEnumerable<string>> GetTags(Profile profile)
 		{
 			IEnumerable<string> tags = null;
 
 			using (var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))
 			{
-				tags = await context.Tags.Where(t => t.OrganisationId == org.Id).Select(t => t.Name).Distinct().ToListAsync();
+				var query = context.Tags.AsQueryable();
+
+				if (!profile.HasPermission("organisation.view-all"))
+				{
+					query = query.Where(t => t.OrganisationId == profile.Organisation.Id);
+				}
+
+
+				tags = await query.Select(t => t.Name).Distinct().ToListAsync();
 			}
 
 			return tags;
 		}
 
-		public async Task<long> GetTotalEventCountAsync(Organisation org)
+
+		public async Task<long> GetTotalEventCountAsync(Profile profile)
         {
             long count = 0;
 
             using (var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))
             {
-                count = await context.Events.Where(e => e.OrganisationId == org.Id).LongCountAsync();
+				var query = context.Events.AsQueryable();
+
+				if (!profile.HasPermission("organisation.view-all"))
+				{
+					query = query.Where(e => e.OrganisationId == profile.Organisation.Id);
+				}
+
+                count = await query.LongCountAsync();
             }
 
             return count;

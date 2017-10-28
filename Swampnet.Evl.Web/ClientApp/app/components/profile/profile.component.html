@@ -1,6 +1,6 @@
-<div *ngIf="org">
-	<h1>{{org.name}}</h1>
-	<h2>{{org.description}}</h2>
-	<div>id: {{org.id}}</div>
-	<div>apiKey: {{org.apiKey}}</div>
+<div *ngIf="profile">
+	<h1>{{profile.name.knownAs}}</h1>
+	<div>id: {{profile.id}} - {{profile.name.title}} {{profile.name.firstName}} {{profile.name.lastName}}</div>
+	<div>org: {{profile.organisation.id}} - {{profile.organisation.name}}</div>
+	<span *ngFor="let r of profile.roles">{{r.name}}, </span>
 </div>

@@ -77,17 +77,38 @@ namespace UnitTests.Mocks
             return new MockedEventQueueProcessor();
         }
 
-        internal static MockedAuth Auth(Organisation org)
+        internal static MockedAuth Auth(Profile profile)
         {
             return new MockedAuth()
             {
-                Organisation = org
+                Profile = profile
             };
         }
 
         internal static MockedEventDataAccess EventDataAccess()
         {
             return new MockedEventDataAccess();
+        }
+
+        internal static Profile MockedProfile()
+        {
+            return new Profile()
+            {
+                Id = 1,
+                Key = "@profile-key",
+                Roles = new List<Role>()
+                {
+                    new Role(){ Name = "tester" }
+                },
+                Name = new Name()
+                {
+                    Title = "Mr",
+                    Firstname = "First",
+                    Lastname = "Last",
+                    KnownAs = "Testy Mc Test Face"
+                },
+                Organisation = MockedOrganisation()
+            };
         }
 
         internal static Organisation MockedOrganisation()
@@ -100,5 +121,39 @@ namespace UnitTests.Mocks
                 Description = "Mocked Organisation"
             };
         }
+
+		internal static Profile Profile()
+		{
+			return new Profile()
+			{
+				Roles = new List<Role>()
+				{
+					new Role()
+					{
+						Name = "test-role",
+						Permissions = new[]
+						{
+							new Permission()
+							{
+								Name = "test.permission",
+								IsEnabled = true,
+							}
+						}
+					},
+					new Role()
+					{
+						Name = "admin-role",
+						Permissions = new[]
+						{
+							new Permission()
+							{
+								Name = "admin.permission",
+								IsEnabled = true,
+							}
+						}
+					}
+				}
+			};
+		}
     }
 }

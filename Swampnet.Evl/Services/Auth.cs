@@ -14,6 +14,13 @@ namespace Swampnet.Evl.Services
     public interface IAuth
     {
         /// <summary>
+        /// Get profile from principal
+        /// </summary>
+        /// <param name="principle"></param>
+        /// <returns></returns>
+        Task<Profile> GetProfileAsync(IPrincipal principle);
+
+        /// <summary>
         /// Get organisation from an api-key
         /// </summary>
         /// <param name="apiKey"></param>
@@ -28,13 +35,6 @@ namespace Swampnet.Evl.Services
         Task<Organisation> GetOrganisationAsync(Guid id);
 
         /// <summary>
-        /// Get organisation based on principal
-        /// </summary>
-        /// <param name="principle"></param>
-        /// <returns></returns>
-        Task<Organisation> GetOrganisationAsync(IPrincipal principle);
-
-        /// <summary>
         /// Get the organisation that represents the EVL service itself
         /// </summary>
         /// <returns></returns>
@@ -45,6 +45,19 @@ namespace Swampnet.Evl.Services
 
     class Auth : IAuth
     {
+        class CachedProfile
+        {
+            public CachedProfile(Profile profile)
+            {
+                Profile = profile;
+                CreatedOnUtc = DateTime.UtcNow;
+            }
+
+            public Profile Profile { get; private set; }
+            public DateTime CreatedOnUtc { get; private set; }
+        }
+
+
         class CachedOrganisation
         {
             private TimeSpan _ttl = TimeSpan.FromMinutes(5);
@@ -74,11 +87,42 @@ namespace Swampnet.Evl.Services
         private readonly IConfiguration _cfg;
         private readonly ConcurrentDictionary<Guid, CachedOrganisation> _apiKeyCache = new ConcurrentDictionary<Guid, CachedOrganisation>();
         private readonly ConcurrentDictionary<Guid, CachedOrganisation> _idCache = new ConcurrentDictionary<Guid, CachedOrganisation>();
+        private readonly ConcurrentDictionary<string, CachedProfile> _cachedProfiles = new ConcurrentDictionary<string, CachedProfile>();
 
         public Auth(IManagementDataAccess managementData, IConfiguration cfg)
         {
             _managementData = managementData;
             _cfg = cfg;
+        }
+
+
+        /// <summary>
+        /// Get profile from IPrincipal
+        /// </summary>
+        /// <param name="principle"></param>
+        /// <returns></returns>
+        public async Task<Profile> GetProfileAsync(IPrincipal principle)
+        {
+            string key = Common.Constants.MOCKED_PROFILE_KEY;
+
+            CachedProfile profile = null;
+
+            if (_cachedProfiles.ContainsKey(key))
+            {
+                profile = _cachedProfiles[key];
+            }
+            else
+            {
+                var p = await _managementData.LoadProfileAsync(key);
+
+                if (p != null)
+                {
+                    profile = new CachedProfile(p);
+                    _cachedProfiles.TryAdd(key, profile);
+                }
+            }
+
+            return profile?.Profile;
         }
 
 
@@ -128,16 +172,6 @@ namespace Swampnet.Evl.Services
             return org?.Organisation;
         }
 
-        /// <summary>
-        /// Get the organisation of the supplied principal. Generally the authenticated user
-        /// </summary>
-        /// <param name="principle"></param>
-        /// <returns></returns>
-        public Task<Organisation> GetOrganisationAsync(IPrincipal principle)
-        {
-            // Mocked out for now.
-            return GetOrganisationAsync(Common.Constants.MOCKED_DEFAULT_ORGANISATION);
-        }
 
 
         public Organisation GetEvlOrganisation()
