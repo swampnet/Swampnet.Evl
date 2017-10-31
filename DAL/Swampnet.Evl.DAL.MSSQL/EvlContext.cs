@@ -72,19 +72,19 @@ namespace Swampnet.Evl.DAL.MSSQL
             modelBuilder.Entity<InternalOrganisation>().Property(f => f.Name).IsRequired();
 
             modelBuilder.Entity<InternalProfile>().ToTable("Profile", EvlContext.SCHEMA);
-            modelBuilder.Entity<InternalProfile>().Property(f => f.Key).HasMaxLength(512).IsRequired();
+            modelBuilder.Entity<InternalProfile>().Property(f => f.Key).HasMaxLength(256).IsRequired();
+            modelBuilder.Entity<InternalProfile>().Property(f => f.InternalOrganisationId).HasColumnName("OrganisationId");
             modelBuilder.Entity<InternalProfile>().HasKey(f => f.Id);
             modelBuilder.Entity<InternalProfile>().HasIndex(f => f.Key);
 
             modelBuilder.Entity<InternalRole>().ToTable("Role", EvlContext.SCHEMA);
 
-            modelBuilder.Entity<InternalProfileRole>().ToTable("ProfileGroups", EvlContext.SCHEMA);
+            modelBuilder.Entity<InternalProfileRole>().ToTable("ProfileRoles", EvlContext.SCHEMA);
             modelBuilder.Entity<InternalProfileRole>().HasKey(x => new { x.ProfileId, x.RoleId });
 
 			modelBuilder.Entity<InternalPermission>().ToTable("Permission", EvlContext.SCHEMA);
 			modelBuilder.Entity<InternalRolePermission>().ToTable("RolePermissions", EvlContext.SCHEMA);
 			modelBuilder.Entity<InternalRolePermission>().HasKey(x => new { x.PermissionId, x.RoleId });
-
 
 			modelBuilder.Entity<ApiKey>().ToTable("ApiKey", EvlContext.SCHEMA);
             modelBuilder.Entity<ApiKey>().Property(f => f.OrganisationId).IsRequired();

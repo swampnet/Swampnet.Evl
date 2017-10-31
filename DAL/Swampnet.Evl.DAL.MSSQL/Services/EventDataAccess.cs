@@ -99,7 +99,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
             {
                 var query = context.Events.AsQueryable();
 
-				if (!profile.HasPermission("organisation.view-all"))
+				if (!profile.HasPermission(Permission.organisation_view_all))
 				{
 					query = query.Where(e => e.OrganisationId == profile.Organisation.Id);
 				}
@@ -182,7 +182,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
             {
 				var query = context.Events.AsQueryable();
 
-				if (!profile.HasPermission("organisation.view-all"))
+				if (!profile.HasPermission(Permission.organisation_view_all))
 				{
 					query = query.Where(e => e.OrganisationId == profile.Organisation.Id);
 				}
@@ -205,7 +205,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
 			{
 				var query = context.Tags.AsQueryable();
 
-				if (!profile.HasPermission("organisation.view-all"))
+				if (!profile.HasPermission(Permission.organisation_view_all))
 				{
 					query = query.Where(t => t.OrganisationId == profile.Organisation.Id);
 				}
@@ -226,7 +226,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
             {
 				var query = context.Events.AsQueryable();
 
-				if (!profile.HasPermission("organisation.view-all"))
+				if (!profile.HasPermission(Permission.organisation_view_all))
 				{
 					query = query.Where(e => e.OrganisationId == profile.Organisation.Id);
 				}

@@ -14,9 +14,11 @@ drop table [evl].Tag
 
 drop table [evl].[Trigger]
 
-drop table [evl].[profilegroups]
+drop table [evl].[profileroles]
 drop table [evl].[profile]
+drop table [evl].[rolepermissions]
 drop table [evl].[role]
+drop table [evl].[permission]
 
 
 drop table [evl].[Event]

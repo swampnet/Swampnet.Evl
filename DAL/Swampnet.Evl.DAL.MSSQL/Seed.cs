@@ -40,7 +40,7 @@ namespace Swampnet.Evl.DAL.MSSQL
 
 				context.Permissions.AddRange(new[]
 				{
-					new InternalPermission() { Name = "organisation.view-all", IsEnabled = true }
+					new InternalPermission() { Name = Permission.organisation_view_all, IsEnabled = true }
 				});
 
 				context.SaveChanges();
@@ -58,7 +58,7 @@ namespace Swampnet.Evl.DAL.MSSQL
 				admin.InternalRolePermissions.Add(new InternalRolePermission()
 				{
 					Role = admin,
-					Permission = context.Permissions.Single(p => p.Name == "organisation.view-all")
+					Permission = context.Permissions.Single(p => p.Name == Permission.organisation_view_all)
 				});
 
 				context.SaveChanges();

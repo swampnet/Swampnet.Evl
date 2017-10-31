@@ -16,6 +16,61 @@ insert into [evl].[apiKey] (Id, CreatedOnUtc, OrganisationId, RevokedOnUtc) valu
 	('3B94A54F-FDF2-4AFF-AA80-A35ED5836841', GetUtcDate(), @mocked_organisation, null),
 	('58BAD582-C6CF-407A-B482-502FB423CD55', GetUtcDate(), @mocked_organisation, null)
 
+-- Permissions
+insert into evl.Permission (IsEnabled, Name) values
+	(1, 'organisation.view'),
+	(1, 'organisation.create'),
+	(1, 'organisation.edit'),
+	(1, 'organisation.delete'),
+	(1, 'organisation.view-all')
 
-commit
---rollback
+-- Roles
+insert into evl.[Role] (Name) values
+	('owner'),
+	('admin'),
+	('user')
+
+insert into evl.RolePermissions (RoleId, PermissionId)
+select r.Id, p.Id
+from evl.[Role] r, evl.Permission p
+where r.name = 'admin'
+and p.name in (
+	'organisation.view',
+	'organisation.create',
+	'organisation.edit',
+	'organisation.delete',
+	'organisation.view-all'
+)
+
+insert into evl.RolePermissions (RoleId, PermissionId)
+select r.Id, p.Id
+from evl.[Role] r, evl.Permission p
+where r.name = 'user'
+and p.name in (
+	'organisation.view'
+)
+
+-- Profiles
+insert into evl.[Profile] (Title, Firstname, Lastname, KnownAs, OrganisationId, [Key]) values
+	('Mr', 'Pete', 'Whitby', 'pj', @mocked_organisation, '@todo-pjw-001'),
+	('Mr', 'Testy', 'McTestface', 'tf', @mocked_organisation, '@todo-tf-001')
+
+-- Add admin & user roles
+insert into evl.ProfileRoles (ProfileId, RoleId)
+select p.Id, r.Id
+from evl.[profile] p, evl.[role] r
+where p.[key] = '@todo-pjw-001'
+and r.name in ('admin', 'user')
+
+-- Add admin & user roles
+insert into evl.ProfileRoles (ProfileId, RoleId)
+select
+	p.Id,
+	r.Id
+from evl.[profile] p, evl.[role] r
+where p.[key] = '@todo-tf-001'
+and r.name in ('user')
+
+
+--commit
+rollback
