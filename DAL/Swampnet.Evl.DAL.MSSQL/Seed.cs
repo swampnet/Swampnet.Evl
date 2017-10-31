@@ -54,14 +54,24 @@ namespace Swampnet.Evl.DAL.MSSQL
 
 				context.SaveChanges();
 
+                // Add permissions to admin role
 				var admin = context.Roles.Single(r => r.Name == "admin");
-				admin.InternalRolePermissions.Add(new InternalRolePermission()
-				{
-					Role = admin,
-					Permission = context.Permissions.Single(p => p.Name == Permission.organisation_view_all)
-				});
+                foreach(var perm in new[] {
+                    Permission.organisation_view_all,
+                    Permission.rule_create,
+                    Permission.rule_edit,
+                    Permission.rule_delete,
+                    Permission.rule_view
+                })
+                {
+                    admin.InternalRolePermissions.Add(new InternalRolePermission()
+                    {
+                        Role = admin,
+                        Permission = context.Permissions.Single(p => p.Name == perm)
+                    });
+                }
 
-				context.SaveChanges();
+                context.SaveChanges();
 
 				foreach (var p in _mockedProfiles)
                 {

@@ -18,6 +18,11 @@ insert into [evl].[apiKey] (Id, CreatedOnUtc, OrganisationId, RevokedOnUtc) valu
 
 -- Permissions
 insert into evl.Permission (IsEnabled, Name) values
+	(1, 'rule.view'),
+	(1, 'rule.create'),
+	(1, 'rule.edit'),
+	(1, 'rule.delete'),
+
 	(1, 'organisation.view'),
 	(1, 'organisation.create'),
 	(1, 'organisation.edit'),
@@ -35,6 +40,11 @@ select r.Id, p.Id
 from evl.[Role] r, evl.Permission p
 where r.name = 'admin'
 and p.name in (
+	'rule.view',
+	'rule.create',
+	'rule.edit',
+	'rule.delete',
+
 	'organisation.view',
 	'organisation.create',
 	'organisation.edit',
