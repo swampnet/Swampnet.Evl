@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Swampnet.Evl.Common;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -9,6 +10,11 @@ namespace Swampnet.Evl.DAL.MSSQL.Entities
     /// </summary>
     internal class InternalRule
     {
+        public InternalRule()
+        {
+            Audit = new List<InternalRuleAudit>();
+        }
+
         /// <summary>
         /// PK
         /// </summary>
@@ -50,14 +56,17 @@ namespace Swampnet.Evl.DAL.MSSQL.Entities
         public string ActionData { get; set; }
 
         /// <summary>
-        /// When the rule was created
+        /// Audit trail
         /// </summary>
-        public DateTime CreatedOnUtc { get; set; }
+        public ICollection<InternalRuleAudit> Audit { get; set; }
 
 
-        /// <summary>
-        /// When the rule was last updated
-        /// </summary>
-        public DateTime ModifiedOnUtc { get; set; }
+        internal void AddAudit(long profileId, AuditAction action)
+        {
+            Audit.Add(new InternalRuleAudit() {
+                Audit = new InternalAudit(profileId, action),
+                Rule = this
+            });
+        }
     }
 }

@@ -1,7 +1,6 @@
 ﻿-- Drop Evl tables
 
 drop table [evl].ApiKey
-drop table [evl].[rule]
 
 drop table [evl].EventProperties
 drop table [evl].[ActionProperties]
@@ -15,12 +14,17 @@ drop table [evl].Tag
 drop table [evl].[Trigger]
 
 drop table [evl].[profileroles]
+
+drop table evl.[RuleAudit]
+drop table evl.[Audit]
+
 drop table [evl].[profile]
+
 drop table [evl].[rolepermissions]
 drop table [evl].[role]
 drop table [evl].[permission]
 
-
+drop table [evl].[rule]
 drop table [evl].[Event]
 drop table [evl].Organisation
 

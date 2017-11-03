@@ -26,7 +26,7 @@ namespace Swampnet.Evl.DAL.MSSQL
 
 		public static EvlContext Create(string connectionString)
         {
-			Seed.Init(connectionString);
+			//Seed.Init(connectionString);
 
 			return new EvlContext(
                 new DbContextOptionsBuilder<EvlContext>()
@@ -89,11 +89,18 @@ namespace Swampnet.Evl.DAL.MSSQL
 			modelBuilder.Entity<ApiKey>().ToTable("ApiKey", EvlContext.SCHEMA);
             modelBuilder.Entity<ApiKey>().Property(f => f.OrganisationId).IsRequired();
 
+            modelBuilder.Entity<InternalAudit>().ToTable("Audit", EvlContext.SCHEMA);
+            modelBuilder.Entity<InternalAudit>().Property(f => f.Action).HasMaxLength(100);
+            modelBuilder.Entity<InternalAudit>().Property(f => f.InternalProfileId).HasColumnName("ProfileId");
+
             modelBuilder.Entity<InternalRule>().ToTable("Rule", EvlContext.SCHEMA);
             modelBuilder.Entity<InternalRule>().Property(f => f.ActionData).IsRequired().HasColumnType("xml");
             modelBuilder.Entity<InternalRule>().Property(f => f.ExpressionData).IsRequired().HasColumnType("xml");
             modelBuilder.Entity<InternalRule>().Property(f => f.Name).IsRequired();
             modelBuilder.Entity<InternalRule>().Property(f => f.IsActive).IsRequired();
+
+            modelBuilder.Entity<InternalRuleAudit>().ToTable("RuleAudit", EvlContext.SCHEMA);
+            modelBuilder.Entity<InternalRuleAudit>().HasKey(x => new { x.RuleId, x.AuditId });
 
             modelBuilder.Entity<InternalTrigger>().ToTable("Trigger", EvlContext.SCHEMA);
             modelBuilder.Entity<InternalTrigger>().Property(f => f.RuleName).IsRequired();
