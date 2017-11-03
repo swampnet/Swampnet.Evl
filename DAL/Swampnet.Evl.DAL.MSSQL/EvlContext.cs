@@ -26,7 +26,7 @@ namespace Swampnet.Evl.DAL.MSSQL
 
 		public static EvlContext Create(string connectionString)
         {
-			//Seed.Init(connectionString);
+			Seed.Init(connectionString);
 
 			return new EvlContext(
                 new DbContextOptionsBuilder<EvlContext>()
@@ -101,6 +101,12 @@ namespace Swampnet.Evl.DAL.MSSQL
 
             modelBuilder.Entity<InternalRuleAudit>().ToTable("RuleAudit", EvlContext.SCHEMA);
             modelBuilder.Entity<InternalRuleAudit>().HasKey(x => new { x.RuleId, x.AuditId });
+
+            modelBuilder.Entity<InternalProfileAudit>().ToTable("ProfileAudit", EvlContext.SCHEMA);
+            modelBuilder.Entity<InternalProfileAudit>().HasKey(x => new { x.ProfileId, x.AuditId });
+
+            modelBuilder.Entity<InternalOrganisationAudit>().ToTable("OrganisationAudit", EvlContext.SCHEMA);
+            modelBuilder.Entity<InternalOrganisationAudit>().HasKey(x => new { x.OrganisationId, x.AuditId });
 
             modelBuilder.Entity<InternalTrigger>().ToTable("Trigger", EvlContext.SCHEMA);
             modelBuilder.Entity<InternalTrigger>().Property(f => f.RuleName).IsRequired();

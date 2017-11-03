@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Swampnet.Evl.Common;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -13,6 +14,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Entities
             Rules = new List<InternalRule>();
             Tags = new List<InternalTag>();
             Profiles = new List<InternalProfile>();
+            Audit = new List<InternalOrganisationAudit>();
         }
 
         public Guid Id { get; set; }
@@ -29,27 +31,19 @@ namespace Swampnet.Evl.DAL.MSSQL.Entities
         public ICollection<InternalRule> Rules { get; set; }
         public ICollection<InternalTag> Tags { get; set; }
         public ICollection<InternalProfile> Profiles { get; set; }
+        public ICollection<InternalOrganisationAudit> Audit { get; set; }
+
+        internal void AddAudit(long profileId, AuditAction action)
+        {
+            Audit.Add(new InternalOrganisationAudit()
+            {
+                Audit = new InternalAudit(profileId, action),
+                Organisation = this
+            });
+        }
+
     }
 
-
-    class InternalProfile
-    {
-		public InternalProfile()
-		{
-			InternalProfileRoles = new List<InternalProfileRole>();
-		}
-
-        public long Id { get; set; }
-        public string Key { get; set; }
-        public string Title { get; set; }
-        public string Firstname { get; set; }
-        public string Lastname { get; set; }
-        public string KnownAs { get; set; }
-
-        public Guid InternalOrganisationId { get; set; }
-        public InternalOrganisation Organisation { get; set; }
-        public ICollection<InternalProfileRole> InternalProfileRoles { get; set; }
-    }
 
     class InternalProfileRole
     {

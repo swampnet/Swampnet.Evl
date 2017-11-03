@@ -115,14 +115,7 @@ namespace Swampnet.Evl.DAL.MSSQL
                 {
                     var rule = Convert.ToRule(r);
                     rule.OrganisationId = Common.Constants.MOCKED_DEFAULT_ORGANISATION;
-
                     rule.AddAudit(defaultProfile.Id, Common.AuditAction.Create);
-
-                    //rule.CreatedOnUtc = DateTime.UtcNow;
-                    //rule.CreatedBy = context.Profiles.Single(p => p.Key == Common.Constants.MOCKED_PROFILE_KEY);
-                    //rule.ModifiedOnUtc = DateTime.UtcNow;
-                    //rule.ModifiedBy = context.Profiles.Single(p => p.Key == Common.Constants.MOCKED_PROFILE_KEY);
-
                     context.Rules.Add(rule);
                 }
 
