@@ -54,6 +54,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Entities
         /// </summary>
         public DateTime CreatedOnUtc { get; set; }
 
+
         /// <summary>
         /// When the rule was last updated
         /// </summary>

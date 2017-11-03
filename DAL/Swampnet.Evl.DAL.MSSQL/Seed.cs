@@ -40,8 +40,18 @@ namespace Swampnet.Evl.DAL.MSSQL
 
 				context.Permissions.AddRange(new[]
 				{
-					new InternalPermission() { Name = Permission.organisation_view_all, IsEnabled = true }
-				});
+					new InternalPermission() { Name = Permission.organisation_view_all, IsEnabled = true },
+                    new InternalPermission() { Name = Permission.organisation_create, IsEnabled = true },
+                    new InternalPermission() { Name = Permission.organisation_delete, IsEnabled = true },
+                    new InternalPermission() { Name = Permission.organisation_edit, IsEnabled = true },
+                    new InternalPermission() { Name = Permission.organisation_view, IsEnabled = true },
+
+                    new InternalPermission() { Name = Permission.rule_create, IsEnabled = true },
+                    new InternalPermission() { Name = Permission.rule_delete, IsEnabled = true },
+                    new InternalPermission() { Name = Permission.rule_edit, IsEnabled = true },
+                    new InternalPermission() { Name = Permission.rule_view, IsEnabled = true }
+
+                });
 
 				context.SaveChanges();
 
@@ -104,7 +114,9 @@ namespace Swampnet.Evl.DAL.MSSQL
                     var rule = Convert.ToRule(r);
                     rule.OrganisationId = Common.Constants.MOCKED_DEFAULT_ORGANISATION;
                     rule.CreatedOnUtc = DateTime.UtcNow;
+                    //rule.CreatedBy = context.Profiles.Single(p => p.Key == Common.Constants.MOCKED_PROFILE_KEY);
                     rule.ModifiedOnUtc = DateTime.UtcNow;
+                    //rule.ModifiedBy = context.Profiles.Single(p => p.Key == Common.Constants.MOCKED_PROFILE_KEY);
 
                     context.Rules.Add(rule);
                 }
