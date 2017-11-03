@@ -10,5 +10,7 @@ namespace Swampnet.Evl.Common.Entities
         public string Name { get; set; }
         public string Description  { get; set; }
         public Guid ApiKey { get; set; }
+        public Audit[] Audit { get; set; }
+
     }
 }

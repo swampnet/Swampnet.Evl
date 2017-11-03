@@ -35,7 +35,12 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
         {
             using (var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))
             {
-                var rule = await context.Rules.SingleOrDefaultAsync(r => r.IsActive && r.Id == id);
+                var rule = await context.Rules
+                            .Include(f => f.Audit)
+                                .ThenInclude(a => a.Audit)
+                                    .ThenInclude(a => a.Profile)
+                            .SingleOrDefaultAsync(r => r.IsActive && r.Id == id);
+
                 if(rule == null)
                 {
                     return null;
@@ -49,7 +54,9 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
         {
             using (var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))
             {
-                var rules = await context.Rules.Where(r => r.IsActive).ToListAsync();
+                var rules = await context.Rules
+                                        .Where(r => r.IsActive)
+                                        .ToListAsync();
 
                 return rules.Select(r => Convert.ToRule(r));
             }
@@ -62,8 +69,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
             {
                 rule.Id = Guid.NewGuid();
 				var r = Convert.ToRule(rule);
-                r.CreatedOnUtc = DateTime.UtcNow;
-                r.ModifiedOnUtc = DateTime.UtcNow;
+                r.AddAudit(profile.Id, Common.AuditAction.Create);
                 r.OrganisationId = profile.Organisation.Id;
 
 				context.Rules.Add(r);
@@ -76,7 +82,10 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
         {
             using (var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))
             {
-                var r = context.Rules.SingleOrDefault(x => x.Id == rule.Id);
+                var r = context.Rules
+                    .Include(f => f.Audit)
+                        .ThenInclude(a => a.Audit)
+                    .SingleOrDefault(x => x.Id == rule.Id);
                 if(r == null)
                 {
                     throw new NullReferenceException("Rule not found");
@@ -86,7 +95,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
                 r.IsActive = rule.IsActive;
                 r.ActionData = rule.Actions.ToXmlString();
                 r.ExpressionData = rule.Expression.ToXmlString();
-                r.ModifiedOnUtc = DateTime.UtcNow;
+                r.AddAudit(profile.Id, Common.AuditAction.Modify);
 
                 await context.SaveChangesAsync();
             }
@@ -105,9 +114,9 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
 				}
 
 				r.IsActive = false;
-                r.ModifiedOnUtc = DateTime.UtcNow;
+                r.AddAudit(profile.Id, Common.AuditAction.Delete);
 
-				await context.SaveChangesAsync();
+                await context.SaveChangesAsync();
 			}
         }
 
@@ -127,7 +136,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
                     if(rule.Order != ro.Order)
                     {
                         rule.Order = ro.Order;
-                        rule.ModifiedOnUtc = DateTime.UtcNow;
+                        //rule.ModifiedOnUtc = DateTime.UtcNow;
                     }
                 }
 

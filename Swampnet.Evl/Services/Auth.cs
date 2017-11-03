@@ -99,6 +99,11 @@ namespace Swampnet.Evl.Services
         /// <summary>
         /// Get profile from IPrincipal
         /// </summary>
+        /// <remarks>
+        /// Basically mocked out for now - It will always return the profile associated with Common.Constants.MOCKED_PROFILE_KEY
+        /// I'm assuming that whatever kind of authentication we end up using, I'll be able to resolve some kind of key from
+        /// the principle which we can use to look up a profile.
+        /// </remarks>
         /// <param name="principle"></param>
         /// <returns></returns>
         public async Task<Profile> GetProfileAsync(IPrincipal principle)

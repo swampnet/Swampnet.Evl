@@ -40,8 +40,18 @@ namespace Swampnet.Evl.DAL.MSSQL
 
 				context.Permissions.AddRange(new[]
 				{
-					new InternalPermission() { Name = "organisation.view-all", IsEnabled = true }
-				});
+					new InternalPermission() { Name = Permission.organisation_view_all, IsEnabled = true },
+                    new InternalPermission() { Name = Permission.organisation_create, IsEnabled = true },
+                    new InternalPermission() { Name = Permission.organisation_delete, IsEnabled = true },
+                    new InternalPermission() { Name = Permission.organisation_edit, IsEnabled = true },
+                    new InternalPermission() { Name = Permission.organisation_view, IsEnabled = true },
+
+                    new InternalPermission() { Name = Permission.rule_create, IsEnabled = true },
+                    new InternalPermission() { Name = Permission.rule_delete, IsEnabled = true },
+                    new InternalPermission() { Name = Permission.rule_edit, IsEnabled = true },
+                    new InternalPermission() { Name = Permission.rule_view, IsEnabled = true }
+
+                });
 
 				context.SaveChanges();
 
@@ -54,14 +64,24 @@ namespace Swampnet.Evl.DAL.MSSQL
 
 				context.SaveChanges();
 
+                // Add permissions to admin role
 				var admin = context.Roles.Single(r => r.Name == "admin");
-				admin.InternalRolePermissions.Add(new InternalRolePermission()
-				{
-					Role = admin,
-					Permission = context.Permissions.Single(p => p.Name == "organisation.view-all")
-				});
+                foreach(var perm in new[] {
+                    Permission.organisation_view_all,
+                    Permission.rule_create,
+                    Permission.rule_edit,
+                    Permission.rule_delete,
+                    Permission.rule_view
+                })
+                {
+                    admin.InternalRolePermissions.Add(new InternalRolePermission()
+                    {
+                        Role = admin,
+                        Permission = context.Permissions.Single(p => p.Name == perm)
+                    });
+                }
 
-				context.SaveChanges();
+                context.SaveChanges();
 
 				foreach (var p in _mockedProfiles)
                 {
@@ -89,13 +109,13 @@ namespace Swampnet.Evl.DAL.MSSQL
 
                 context.SaveChanges();
 
+                var defaultProfile = context.Profiles.Single(p => p.Key == Common.Constants.MOCKED_PROFILE_KEY);
+
                 foreach (var r in _mockedRules)
                 {
                     var rule = Convert.ToRule(r);
                     rule.OrganisationId = Common.Constants.MOCKED_DEFAULT_ORGANISATION;
-                    rule.CreatedOnUtc = DateTime.UtcNow;
-                    rule.ModifiedOnUtc = DateTime.UtcNow;
-
+                    rule.AddAudit(defaultProfile.Id, Common.AuditAction.Create);
                     context.Rules.Add(rule);
                 }
 

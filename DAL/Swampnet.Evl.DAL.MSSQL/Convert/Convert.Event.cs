@@ -8,10 +8,11 @@ using Swampnet.Evl.Common;
 
 namespace Swampnet.Evl.DAL.MSSQL
 {
+    /// <summary>
+    /// Events
+    /// </summary>
     static partial class Convert
     {
-        #region Event
-
         /// <summary>
         /// Convert an API Event to an InternalEvent
         /// </summary>
@@ -51,69 +52,10 @@ namespace Swampnet.Evl.DAL.MSSQL
         }
 
 
-        internal static Profile ToProfile(InternalProfile source)
-        {
-            return new Profile()
-            {
-                Id = source.Id,
-                Key = source.Key,
-                Name = new Name()
-                {
-                    Title = source.Title,
-                    Firstname = source.Firstname,
-                    Lastname = source.Lastname,
-                    KnownAs = source.KnownAs
-                },
-                Organisation = source.Organisation == null
-                    ? null
-                    : Convert.ToOrganisation(source.Organisation),
-                Roles = source.InternalProfileRoles == null 
-                    ? null
-                    : source.InternalProfileRoles.Select(pg => Convert.ToRole(pg.Role)).ToList()
-            };
-        }
-
-        internal static Role ToRole(InternalRole source)
-        {
-            return new Role()
-            {
-                Name = source.Name,
-				Permissions = source.InternalRolePermissions == null 
-					? Enumerable.Empty<Permission>()
-					: source.InternalRolePermissions.Select(rp => Convert.ToPermission(rp.Permission))
-
-            };
-        }
-
-
-		internal static Permission ToPermission(InternalPermission source)
-		{
-			return new Permission()
-			{
-				IsEnabled = source.IsEnabled,
-				Name = source.Name
-			};
-		}
-
-
-		/// <summary>
-		/// Convert an API IProperty to an InternalProperty
-		/// </summary>
-		internal static InternalProperty ToInternalProperty(IProperty source)
-        {
-            return new InternalProperty()
-            {
-                Category = source.Category.Truncate(225),
-                Name = source.Name.Truncate(225),
-                Value = source.Value == null ? "null" : source.Value
-            };
-        }
-
-
         /// <summary>
         /// Convert an InternalEvent to an API Event 
         /// </summary>
-        internal static EventDetails ToEvent(InternalEvent source)
+        internal static EventDetails ToEventDetails(InternalEvent source)
         {
             return source == null 
                 ? null 
@@ -139,69 +81,6 @@ namespace Swampnet.Evl.DAL.MSSQL
         }
 
 
-		internal static Trigger ToTrigger(InternalTrigger source)
-		{
-			return new Trigger()
-			{
-				RuleName = source.RuleName,
-				RuleId = source.RuleId,
-				TimestampUtc = source.TimestampUtc,
-				Actions = source.Actions == null
-					? null
-					: source.Actions.Select(a => Convert.ToAction(a)).ToList()
-			};
-		}
-
-
-		internal static TriggerAction ToAction(InternalAction source)
-		{
-			return new TriggerAction()
-			{
-				Error = source.Error,
-				Type = source.Type,
-				TimestampUtc = source.TimestampUtc,
-				Properties = source.InternalActionProperties == null
-					? null
-					: source.InternalActionProperties.Select(p => Convert.ToProperty(p.Property)).ToList()
-			};
-		}
-
-
-		internal static InternalTrigger ToTrigger(Trigger source)
-        {
-            var trigger = new InternalTrigger();
-
-            trigger.RuleName = source.RuleName;
-			trigger.RuleId = source.RuleId;
-            trigger.TimestampUtc = source.TimestampUtc;
-            trigger.Actions = source.Actions?.Select(a => Convert.ToAction(a)).ToList();
-
-            return trigger;
-        }
-
-
-        internal static InternalAction ToAction(TriggerAction source)
-        {
-            var action = new InternalAction();
-
-            action.TimestampUtc = source.TimestampUtc;
-            action.Type = source.Type;
-            action.Error = source.Error;
-
-            if(source.Properties != null)
-            {
-                foreach(var p in source.Properties)
-                {
-                    action.InternalActionProperties.Add(new InternalActionProperties()
-                    {
-                        Action = action,
-                        Property = Convert.ToInternalProperty(p)
-                    });
-                }
-            }
-
-            return action;
-        }
 
 
         /// <summary>
@@ -218,21 +97,5 @@ namespace Swampnet.Evl.DAL.MSSQL
                 Source = source.Source
             };
         }
-
-        /// <summary>
-        /// Convert an IProperty to a Property
-        /// </summary>
-        /// <param name="source"></param>
-        /// <returns></returns>
-        internal static Property ToProperty(IProperty source)
-        {
-            return new Property()
-            {
-                Category = source.Category,
-                Name = source.Name,
-                Value = source.Value
-            };
-        }
-        #endregion
     }
 }

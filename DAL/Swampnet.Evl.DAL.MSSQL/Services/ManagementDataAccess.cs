@@ -30,6 +30,8 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
                         .ThenInclude(pg => pg.Role)
 							.ThenInclude(r => r.InternalRolePermissions)
 								.ThenInclude(r => r.Permission)
+                    .Include(x => x.Audit)
+                        .ThenInclude(x => x.Audit)
 					.SingleOrDefaultAsync(x => x.Organisation.Id == org.Id && x.Id == id);
 
                 return Convert.ToProfile(p);
@@ -47,7 +49,9 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
                         .ThenInclude(pg => pg.Role)
 							.ThenInclude(r => r.InternalRolePermissions)
 								.ThenInclude(r => r.Permission)
-					.SingleOrDefaultAsync(x => x.Key == key);
+                    .Include(x => x.Audit)
+                        .ThenInclude(x => x.Audit)
+                    .SingleOrDefaultAsync(x => x.Key == key);
 
                 return Convert.ToProfile(p);
             }
@@ -59,9 +63,6 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
             using (var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))
             {
                 var p = await context.Profiles
-                    //.Include(x => x.Organisation)
-                    //.Include(x => x.InternalProfileGroups)
-                    //    .ThenInclude(pg => pg.Group)
                     .Where(x => x.Organisation.Id == org.Id)
                     .ToListAsync();
 
@@ -74,7 +75,10 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
         {
             using (var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))
             {
-                var org = await context.Organisations.FirstOrDefaultAsync(o => o.ApiKey == apiKey);
+                var org = await context.Organisations
+                    .Include(x => x.Audit)
+                        .ThenInclude(x => x.Audit)
+                    .FirstOrDefaultAsync(o => o.ApiKey == apiKey);
 
                 return Convert.ToOrganisation(org);
             }
@@ -84,7 +88,10 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
         {
             using (var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))
             {
-                var org = await context.Organisations.FirstOrDefaultAsync(o => o.Id == id);
+                var org = await context.Organisations
+                    .Include(x => x.Audit)
+                        .ThenInclude(x => x.Audit)
+                    .FirstOrDefaultAsync(o => o.Id == id);
 
                 return Convert.ToOrganisation(org);
             }

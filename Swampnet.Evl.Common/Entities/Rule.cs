@@ -56,6 +56,11 @@ namespace Swampnet.Evl.Common.Entities
         /// Actions to run if expression evaluates to true
         /// </summary>
         public ActionDefinition[] Actions { get; set; }
+
+        /// <summary>
+        /// Audit trail
+        /// </summary>
+        public Audit[]  Audit { get; set; }
     }
 
 

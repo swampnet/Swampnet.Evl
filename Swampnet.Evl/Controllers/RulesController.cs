@@ -42,7 +42,7 @@ namespace Swampnet.Evl.Controllers
             try
             {
                 var profile = await _auth.GetProfileAsync(User);
-                if (profile == null)
+                if (profile == null || !profile.HasPermission(Permission.rule_view))
                 {
                     return Unauthorized();
                 }
@@ -70,7 +70,7 @@ namespace Swampnet.Evl.Controllers
             try
             {
                 var profile = await _auth.GetProfileAsync(User);
-                if (profile == null)
+                if (profile == null || !profile.HasPermission(Permission.rule_view))
                 {
                     return Unauthorized();
                 }
@@ -107,7 +107,7 @@ namespace Swampnet.Evl.Controllers
             try
             {
                 var profile = await _auth.GetProfileAsync(User);
-                if (profile == null)
+                if (profile == null || !profile.HasPermission(Permission.rule_create))
                 {
                     return Unauthorized();
                 }
@@ -148,7 +148,7 @@ namespace Swampnet.Evl.Controllers
             try
             {
                 var profile = await _auth.GetProfileAsync(User);
-                if (profile == null)
+                if (profile == null || !profile.HasPermission(Permission.rule_edit))
                 {
                     return Unauthorized();
                 }
@@ -180,7 +180,7 @@ namespace Swampnet.Evl.Controllers
             try
             {
                 var profile = await _auth.GetProfileAsync(User);
-                if (profile == null)
+                if (profile == null || !profile.HasPermission(Permission.rule_edit))
                 {
                     return Unauthorized();
                 }
@@ -231,7 +231,7 @@ namespace Swampnet.Evl.Controllers
 			try
 			{
                 var profile = await _auth.GetProfileAsync(User);
-                if (profile == null)
+                if (profile == null || !profile.HasPermission(Permission.rule_delete))
                 {
                     return Unauthorized();
                 }
