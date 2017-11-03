@@ -7,6 +7,9 @@ using System.Text;
 
 namespace Swampnet.Evl.DAL.MSSQL
 {
+    /// <summary>
+    /// Profiles, Roles and Permissions
+    /// </summary>
     static partial class Convert
     {
         internal static ProfileSummary ToProfileSummary(InternalProfile source)
@@ -72,6 +75,5 @@ namespace Swampnet.Evl.DAL.MSSQL
                 Name = source.Name
             };
         }
-
     }
 }

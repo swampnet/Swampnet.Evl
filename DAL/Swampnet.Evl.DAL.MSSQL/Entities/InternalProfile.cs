@@ -36,4 +36,28 @@ namespace Swampnet.Evl.DAL.MSSQL.Entities
         }
 
     }
+
+
+    class InternalRole
+    {
+        public InternalRole()
+        {
+            InternalRolePermissions = new List<InternalRolePermission>();
+        }
+
+        public long Id { get; set; }
+        public string Name { get; set; }
+
+        public ICollection<InternalRolePermission> InternalRolePermissions { get; set; }
+    }
+
+
+    class InternalPermission
+    {
+        public long Id { get; set; }
+        public string Name { get; set; }
+        public bool IsEnabled { get; set; }
+    }
+
+
 }

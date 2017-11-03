@@ -131,7 +131,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Entities
                 InternalEventProperties = new List<Entities.InternalEventProperties>();
             }
 
-            InternalEventProperties.Add(new InternalEventProperties(this, Convert.ToInternalProperty(property)));
+            InternalEventProperties.Add(new InternalEventProperties() { Event = this, Property = Convert.ToInternalProperty(property) });
         }
 
 

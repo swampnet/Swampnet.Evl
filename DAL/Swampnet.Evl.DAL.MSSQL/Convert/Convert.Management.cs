@@ -7,6 +7,9 @@ using Swampnet.Evl.DAL.MSSQL.Entities;
 
 namespace Swampnet.Evl.DAL.MSSQL
 {
+    /// <summary>
+    /// Organisations
+    /// </summary>
     static partial class Convert
     {
         public static Organisation ToOrganisation(InternalOrganisation source)

@@ -41,49 +41,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Entities
                 Organisation = this
             });
         }
-
     }
-
-
-    class InternalProfileRole
-    {
-        public long ProfileId { get; set; }
-        public InternalProfile Profile { get; set; }
-
-        public long RoleId { get; set; }
-        public InternalRole Role { get; set; }
-    }
-
-    class InternalRole
-    {
-		public InternalRole()
-		{
-			InternalRolePermissions = new List<InternalRolePermission>();
-		}
-
-        public long Id { get; set; }
-        public string Name { get; set; }
-
-		public ICollection<InternalRolePermission> InternalRolePermissions { get; set; }
-	}
-
-
-	class InternalRolePermission
-	{
-		public long RoleId { get; set; }
-		public InternalRole Role { get; set; }
-
-		public long PermissionId { get; set; }
-		public InternalPermission Permission { get; set; }
-	}
-
-
-	class InternalPermission
-	{
-		public long Id { get; set; }
-		public string Name { get; set; }
-		public bool IsEnabled { get; set; }
-	}
 
 
     class ApiKey
@@ -96,5 +54,4 @@ namespace Swampnet.Evl.DAL.MSSQL.Entities
 
         public InternalOrganisation Organisation { get; set; }
     }
-
 }

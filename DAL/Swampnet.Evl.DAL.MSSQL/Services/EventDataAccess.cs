@@ -54,7 +54,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
 						.ThenInclude(t => t.Property)
 					.SingleOrDefaultAsync(e => e.Id == id);
 
-                return Convert.ToEvent(evt);
+                return Convert.ToEventDetails(evt);
             }
         }
 
