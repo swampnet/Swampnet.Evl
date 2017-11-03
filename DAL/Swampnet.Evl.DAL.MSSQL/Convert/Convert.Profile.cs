@@ -44,7 +44,10 @@ namespace Swampnet.Evl.DAL.MSSQL
                     : Convert.ToOrganisation(source.Organisation),
                 Roles = source.InternalProfileRoles == null
                     ? null
-                    : source.InternalProfileRoles.Select(pg => Convert.ToRole(pg.Role)).ToList()
+                    : source.InternalProfileRoles.Select(pg => Convert.ToRole(pg.Role)).ToList(),
+                Audit = source.Audit == null
+                    ? null
+                    : source.Audit.Select(a => Convert.ToAudit(a.Audit)).ToArray()
             };
         }
 

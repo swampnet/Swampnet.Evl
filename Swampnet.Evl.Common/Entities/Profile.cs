@@ -18,12 +18,14 @@ namespace Swampnet.Evl.Common.Entities
 
         public Organisation Organisation { get; set; }
 
-		/// <summary>
-		/// Return true if any of the groups profile belongs to has the sa permission
-		/// </summary>
-		/// <param name="permission"></param>
-		/// <returns></returns>
-		public bool HasPermission(string permission)
+        public Audit[] Audit { get; set; }
+
+        /// <summary>
+        /// Return true if any of the groups profile belongs to has the sa permission
+        /// </summary>
+        /// <param name="permission"></param>
+        /// <returns></returns>
+        public bool HasPermission(string permission)
 		{
 			return Roles == null
 				? false
