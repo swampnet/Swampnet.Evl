@@ -23,7 +23,11 @@ export class ApiService {
     }
 
 
-    getRules() {
+	getProfile() {
+		return this.get('profiles/current');
+	}
+
+	getRules() {
         return this.get('rules');
     }
 
@@ -46,6 +50,9 @@ export class ApiService {
         return this.put('rules/' + rule.id, rule);
     }
 
+	reorderRules(rules: any) {
+		return this.post('rules/reorder', rules);
+	}
 
     getMetaData() {
         return this.get('meta');

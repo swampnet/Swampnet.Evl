@@ -34,6 +34,7 @@ namespace Swampnet.Evl.Actions
                 new MetaDataCapture()
                 {
                     Name = "tag",
+                    Description = "Tag",
                     IsRequired = true,
                 }
             };
@@ -44,13 +45,17 @@ namespace Swampnet.Evl.Actions
     {
         public string Type => "remove-tag";
 
+        public string Description => "Remove a tag from the event";
+
         public Task ApplyAsync(EventDetails evt, ActionDefinition actionDefinition, Rule rule)
         {
             if (actionDefinition.Properties != null && actionDefinition.Properties.Any())
             {
                 if (evt.Tags != null && evt.Tags.Any())
                 {
-                    evt.Tags.Remove(actionDefinition.Properties.StringValue("tag"));
+                    var tag = actionDefinition.Properties.StringValue("tag");
+
+                    evt.Tags.RemoveAll(t => t == tag);
                 }
             }
 
@@ -64,6 +69,7 @@ namespace Swampnet.Evl.Actions
                 new MetaDataCapture()
                 {
                     Name = "tag",
+                    Description = "Tag",
                     IsRequired = true,
                 }
             };

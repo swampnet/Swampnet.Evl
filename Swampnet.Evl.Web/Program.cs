@@ -11,7 +11,7 @@ using Serilog;
 
 namespace Swampnet.Evl.Web
 {
-    public class Program
+    static class Program
     {
         public static void Main(string[] args)
         {

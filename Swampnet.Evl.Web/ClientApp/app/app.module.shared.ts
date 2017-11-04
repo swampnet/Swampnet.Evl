@@ -17,7 +17,10 @@ import { ActionDefinitionComponent } from './components/action-definition/action
 import { EventsComponent } from './components/events/events.component';
 import { EventDetailsComponent } from './components/events/event-details.component';
 import { EventsSearchCriteriaComponent } from './components/events/events-search-criteria.component';
+import { ProfileComponent } from './components/profile/profile.component';
 
+import { DateTimePickerModule } from 'ng-pick-datetime';
+import { DragulaModule } from 'ng2-dragula/ng2-dragula';
 
 @NgModule({
     declarations: [
@@ -30,12 +33,15 @@ import { EventsSearchCriteriaComponent } from './components/events/events-search
         ActionDefinitionComponent,
         EventsComponent,
 		EventDetailsComponent,
-        EventsSearchCriteriaComponent
+		EventsSearchCriteriaComponent,
+		ProfileComponent
     ],
     imports: [
         CommonModule,
         HttpModule,
-        FormsModule,
+		FormsModule,
+		DragulaModule,
+		DateTimePickerModule,
         RouterModule.forRoot([
             { path: '', redirectTo: 'home', pathMatch: 'full' },
             { path: 'home', component: HomeComponent },
@@ -46,7 +52,9 @@ import { EventsSearchCriteriaComponent } from './components/events/events-search
             { path: 'events', component: EventsComponent },
 			{ path: 'events/:id', component: EventDetailsComponent },
 
-            { path: '**', redirectTo: 'home' }
+			{ path: 'profile', component: ProfileComponent },
+
+			{ path: '**', redirectTo: 'home' }
         ])
     ],
     providers: [

@@ -35,16 +35,19 @@ namespace Swampnet.Evl.Actions
                 new MetaDataCapture()
                 {
                     Name = "category",
+                    Description = "Category",
                     IsRequired = false,
                 },
                 new MetaDataCapture()
                 {
                     Name = "name",
+                    Description = "Name",
                     IsRequired = true,
                 },
                 new MetaDataCapture()
                 {
                     Name = "value",
+                    Description = "Value",
                     IsRequired = true,
                 }
             };

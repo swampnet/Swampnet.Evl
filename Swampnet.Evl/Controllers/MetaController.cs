@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace Swampnet.Evl.Controllers
 {
+    /// <summary>
+    /// Meta data
+    /// </summary>
     [Route("meta")]
     public class MetaController : Controller
     {
@@ -17,6 +20,13 @@ namespace Swampnet.Evl.Controllers
         private readonly IEnumerable<IActionHandler> _actionHandlers;
         private readonly IAuth _auth;
 
+        /// <summary>
+        /// Construction
+        /// </summary>
+        /// <param name="eventDataAccess"></param>
+        /// <param name="ruleDataAccess"></param>
+        /// <param name="actionHandlers"></param>
+        /// <param name="auth"></param>
         public MetaController(
             IEventDataAccess eventDataAccess,
             IRuleDataAccess ruleDataAccess,
@@ -30,24 +40,32 @@ namespace Swampnet.Evl.Controllers
         }
 
 
-        // GET meta
+        /// <summary>
+        /// GET meta
+        /// </summary>
+        /// <returns>MetaData</returns>
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var org = await _auth.GetOrganisationByApiKeyAsync(Common.Constants.MOCKED_DEFAULT_APIKEY);
-            var metaData = await GetMetaData(org);
+            var profile = await _auth.GetProfileAsync(User);
+            if (profile == null)
+            {
+                return Unauthorized();
+            }
+
+            var metaData = await GetMetaData(profile);
 
             return Ok(metaData);
         }
 
 
-        private async Task<MetaData> GetMetaData(Organisation org)
+        private async Task<MetaData> GetMetaData(Profile profile)
         {
             return new MetaData()
             {
-                ActionMetaData = await GetActionMetaData(org),
-                Operands = await GetOperands(org),
-                Operators = await GetOperators(org)
+                ActionMetaData = await GetActionMetaData(profile.Organisation),
+                Operands = await GetOperands(profile),
+                Operators = await GetOperators(profile.Organisation)
             };
         }
 
@@ -58,11 +76,11 @@ namespace Swampnet.Evl.Controllers
         }
 
 
-        private async Task<MetaDataCapture[]> GetOperands(Organisation org)
+        private async Task<MetaDataCapture[]> GetOperands(Profile profile)
         {
-            var sources = await _eventDataAccess.GetSources(org);
+            var sources = await _eventDataAccess.GetSources(profile);
 
-            // Start of with our static list
+            // Start off with our static list
             var operands = new List<MetaDataCapture>(_operands);
 
             // Add in dynamic source

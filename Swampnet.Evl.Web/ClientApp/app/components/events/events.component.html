@@ -14,8 +14,13 @@
 	</div>
 
 	<ng-template #noResults>
-		<div>No Results</div>
+		<div>Searching..</div>
 	</ng-template>
 
-	<div><pre>{{criteria | json}}</pre></div>
+	<!-- Debug -->
+	<div style="background-color:lightgoldenrodyellow; padding: 5px; margin-top: 20px">
+		<h3>Debug</h3>
+		Rule
+		<div><pre><small>{{criteria | json}}</small></pre></div>
+	</div>
 </div>

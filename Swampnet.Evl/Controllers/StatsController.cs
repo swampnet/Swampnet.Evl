@@ -11,29 +11,47 @@ using System.Threading.Tasks;
 
 namespace Swampnet.Evl.Controllers
 {
+    /// <summary>
+    /// Generic stats / debug info
+    /// </summary>
     [Route("stats")]
     public class StatsController : Controller
     {
         private readonly IEventDataAccess _dal;
         private readonly IAuth _auth;
 
+        /// <summary>
+        /// Construction
+        /// </summary>
+        /// <param name="dal"></param>
+        /// <param name="auth"></param>
         public StatsController(IEventDataAccess dal, IAuth auth)
         {
             _dal = dal;
             _auth = auth;
         }
 
+
+        /// <summary>
+        /// Get all current stats
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> Get()
         {
             try
             {
-                var stats = new Stats();
-                var org = await _auth.GetOrganisationByApiKeyAsync(Common.Constants.MOCKED_DEFAULT_APIKEY);
-                stats.ApiVersion = Assembly.GetEntryAssembly().GetName().Version.ToString();
-                stats.TotalEvents = await _dal.GetTotalEventCountAsync(org);
+                var profile = await _auth.GetProfileAsync(User);
+                if (profile == null)
+                {
+                    return Unauthorized();
+                }
 
-                return Ok(stats);
+                return Ok(new Stats()
+                {
+                    ApiVersion = Assembly.GetEntryAssembly().GetName().Version.ToString(),
+                    TotalEvents = await _dal.GetTotalEventCountAsync(profile)
+                });
             }
             catch (Exception ex)
             {

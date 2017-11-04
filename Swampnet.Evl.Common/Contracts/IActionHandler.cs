@@ -9,6 +9,9 @@ namespace Swampnet.Evl.Common.Contracts
 {
     public interface IActionHandler
     {
+        /// <summary>
+        /// Action code / type
+        /// </summary>
         string Type { get; }
 
         /// <summary>

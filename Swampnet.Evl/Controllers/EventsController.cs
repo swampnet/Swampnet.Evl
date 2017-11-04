@@ -2,6 +2,7 @@
 using Serilog;
 using Swampnet.Evl.Client;
 using Swampnet.Evl.Common.Contracts;
+using Swampnet.Evl.Common.Entities;
 using Swampnet.Evl.Contracts;
 using Swampnet.Evl.Services;
 using System;
@@ -12,6 +13,9 @@ using System.Threading.Tasks;
 
 namespace Swampnet.Evl.Controllers
 {
+    /// <summary>
+    /// All things Event based
+    /// </summary>
     [Route("events")]
 	public class EventsController : Controller
 	{
@@ -19,6 +23,9 @@ namespace Swampnet.Evl.Controllers
         private readonly IEventDataAccess _dal;
         private readonly IAuth _auth;
 
+        /// <summary>
+        /// construction
+        /// </summary>
         public EventsController(IEventDataAccess dal, IEventQueueProcessor eventProcessor, IAuth auth)
         {
             _dal = dal;
@@ -26,15 +33,21 @@ namespace Swampnet.Evl.Controllers
             _auth = auth;
         }
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <returns></returns>
+        /// <summary>
+        /// Get all valid event categories
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("categories")]
-        public IActionResult GetCategories()
+        public async Task<IActionResult> GetCategories()
         {
             try
             {
+                var profile = await _auth.GetProfileAsync(User);
+                if (profile == null)
+                {
+                    return Unauthorized();
+                }
+
                 return Ok(Enum.GetValues(typeof(EventCategory)).Cast<EventCategory>().Select(e => e.ToString()).ToArray());
             }
             catch (Exception ex)
@@ -46,14 +59,25 @@ namespace Swampnet.Evl.Controllers
         }
 
 
+        /// <summary>
+        /// Get all event source values
+        /// </summary>
+        /// <remarks>
+        /// This is per-organisation
+        /// </remarks>
+        /// <returns></returns>
         [HttpGet("sources")]
         public async Task<IActionResult> GetSources()
         {
             try
             {
-                var org = await _auth.GetOrganisationByApiKeyAsync(Common.Constants.MOCKED_DEFAULT_APIKEY);
+                var profile = await _auth.GetProfileAsync(User);
+                if (profile == null)
+                {
+                    return Unauthorized();
+                }
 
-                var sources = await _dal.GetSources(org);
+                var sources = await _dal.GetSources(profile);
 
                 return Ok(sources);
             }
@@ -65,14 +89,26 @@ namespace Swampnet.Evl.Controllers
             }
         }
 
+
+        /// <summary>
+        /// Get all tags
+        /// </summary>
+        /// <remarks>
+        /// Enumerated all the tags used by this organisation
+        /// </remarks>
+        /// <returns></returns>
 		[HttpGet("tags")]
 		public async Task<IActionResult> GetTags()
 		{
 			try
 			{
-                var org = await _auth.GetOrganisationByApiKeyAsync(Common.Constants.MOCKED_DEFAULT_APIKEY);
+                var profile = await _auth.GetProfileAsync(User);
+                if (profile == null)
+                {
+                    return Unauthorized();
+                }
 
-                var tags = await _dal.GetTags(org);
+                var tags = await _dal.GetTags(profile);
 
 				return Ok(tags);
 			}
@@ -85,16 +121,25 @@ namespace Swampnet.Evl.Controllers
 		}
 
 
+        /// <summary>
+        /// Event search
+        /// </summary>
+        /// <param name="criteria"></param>
+        /// <returns></returns>
 		[HttpGet]
         public async Task<IActionResult> Get([FromQuery] EventSearchCriteria criteria)
         {
             try
             {
+                var profile = await _auth.GetProfileAsync(User);
+                if (profile == null)
+                {
+                    return Unauthorized();
+                }
+
                 Log.Logger.WithPublicProperties(criteria).Debug("Get");
 
-                var org = await _auth.GetOrganisationByApiKeyAsync(Common.Constants.MOCKED_DEFAULT_APIKEY);
-
-                var events = await _dal.SearchAsync(org, criteria);
+                var events = await _dal.SearchAsync(profile, criteria);
 
                 return Ok(events);
             }
@@ -107,10 +152,11 @@ namespace Swampnet.Evl.Controllers
             }
         }
 
+
 		/// <summary>
 		/// Retrieves a specific event by unique id
 		/// </summary>
-		/// <remarks>Awesomeness!</remarks>
+		/// <remarks>EventDetail</remarks>
 		/// <response code="200">Event found</response>
 		/// <response code="400">Event has missing/invalid values</response>
 		/// <response code="500">Oops! Can't find your event right now</response>
@@ -119,8 +165,13 @@ namespace Swampnet.Evl.Controllers
         {
             try
             {
-                var org = await _auth.GetOrganisationByApiKeyAsync(Common.Constants.MOCKED_DEFAULT_APIKEY);
-                var evt = await _dal.ReadAsync(org, id);
+                var profile = await _auth.GetProfileAsync(User);
+                if (profile == null)
+                {
+                    return Unauthorized();
+                }
+
+                var evt = await _dal.ReadAsync(profile.Organisation, id);
 
                 if (evt == null)
                 {
@@ -138,9 +189,13 @@ namespace Swampnet.Evl.Controllers
             }
         }
 
+
         /// <summary>
-        /// Main POST
+        /// Log an event
         /// </summary>
+        /// <remarks>
+        /// Event is inspected and processed offline
+        /// </remarks>
         /// <param name="e"></param>
         /// <returns></returns>
         [HttpPost]
@@ -148,9 +203,7 @@ namespace Swampnet.Evl.Controllers
 		{
 			try
 			{
-                var evt = Common.Convert.ToEventDetails(e);
-
-				if (evt == null)
+				if (e == null)
 				{
 					return BadRequest();
 				}
@@ -169,23 +222,11 @@ namespace Swampnet.Evl.Controllers
                     return Unauthorized();
                 }
 
-                if (string.IsNullOrEmpty(evt.Source))
-                {
-                    evt.Source = org.Name;
-                }
-
-				if(evt.Properties == null)
-				{
-					evt.Properties = new List<Property>();
-				}
-
-                evt.Properties.AddRange(Request.CommonProperties());
-
-                evt.Id = await _dal.CreateAsync(org, evt);
+                var evt = await CreateEventAsync(org, e);
 
                 _eventProcessor.Enqueue(evt.Id);
 
-				return CreatedAtRoute("EventDetails", new { id = evt.Id }, evt);
+                return CreatedAtRoute("EventDetails", new { id = evt.Id }, evt);
 			}
 			catch (UnauthorizedAccessException ex)
 			{
@@ -200,6 +241,11 @@ namespace Swampnet.Evl.Controllers
         }
 
 
+        /// <summary>
+        /// Submit a batch of events
+        /// </summary>
+        /// <param name="evts"></param>
+        /// <returns></returns>
         [HttpPost("bulk")]
         public async Task<IActionResult> PostBulk([FromBody] IEnumerable<Event> evts)
         {
@@ -210,22 +256,27 @@ namespace Swampnet.Evl.Controllers
                     return BadRequest();
                 }
 
-                var apiKey = Request.ApiKey();
+                //var apiKey = Request.ApiKey();
+                var apiKey = Common.Constants.MOCKED_DEFAULT_APIKEY;
 
                 // @TODO: Auth
                 var org = await _auth.GetOrganisationByApiKeyAsync(apiKey);
+                if (org == null)
+                {
+                    return Unauthorized();
+                }
 
-                Parallel.ForEach(evts, async evt =>
+                Parallel.ForEach(evts, async e =>
                 {
                     try
                     {
-                        evt.Properties.AddRange(Request.CommonProperties());
-                        var id = await _dal.CreateAsync(org, Common.Convert.ToEventDetails(evt));
-						_eventProcessor.Enqueue(id);
+                        var evt = await CreateEventAsync(org, e);
+
+                        _eventProcessor.Enqueue(evt.Id);
                     }
                     catch (Exception ex)
                     {
-                        Debug.WriteLine(ex.Message);
+						Log.Error(ex, ex.Message);
                     }
                 });
 
@@ -241,6 +292,31 @@ namespace Swampnet.Evl.Controllers
                 Log.Error(ex, ex.Message);
                 return this.InternalServerError(ex);
             }
+        }
+
+
+        /// <summary>
+        /// Create event
+        /// </summary>
+        private async Task<EventDetails> CreateEventAsync(Organisation org, Event e)
+        {
+            var evt = Common.Convert.ToEventDetails(e);
+
+            if (string.IsNullOrEmpty(evt.Source))
+            {
+                evt.Source = org.Name;
+            }
+
+            if (evt.Properties == null)
+            {
+                evt.Properties = new List<Property>();
+            }
+
+            evt.Properties.AddRange(Request.CommonProperties());
+
+            evt.Id = await _dal.CreateAsync(org, evt);
+
+            return evt;
         }
     }
 }

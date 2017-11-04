@@ -17,5 +17,8 @@ namespace Swampnet.Evl.DAL.MSSQL.Entities
         public string Name { get; set; }
 
         public ICollection<InternalEventTags> InternalEventTags { get; set; }
+
+        public Guid OrganisationId { get; set; }
+        public InternalOrganisation Organisation { get; set; }
     }
 }

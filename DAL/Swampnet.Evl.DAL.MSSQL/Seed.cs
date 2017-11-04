@@ -6,6 +6,7 @@ using System;
 using Swampnet.Evl.Common.Entities;
 using System.Collections.Generic;
 using Swampnet.Evl.Client;
+using System.Linq;
 
 
 namespace Swampnet.Evl.DAL.MSSQL
@@ -28,23 +29,93 @@ namespace Swampnet.Evl.DAL.MSSQL
 
                 ((RelationalDatabaseCreator)context.Database.GetService<IDatabaseCreator>()).CreateTables();
 
-                // Organisation
-                var org = new InternalOrganisation()
+                context.Organisations.AddRange(_mockedOrganisations.Select(o => new InternalOrganisation()
                 {
-                    Id = _mockedOrganisation.Id,
-                    Name = _mockedOrganisation.Name,
-                    Description = _mockedOrganisation.Description,
+                    Id = o.Id,
+                    Name = o.Name,
+                    Description = o.Description,
                     ApiKeys = new List<ApiKey>(_mockedApiKeys),
-                    ApiKey = _mockedOrganisation.ApiKey
-                };
+                    ApiKey = o.ApiKey
+                }));
 
-                context.Organisations.Add(org);
+				context.Permissions.AddRange(new[]
+				{
+					new InternalPermission() { Name = Permission.organisation_view_all, IsEnabled = true },
+                    new InternalPermission() { Name = Permission.organisation_create, IsEnabled = true },
+                    new InternalPermission() { Name = Permission.organisation_delete, IsEnabled = true },
+                    new InternalPermission() { Name = Permission.organisation_edit, IsEnabled = true },
+                    new InternalPermission() { Name = Permission.organisation_view, IsEnabled = true },
+
+                    new InternalPermission() { Name = Permission.rule_create, IsEnabled = true },
+                    new InternalPermission() { Name = Permission.rule_delete, IsEnabled = true },
+                    new InternalPermission() { Name = Permission.rule_edit, IsEnabled = true },
+                    new InternalPermission() { Name = Permission.rule_view, IsEnabled = true }
+
+                });
+
+				context.SaveChanges();
+
+				context.Roles.AddRange(new[]
+                {
+                    new InternalRole() { Name = "owner" },
+                    new InternalRole() { Name = "admin" },
+                    new InternalRole() { Name = "user" }
+                });
+
+				context.SaveChanges();
+
+                // Add permissions to admin role
+				var admin = context.Roles.Single(r => r.Name == "admin");
+                foreach(var perm in new[] {
+                    Permission.organisation_view_all,
+                    Permission.rule_create,
+                    Permission.rule_edit,
+                    Permission.rule_delete,
+                    Permission.rule_view
+                })
+                {
+                    admin.InternalRolePermissions.Add(new InternalRolePermission()
+                    {
+                        Role = admin,
+                        Permission = context.Permissions.Single(p => p.Name == perm)
+                    });
+                }
+
+                context.SaveChanges();
+
+				foreach (var p in _mockedProfiles)
+                {
+                    var profile = new InternalProfile()
+                    {
+                        Title = p.Name.Firstname,
+                        Firstname = p.Name.Firstname,
+                        Lastname = p.Name.Lastname,
+                        KnownAs = p.Name.KnownAs,
+                        Key = p.Key,
+                        Organisation = context.Organisations.Single(o => o.Id == Common.Constants.MOCKED_DEFAULT_ORGANISATION),
+                        InternalProfileRoles = new List<InternalProfileRole>()
+                    };
+
+                    foreach(var g in p.Roles)
+                    {
+                        profile.InternalProfileRoles.Add(new InternalProfileRole() {
+                            Profile = profile,
+                            Role = context.Roles.Single(x => x.Name == g.Name)
+                        });
+                    }
+
+                    context.Profiles.Add(profile);
+                }
+
+                context.SaveChanges();
+
+                var defaultProfile = context.Profiles.Single(p => p.Key == Common.Constants.MOCKED_PROFILE_KEY);
 
                 foreach (var r in _mockedRules)
                 {
                     var rule = Convert.ToRule(r);
                     rule.OrganisationId = Common.Constants.MOCKED_DEFAULT_ORGANISATION;
-
+                    rule.AddAudit(defaultProfile.Id, Common.AuditAction.Create);
                     context.Rules.Add(rule);
                 }
 
@@ -67,15 +138,21 @@ namespace Swampnet.Evl.DAL.MSSQL
                 CreatedOnUtc = DateTime.UtcNow,
                 Id = Guid.Parse("58BAD582-C6CF-407A-B482-502FB423CD55"),
                 RevokedOnUtc = null
+            },
+            new ApiKey()
+            {
+                CreatedOnUtc = DateTime.UtcNow,
+                Id = Guid.Parse("25C135A0-B574-4A9B-BC37-4F0694017896"),
+                RevokedOnUtc = null
             }
         };
 
         private static IEnumerable<Rule> _mockedRules = new[] {
             new Rule("Test Email")
             {
-                Id = Guid.NewGuid(),                
+                Id = Guid.NewGuid(),
                 IsActive = true,
-
+                Order = 1,
                 Expression = new Expression(RuleOperatorType.MATCH_ALL)
                 {
                     Children = new[]
@@ -106,6 +183,7 @@ namespace Swampnet.Evl.DAL.MSSQL
             {
                 Id = Guid.NewGuid(),
                 IsActive = true,
+                Order = 2,
                 Expression = new Expression(RuleOperatorType.MATCH_ALL)
                 {
                     Children = new[]
@@ -130,10 +208,29 @@ namespace Swampnet.Evl.DAL.MSSQL
                 }
             },
 
+            //new Rule("Startup")
+            //{
+            //    Id = Guid.NewGuid(),
+            //    IsActive = true,
+            //    Order = 3,
+            //    Expression = new Expression(RuleOperatorType.MATCH_ALL)
+            //    {
+            //        Children = new[]
+            //        {
+            //            new Expression(RuleOperatorType.TAGGED, "START")
+            //        }
+            //    },
+            //    Actions = new[]
+            //    {
+            //        new ActionDefinition("email", new[]{ new Property("to", "pj@theswamp.co.uk") })
+            //    }
+            //},
+
             new Rule("Test error downgrade")
             {
                 Id = Guid.NewGuid(),
                 IsActive = true,
+                Order = 0,
                 Expression = new Expression(RuleOperatorType.MATCH_ALL)
                 {
                     Children = new []
@@ -153,12 +250,43 @@ namespace Swampnet.Evl.DAL.MSSQL
         };
 
 
-        private static Organisation _mockedOrganisation = new Organisation()
+        private static Organisation[] _mockedOrganisations = new[]
         {
-            Id = Common.Constants.MOCKED_DEFAULT_ORGANISATION,
-            Description = "Event Logging",
-            Name = "Evl",
-            ApiKey = Common.Constants.MOCKED_DEFAULT_APIKEY
+            new Organisation()
+            {
+                Id = Common.Constants.MOCKED_DEFAULT_ORGANISATION,
+                Description = "Mocked organisation",
+                Name = "Mocked",
+                ApiKey = Common.Constants.MOCKED_DEFAULT_APIKEY
+            },
+            new Organisation()
+            {
+                Id = Guid.Parse("60FACD3A-2232-4E15-9F3C-61289CDDD544"),
+                Description = "Event Logging",
+                Name = "Evl",
+                ApiKey = Guid.Parse("25C135A0-B574-4A9B-BC37-4F0694017896")
+            }
+        };
+
+
+        private static Profile[] _mockedProfiles = new[]
+        {
+            new Profile()
+            {
+                Name = new Name()
+                {
+                    Firstname = "Pete",
+                    Lastname = "Whitby",
+                    Title = "Mr",
+                    KnownAs = "pj"
+                },
+                Key = Common.Constants.MOCKED_PROFILE_KEY,
+                Roles = new List<Role>()
+                {
+                    new Role(){ Name = "admin"},
+                    new Role(){ Name = "user"}
+                }
+            }
         };
     }
 }

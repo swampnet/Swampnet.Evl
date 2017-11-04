@@ -8,9 +8,10 @@ using Swampnet.Evl.Actions;
 using Swampnet.Evl.Client;
 using System.Threading.Tasks;
 using Serilog;
-using UnitTests.Mocks;
+using Swampnet.Evl.Services;
+using Swampnet.Evl.Contracts;
 
-namespace UnitTests
+namespace UnitTests.Mocks
 {
     static class Mock
     {
@@ -25,6 +26,7 @@ namespace UnitTests
                 Tags = new List<string>(Mock.Tags())
             };
         }
+
 
         internal static ILogger Logger()
         {
@@ -70,45 +72,88 @@ namespace UnitTests
             };
         }
 
-
-        private class MockedRuleLoader : IRuleDataAccess
+        internal static MockedEventQueueProcessor EventQueueProcessor()
         {
-            private readonly IEnumerable<Rule> _rules;
-
-            public MockedRuleLoader(IEnumerable<Rule> rules)
-            {
-                _rules = rules;
-            }
-
-            public Task CreateAsync(Organisation org, Rule rule)
-            {
-                throw new NotImplementedException();
-            }
-
-            public Task DeleteAsync(Organisation org, Guid id)
-            {
-                throw new NotImplementedException();
-            }
-
-            public Task<Rule> LoadAsync(Organisation org, Guid id)
-            {
-                throw new NotImplementedException();
-            }
-
-            public Task<IEnumerable<Rule>> LoadAsync(Organisation org)
-            {
-                return Task.Run(() => _rules);
-            }
-
-            public Task<IEnumerable<RuleSummary>> SearchAsync(Organisation org)
-            {
-                throw new NotImplementedException();
-            }
-
-            public Task UpdateAsync(Organisation org, Rule rule)
-            {
-                throw new NotImplementedException();
-            }
+            return new MockedEventQueueProcessor();
         }
+
+        internal static MockedAuth Auth(Profile profile)
+        {
+            return new MockedAuth()
+            {
+                Profile = profile
+            };
+        }
+
+        internal static MockedEventDataAccess EventDataAccess()
+        {
+            return new MockedEventDataAccess();
+        }
+
+        internal static Profile MockedProfile()
+        {
+            return new Profile()
+            {
+                Id = 1,
+                Key = "@profile-key",
+                Roles = new List<Role>()
+                {
+                    new Role(){ Name = "tester" }
+                },
+                Name = new Name()
+                {
+                    Title = "Mr",
+                    Firstname = "First",
+                    Lastname = "Last",
+                    KnownAs = "Testy Mc Test Face"
+                },
+                Organisation = MockedOrganisation()
+            };
+        }
+
+        internal static Organisation MockedOrganisation()
+        {
+            return new Organisation()
+            {
+                ApiKey = Guid.NewGuid(),
+                Id = Guid.NewGuid(),
+                Name = "mocked-org",
+                Description = "Mocked Organisation"
+            };
+        }
+
+		internal static Profile Profile()
+		{
+			return new Profile()
+			{
+				Roles = new List<Role>()
+				{
+					new Role()
+					{
+						Name = "test-role",
+						Permissions = new[]
+						{
+							new Permission()
+							{
+								Name = "test.permission",
+								IsEnabled = true,
+							}
+						}
+					},
+					new Role()
+					{
+						Name = "admin-role",
+						Permissions = new[]
+						{
+							new Permission()
+							{
+								Name = "admin.permission",
+								IsEnabled = true,
+							}
+						}
+					}
+				}
+			};
+		}
     }
 }

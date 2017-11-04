@@ -22,7 +22,6 @@ namespace Swampnet.Evl.Plugins.Slack
 
         public string Type => "slack";
 
-
         public async Task ApplyAsync(EventDetails evt, ActionDefinition actionDefinition, Rule rule)
         {
             var msg = CreateSlackMessage(evt, actionDefinition, rule);
@@ -37,6 +36,7 @@ namespace Swampnet.Evl.Plugins.Slack
                 new MetaDataCapture()
                 {
                     Name = "channel",
+                    Description = "Slack #channel or @usr",
                     IsRequired = true
                 }
             };

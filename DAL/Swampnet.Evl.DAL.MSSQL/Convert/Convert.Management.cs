@@ -7,6 +7,9 @@ using Swampnet.Evl.DAL.MSSQL.Entities;
 
 namespace Swampnet.Evl.DAL.MSSQL
 {
+    /// <summary>
+    /// Organisations
+    /// </summary>
     static partial class Convert
     {
         public static Organisation ToOrganisation(InternalOrganisation source)
@@ -19,7 +22,10 @@ namespace Swampnet.Evl.DAL.MSSQL
                     Id = source.Id,
                     Name = source.Name,
                     Description = source.Description,
-                    ApiKey = source.ApiKey
+                    ApiKey = source.ApiKey,
+                    Audit = source.Audit == null
+                    ? null
+                    : source.Audit.Select(a => Convert.ToAudit(a.Audit)).ToArray()
                 };
         }
     }

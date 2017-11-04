@@ -1,6 +1,20 @@
 master ![Build status](https://swampnet.visualstudio.com/_apis/public/build/definitions/2d0f5092-dcc4-4d85-80b6-c0ecbac3c14f/12/badge)
 develop ![Build status](https://swampnet.visualstudio.com/_apis/public/build/definitions/2d0f5092-dcc4-4d85-80b6-c0ecbac3c14f/13/badge)
 
+# Generic event logging service
+
+### Back end
+- Dot Net Core 2.0
+- WebApi
+- Entity Framework Core
+
+### Front end
+- ASP.Net Core
+- Angular 4.x
+
+
+
+
 Flexible, structured events
 https://serilog.net/
 
@@ -13,5 +27,11 @@ A cross-platform .NET library for IMAP, POP3, and SMTP
 
 Create deployment script:
 azure site deploymentscript -s Swampnet.Evl.sln --aspWAP Swampnet.Evl.Web\Swampnet.Evl.Web.csproj
+
+dragula
+https://github.com/valor-software/ng2-dragula
+
+owl date time picker
+https://github.com/DanielYKPan/date-time-picker
 
 ....

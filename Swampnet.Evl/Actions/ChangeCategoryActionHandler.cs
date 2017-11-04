@@ -13,6 +13,7 @@ namespace Swampnet.Evl.Actions
     {
         public string Type => "change-category";
 
+
         public Task ApplyAsync(EventDetails evt, ActionDefinition actionDefinition, Rule rule)
         {
             var cat = actionDefinition.Properties.StringValue("category");
@@ -31,6 +32,7 @@ namespace Swampnet.Evl.Actions
                 new MetaDataCapture()
                 {
                     Name = "Category",
+                    Description = "Category",
                     IsRequired = true,
                     DataType = "select",
                     Options = new[]

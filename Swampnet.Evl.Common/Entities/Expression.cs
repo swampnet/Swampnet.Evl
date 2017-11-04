@@ -71,8 +71,7 @@ namespace Swampnet.Evl.Common.Entities
 		Source,
 		Category,
 		Summary,
-		Property,
-        Tag
+		Property
 	}
 
 	public enum RuleOperatorType
