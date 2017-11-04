@@ -5,7 +5,9 @@ import { Component, ViewEncapsulation } from '@angular/core';
     templateUrl: './app.component.html',
 	styleUrls: [
 		'./app.component.css',
-		'../../../../node_modules/dragula/dist/dragula.css'],
+		'../../../../node_modules/dragula/dist/dragula.css',
+		'../../../../node_modules/ng-pick-datetime/assets/style/picker.min.css'
+	],
     encapsulation: ViewEncapsulation.None
 })
 export class AppComponent {

@@ -19,6 +19,7 @@ import { EventDetailsComponent } from './components/events/event-details.compone
 import { EventsSearchCriteriaComponent } from './components/events/events-search-criteria.component';
 import { ProfileComponent } from './components/profile/profile.component';
 
+import { DateTimePickerModule } from 'ng-pick-datetime';
 import { DragulaModule } from 'ng2-dragula/ng2-dragula';
 
 @NgModule({
@@ -40,6 +41,7 @@ import { DragulaModule } from 'ng2-dragula/ng2-dragula';
         HttpModule,
 		FormsModule,
 		DragulaModule,
+		DateTimePickerModule,
         RouterModule.forRoot([
             { path: '', redirectTo: 'home', pathMatch: 'full' },
             { path: 'home', component: HomeComponent },

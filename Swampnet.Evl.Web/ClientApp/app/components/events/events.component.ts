@@ -36,7 +36,8 @@ export class EventsComponent {
 
         //console.log("*** max: " + max);
 
-        try {
+		try {
+			this.events = null;
             this.events = await this.api.searchEvents(this.criteria);
         } catch (e) {
             console.error(e);

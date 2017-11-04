@@ -154,6 +154,8 @@ namespace Swampnet.Evl.Controllers
                     return Unauthorized();
                 }
 
+				Log.Debug("Reorder rules");
+
                 await _rulesData.ReorderAsync(profile, rules);
 
                 var reordered = await _rulesData.SearchAsync(profile.Organisation);

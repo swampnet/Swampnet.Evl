@@ -31,4 +31,7 @@ azure site deploymentscript -s Swampnet.Evl.sln --aspWAP Swampnet.Evl.Web\Swampn
 dragula
 https://github.com/valor-software/ng2-dragula
 
+owl date time picker
+https://github.com/DanielYKPan/date-time-picker
+
 ....
