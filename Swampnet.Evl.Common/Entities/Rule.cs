@@ -92,7 +92,7 @@ namespace Swampnet.Evl.Common.Entities
 
     public class RuleOrder
     {
-        public Guid RuleId { get; set; }
+        public Guid Id { get; set; }
         public int Order { get; set; }
     }
 }

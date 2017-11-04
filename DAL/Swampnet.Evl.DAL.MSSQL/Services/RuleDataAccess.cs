@@ -126,13 +126,13 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
             using (var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))
             {
                 // Grab all relevent rules
-                var ids = rules.Select(r => r.RuleId);
+                var ids = rules.Select(r => r.Id);
                 var internalRules = await context.Rules.Where(r => ids.Contains(r.Id)).ToListAsync();
                 
                 // Update order
                 foreach(var ro in rules)
                 {
-                    var rule = internalRules.Single(r => r.Id == ro.RuleId);
+                    var rule = internalRules.Single(r => r.Id == ro.Id);
                     if(rule.Order != ro.Order)
                     {
                         rule.Order = ro.Order;

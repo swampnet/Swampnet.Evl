@@ -62,7 +62,8 @@ export class RuleDetailsComponent {
         return {
             id: undefined,
             name: "New rule",
-            isActive: true,
+			isActive: true,
+			order: 999999,
             expression: {
                 operator: "MATCH_ALL",
                 operand: "NULL",

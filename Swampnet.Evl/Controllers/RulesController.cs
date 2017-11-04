@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace Swampnet.Evl.Controllers
 {
@@ -49,7 +50,7 @@ namespace Swampnet.Evl.Controllers
 
                 var rules = await _rulesData.SearchAsync(profile.Organisation);
 
-                return Ok(rules);
+                return Ok(rules.OrderBy(x => x.Order));
             }
             catch (Exception ex)
             {
