@@ -16,7 +16,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Serilog.Sinks.Evl\Serilog.Sinks.Evl.csproj" />
-    <ProjectReference Include="..\..\Swampnet.Evl.Common\Swampnet.Evl.Common.csproj" />
   </ItemGroup>
 
   <ItemGroup>

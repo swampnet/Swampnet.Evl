@@ -47,9 +47,6 @@ namespace IntegrationTests
             }
             catch (Exception ex)
             {
-                ex.AddData("key-one", 1);
-                ex.AddData("key-two", 2);
-
                 Log.Error(ex, ex.Message);
             }
         }
@@ -109,7 +106,6 @@ namespace IntegrationTests
                 }
                 catch (Exception ex)
                 {
-                    ex.AddData("Count", count);
                     Log.Error(ex, ex.Message);
                 }
                 finally

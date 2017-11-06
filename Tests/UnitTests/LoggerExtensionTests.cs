@@ -1,17 +1,32 @@
-﻿using UnitTests.Mocks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Swampnet.Evl;
-using Swampnet.Evl.Client;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
+using System.Collections.Generic;
+using System.Text;
+using Swampnet.Evl;
+using UnitTests.Mocks;
 using Serilog.Sinks.Evl;
+using Swampnet.Evl.Client;
 
 namespace UnitTests
 {
     [TestClass]
-    public class SerilogSinkTests
+    public class LoggerExtensionTests
     {
+        //[TestMethod]
+        //public void LoggerExtension_AddProperties_FromObject()
+        //{
+        //    var logger = Mock.Logger();
+        //    var simple = new SimpleClass() { SomeInt = 123, SomeString = "456" };
+
+        //    logger.WithProperties(simple);
+
+        //    var result = (MockedLogger)logger;
+
+        //    Assert.AreEqual(2, result.Properties.Count());
+        //}
+
         [TestMethod]
-        public void SerilogSink_AddProperty()
+        public void LoggerExtension_AddProperty()
         {
             var logger = Mock.Logger();
 
@@ -30,7 +45,7 @@ namespace UnitTests
 
 
         [TestMethod]
-        public void SerilogSink_AddPropertyWithCategory()
+        public void LoggerExtension_AddPropertyWithCategory()
         {
             var logger = Mock.Logger();
 
@@ -45,7 +60,7 @@ namespace UnitTests
 
 
         [TestMethod]
-        public void SerilogSink_AddTag()
+        public void LoggerExtension_AddTag()
         {
             var logger = Mock.Logger();
 
@@ -62,7 +77,7 @@ namespace UnitTests
 
 
         [TestMethod]
-        public void SerilogSink_WithMemberName()
+        public void LoggerExtension_WithMemberName()
         {
             var logger = Mock.Logger();
 
@@ -72,8 +87,15 @@ namespace UnitTests
 
             var x = result.Properties.Single();
 
-            Assert.AreEqual("SerilogSink_WithMemberName", x.Value);
+            Assert.AreEqual("LoggerExtension_WithMemberName", x.Value);
         }
 
+
+
+        public class SimpleClass
+        {
+            public int SomeInt { get; set; }
+            public string SomeString { get; set; }
+        }
     }
 }

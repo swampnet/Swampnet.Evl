@@ -137,8 +137,6 @@ namespace Swampnet.Evl.Controllers
                     return Unauthorized();
                 }
 
-                Log.Logger.WithProperties(criteria).Debug("Get");
-
                 var events = await _dal.SearchAsync(profile, criteria);
 
                 return Ok(events);
