@@ -72,21 +72,21 @@ namespace Swampnet.Evl
         /// <summary>
         /// Add all public properties on an object to the log
         /// </summary>
-        public static ILogger WithPublicProperties(this ILogger logger, object o)
-        {
-            if(o == null)
-            {
-                return logger;
-            }
+        //public static ILogger WithPublicProperties(this ILogger logger, object o)
+        //{
+        //    if(o == null)
+        //    {
+        //        return logger;
+        //    }
 
-            var properties = new List<Property>();
-            foreach (PropertyInfo prop in o.GetType().GetProperties())
-            {
-                properties.Add(new Property(o.GetType().Name, prop.Name, prop.GetValue(o, null)));
-            }
+        //    var properties = new List<Property>();
+        //    foreach (PropertyInfo prop in o.GetType().GetProperties())
+        //    {
+        //        properties.Add(new Property(o.GetType().Name, prop.Name, prop.GetValue(o, null)));
+        //    }
 
-            return logger.WithProperties(properties);
-        }
+        //    return logger.WithProperties(properties);
+        //}
 
         /// <summary>
         /// Add key/value pairs to the log

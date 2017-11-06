@@ -14,8 +14,4 @@
     <ProjectReference Include="..\..\Swampnet.Evl.Common\Swampnet.Evl.Common.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Services\" />
-  </ItemGroup>
-
 </Project>

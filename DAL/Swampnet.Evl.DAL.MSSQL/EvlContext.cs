@@ -1,6 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Swampnet.Evl.DAL.MSSQL.Entities;
+using Swampnet.Evl.DAL.MSSQL.Services;
+using System;
 using System.Linq;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Swampnet.Evl.DAL.MSSQL
 {
@@ -12,6 +17,9 @@ namespace Swampnet.Evl.DAL.MSSQL
 		public EvlContext(DbContextOptions options)
             : base(options)
         {
+            //var serviceProvider = this.GetInfrastructure();
+            //var loggerFactory = serviceProvider.GetService<ILoggerFactory>();
+            //loggerFactory.AddProvider(new EFLoggerProvider());
         }
 
 

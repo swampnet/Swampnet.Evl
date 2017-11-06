@@ -16,6 +16,7 @@ using Microsoft.Extensions.PlatformAbstractions;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Reflection.Metadata;
 using System.Collections.Generic;
+using Microsoft.Extensions.Logging;
 
 namespace Swampnet.Evl
 {
@@ -91,7 +92,7 @@ namespace Swampnet.Evl
         public void Configure(
             IApplicationBuilder app,
             IHostingEnvironment env,
-            //ILoggerFactory loggerFactory,
+            ILoggerFactory loggerFactory,
             IApplicationLifetime appLifetime,
             IAuth auth,
             IEventDataAccess dal,
@@ -106,8 +107,10 @@ namespace Swampnet.Evl
                 .CreateLogger();
 
             //loggerFactory.AddSerilog(); // Pretty noisy!
+            loggerFactory.AddProvider(new DAL.MSSQL.Services.EFLoggerProvider());
 
-			appLifetime.ApplicationStopped.Register(Log.CloseAndFlush);
+
+            appLifetime.ApplicationStopped.Register(Log.CloseAndFlush);
 
 			if (env.IsDevelopment())
             {
