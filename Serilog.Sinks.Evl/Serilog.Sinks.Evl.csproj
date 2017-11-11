@@ -9,6 +9,10 @@
     <RepositoryUrl>https://github.com/swampnet/Swampnet.Evl</RepositoryUrl>
   </PropertyGroup>
 
+	<!--<PropertyGroup>
+		<NuspecFile>Serilog.Sinks.Evl.nuspec</NuspecFile>
+	</PropertyGroup>-->
+	
   <ItemGroup>
     <PackageReference Include="Serilog" Version="2.5.0" />
     <PackageReference Include="Serilog.Sinks.PeriodicBatching" Version="2.1.1" />

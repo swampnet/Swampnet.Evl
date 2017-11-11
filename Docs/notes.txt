@@ -4,7 +4,7 @@ Swampnet.Evl - Develop
 
 Options
 	Build number format
-		1.0$(Rev:.r)
+		1.0$(Rev:.r)		original: $(date:yyyyMMdd)$(rev:.r) 
 
 Tasks
 	publish
