@@ -137,15 +137,12 @@ namespace Swampnet.Evl.Controllers
                     return Unauthorized();
                 }
 
-                Log.Logger.WithPublicProperties(criteria).Debug("Get");
-
                 var events = await _dal.SearchAsync(profile, criteria);
 
                 return Ok(events);
             }
             catch (Exception ex)
             {
-                ex.AddData(criteria.GetPublicProperties());
                 Log.Error(ex, ex.Message);
 
                 return this.InternalServerError(ex);

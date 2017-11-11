@@ -44,12 +44,6 @@ namespace Swampnet.Evl
             return logger;
         }
 
-		private static string GetName(IProperty p)
-		{
-			return (_id++).ToString() + EvlSink.ID + (string.IsNullOrEmpty(p.Category) ? p.Name : p.Category + EvlSink.CATEGORY_SPLIT + p.Name);
-		}
-
-		private static long _id = 0;
 
         /// <summary>
         /// Add single property to log
@@ -70,25 +64,6 @@ namespace Swampnet.Evl
 
 
         /// <summary>
-        /// Add all public properties on an object to the log
-        /// </summary>
-        public static ILogger WithPublicProperties(this ILogger logger, object o)
-        {
-            if(o == null)
-            {
-                return logger;
-            }
-
-            var properties = new List<Property>();
-            foreach (PropertyInfo prop in o.GetType().GetProperties())
-            {
-                properties.Add(new Property(o.GetType().Name, prop.Name, prop.GetValue(o, null)));
-            }
-
-            return logger.WithProperties(properties);
-        }
-
-        /// <summary>
         /// Add key/value pairs to the log
         /// </summary>
         /// <param name="logger"></param>
@@ -104,6 +79,7 @@ namespace Swampnet.Evl
             return logger;
         }
 
+
         /// <summary>
         /// Add a tag to the log
         /// </summary>
@@ -112,6 +88,7 @@ namespace Swampnet.Evl
             return logger.WithTags(new[] { tag });
         }
 
+
         /// <summary>
         /// Add multiple tags to the log
         /// </summary>
@@ -119,5 +96,13 @@ namespace Swampnet.Evl
 		{
 			return logger.WithProperties(tags.Select(t => new Property(EvlSink.TAG_CATEGORY, EvlSink.TAG_CATEGORY, t)));
 		}
-	}
+
+
+        private static string GetName(IProperty p)
+        {
+            return (_id++).ToString() + EvlSink.ID + (string.IsNullOrEmpty(p.Category) ? p.Name : p.Category + EvlSink.CATEGORY_SPLIT + p.Name);
+        }
+
+        private static long _id = 0;
+    }
 }

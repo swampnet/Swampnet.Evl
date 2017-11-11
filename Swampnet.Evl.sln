@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27004.2005
+VisualStudioVersion = 15.0.27004.2002
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Serilog.Sinks.Evl", "Serilog.Sinks.Evl\Serilog.Sinks.Evl.csproj", "{1FE9C888-BC5C-4843-A9E4-F811C5092D44}"
 EndProject
@@ -25,7 +25,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Swampnet.Evl.Plugins.Email"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{13039D43-A38F-47B8-9A70-9377974B691F}"
 	ProjectSection(SolutionItems) = preProject
-		Docs\notes.txt = Docs\notes.txt
 		readme.md = readme.md
 	EndProjectSection
 EndProject

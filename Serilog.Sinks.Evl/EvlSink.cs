@@ -43,16 +43,17 @@ namespace Serilog.Sinks.Evl
             if (string.IsNullOrEmpty(source))
             {
                 source = "unknown";
-                var ass = Assembly.GetEntryAssembly();
-                if(ass != null)
-                {
-                    var name = ass.GetName();
-                    if(name != null)
-                    {
-                        source = name.Name;
-                        sourceVersion = name.Version.ToString();
-                    }
-                }
+                // Need to bump to .net standard 1.5 for this
+                //var ass = Assembly.GetEntryAssembly();
+                //if(ass != null)
+                //{
+                //    var name = ass.GetName();
+                //    if(name != null)
+                //    {
+                //        source = name.Name;
+                //        sourceVersion = name.Version.ToString();
+                //    }
+                //}
             }
 
             Api.Source = source;

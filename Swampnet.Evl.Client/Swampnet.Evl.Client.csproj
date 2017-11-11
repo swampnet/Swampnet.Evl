@@ -2,11 +2,15 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard1.4</TargetFramework>
+    <Authors>pj@theswamp.co.uk</Authors>
+    <Company>TheSwamp</Company>
+    <PackageProjectUrl>https://github.com/swampnet/Swampnet.Evl</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/swampnet/Swampnet.Evl</RepositoryUrl>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
-    <PackageReference Include="System.Reflection.TypeExtensions" Version="4.4.0" />
   </ItemGroup>
 
 </Project>
