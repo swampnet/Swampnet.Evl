@@ -17,6 +17,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Reflection.Metadata;
 using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
+using System.Reflection;
 
 namespace Swampnet.Evl
 {
@@ -102,7 +103,7 @@ namespace Swampnet.Evl
                 .MinimumLevel.Verbose()
 				.Enrich.WithExceptionDetails()
 				.Enrich.FromLogContext()
-                .WriteTo.LocalEvlSink(auth.GetEvlOrganisation(), dal, eventProcessor)
+                .WriteTo.LocalEvlSink(auth.GetEvlOrganisation(), dal, eventProcessor, "Swampnet.Evl", Assembly.GetCallingAssembly().GetName().Version.ToString())
                 .WriteTo.Console()
                 .CreateLogger();
 

@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Serilog.Exceptions;
 using Serilog.Events;
+using System.Reflection;
 
 namespace Swampnet.Evl.Web
 {
@@ -23,7 +24,9 @@ namespace Swampnet.Evl.Web
                 .WriteTo.Console()
                 .WriteTo.EvlSink(
                     Configuration["evl:api-key"],
-                    Configuration["evl:endpoint"])
+                    Configuration["evl:endpoint"],
+					"Swampnet.Evl.Web",
+					Assembly.GetCallingAssembly().GetName().Version.ToString())
                 .CreateLogger();
         }
 
