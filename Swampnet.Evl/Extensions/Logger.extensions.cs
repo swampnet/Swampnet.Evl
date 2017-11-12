@@ -25,9 +25,11 @@ namespace Swampnet.Evl
                 Organisation org,
                 IEventDataAccess dal, 
                 IEventQueueProcessor eventProcessor,
+				string source = null,
+				string version = null,
                 IFormatProvider formatProvider = null)
         {
-            return loggerConfiguration.Sink(new LocalSink(org, dal, eventProcessor, formatProvider));
+            return loggerConfiguration.Sink(new LocalSink(org, dal, eventProcessor, source, version, formatProvider));
         }
 
        
@@ -44,8 +46,10 @@ namespace Swampnet.Evl
                 Organisation org,
                 IEventDataAccess dal,
                 IEventQueueProcessor eventProcessor,
+				string source,
+				string version,
                 IFormatProvider formatProvider)
-                : base(formatProvider, null, null, null, null)
+                : base(formatProvider, null, null, source, version)
             {
                 _org = org;
                 _dal = dal;

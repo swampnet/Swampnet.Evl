@@ -1,11 +1,8 @@
 ﻿<div *ngIf="rules; else noRulesTemplate">
     <div class="container-fluid" [dragula]='"bag-items"' [dragulaModel]='rules'>
         <div *ngFor="let r of rules">
-			<!--[routerLink]="['/rules', r.id]"-->
             <div *ngIf="r.isActive" class="row rule-panel mouse-pointer" [routerLink]="['/rules', r.id]">
-                <div class="col-sm-6">
-                    ({{r.order}}) {{ r.name }}
-                </div>
+                <div class="col-sm-6">{{ r.name }}</div>
                 <div class="col-sm-6">
                     <div class="rule-action-container">
                         <span class="rule-action" *ngFor="let a of r.actions">{{a}}</span>

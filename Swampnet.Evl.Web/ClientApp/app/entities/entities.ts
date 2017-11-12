@@ -101,7 +101,9 @@ export interface Trigger {
 }
 
 export interface EventDetails {
-    id: string;
+	id: string;
+	source: string;
+	sourceVersion: string;
     category: string;
     summary: string;
     timestampUtc: Date;
