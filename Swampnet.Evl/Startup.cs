@@ -113,8 +113,7 @@ namespace Swampnet.Evl
                 .CreateLogger();
 
             //loggerFactory.AddSerilog(); // Pretty noisy!
-            loggerFactory.AddProvider(new DAL.MSSQL.Services.EFLoggerProvider());
-
+            loggerFactory.AddEntityFrameworkLogger();
 
             appLifetime.ApplicationStopped.Register(Log.CloseAndFlush);
 

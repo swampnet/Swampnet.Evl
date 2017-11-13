@@ -100,6 +100,10 @@ namespace Swampnet.Evl
 
         private static string GetName(IProperty p)
         {
+            // I've already forgotton what this godawful id thing is all about. Something about making property names unique (I think Serilog stores all
+            // this in a dictionary, so we can't have multiple properties with the same name. Evl, of course, doesn't care about that (and in fact we
+            // use multiple properties with the same name all over the place)
+            // Pretty sure this is some kind of way to trick the Serilog subsystem to handle that.
             return (_id++).ToString() + EvlSink.ID + (string.IsNullOrEmpty(p.Category) ? p.Name : p.Category + EvlSink.CATEGORY_SPLIT + p.Name);
         }
 

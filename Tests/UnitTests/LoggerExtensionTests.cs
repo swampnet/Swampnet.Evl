@@ -77,6 +77,27 @@ namespace UnitTests
 
 
         [TestMethod]
+        public void LoggerExtension_AddTags()
+        {
+            var logger = Mock.Logger();
+
+            logger = logger.WithTags(new[] { "tag-01", "tag-02" });
+
+            var result = (MockedLogger)logger;
+
+            var x = result.Properties.ToArray();
+
+            Assert.AreEqual(2, x.Length);
+
+            Assert.AreEqual($"{EvlSink.TAG_CATEGORY}{EvlSink.CATEGORY_SPLIT}{EvlSink.TAG_CATEGORY}", x[0].Name);
+            Assert.AreEqual($"tag-01", x[0].Value);
+
+            Assert.AreEqual($"{EvlSink.TAG_CATEGORY}{EvlSink.CATEGORY_SPLIT}{EvlSink.TAG_CATEGORY}", x[1].Name);
+            Assert.AreEqual($"tag-02", x[1].Value);
+        }
+
+
+        [TestMethod]
         public void LoggerExtension_WithMemberName()
         {
             var logger = Mock.Logger();
