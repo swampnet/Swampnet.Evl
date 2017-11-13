@@ -27,11 +27,11 @@ namespace Swampnet.Evl.Services
                     break;
 
                 case RuleOperatorType.EQ:
-                    result = Eq(GetOperand(expression, evt), expression.Value);
+                    result = EQ(GetOperand(expression, evt), expression.Value);
                     break;
 
                 case RuleOperatorType.NOT_EQ:
-                    result = !Eq(GetOperand(expression, evt), expression.Value);
+                    result = !EQ(GetOperand(expression, evt), expression.Value);
                     break;
 
                 case RuleOperatorType.REGEX:
@@ -39,21 +39,21 @@ namespace Swampnet.Evl.Services
                     break;
 
                 case RuleOperatorType.LT:
-                    result = Lt(GetOperand(expression, evt), expression.Value);
+                    result = LT(GetOperand(expression, evt), expression.Value);
                     break;
 
                 case RuleOperatorType.LTE:
-                    result = Eq(GetOperand(expression, evt), expression.Value) 
-                          || Lt(GetOperand(expression, evt), expression.Value);
+                    result = EQ(GetOperand(expression, evt), expression.Value) 
+                          || LT(GetOperand(expression, evt), expression.Value);
                     break;
 
                 case RuleOperatorType.GT:
-                    result = Gt(GetOperand(expression, evt), expression.Value);
+                    result = GT(GetOperand(expression, evt), expression.Value);
                     break;
 
                 case RuleOperatorType.GTE:
-                    result = Eq(GetOperand(expression, evt), expression.Value) 
-                          || Gt(GetOperand(expression, evt), expression.Value);
+                    result = EQ(GetOperand(expression, evt), expression.Value) 
+                          || GT(GetOperand(expression, evt), expression.Value);
                     break;
 
                 case RuleOperatorType.TAGGED:
@@ -99,7 +99,7 @@ namespace Swampnet.Evl.Services
         }
 
 
-        private bool Eq(string operand, string value)
+        private bool EQ(string operand, string value)
         {
             return operand.EqualsNoCase(value);
         }
@@ -110,7 +110,7 @@ namespace Swampnet.Evl.Services
         /// <remarks>
         /// Currently only supports numeric and dates
         /// </remarks>
-        private bool Lt(string operand, string value)
+        private bool LT(string operand, string value)
         {
             if (double.TryParse(operand, out double lhs_nmber) && double.TryParse(value, out double rhs_number))
             {
@@ -131,7 +131,7 @@ namespace Swampnet.Evl.Services
         /// <remarks>
         /// Currently only supports numeric and dates
         /// </remarks>
-        private bool Gt(string operand, string value)
+        private bool GT(string operand, string value)
         {
             if (double.TryParse(operand, out double lhs_nmber) && double.TryParse(value, out double rhs_number))
             {
