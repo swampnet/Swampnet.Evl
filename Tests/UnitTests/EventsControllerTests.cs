@@ -254,7 +254,7 @@ namespace UnitTests
         [TestMethod]
         public void EventsControllerTests_Post_Bulk()
         {
-            // I got some kind of timing/thread/race issue going ton with this
+            // I got some kind of timing/thread/race issue going on with this
             var dal = Mock.EventDataAccess();
             var eventProcessor = Mock.EventQueueProcessor();
 
@@ -272,10 +272,16 @@ namespace UnitTests
 
             var rs = controller.PostBulk(events).Result;
 
-            // Created & Queued 3 events
+            // Created 3 events
             Assert.AreEqual(events.Length, dal.CreateCount, "CreateCount");
+
+            // Didn't update anything
             Assert.AreEqual(0, dal.UpdateCount, "UpdateCount");
-            Assert.AreEqual(events.Length, eventProcessor.Queue.Count, "QueueCount");
+
+            // Have 3 events in the queue
+            // Error: Expected:<3>.Actual:<2>.QueueCount. I reckon this is a concurrency issue around adding stuff 
+            // to the queue inside a parralel.foreach
+            Assert.AreEqual(events.Length, eventProcessor.Queue.Count, "QueueCount"); 
         }
     }
 }
