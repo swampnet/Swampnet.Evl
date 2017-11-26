@@ -27,7 +27,8 @@ namespace Swampnet.Evl.DAL.MSSQL
                     .UseSqlServer(connectionString)
                     .Options);
 
-                ((RelationalDatabaseCreator)context.Database.GetService<IDatabaseCreator>()).CreateTables();
+				//((RelationalDatabaseCreator)context.Database.GetService<IDatabaseCreator>()).EnsureCreated();
+				((RelationalDatabaseCreator)context.Database.GetService<IDatabaseCreator>()).CreateTables();
 
                 context.Organisations.AddRange(_mockedOrganisations.Select(o => new InternalOrganisation()
                 {
