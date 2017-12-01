@@ -42,8 +42,9 @@ namespace Swampnet.Evl.EventProcessors
                 {
                     count = 0;
                     
-                    foreach (var rule in rules.ToArray().OrderBy(r => r.Order))
+                    foreach (var rule in rules.OrderBy(r => r.Order).ToArray())
                     {
+                        // Rule is true. Record a Trigger and run and actions associated with the rule.
                         if (expressionEvaluator.Evaluate(rule.Expression, evt))
                         {
                             var trigger = new Trigger(rule.Id.Value, rule.Name);

@@ -254,27 +254,34 @@ namespace UnitTests
         [TestMethod]
         public void EventsControllerTests_Post_Bulk()
         {
-			// I got some kind of timing/thread/race issue going ton with this
-            //var dal = Mock.EventDataAccess();
-            //var q = Mock.EventQueueProcessor();
+            // I got some kind of timing/thread/race issue going on with this
+            var dal = Mock.EventDataAccess();
+            var eventProcessor = Mock.EventQueueProcessor();
 
-            //var events = new EventsController(dal, q, Mock.Auth(Mock.MockedProfile()));
+            var controller = new EventsController(dal, eventProcessor, Mock.Auth(Mock.MockedProfile()));
+            var events = new[]
+            {
+                new Event(),
+                new Event(),
+                new Event()
+            };
 
-            //Assert.AreEqual(0, dal.CreateCount);
-            //Assert.AreEqual(0, dal.UpdateCount);
-            //Assert.AreEqual(0, q.Queue.Count);
+            Assert.AreEqual(0, dal.CreateCount);
+            Assert.AreEqual(0, dal.UpdateCount);
+            Assert.AreEqual(0, eventProcessor.Queue.Count);
 
-            //var rs = events.PostBulk(new[] 
-            //{
-            //    new Event(),
-            //    new Event(),
-            //    new Event()
-            //}).Result;
+            var rs = controller.PostBulk(events).Result;
 
-            //// Created & Queued 3 events
-            //Assert.AreEqual(3, dal.CreateCount);
-            //Assert.AreEqual(0, dal.UpdateCount);
-            //Assert.AreEqual(3, q.Queue.Count);
+            // Created 3 events
+            Assert.AreEqual(events.Length, dal.CreateCount, "CreateCount");
+
+            // Didn't update anything
+            Assert.AreEqual(0, dal.UpdateCount, "UpdateCount");
+
+            // Have 3 events in the queue
+            // Error: Expected:<3>.Actual:<2>.QueueCount. I reckon this is a concurrency issue around adding stuff 
+            // to the queue inside a parralel.foreach
+            Assert.AreEqual(events.Length, eventProcessor.Queue.Count, "QueueCount"); 
         }
     }
 }

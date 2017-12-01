@@ -103,13 +103,17 @@ namespace Swampnet.Evl
                 .MinimumLevel.Verbose()
 				.Enrich.WithExceptionDetails()
 				.Enrich.FromLogContext()
-                .WriteTo.LocalEvlSink(auth.GetEvlOrganisation(), dal, eventProcessor, "Swampnet.Evl", Assembly.GetCallingAssembly().GetName().Version.ToString())
+                .WriteTo.LocalEvlSink(
+                    auth.GetEvlOrganisation(), 
+                    dal, 
+                    eventProcessor,
+                    typeof(Startup).Assembly.GetName().Name,
+                    typeof(Startup).Assembly.GetName().Version.ToString())
                 .WriteTo.Console()
                 .CreateLogger();
 
             //loggerFactory.AddSerilog(); // Pretty noisy!
-            loggerFactory.AddProvider(new DAL.MSSQL.Services.EFLoggerProvider());
-
+            loggerFactory.AddEntityFrameworkLogger();
 
             appLifetime.ApplicationStopped.Register(Log.CloseAndFlush);
 

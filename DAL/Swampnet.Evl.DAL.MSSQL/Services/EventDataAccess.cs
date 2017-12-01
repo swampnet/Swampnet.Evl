@@ -38,7 +38,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
             }
         }
 
-        // @TODO: We're not using org.id atm - reason being that for some internal operations we don't have an organisation
+
         public async Task<EventDetails> ReadAsync(Organisation org, Guid id)
         {
             using (var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))
@@ -58,7 +58,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
             }
         }
 
-        // @TODO: We're not using org.id atm - reason being that for some internal operations we don't have an organisation
+
         public async Task UpdateAsync(Organisation org, Guid id, EventDetails evt)
         {
             using (var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))

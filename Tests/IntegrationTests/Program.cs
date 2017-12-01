@@ -27,7 +27,9 @@ namespace IntegrationTests
                 .WriteTo.Console()
                 .WriteTo.EvlSink(
                     Configuration["evl:api-key"], 
-                    Configuration["evl:endpoint"])
+                    Configuration["evl:endpoint"],
+                    typeof(Program).Assembly.GetName().Name,
+                    typeof(Program).Assembly.GetName().Version.ToString())
                 .CreateLogger();
 
             //LogException();

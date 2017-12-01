@@ -269,7 +269,10 @@ namespace Swampnet.Evl.Controllers
                     {
                         var evt = await CreateEventAsync(org, e);
 
-                        _eventProcessor.Enqueue(evt.Id);
+                        lock (_eventProcessor)
+                        {
+                            _eventProcessor.Enqueue(evt.Id);
+                        }
                     }
                     catch (Exception ex)
                     {

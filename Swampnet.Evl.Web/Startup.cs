@@ -25,8 +25,8 @@ namespace Swampnet.Evl.Web
                 .WriteTo.EvlSink(
                     Configuration["evl:api-key"],
                     Configuration["evl:endpoint"],
-					"Swampnet.Evl.Web",
-					Assembly.GetCallingAssembly().GetName().Version.ToString())
+                    typeof(Startup).Assembly.GetName().Name,
+                    typeof(Startup).Assembly.GetName().Version.ToString())
                 .CreateLogger();
         }
 

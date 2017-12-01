@@ -68,7 +68,7 @@ namespace Swampnet.Evl.Services
         }
 
 
-        private void MonitorThread()
+        private async void MonitorThread()
         {
             var eventIds = Wait();
             while (eventIds != null)
@@ -77,13 +77,13 @@ namespace Swampnet.Evl.Services
                 {
                     try
                     {
-                        var evt = _dal.ReadAsync(_evlOrganisation, eventId).Result;
+                        var evt = await _dal.ReadAsync(_evlOrganisation, eventId);
 
                         foreach (var processor in _processors.OrderBy(p => p.Priority))
                         {
                             try
                             {
-                                processor.ProcessAsync(evt).Wait();
+                                await processor.ProcessAsync(evt);
                             }
                             catch (Exception ex)
                             {
@@ -92,7 +92,7 @@ namespace Swampnet.Evl.Services
                             }
                         }
 
-                        _dal.UpdateAsync(_evlOrganisation, eventId, evt).Wait();
+                        await _dal.UpdateAsync(_evlOrganisation, eventId, evt);
                     }
                     catch (Exception ex)
                     {

@@ -1,13 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore.Storage;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Text;
 
 namespace Swampnet.Evl.DAL.MSSQL.Services
 {
-    public class EFLoggerProvider : ILoggerProvider
+    class EFLoggerProvider : ILoggerProvider
     {
         public ILogger CreateLogger(string categoryName)
         {
