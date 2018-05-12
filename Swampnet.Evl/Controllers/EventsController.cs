@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using Swampnet.Evl.Client;
 using Swampnet.Evl.Common.Contracts;
@@ -42,9 +43,7 @@ namespace Swampnet.Evl.Controllers
         {
             try
             {
-                var apiKey = Request.ApiKey();
-
-                var org = await _auth.GetOrganisationByApiKeyAsync(apiKey);
+                var org = await _auth.GetOrganisationByApiKeyAsync(Request.ApiKey());
                 if (org == null)
                 {
                     return Unauthorized();
@@ -73,14 +72,11 @@ namespace Swampnet.Evl.Controllers
         {
             try
             {
-                var apiKey = Request.ApiKey();
-
-                var org = await _auth.GetOrganisationByApiKeyAsync(apiKey);
+                var org = await _auth.GetOrganisationByApiKeyAsync(Request.ApiKey());
                 if (org == null)
                 {
                     return Unauthorized();
                 }
-
 
                 var sources = await _dal.GetSources(org);
 
@@ -107,9 +103,7 @@ namespace Swampnet.Evl.Controllers
 		{
 			try
 			{
-                var apiKey = Request.ApiKey();
-
-                var org = await _auth.GetOrganisationByApiKeyAsync(apiKey);
+                var org = await _auth.GetOrganisationByApiKeyAsync(Request.ApiKey());
                 if (org == null)
                 {
                     return Unauthorized();
@@ -138,9 +132,7 @@ namespace Swampnet.Evl.Controllers
         {
             try
             {
-                var apiKey = Request.ApiKey();
-
-                var org = await _auth.GetOrganisationByApiKeyAsync(apiKey);
+                var org = await _auth.GetOrganisationByApiKeyAsync(Request.ApiKey());
                 if (org == null)
                 {
                     return Unauthorized();
@@ -171,9 +163,7 @@ namespace Swampnet.Evl.Controllers
         {
             try
             {
-                var apiKey = Request.ApiKey();
-
-                var org = await _auth.GetOrganisationByApiKeyAsync(apiKey);
+                var org = await _auth.GetOrganisationByApiKeyAsync(Request.ApiKey());
                 if (org == null)
                 {
                     return Unauthorized();
@@ -211,9 +201,7 @@ namespace Swampnet.Evl.Controllers
 		{
 			try
 			{
-                var apiKey = Request.ApiKey();
-
-                var org = await _auth.GetOrganisationByApiKeyAsync(apiKey);
+                var org = await _auth.GetOrganisationByApiKeyAsync(Request.ApiKey());
                 if (org == null)
                 {
                     return Unauthorized();
@@ -254,9 +242,7 @@ namespace Swampnet.Evl.Controllers
         {
             try
             {
-                var apiKey = Request.ApiKey();
-
-                var org = await _auth.GetOrganisationByApiKeyAsync(apiKey);
+                var org = await _auth.GetOrganisationByApiKeyAsync(Request.ApiKey());
                 if (org == null)
                 {
                     return Unauthorized();

@@ -133,6 +133,11 @@ namespace Swampnet.Evl.Services
 
         public async Task<Organisation> GetOrganisationByApiKeyAsync(Guid apiKey)
         {
+            if(apiKey == Guid.Empty)
+            {
+                return null;
+            }
+
             CachedOrganisation org = null;
 
             if (_apiKeyCache.ContainsKey(apiKey))
