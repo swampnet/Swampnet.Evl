@@ -33,14 +33,12 @@ namespace Swampnet.Evl.Common.Contracts
         /// <returns></returns>
         Task UpdateAsync(Organisation org, Guid id, EventDetails evt);
 
-        Task<IEnumerable<EventSummary>> SearchAsync(Profile profile, EventSearchCriteria criteria);
+        Task<IEnumerable<EventSummary>> SearchAsync(Organisation org, EventSearchCriteria criteria);
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        Task<IEnumerable<string>> GetSources(Profile profile);
-		Task<IEnumerable<string>> GetTags(Profile profile);
-		Task<long> GetTotalEventCountAsync(Profile profile);
+        Task<IEnumerable<string>> GetSources(Organisation org);
+
+        Task<IEnumerable<string>> GetTags(Organisation org);
+
+        Task<long> GetTotalEventCountAsync(Organisation org);
     }
 }

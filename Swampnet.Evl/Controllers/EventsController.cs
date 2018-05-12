@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using Swampnet.Evl.Client;
 using Swampnet.Evl.Common.Contracts;
@@ -42,8 +43,8 @@ namespace Swampnet.Evl.Controllers
         {
             try
             {
-                var profile = await _auth.GetProfileAsync(User);
-                if (profile == null)
+                var org = await _auth.GetOrganisationByApiKeyAsync(Request.ApiKey());
+                if (org == null)
                 {
                     return Unauthorized();
                 }
@@ -71,13 +72,13 @@ namespace Swampnet.Evl.Controllers
         {
             try
             {
-                var profile = await _auth.GetProfileAsync(User);
-                if (profile == null)
+                var org = await _auth.GetOrganisationByApiKeyAsync(Request.ApiKey());
+                if (org == null)
                 {
                     return Unauthorized();
                 }
 
-                var sources = await _dal.GetSources(profile);
+                var sources = await _dal.GetSources(org);
 
                 return Ok(sources);
             }
@@ -102,13 +103,13 @@ namespace Swampnet.Evl.Controllers
 		{
 			try
 			{
-                var profile = await _auth.GetProfileAsync(User);
-                if (profile == null)
+                var org = await _auth.GetOrganisationByApiKeyAsync(Request.ApiKey());
+                if (org == null)
                 {
                     return Unauthorized();
                 }
 
-                var tags = await _dal.GetTags(profile);
+                var tags = await _dal.GetTags(org);
 
 				return Ok(tags);
 			}
@@ -131,13 +132,13 @@ namespace Swampnet.Evl.Controllers
         {
             try
             {
-                var profile = await _auth.GetProfileAsync(User);
-                if (profile == null)
+                var org = await _auth.GetOrganisationByApiKeyAsync(Request.ApiKey());
+                if (org == null)
                 {
                     return Unauthorized();
                 }
 
-                var events = await _dal.SearchAsync(profile, criteria);
+                var events = await _dal.SearchAsync(org, criteria);
 
                 return Ok(events);
             }
@@ -162,13 +163,13 @@ namespace Swampnet.Evl.Controllers
         {
             try
             {
-                var profile = await _auth.GetProfileAsync(User);
-                if (profile == null)
+                var org = await _auth.GetOrganisationByApiKeyAsync(Request.ApiKey());
+                if (org == null)
                 {
                     return Unauthorized();
                 }
 
-                var evt = await _dal.ReadAsync(profile.Organisation, id);
+                var evt = await _dal.ReadAsync(org, id);
 
                 if (evt == null)
                 {
@@ -200,24 +201,17 @@ namespace Swampnet.Evl.Controllers
 		{
 			try
 			{
-				if (e == null)
-				{
-					return BadRequest();
-				}
-
-                //var apiKey = Request.ApiKey();
-                var apiKey = Common.Constants.MOCKED_DEFAULT_APIKEY;
-
-                // @TODO: We drive everything off the API key, we currently don't check if the caller is actually
-                //        the owner of the key.
-
-                // @TODO: Auth
-                // @TODO: Check api key is valid, get organisation
-                var org = await _auth.GetOrganisationByApiKeyAsync(apiKey);
-                if(org == null)
+                var org = await _auth.GetOrganisationByApiKeyAsync(Request.ApiKey());
+                if (org == null)
                 {
                     return Unauthorized();
                 }
+
+                if (e == null)
+                {
+                    return BadRequest();
+                }
+
 
                 var evt = await CreateEventAsync(org, e);
 
@@ -248,19 +242,15 @@ namespace Swampnet.Evl.Controllers
         {
             try
             {
-                if (evts == null)
-                {
-                    return BadRequest();
-                }
-
-                //var apiKey = Request.ApiKey();
-                var apiKey = Common.Constants.MOCKED_DEFAULT_APIKEY;
-
-                // @TODO: Auth
-                var org = await _auth.GetOrganisationByApiKeyAsync(apiKey);
+                var org = await _auth.GetOrganisationByApiKeyAsync(Request.ApiKey());
                 if (org == null)
                 {
                     return Unauthorized();
+                }
+
+                if (evts == null)
+                {
+                    return BadRequest();
                 }
 
                 Parallel.ForEach(evts, async e =>

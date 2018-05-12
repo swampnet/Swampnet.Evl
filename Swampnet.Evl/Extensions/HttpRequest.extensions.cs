@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Serilog;
 using Swampnet.Evl.Client;
 using Swampnet.Evl.Common;
 using System;
@@ -21,7 +22,12 @@ namespace Swampnet.Evl
 
         public static Guid ApiKey(this HttpRequest rq)
         {
-            return Guid.Parse(rq.Headers[Constants.API_KEY_HEADER].SingleOrDefault());
+            Guid apiKey = Guid.Empty;
+            if(!Guid.TryParse(rq.Headers[Constants.API_KEY_HEADER].SingleOrDefault(), out apiKey))
+            {
+                Log.Information("Can't resolve api-key");
+            }
+            return apiKey;
         }
 
 

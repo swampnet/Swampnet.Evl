@@ -15,12 +15,12 @@ namespace Swampnet.Evl.Common.Contracts
 
         Task<IEnumerable<Rule>> LoadAsync(Organisation org);
 
-        Task CreateAsync(Profile profile, Rule rule);
+        Task CreateAsync(Organisation profile, Rule rule);
 
-        Task UpdateAsync(Profile profile, Rule rule);
+        Task UpdateAsync(Organisation profile, Rule rule);
 
-        Task DeleteAsync(Profile profile, Guid id);
+        Task DeleteAsync(Organisation profile, Guid id);
 
-        Task ReorderAsync(Profile profile, IEnumerable<RuleOrder> rules);
+        Task ReorderAsync(Organisation profile, IEnumerable<RuleOrder> rules);
     }
 }

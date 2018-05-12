@@ -81,7 +81,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Entities
 
         internal void AddTag(EvlContext context, string tag, Organisation org)
         {
-            if(!string.IsNullOrEmpty(tag) && !GetTagNames().Contains(tag))
+            if(!string.IsNullOrEmpty(tag) && !GetTagNames().Any(t => t.EqualsNoCase(tag)))
             {
                 var link = new InternalEventTags();
                 link.Event = this;

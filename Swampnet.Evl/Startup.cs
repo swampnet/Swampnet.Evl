@@ -79,6 +79,7 @@ namespace Swampnet.Evl
 					Description = "Backend API for Evl"					
 				});
 
+
 				var filePath = Path.Combine(PlatformServices.Default.Application.ApplicationBasePath, "Swampnet.Evl.xml");
 				c.IncludeXmlComments(filePath);
 
@@ -120,16 +121,17 @@ namespace Swampnet.Evl
 			if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-
-                // Enable middleware to serve generated Swagger as a JSON endpoint.
-                app.UseSwagger();
-
-                // Enable middleware to serve swagger-ui (HTML, JS, CSS etc.), specifying the Swagger JSON endpoint.
-                app.UseSwaggerUI(c =>
-                {
-                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Evl API V1");
-				});
             }
+
+            // Enable middleware to serve generated Swagger as a JSON endpoint.
+            app.UseSwagger();
+
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS etc.), specifying the Swagger JSON endpoint.
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Evl API V1");
+            });
+
 
             app.UseCors(cfg =>
 				cfg.AllowAnyOrigin()
@@ -138,10 +140,10 @@ namespace Swampnet.Evl
 
 			app.UseMvc();
 
-            Log.Logger
-                .WithTag("START")
-                .WithProperty("StartTime", DateTime.UtcNow)
-                .Information("Start");
+            //Log.Logger
+            //    .WithTag("START")
+            //    .WithProperty("StartTime", DateTime.UtcNow)
+            //    .Information("Start");
         }
     }
 }

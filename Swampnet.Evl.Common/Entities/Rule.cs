@@ -60,7 +60,7 @@ namespace Swampnet.Evl.Common.Entities
         /// <summary>
         /// Audit trail
         /// </summary>
-        public Audit[]  Audit { get; set; }
+        //public Audit[]  Audit { get; set; }
     }
 
 

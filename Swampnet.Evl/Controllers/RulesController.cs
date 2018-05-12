@@ -42,13 +42,13 @@ namespace Swampnet.Evl.Controllers
         {
             try
             {
-                var profile = await _auth.GetProfileAsync(User);
-                if (profile == null || !profile.HasPermission(Permission.rule_view))
+                var org = await _auth.GetOrganisationByApiKeyAsync(Request.ApiKey());
+                if (org == null)
                 {
                     return Unauthorized();
                 }
 
-                var rules = await _rulesData.SearchAsync(profile.Organisation);
+                var rules = await _rulesData.SearchAsync(org);
 
                 return Ok(rules.OrderBy(x => x.Order));
             }
@@ -70,13 +70,13 @@ namespace Swampnet.Evl.Controllers
         {
             try
             {
-                var profile = await _auth.GetProfileAsync(User);
-                if (profile == null || !profile.HasPermission(Permission.rule_view))
+                var org = await _auth.GetOrganisationByApiKeyAsync(Request.ApiKey());
+                if (org == null)
                 {
                     return Unauthorized();
                 }
 
-                var rule = await _rulesData.LoadAsync(profile.Organisation, id);
+                var rule = await _rulesData.LoadAsync(org, id);
 
                 if(rule == null)
                 {
@@ -107,8 +107,8 @@ namespace Swampnet.Evl.Controllers
         {
             try
             {
-                var profile = await _auth.GetProfileAsync(User);
-                if (profile == null || !profile.HasPermission(Permission.rule_create))
+                var org = await _auth.GetOrganisationByApiKeyAsync(Request.ApiKey());
+                if (org == null)
                 {
                     return Unauthorized();
                 }
@@ -120,7 +120,7 @@ namespace Swampnet.Evl.Controllers
 
 				Log.Debug("POST rule {ruleName}", rule.Name);
 
-				await _rulesData.CreateAsync(profile, rule);
+				await _rulesData.CreateAsync(org, rule);
 
                 return CreatedAtRoute("RuleDetails", new { id = rule.Id }, rule);
             }
@@ -148,17 +148,17 @@ namespace Swampnet.Evl.Controllers
         {
             try
             {
-                var profile = await _auth.GetProfileAsync(User);
-                if (profile == null || !profile.HasPermission(Permission.rule_edit))
+                var org = await _auth.GetOrganisationByApiKeyAsync(Request.ApiKey());
+                if (org == null)
                 {
                     return Unauthorized();
                 }
 
-				Log.Debug("Reorder rules");
+                Log.Debug("Reorder rules");
 
-                await _rulesData.ReorderAsync(profile, rules);
+                await _rulesData.ReorderAsync(org, rules);
 
-                var reordered = await _rulesData.SearchAsync(profile.Organisation);
+                var reordered = await _rulesData.SearchAsync(org);
 
                 return Ok(reordered);
             }
@@ -182,8 +182,8 @@ namespace Swampnet.Evl.Controllers
         {
             try
             {
-                var profile = await _auth.GetProfileAsync(User);
-                if (profile == null || !profile.HasPermission(Permission.rule_edit))
+                var org = await _auth.GetOrganisationByApiKeyAsync(Request.ApiKey());
+                if (org == null)
                 {
                     return Unauthorized();
                 }
@@ -201,7 +201,7 @@ namespace Swampnet.Evl.Controllers
 					return BadRequest("id and Rule.Id do not match");
 				}
 
-				await _rulesData.UpdateAsync(profile, rule);
+				await _rulesData.UpdateAsync(org, rule);
 
                 // Not sure I should be returning this for an update?
                 return CreatedAtRoute("RuleDetails", new { id = id }, rule);
@@ -233,15 +233,15 @@ namespace Swampnet.Evl.Controllers
         {
 			try
 			{
-                var profile = await _auth.GetProfileAsync(User);
-                if (profile == null || !profile.HasPermission(Permission.rule_delete))
+                var org = await _auth.GetOrganisationByApiKeyAsync(Request.ApiKey());
+                if (org == null)
                 {
                     return Unauthorized();
                 }
 
                 Log.Information("DEL rule {ruleId}", id);
 
-				await _rulesData.DeleteAsync(profile, id);
+				await _rulesData.DeleteAsync(org, id);
 
 				return Ok();
 			}
