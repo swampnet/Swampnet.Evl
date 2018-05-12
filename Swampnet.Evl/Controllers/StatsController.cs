@@ -41,8 +41,10 @@ namespace Swampnet.Evl.Controllers
         {
             try
             {
-                var profile = await _auth.GetProfileAsync(User);
-                if (profile == null)
+                var apiKey = Request.ApiKey();
+
+                var org = await _auth.GetOrganisationByApiKeyAsync(apiKey);
+                if (org == null)
                 {
                     return Unauthorized();
                 }
@@ -50,7 +52,7 @@ namespace Swampnet.Evl.Controllers
                 return Ok(new Stats()
                 {
                     ApiVersion = Assembly.GetEntryAssembly().GetName().Version.ToString(),
-                    TotalEvents = await _dal.GetTotalEventCountAsync(profile)
+                    TotalEvents = await _dal.GetTotalEventCountAsync(org)
                 });
             }
             catch (Exception ex)

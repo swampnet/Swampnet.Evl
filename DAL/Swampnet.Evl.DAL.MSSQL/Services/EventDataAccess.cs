@@ -93,18 +93,15 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
         }
 
 
-        public async Task<IEnumerable<EventSummary>> SearchAsync(Profile profile, EventSearchCriteria criteria)
+        public async Task<IEnumerable<EventSummary>> SearchAsync(Organisation org, EventSearchCriteria criteria)
         {
             using (var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))
             {
                 var query = context.Events.AsQueryable();
 
-				if (!profile.HasPermission(Permission.organisation_view_all))
-				{
-					query = query.Where(e => e.OrganisationId == profile.Organisation.Id);
-				}
+                query = query.Where(e => e.OrganisationId == org.Id);
 
-				if (criteria.Id.HasValue)
+                if (criteria.Id.HasValue)
                 {
                     query = query.Where(e => e.Id == criteria.Id);
                 }
@@ -174,7 +171,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
             }
         }
 
-        public async Task<IEnumerable<string>> GetSources(Profile profile)
+        public async Task<IEnumerable<string>> GetSources(Organisation org)
         {
             IEnumerable<string> sources = null;
 
@@ -182,12 +179,9 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
             {
 				var query = context.Events.AsQueryable();
 
-				if (!profile.HasPermission(Permission.organisation_view_all))
-				{
-					query = query.Where(e => e.OrganisationId == profile.Organisation.Id);
-				}
+                query = query.Where(e => e.OrganisationId == org.Id);
 
-				sources = await query
+                sources = await query
                     .Select(e => e.Source)
                     .Distinct()
                     .ToListAsync();
@@ -197,7 +191,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
         }
 
 
-		public async Task<IEnumerable<string>> GetTags(Profile profile)
+		public async Task<IEnumerable<string>> GetTags(Organisation org)
 		{
 			IEnumerable<string> tags = null;
 
@@ -205,20 +199,16 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
 			{
 				var query = context.Tags.AsQueryable();
 
-				if (!profile.HasPermission(Permission.organisation_view_all))
-				{
-					query = query.Where(t => t.OrganisationId == profile.Organisation.Id);
-				}
+                query = query.Where(t => t.OrganisationId == org.Id);
 
-
-				tags = await query.Select(t => t.Name).Distinct().ToListAsync();
+                tags = await query.Select(t => t.Name).Distinct().ToListAsync();
 			}
 
 			return tags;
 		}
 
 
-		public async Task<long> GetTotalEventCountAsync(Profile profile)
+		public async Task<long> GetTotalEventCountAsync(Organisation org)
         {
             long count = 0;
 
@@ -226,10 +216,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
             {
 				var query = context.Events.AsQueryable();
 
-				if (!profile.HasPermission(Permission.organisation_view_all))
-				{
-					query = query.Where(e => e.OrganisationId == profile.Organisation.Id);
-				}
+                query = query.Where(e => e.OrganisationId == org.Id);
 
                 count = await query.LongCountAsync();
             }

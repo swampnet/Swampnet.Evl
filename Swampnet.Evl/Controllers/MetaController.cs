@@ -78,7 +78,7 @@ namespace Swampnet.Evl.Controllers
 
         private async Task<MetaDataCapture[]> GetOperands(Profile profile)
         {
-            var sources = await _eventDataAccess.GetSources(profile);
+            var sources = await _eventDataAccess.GetSources(profile.Organisation);
 
             // Start off with our static list
             var operands = new List<MetaDataCapture>(_operands);
