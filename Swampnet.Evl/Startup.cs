@@ -140,10 +140,10 @@ namespace Swampnet.Evl
 
 			app.UseMvc();
 
-            //Log.Logger
-            //    .WithTag("START")
-            //    .WithProperty("StartTime", DateTime.UtcNow)
-            //    .Information("Start");
+            Log.Logger
+                .WithTag("START")
+                .WithProperty("StartTime", DateTime.UtcNow)
+                .Information("Start");
         }
     }
 }
