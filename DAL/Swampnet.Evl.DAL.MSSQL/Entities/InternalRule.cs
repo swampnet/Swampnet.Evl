@@ -12,7 +12,6 @@ namespace Swampnet.Evl.DAL.MSSQL.Entities
     {
         public InternalRule()
         {
-            //Audit = new List<InternalRuleAudit>();
         }
 
         /// <summary>
@@ -54,19 +53,5 @@ namespace Swampnet.Evl.DAL.MSSQL.Entities
         /// Serialised action data
         /// </summary>
         public string ActionData { get; set; }
-
-        /// <summary>
-        /// Audit trail
-        /// </summary>
-        //public ICollection<InternalRuleAudit> Audit { get; set; }
-
-
-        //internal void AddAudit(long profileId, AuditAction action)
-        //{
-        //    Audit.Add(new InternalRuleAudit() {
-        //        Audit = new InternalAudit(profileId, action),
-        //        Rule = this
-        //    });
-        //}
     }
 }

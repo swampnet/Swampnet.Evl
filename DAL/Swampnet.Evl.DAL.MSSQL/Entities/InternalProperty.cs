@@ -24,8 +24,5 @@ namespace Swampnet.Evl.DAL.MSSQL.Entities
                 ? $"{Id} - {Name} = {Value}"
                 : $"{Id} - [{Category}] {Name} = {Value}";
         }
-
-
-        //public InternalEvent Event { get; set; }
     }
 }

@@ -36,10 +36,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
             using (var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))
             {
                 var rule = await context.Rules
-                            //.Include(f => f.Audit)
-                            //    .ThenInclude(a => a.Audit)
-                            //        .ThenInclude(a => a.Profile)
-                            .SingleOrDefaultAsync(r => r.IsActive && r.Id == id);
+                            .SingleOrDefaultAsync(r => r.IsActive && r.Id == id && r.OrganisationId == org.Id);
 
                 if(rule == null)
                 {
@@ -55,7 +52,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
             using (var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))
             {
                 var rules = await context.Rules
-                                        .Where(r => r.IsActive)
+                                        .Where(r => r.IsActive && r.OrganisationId == org.Id)
                                         .ToListAsync();
 
                 return rules.Select(r => Convert.ToRule(r));
@@ -69,7 +66,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
             {
                 rule.Id = Guid.NewGuid();
 				var r = Convert.ToRule(rule);
-                //r.AddAudit(profile.Id, Common.AuditAction.Create);
+
                 r.OrganisationId = org.Id;
 
 				context.Rules.Add(r);
@@ -83,9 +80,8 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
             using (var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))
             {
                 var r = context.Rules
-                    //.Include(f => f.Audit)
-                    //    .ThenInclude(a => a.Audit)
-                    .SingleOrDefault(x => x.Id == rule.Id);
+                    .SingleOrDefault(x => x.Id == rule.Id && r.OrganisationId == org.Id);
+
                 if(r == null)
                 {
                     throw new NullReferenceException("Rule not found");
@@ -95,7 +91,6 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
                 r.IsActive = rule.IsActive;
                 r.ActionData = rule.Actions.ToXmlString();
                 r.ExpressionData = rule.Expression.ToXmlString();
-                //r.AddAudit(profile.Id, Common.AuditAction.Modify);
 
                 await context.SaveChangesAsync();
             }
@@ -107,7 +102,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
 			//        A: Well, flag it as so, obv. Question is, do we use the active flag for that?
 			using (var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))
 			{
-				var r = context.Rules.SingleOrDefault(x => x.Id == id);
+				var r = context.Rules.SingleOrDefault(x => x.Id == id && r.OrganisationId == org.Id);
 				if (r == null)
 				{
 					throw new NullReferenceException("Rule not found");
@@ -127,7 +122,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
             {
                 // Grab all relevent rules
                 var ids = rules.Select(r => r.Id);
-                var internalRules = await context.Rules.Where(r => ids.Contains(r.Id)).ToListAsync();
+                var internalRules = await context.Rules.Where(r => r.OrganisationId == org.Id && ids.Contains(r.Id)).ToListAsync();
                 
                 // Update order
                 foreach(var ro in rules)
@@ -136,7 +131,6 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
                     if(rule.Order != ro.Order)
                     {
                         rule.Order = ro.Order;
-                        //rule.ModifiedOnUtc = DateTime.UtcNow;
                     }
                 }
 

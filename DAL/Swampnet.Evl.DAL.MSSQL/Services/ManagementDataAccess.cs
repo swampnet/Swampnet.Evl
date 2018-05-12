@@ -20,56 +20,6 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
             _cfg = cfg;
         }
 
-     //   public async Task<Profile> LoadProfileAsync(Organisation org, long id)
-     //   {
-     //       using (var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))
-     //       {
-     //           var p = await context.Profiles
-     //               .Include(x => x.Organisation)
-     //               .Include(x => x.InternalProfileRoles)
-     //                   .ThenInclude(pg => pg.Role)
-					//		.ThenInclude(r => r.InternalRolePermissions)
-					//			.ThenInclude(r => r.Permission)
-     //               .Include(x => x.Audit)
-     //                   .ThenInclude(x => x.Audit)
-					//.SingleOrDefaultAsync(x => x.Organisation.Id == org.Id && x.Id == id);
-
-     //           return Convert.ToProfile(p);
-     //       }
-     //   }
-
-
-     //   public async Task<Profile> LoadProfileAsync(string key)
-     //   {
-     //       using (var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))
-     //       {
-     //           var p = await context.Profiles
-     //               .Include(x => x.Organisation)
-     //               .Include(x => x.InternalProfileRoles)
-     //                   .ThenInclude(pg => pg.Role)
-					//		.ThenInclude(r => r.InternalRolePermissions)
-					//			.ThenInclude(r => r.Permission)
-     //               .Include(x => x.Audit)
-     //                   .ThenInclude(x => x.Audit)
-     //               .SingleOrDefaultAsync(x => x.Key == key);
-
-     //           return Convert.ToProfile(p);
-     //       }
-     //   }
-
-
-        //public async Task<IEnumerable<Profile>> LoadProfilesAsync(Organisation org)
-        //{
-        //    using (var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))
-        //    {
-        //        var p = await context.Profiles
-        //            .Where(x => x.Organisation.Id == org.Id)
-        //            .ToListAsync();
-
-        //        return p.Select(Convert.ToProfile);
-        //    }
-        //}
-
 
         public async Task<Organisation> LoadOrganisationByApiKeyAsync(Guid apiKey)
         {
@@ -83,6 +33,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
                 return Convert.ToOrganisation(org);
             }
         }
+
 
         public async Task<Organisation> LoadOrganisationAsync(Guid id)
         {

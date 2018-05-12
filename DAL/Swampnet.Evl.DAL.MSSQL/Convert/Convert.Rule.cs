@@ -24,26 +24,9 @@ namespace Swampnet.Evl.DAL.MSSQL
                 Order = source.Order,
                 Expression = source.ExpressionData.Deserialize<Expression>(),
                 Actions = source.ActionData.Deserialize<ActionDefinition[]>()
-                //Audit = source.Audit == null
-                //    ? null
-                //    : source.Audit.Select(a => ToAudit(a.Audit)).ToArray()
             };
         }
 
-        /// <summary>
-        /// Convert InternalAudit to an API Audit
-        /// </summary>
-        /// <param name="source"></param>
-        /// <returns></returns>
-        //internal static Audit ToAudit(InternalAudit source)
-        //{
-        //    return new Audit()
-        //    {
-        //        Action = source.Action,
-        //        Profile = Convert.ToProfileSummary(source.Profile),
-        //        TimestampUtc = source.TimestampUtc
-        //    };
-        //}
 
 
         /// <summary>

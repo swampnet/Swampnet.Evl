@@ -52,7 +52,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
 						.ThenInclude(t => t.Actions)
 						.ThenInclude(t => t.InternalActionProperties)
 						.ThenInclude(t => t.Property)
-					.SingleOrDefaultAsync(e => e.Id == id);
+					.SingleOrDefaultAsync(e => e.OrganisationId == org.Id && e.Id == id);
 
                 return Convert.ToEventDetails(evt);
             }
@@ -72,7 +72,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
 						.ThenInclude(t => t.Actions)
 						.ThenInclude(t => t.InternalActionProperties)
 						.ThenInclude(t => t.Property)
-                    .SingleOrDefaultAsync(e => e.Id == id);
+                    .SingleOrDefaultAsync(e => e.OrganisationId == org.Id && e.Id == id);
 
                 if (internalEvent == null)
                 {
