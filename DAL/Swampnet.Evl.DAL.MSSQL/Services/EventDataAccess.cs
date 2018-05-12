@@ -43,16 +43,24 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
         {
             using (var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))
             {
-                var evt = await context.Events
+                var query = context.Events
                     .Include(e => e.InternalEventProperties)
                         .ThenInclude(p => p.Property)
                     .Include(e => e.InternalEventTags)
                         .ThenInclude(t => t.Tag)
-					.Include(e => e.Triggers)
-						.ThenInclude(t => t.Actions)
-						.ThenInclude(t => t.InternalActionProperties)
-						.ThenInclude(t => t.Property)
-					.SingleOrDefaultAsync(e => e.OrganisationId == org.Id && e.Id == id);
+                    .Include(e => e.Triggers)
+                        .ThenInclude(t => t.Actions)
+                        .ThenInclude(t => t.InternalActionProperties)
+                        .ThenInclude(t => t.Property)
+                    .Include(e => e.Organisation)
+                    .Where(e => e.Id == id);
+
+                if(org != null)
+                {
+                    query = query.Where(e => e.OrganisationId == org.Id);
+                }
+
+                var evt = await query.SingleOrDefaultAsync();
 
                 return Convert.ToEventDetails(evt);
             }
@@ -63,16 +71,18 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
         {
             using (var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))
             {
-                var internalEvent = await context.Events
+                var query = context.Events
                     .Include(e => e.InternalEventProperties)
                         .ThenInclude(p => p.Property)
                     .Include(e => e.InternalEventTags)
                         .ThenInclude(t => t.Tag)
-					.Include(e => e.Triggers)
-						.ThenInclude(t => t.Actions)
-						.ThenInclude(t => t.InternalActionProperties)
-						.ThenInclude(t => t.Property)
-                    .SingleOrDefaultAsync(e => e.OrganisationId == org.Id && e.Id == id);
+                    .Include(e => e.Triggers)
+                        .ThenInclude(t => t.Actions)
+                        .ThenInclude(t => t.InternalActionProperties)
+                        .ThenInclude(t => t.Property)
+                    .Where(e => e.Id == id);
+
+                var internalEvent = await query.SingleOrDefaultAsync();
 
                 if (internalEvent == null)
                 {
@@ -84,7 +94,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
                 internalEvent.ModifiedOnUtc = DateTime.UtcNow;
 
                 internalEvent.AddProperties(evt.Properties);
-                internalEvent.AddTags(context, evt.Tags, org);
+                internalEvent.AddTags(context, evt.Tags, evt.Organisation);
 				internalEvent.AddTriggers(evt.Triggers);
                 // @TODO: We should be able to remove tags that don't exist as well
 

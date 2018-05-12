@@ -62,6 +62,7 @@ namespace Swampnet.Evl.DAL.MSSQL
                 : new EventDetails()
                 {
                     Id = source.Id,
+                    Organisation = Convert.ToOrganisation(source.Organisation),
                     Category = Enum.Parse<EventCategory>(source.Category, true),
                     Summary = source.Summary,
                     TimestampUtc = source.TimestampUtc,

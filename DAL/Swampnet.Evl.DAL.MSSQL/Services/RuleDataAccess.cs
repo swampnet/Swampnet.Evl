@@ -35,8 +35,14 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
         {
             using (var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))
             {
-                var rule = await context.Rules
-                            .SingleOrDefaultAsync(r => r.IsActive && r.Id == id && r.OrganisationId == org.Id);
+                var query = context.Rules.Where(r => r.Id == id);
+
+                if(org != null)
+                {
+                    query = query.Where(r => r.OrganisationId == org.Id);
+                }
+
+                var rule = await query.SingleOrDefaultAsync();
 
                 if(rule == null)
                 {
@@ -52,8 +58,8 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
             using (var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))
             {
                 var rules = await context.Rules
-                                        .Where(r => r.IsActive && r.OrganisationId == org.Id)
-                                        .ToListAsync();
+                                .Where(r => r.IsActive && r.OrganisationId == org.Id)
+                                .ToListAsync();
 
                 return rules.Select(r => Convert.ToRule(r));
             }
@@ -80,7 +86,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
             using (var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))
             {
                 var r = context.Rules
-                    .SingleOrDefault(x => x.Id == rule.Id && r.OrganisationId == org.Id);
+                    .SingleOrDefault(x => x.Id == rule.Id && x.OrganisationId == org.Id);
 
                 if(r == null)
                 {
@@ -102,14 +108,13 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
 			//        A: Well, flag it as so, obv. Question is, do we use the active flag for that?
 			using (var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))
 			{
-				var r = context.Rules.SingleOrDefault(x => x.Id == id && r.OrganisationId == org.Id);
+				var r = context.Rules.SingleOrDefault(x => x.Id == id && x.OrganisationId == org.Id);
 				if (r == null)
 				{
 					throw new NullReferenceException("Rule not found");
 				}
 
 				r.IsActive = false;
-                //r.AddAudit(profile.Id, Common.AuditAction.Delete);
 
                 await context.SaveChangesAsync();
 			}
