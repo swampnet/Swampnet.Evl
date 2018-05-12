@@ -25,11 +25,11 @@ namespace Swampnet.Evl.DAL.MSSQL
 
         public DbSet<InternalEvent> Events { get; set; }
         public DbSet<InternalTag> Tags { get; set; }
-        public DbSet<InternalProfile> Profiles { get; set; }
+        //public DbSet<InternalProfile> Profiles { get; set; }
         public DbSet<InternalOrganisation> Organisations { get; set; }
         public DbSet<InternalRule> Rules { get; set; }
-        public DbSet<InternalRole> Roles { get; set; }
-		public DbSet<InternalPermission> Permissions { get; set; }
+        //public DbSet<InternalRole> Roles { get; set; }
+		//public DbSet<InternalPermission> Permissions { get; set; }
 
 
 		public static EvlContext Create(string connectionString)
@@ -79,27 +79,27 @@ namespace Swampnet.Evl.DAL.MSSQL
             modelBuilder.Entity<InternalOrganisation>().Property(f => f.Description).IsRequired();
             modelBuilder.Entity<InternalOrganisation>().Property(f => f.Name).IsRequired();
 
-            modelBuilder.Entity<InternalProfile>().ToTable("Profile", EvlContext.SCHEMA);
-            modelBuilder.Entity<InternalProfile>().Property(f => f.Key).HasMaxLength(256).IsRequired();
-            modelBuilder.Entity<InternalProfile>().Property(f => f.InternalOrganisationId).HasColumnName("OrganisationId");
-            modelBuilder.Entity<InternalProfile>().HasKey(f => f.Id);
-            modelBuilder.Entity<InternalProfile>().HasIndex(f => f.Key);
+   //         modelBuilder.Entity<InternalProfile>().ToTable("Profile", EvlContext.SCHEMA);
+   //         modelBuilder.Entity<InternalProfile>().Property(f => f.Key).HasMaxLength(256).IsRequired();
+   //         modelBuilder.Entity<InternalProfile>().Property(f => f.InternalOrganisationId).HasColumnName("OrganisationId");
+   //         modelBuilder.Entity<InternalProfile>().HasKey(f => f.Id);
+   //         modelBuilder.Entity<InternalProfile>().HasIndex(f => f.Key);
 
-            modelBuilder.Entity<InternalRole>().ToTable("Role", EvlContext.SCHEMA);
+   //         modelBuilder.Entity<InternalRole>().ToTable("Role", EvlContext.SCHEMA);
 
-            modelBuilder.Entity<InternalProfileRole>().ToTable("ProfileRoles", EvlContext.SCHEMA);
-            modelBuilder.Entity<InternalProfileRole>().HasKey(x => new { x.ProfileId, x.RoleId });
+   //         modelBuilder.Entity<InternalProfileRole>().ToTable("ProfileRoles", EvlContext.SCHEMA);
+   //         modelBuilder.Entity<InternalProfileRole>().HasKey(x => new { x.ProfileId, x.RoleId });
 
-			modelBuilder.Entity<InternalPermission>().ToTable("Permission", EvlContext.SCHEMA);
-			modelBuilder.Entity<InternalRolePermission>().ToTable("RolePermissions", EvlContext.SCHEMA);
-			modelBuilder.Entity<InternalRolePermission>().HasKey(x => new { x.PermissionId, x.RoleId });
+			//modelBuilder.Entity<InternalPermission>().ToTable("Permission", EvlContext.SCHEMA);
+			//modelBuilder.Entity<InternalRolePermission>().ToTable("RolePermissions", EvlContext.SCHEMA);
+			//modelBuilder.Entity<InternalRolePermission>().HasKey(x => new { x.PermissionId, x.RoleId });
 
 			modelBuilder.Entity<ApiKey>().ToTable("ApiKey", EvlContext.SCHEMA);
             modelBuilder.Entity<ApiKey>().Property(f => f.OrganisationId).IsRequired();
 
-            modelBuilder.Entity<InternalAudit>().ToTable("Audit", EvlContext.SCHEMA);
-            modelBuilder.Entity<InternalAudit>().Property(f => f.Action).HasMaxLength(100);
-            modelBuilder.Entity<InternalAudit>().Property(f => f.InternalProfileId).HasColumnName("ProfileId");
+            //modelBuilder.Entity<InternalAudit>().ToTable("Audit", EvlContext.SCHEMA);
+            //modelBuilder.Entity<InternalAudit>().Property(f => f.Action).HasMaxLength(100);
+            //modelBuilder.Entity<InternalAudit>().Property(f => f.InternalProfileId).HasColumnName("ProfileId");
 
             modelBuilder.Entity<InternalRule>().ToTable("Rule", EvlContext.SCHEMA);
             modelBuilder.Entity<InternalRule>().Property(f => f.ActionData).IsRequired().HasColumnType("xml");
@@ -107,14 +107,14 @@ namespace Swampnet.Evl.DAL.MSSQL
             modelBuilder.Entity<InternalRule>().Property(f => f.Name).IsRequired();
             modelBuilder.Entity<InternalRule>().Property(f => f.IsActive).IsRequired();
 
-            modelBuilder.Entity<InternalRuleAudit>().ToTable("RuleAudit", EvlContext.SCHEMA);
-            modelBuilder.Entity<InternalRuleAudit>().HasKey(x => new { x.RuleId, x.AuditId });
+            //modelBuilder.Entity<InternalRuleAudit>().ToTable("RuleAudit", EvlContext.SCHEMA);
+            //modelBuilder.Entity<InternalRuleAudit>().HasKey(x => new { x.RuleId, x.AuditId });
 
-            modelBuilder.Entity<InternalProfileAudit>().ToTable("ProfileAudit", EvlContext.SCHEMA);
-            modelBuilder.Entity<InternalProfileAudit>().HasKey(x => new { x.ProfileId, x.AuditId });
+            //modelBuilder.Entity<InternalProfileAudit>().ToTable("ProfileAudit", EvlContext.SCHEMA);
+            //modelBuilder.Entity<InternalProfileAudit>().HasKey(x => new { x.ProfileId, x.AuditId });
 
-            modelBuilder.Entity<InternalOrganisationAudit>().ToTable("OrganisationAudit", EvlContext.SCHEMA);
-            modelBuilder.Entity<InternalOrganisationAudit>().HasKey(x => new { x.OrganisationId, x.AuditId });
+            //modelBuilder.Entity<InternalOrganisationAudit>().ToTable("OrganisationAudit", EvlContext.SCHEMA);
+            //modelBuilder.Entity<InternalOrganisationAudit>().HasKey(x => new { x.OrganisationId, x.AuditId });
 
             modelBuilder.Entity<InternalTrigger>().ToTable("Trigger", EvlContext.SCHEMA);
             modelBuilder.Entity<InternalTrigger>().Property(f => f.RuleName).IsRequired();

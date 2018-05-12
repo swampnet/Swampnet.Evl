@@ -12,68 +12,68 @@ namespace Swampnet.Evl.DAL.MSSQL
     /// </summary>
     static partial class Convert
     {
-        internal static ProfileSummary ToProfileSummary(InternalProfile source)
-        {
-            return new ProfileSummary()
-            {
-                Id = source.Id,
-                Key = source.Key,
-                Name = new Name()
-                {
-                    Title = source.Title,
-                    Firstname = source.Firstname,
-                    Lastname = source.Lastname,
-                    KnownAs = source.KnownAs
-                }
-            };
-        }
+        //internal static ProfileSummary ToProfileSummary(InternalProfile source)
+        //{
+        //    return new ProfileSummary()
+        //    {
+        //        Id = source.Id,
+        //        Key = source.Key,
+        //        Name = new Name()
+        //        {
+        //            Title = source.Title,
+        //            Firstname = source.Firstname,
+        //            Lastname = source.Lastname,
+        //            KnownAs = source.KnownAs
+        //        }
+        //    };
+        //}
 
 
-        internal static Profile ToProfile(InternalProfile source)
-        {
-            return new Profile()
-            {
-                Id = source.Id,
-                Key = source.Key,
-                Name = new Name()
-                {
-                    Title = source.Title,
-                    Firstname = source.Firstname,
-                    Lastname = source.Lastname,
-                    KnownAs = source.KnownAs
-                },
-                Organisation = source.Organisation == null
-                    ? null
-                    : Convert.ToOrganisation(source.Organisation),
-                Roles = source.InternalProfileRoles == null
-                    ? null
-                    : source.InternalProfileRoles.Select(pg => Convert.ToRole(pg.Role)).ToList(),
-                Audit = source.Audit == null
-                    ? null
-                    : source.Audit.Select(a => Convert.ToAudit(a.Audit)).ToArray()
-            };
-        }
+        //internal static Profile ToProfile(InternalProfile source)
+        //{
+        //    return new Profile()
+        //    {
+        //        Id = source.Id,
+        //        Key = source.Key,
+        //        Name = new Name()
+        //        {
+        //            Title = source.Title,
+        //            Firstname = source.Firstname,
+        //            Lastname = source.Lastname,
+        //            KnownAs = source.KnownAs
+        //        },
+        //        Organisation = source.Organisation == null
+        //            ? null
+        //            : Convert.ToOrganisation(source.Organisation),
+        //        Roles = source.InternalProfileRoles == null
+        //            ? null
+        //            : source.InternalProfileRoles.Select(pg => Convert.ToRole(pg.Role)).ToList(),
+        //        Audit = source.Audit == null
+        //            ? null
+        //            : source.Audit.Select(a => Convert.ToAudit(a.Audit)).ToArray()
+        //    };
+        //}
 
-        internal static Role ToRole(InternalRole source)
-        {
-            return new Role()
-            {
-                Name = source.Name,
-                Permissions = source.InternalRolePermissions == null
-                    ? Enumerable.Empty<Permission>()
-                    : source.InternalRolePermissions.Select(rp => Convert.ToPermission(rp.Permission))
+        //internal static Role ToRole(InternalRole source)
+        //{
+        //    return new Role()
+        //    {
+        //        Name = source.Name,
+        //        Permissions = source.InternalRolePermissions == null
+        //            ? Enumerable.Empty<Permission>()
+        //            : source.InternalRolePermissions.Select(rp => Convert.ToPermission(rp.Permission))
 
-            };
-        }
+        //    };
+        //}
 
 
-        internal static Permission ToPermission(InternalPermission source)
-        {
-            return new Permission()
-            {
-                IsEnabled = source.IsEnabled,
-                Name = source.Name
-            };
-        }
+        //internal static Permission ToPermission(InternalPermission source)
+        //{
+        //    return new Permission()
+        //    {
+        //        IsEnabled = source.IsEnabled,
+        //        Name = source.Name
+        //    };
+        //}
     }
 }

@@ -36,9 +36,9 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
             using (var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))
             {
                 var rule = await context.Rules
-                            .Include(f => f.Audit)
-                                .ThenInclude(a => a.Audit)
-                                    .ThenInclude(a => a.Profile)
+                            //.Include(f => f.Audit)
+                            //    .ThenInclude(a => a.Audit)
+                            //        .ThenInclude(a => a.Profile)
                             .SingleOrDefaultAsync(r => r.IsActive && r.Id == id);
 
                 if(rule == null)
@@ -63,14 +63,14 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
         }
 
 
-        public async Task CreateAsync(Profile profile, Rule rule)
+        public async Task CreateAsync(Organisation org, Rule rule)
         {
             using (var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))
             {
                 rule.Id = Guid.NewGuid();
 				var r = Convert.ToRule(rule);
-                r.AddAudit(profile.Id, Common.AuditAction.Create);
-                r.OrganisationId = profile.Organisation.Id;
+                //r.AddAudit(profile.Id, Common.AuditAction.Create);
+                r.OrganisationId = org.Id;
 
 				context.Rules.Add(r);
                 await context.SaveChangesAsync();
@@ -78,13 +78,13 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
         }
 
 
-        public async Task UpdateAsync(Profile profile, Rule rule)
+        public async Task UpdateAsync(Organisation org, Rule rule)
         {
             using (var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))
             {
                 var r = context.Rules
-                    .Include(f => f.Audit)
-                        .ThenInclude(a => a.Audit)
+                    //.Include(f => f.Audit)
+                    //    .ThenInclude(a => a.Audit)
                     .SingleOrDefault(x => x.Id == rule.Id);
                 if(r == null)
                 {
@@ -95,13 +95,13 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
                 r.IsActive = rule.IsActive;
                 r.ActionData = rule.Actions.ToXmlString();
                 r.ExpressionData = rule.Expression.ToXmlString();
-                r.AddAudit(profile.Id, Common.AuditAction.Modify);
+                //r.AddAudit(profile.Id, Common.AuditAction.Modify);
 
                 await context.SaveChangesAsync();
             }
         }
 
-        public async Task DeleteAsync(Profile profile, Guid id)
+        public async Task DeleteAsync(Organisation org, Guid id)
         {
 			// @TODO: Now, do we really want to delete stuff or just flag it as so?
 			//        A: Well, flag it as so, obv. Question is, do we use the active flag for that?
@@ -114,14 +114,14 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
 				}
 
 				r.IsActive = false;
-                r.AddAudit(profile.Id, Common.AuditAction.Delete);
+                //r.AddAudit(profile.Id, Common.AuditAction.Delete);
 
                 await context.SaveChangesAsync();
 			}
         }
 
 
-        public async Task ReorderAsync(Profile profile, IEnumerable<RuleOrder> rules)
+        public async Task ReorderAsync(Organisation org, IEnumerable<RuleOrder> rules)
         {
             using (var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))
             {

@@ -28,49 +28,49 @@ namespace Swampnet.Evl.DAL.MSSQL.Entities
     }
 
 
-    class InternalRuleAudit
-    {
-        public Guid RuleId { get; set; }
-        public InternalRule Rule { get; set; }
+    //class InternalRuleAudit
+    //{
+    //    public Guid RuleId { get; set; }
+    //    public InternalRule Rule { get; set; }
 
-        public long AuditId { get; set; }
-        public InternalAudit Audit { get; set; }
-    }
+    //    public long AuditId { get; set; }
+    //    public InternalAudit Audit { get; set; }
+    //}
 
 
-    class InternalProfileAudit
-    {
-        public long ProfileId { get; set; }
-        public InternalProfile Profile { get; set; }
+    //class InternalProfileAudit
+    //{
+    //    public long ProfileId { get; set; }
+    //    public InternalProfile Profile { get; set; }
 
-        public long AuditId { get; set; }
-        public InternalAudit Audit { get; set; }
-    }
+    //    public long AuditId { get; set; }
+    //    public InternalAudit Audit { get; set; }
+    //}
 
-    class InternalOrganisationAudit
-    {
-        public Guid OrganisationId { get; set; }
-        public InternalOrganisation Organisation { get; set; }
+    //class InternalOrganisationAudit
+    //{
+    //    public Guid OrganisationId { get; set; }
+    //    public InternalOrganisation Organisation { get; set; }
 
-        public long AuditId { get; set; }
-        public InternalAudit Audit { get; set; }
-    }
+    //    public long AuditId { get; set; }
+    //    public InternalAudit Audit { get; set; }
+    //}
 
-    class InternalProfileRole
-    {
-        public long ProfileId { get; set; }
-        public InternalProfile Profile { get; set; }
+    //class InternalProfileRole
+    //{
+    //    public long ProfileId { get; set; }
+    //    public InternalProfile Profile { get; set; }
 
-        public long RoleId { get; set; }
-        public InternalRole Role { get; set; }
-    }
+    //    public long RoleId { get; set; }
+    //    public InternalRole Role { get; set; }
+    //}
 
-    class InternalRolePermission
-    {
-        public long RoleId { get; set; }
-        public InternalRole Role { get; set; }
+    //class InternalRolePermission
+    //{
+    //    public long RoleId { get; set; }
+    //    public InternalRole Role { get; set; }
 
-        public long PermissionId { get; set; }
-        public InternalPermission Permission { get; set; }
-    }
+    //    public long PermissionId { get; set; }
+    //    public InternalPermission Permission { get; set; }
+    //}
 }
