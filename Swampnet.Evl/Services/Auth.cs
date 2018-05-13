@@ -25,7 +25,7 @@ namespace Swampnet.Evl.Services
         /// </summary>
         /// <param name="apiKey"></param>
         /// <returns></returns>
-        Task<Organisation> GetOrganisationByApiKeyAsync(Guid apiKey);
+        Task<Organisation> GetOrganisationByApiKeyAsync(Guid? apiKey);
 
         /// <summary>
         /// Get organisation by id
@@ -96,63 +96,29 @@ namespace Swampnet.Evl.Services
         }
 
 
-        /// <summary>
-        /// Get profile from IPrincipal
-        /// </summary>
-        /// <remarks>
-        /// Basically mocked out for now - It will always return the profile associated with Common.Constants.MOCKED_PROFILE_KEY
-        /// I'm assuming that whatever kind of authentication we end up using, I'll be able to resolve some kind of key from
-        /// the principle which we can use to look up a profile.
-        /// </remarks>
-        /// <param name="principle"></param>
-        /// <returns></returns>
-        //public async Task<Profile> GetProfileAsync(IPrincipal principle)
-        //{
-        //    string key = Common.Constants.MOCKED_PROFILE_KEY;
 
-        //    CachedProfile profile = null;
-
-        //    if (_cachedProfiles.ContainsKey(key))
-        //    {
-        //        profile = _cachedProfiles[key];
-        //    }
-        //    else
-        //    {
-        //        var p = await _managementData.LoadProfileAsync(key);
-
-        //        if (p != null)
-        //        {
-        //            profile = new CachedProfile(p);
-        //            _cachedProfiles.TryAdd(key, profile);
-        //        }
-        //    }
-
-        //    return profile?.Profile;
-        //}
-
-
-        public async Task<Organisation> GetOrganisationByApiKeyAsync(Guid apiKey)
+        public async Task<Organisation> GetOrganisationByApiKeyAsync(Guid? apiKey)
         {
-            if(apiKey == Guid.Empty)
+            if(!apiKey.HasValue || apiKey == Guid.Empty)
             {
                 return null;
             }
 
             CachedOrganisation org = null;
 
-            if (_apiKeyCache.ContainsKey(apiKey))
+            if (_apiKeyCache.ContainsKey(apiKey.Value))
             {
-                org = _apiKeyCache[apiKey];
+                org = _apiKeyCache[apiKey.Value];
             }
             else
             {
-                var o = await _managementData.LoadOrganisationByApiKeyAsync(apiKey);
+                var o = await _managementData.LoadOrganisationByApiKeyAsync(apiKey.Value);
 
                 if (o != null)
                 {
 					org = new CachedOrganisation(o);
 
-					_apiKeyCache.TryAdd(apiKey, org);
+					_apiKeyCache.TryAdd(apiKey.Value, org);
                 }
             }
 

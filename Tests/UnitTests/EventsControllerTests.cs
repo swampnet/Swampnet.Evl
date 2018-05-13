@@ -20,7 +20,7 @@ namespace UnitTests
             var events = new EventsController(
                 Mock.EventDataAccess(), 
                 Mock.EventQueueProcessor(), 
-                Mock.Auth());
+                Mock.Auth(Mock.MockedOrganisation()));
         }
 
 
@@ -30,7 +30,7 @@ namespace UnitTests
             var events = new EventsController(
                 Mock.EventDataAccess(),
                 Mock.EventQueueProcessor(),
-                Mock.Auth());
+                Mock.Auth(Mock.MockedOrganisation()));
 
             var rs = events.GetCategories().Result as OkObjectResult;
 
@@ -52,7 +52,7 @@ namespace UnitTests
             var events = new EventsController(
                 Mock.EventDataAccess(),
                 Mock.EventQueueProcessor(),
-                Mock.Auth());
+                Mock.Auth(Mock.MockedOrganisation()));
 
             var rs = events.GetSources().Result as OkObjectResult;
 
@@ -77,7 +77,7 @@ namespace UnitTests
             var events = new EventsController(
                 Mock.EventDataAccess(),
                 Mock.EventQueueProcessor(),
-                Mock.Auth());
+                Mock.Auth(Mock.MockedOrganisation()));
 
             var rs = events.GetTags().Result as OkObjectResult;
 
@@ -101,7 +101,7 @@ namespace UnitTests
         public void EventsControllerTests_Search()
         {
             var dal = Mock.EventDataAccess();
-            var auth = Mock.Auth();
+            var auth = Mock.Auth(Mock.MockedOrganisation());
 
             var events = new EventsController(
                 dal,
@@ -131,7 +131,7 @@ namespace UnitTests
             var events = new EventsController(
                 Mock.EventDataAccess(),
                 Mock.EventQueueProcessor(),
-                Mock.Auth());
+                Mock.Auth(Mock.MockedOrganisation()));
 
             var rs = events.Get(Guid.Parse("6B625284-DD40-4AD5-95FF-5F6AEF6C214F")).Result as OkObjectResult;
 
@@ -149,7 +149,7 @@ namespace UnitTests
             var events = new EventsController(
                 Mock.EventDataAccess(),
                 Mock.EventQueueProcessor(),
-                Mock.Auth());
+                Mock.Auth(Mock.MockedOrganisation()));
 
             var rs = events.Get(Guid.Parse("C05CFB1A-0859-49D8-A469-97E39F12720B")).Result as NotFoundResult;
 
@@ -166,7 +166,7 @@ namespace UnitTests
         {
             var dal = Mock.EventDataAccess();
             var q = Mock.EventQueueProcessor();
-            var auth = Mock.Auth();
+            var auth = Mock.Auth(Mock.MockedOrganisation());
 
             var events = new EventsController(dal, q, auth);
 
@@ -189,9 +189,6 @@ namespace UnitTests
             var evt = rs.Value as EventDetails;
             
             Assert.IsNotNull(evt);
-
-            // Source should default to organisation name
-            //Assert.AreEqual(auth.Profile.Organisation.Name, evt.Source);
         }
 
 
@@ -200,7 +197,7 @@ namespace UnitTests
         {
             var dal = Mock.EventDataAccess();
             var q = Mock.EventQueueProcessor();
-            var auth = Mock.Auth(); // No organisation
+            var auth = Mock.Auth(null); // No organisation
 
             var events = new EventsController(dal, q, auth);
 
@@ -231,7 +228,7 @@ namespace UnitTests
             var dal = Mock.EventDataAccess();
             var q = Mock.EventQueueProcessor();
 
-            var events = new EventsController(dal, q, Mock.Auth());
+            var events = new EventsController(dal, q, Mock.Auth(Mock.MockedOrganisation()));
 
             Assert.AreEqual(0, dal.CreateCount);
             Assert.AreEqual(0, dal.UpdateCount);
@@ -258,7 +255,7 @@ namespace UnitTests
             var dal = Mock.EventDataAccess();
             var eventProcessor = Mock.EventQueueProcessor();
 
-            var controller = new EventsController(dal, eventProcessor, Mock.Auth());
+            var controller = new EventsController(dal, eventProcessor, Mock.Auth(Mock.MockedOrganisation()));
             var events = new[]
             {
                 new Event(),

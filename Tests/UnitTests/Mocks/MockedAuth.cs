@@ -10,31 +10,31 @@ namespace UnitTests.Mocks
 {
     class MockedAuth : IAuth
     {
-        //public Profile Profile { get; set; }
+        private readonly Organisation _org;
+
+        public MockedAuth(Organisation org)
+        {
+            _org = org;
+        }
 
         public Organisation GetEvlOrganisation()
         {
-            return null;// Profile?.Organisation;
+            return _org;
         }
 
         public Task<Organisation> GetOrganisationAsync(Guid id)
         {
-            return Task.FromResult((Organisation)null);// Profile?.Organisation);
+            return Task.FromResult(_org);
         }
 
         public Task<Organisation> GetOrganisationAsync(IPrincipal principle)
         {
-            return Task.FromResult((Organisation)null);// Profile?.Organisation);
+            return Task.FromResult(_org);
         }
 
-        public Task<Organisation> GetOrganisationByApiKeyAsync(Guid apiKey)
+        public Task<Organisation> GetOrganisationByApiKeyAsync(Guid? apiKey)
         {
-            return Task.FromResult((Organisation)null);// Profile?.Organisation);
+            return Task.FromResult(_org);
         }
-
-        //public Task<Profile> GetProfileAsync(IPrincipal principle)
-        //{
-        //    return Task.FromResult(Profile);
-        //}
     }
 }
