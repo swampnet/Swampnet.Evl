@@ -8,11 +8,6 @@ develop ![Build status](https://swampnet.visualstudio.com/_apis/public/build/def
 - WebApi
 - Entity Framework Core
 
-### Front end
-- ASP.Net Core
-- Angular 4.x
-
-
 Flexible, structured events
 https://serilog.net/
 
@@ -22,13 +17,11 @@ https://serilog.net/
 http://www.mimekit.net/
 A cross-platform .NET library for IMAP, POP3, and SMTP
 
+~~dragula~~
+~~https://github.com/valor-software/ng2-dragula~~
 
-
-dragula
-https://github.com/valor-software/ng2-dragula
-
-owl date time picker
-https://github.com/DanielYKPan/date-time-picker
+~~owl date time picker~~
+~~https://github.com/DanielYKPan/date-time-picker~~
 
 @Notes
 Create deployment script:

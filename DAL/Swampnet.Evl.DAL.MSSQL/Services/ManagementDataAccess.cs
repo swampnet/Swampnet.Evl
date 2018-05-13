@@ -26,8 +26,6 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
             using (var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))
             {
                 var org = await context.Organisations
-                    //.Include(x => x.Audit)
-                    //    .ThenInclude(x => x.Audit)
                     .FirstOrDefaultAsync(o => o.ApiKey == apiKey);
 
                 return Convert.ToOrganisation(org);
@@ -40,8 +38,6 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
             using (var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))
             {
                 var org = await context.Organisations
-                    //.Include(x => x.Audit)
-                    //    .ThenInclude(x => x.Audit)
                     .FirstOrDefaultAsync(o => o.Id == id);
 
                 return Convert.ToOrganisation(org);
