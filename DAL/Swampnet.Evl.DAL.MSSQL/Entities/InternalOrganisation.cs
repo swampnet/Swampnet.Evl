@@ -19,11 +19,6 @@ namespace Swampnet.Evl.DAL.MSSQL.Entities
         public string Name { get; set; }
         public string Description { get; set; }
         
-        /// <summary>
-        /// Current active ApiKey
-        /// </summary>
-        public Guid ApiKey { get; set; }
-
         public ICollection<ApiKey> ApiKeys { get; set; }
         public ICollection<InternalEvent> Events { get; set; }
         public ICollection<InternalRule> Rules { get; set; }

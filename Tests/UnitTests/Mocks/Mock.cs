@@ -92,7 +92,6 @@ namespace UnitTests.Mocks
         {
             return new Organisation()
             {
-                ApiKey = Guid.NewGuid(),
                 Id = Guid.NewGuid(),
                 Name = "mocked-org",
                 Description = "Mocked Organisation"

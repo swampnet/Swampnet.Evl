@@ -35,8 +35,7 @@ namespace Swampnet.Evl.DAL.MSSQL
                     Id = o.Id,
                     Name = o.Name,
                     Description = o.Description,
-                    ApiKeys = new List<ApiKey>(_mockedApiKeys),
-                    ApiKey = o.ApiKey
+                    ApiKeys = new List<ApiKey>(_mockedApiKeys)
                 }));
 
                 context.SaveChanges();
@@ -177,37 +176,14 @@ namespace Swampnet.Evl.DAL.MSSQL
             {
                 Id = Common.Constants.MOCKED_DEFAULT_ORGANISATION,
                 Description = "Mocked organisation",
-                Name = "Mocked",
-                ApiKey = Common.Constants.MOCKED_DEFAULT_APIKEY
+                Name = "Mocked"
             },
             new Organisation()
             {
                 Id = Guid.Parse("60FACD3A-2232-4E15-9F3C-61289CDDD544"),
                 Description = "Event Logging",
-                Name = "Evl",
-                ApiKey = Guid.Parse("25C135A0-B574-4A9B-BC37-4F0694017896")
+                Name = "Evl"
             }
         };
-
-
-        //private static Profile[] _mockedProfiles = new[]
-        //{
-        //    new Profile()
-        //    {
-        //        Name = new Name()
-        //        {
-        //            Firstname = "Pete",
-        //            Lastname = "Whitby",
-        //            Title = "Mr",
-        //            KnownAs = "pj"
-        //        },
-        //        Key = Common.Constants.MOCKED_PROFILE_KEY,
-        //        Roles = new List<Role>()
-        //        {
-        //            new Role(){ Name = "admin"},
-        //            new Role(){ Name = "user"}
-        //        }
-        //    }
-        //};
     }
 }

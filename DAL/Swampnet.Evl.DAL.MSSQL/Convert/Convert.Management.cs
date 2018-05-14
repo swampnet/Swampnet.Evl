@@ -21,8 +21,7 @@ namespace Swampnet.Evl.DAL.MSSQL
                 {
                     Id = source.Id,
                     Name = source.Name,
-                    Description = source.Description,
-                    ApiKey = source.ApiKey
+                    Description = source.Description
                 };
         }
     }

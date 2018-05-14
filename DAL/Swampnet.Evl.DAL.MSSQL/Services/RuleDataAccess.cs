@@ -25,7 +25,8 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
         {
             using (var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))
             {
-                var rules = await context.Rules.Where(r => r.IsActive).ToListAsync();
+                var rules = await context.Rules.Where(r => r.IsActive && r.OrganisationId == org.Id).ToListAsync();
+
                 return rules.Select(Convert.ToRuleSummary);
             }
         }

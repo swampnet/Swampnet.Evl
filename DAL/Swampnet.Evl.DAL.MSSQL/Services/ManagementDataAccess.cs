@@ -26,7 +26,11 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
             using (var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))
             {
                 var org = await context.Organisations
-                    .FirstOrDefaultAsync(o => o.ApiKey == apiKey);
+                    .Include(o => o.ApiKeys)
+                    .FirstOrDefaultAsync(o => 
+                        o.ApiKeys.Any(k => 
+                            k.Id == apiKey 
+                            && (k.RevokedOnUtc == null || k.RevokedOnUtc > DateTime.UtcNow)));
 
                 return Convert.ToOrganisation(org);
             }
