@@ -21,10 +21,15 @@ namespace Swampnet.Evl.Client
 
         public string SourceVersion { get; set; }
 
+        /// <summary>
+        /// Comma separated list of tags
+        /// </summary>
 		public string Tags { get; set; }
 
-		#region Advanced
-		public DateTime? FromUtc { get; set; }
+        public string Properties { get; set; }
+
+        #region Advanced
+        public DateTime? FromUtc { get; set; }
         public DateTime? ToUtc { get; set; }
         public int PageSize { get; set; }
         public int Page { get; set; }

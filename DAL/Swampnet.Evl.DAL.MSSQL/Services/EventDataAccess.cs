@@ -15,6 +15,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
     class EventDataAccess : IEventDataAccess
     {
 		private static readonly char[] _splitTags = new[] { ',' };
+        private static readonly char[] _splitProperty = new[] { ':' };
         private readonly IConfiguration _cfg;
 
         public EventDataAccess(IConfiguration cfg)
@@ -142,6 +143,24 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
                     foreach(var tag in criteria.Tags.Split(_splitTags, StringSplitOptions.RemoveEmptyEntries))
                     {
                         query = query.Where(e => e.InternalEventTags.Any(t => t.Tag.Name == tag.Trim()));
+                    }
+                }
+
+
+                // Properties
+                // name1:value1,name2:value2
+                if (!string.IsNullOrEmpty(criteria.Properties))
+                {
+                    foreach(var part in criteria.Properties.Split(_splitTags, StringSplitOptions.RemoveEmptyEntries))
+                    {
+                        var x = part.Split(_splitProperty, StringSplitOptions.RemoveEmptyEntries);
+                        if(x.Length > 0)
+                        {
+                            var name = x[0].Trim();
+                            var value = x.Length > 1 ? x[1].Trim() : "";
+
+                            query = query.Where(e => e.InternalEventProperties.Any(p => p.Property.Name == name && p.Property.Value.Contains(value)));
+                        }
                     }
                 }
 

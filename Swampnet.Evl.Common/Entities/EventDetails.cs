@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
+using Newtonsoft.Json;
 
 namespace Swampnet.Evl.Common.Entities
 {
@@ -16,6 +17,8 @@ namespace Swampnet.Evl.Common.Entities
 
 
         public Guid Id { get; set; }
+
+        [JsonIgnore]
         public Organisation Organisation { get; set; }
         public List<Trigger> Triggers { get; set; }
     }
