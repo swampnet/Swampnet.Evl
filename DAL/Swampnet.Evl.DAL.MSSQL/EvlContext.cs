@@ -60,16 +60,16 @@ namespace Swampnet.Evl.DAL.MSSQL
             modelBuilder.Entity<InternalEvent>().Property(f => f.Summary).IsRequired();
 
             modelBuilder.Entity<InternalEventProperties>().ToTable("EventProperties", EvlContext.SCHEMA);
-            modelBuilder.Entity<InternalEventProperties>().Property(f => f.InternalPropertyId).HasColumnName("PropertyId");
-            modelBuilder.Entity<InternalEventProperties>().HasKey(x => new { x.EventId, x.InternalPropertyId });
+            modelBuilder.Entity<InternalEventProperties>().Property(f => f.PropertyId).HasColumnName("PropertyId");
+            modelBuilder.Entity<InternalEventProperties>().HasKey(x => new { x.EventId, x.PropertyId });
 
             modelBuilder.Entity<InternalEventTags>().ToTable("EventTags", EvlContext.SCHEMA);
-            modelBuilder.Entity<InternalEventTags>().Property(f => f.InternalTagId).HasColumnName("TagId");
-            modelBuilder.Entity<InternalEventTags>().HasKey(x => new { x.EventId, x.InternalTagId });
+            modelBuilder.Entity<InternalEventTags>().Property(f => f.TagId).HasColumnName("TagId");
+            modelBuilder.Entity<InternalEventTags>().HasKey(x => new { x.EventId, x.TagId });
 
             modelBuilder.Entity<InternalActionProperties>().ToTable("ActionProperties", EvlContext.SCHEMA);
-            modelBuilder.Entity<InternalActionProperties>().Property(f => f.InternalPropertyId).HasColumnName("PropertyId");
-            modelBuilder.Entity<InternalActionProperties>().HasKey(x => new { x.ActionId, x.InternalPropertyId });
+            modelBuilder.Entity<InternalActionProperties>().Property(f => f.PropertyId).HasColumnName("PropertyId");
+            modelBuilder.Entity<InternalActionProperties>().HasKey(x => new { x.ActionId, x.PropertyId });
 
             modelBuilder.Entity<InternalTag>().ToTable("Tag", EvlContext.SCHEMA);
             modelBuilder.Entity<InternalTag>().Property(f => f.Name).IsRequired().HasMaxLength(100);
@@ -80,8 +80,13 @@ namespace Swampnet.Evl.DAL.MSSQL
             modelBuilder.Entity<InternalOrganisation>().Property(f => f.Description).IsRequired();
             modelBuilder.Entity<InternalOrganisation>().Property(f => f.Name).IsRequired();
 
-			modelBuilder.Entity<ApiKey>().ToTable("ApiKey", EvlContext.SCHEMA);
-            modelBuilder.Entity<ApiKey>().Property(f => f.OrganisationId).IsRequired();
+            modelBuilder.Entity<InternalOrganisationConfigurationProperties>().ToTable("OrganisationConfigurationProperties", EvlContext.SCHEMA);
+            modelBuilder.Entity<InternalOrganisationConfigurationProperties>().Property(f => f.PropertyId).HasColumnName("PropertyId");
+            modelBuilder.Entity<InternalOrganisationConfigurationProperties>().HasKey(x => new { x.OrganisationId, x.PropertyId });
+
+
+            modelBuilder.Entity<InternalApiKey>().ToTable("ApiKey", EvlContext.SCHEMA);
+            modelBuilder.Entity<InternalApiKey>().Property(f => f.OrganisationId).IsRequired();
 
             modelBuilder.Entity<InternalRule>().ToTable("Rule", EvlContext.SCHEMA);
             modelBuilder.Entity<InternalRule>().Property(f => f.ActionData).IsRequired().HasColumnType("xml");

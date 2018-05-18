@@ -9,31 +9,22 @@ namespace Swampnet.Evl.DAL.MSSQL.Entities
     {
         public InternalOrganisation()
         {
-            ApiKeys = new List<ApiKey>();
+            ApiKeys = new List<InternalApiKey>();
             Events = new List<InternalEvent>();
             Rules = new List<InternalRule>();
             Tags = new List<InternalTag>();
+            InternalOrganisationConfigurationProperties = new List<InternalOrganisationConfigurationProperties>();
         }
 
         public Guid Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         
-        public ICollection<ApiKey> ApiKeys { get; set; }
+        public ICollection<InternalApiKey> ApiKeys { get; set; }
         public ICollection<InternalEvent> Events { get; set; }
         public ICollection<InternalRule> Rules { get; set; }
         public ICollection<InternalTag> Tags { get; set; }
-    }
+        public List<InternalOrganisationConfigurationProperties> InternalOrganisationConfigurationProperties { get; set; }
 
-
-    class ApiKey
-    {
-        public Guid Id { get; set; }
-        public Guid OrganisationId { get; set; }
-
-        public DateTime CreatedOnUtc { get; set; }
-        public DateTime? RevokedOnUtc { get; set; }
-
-        public InternalOrganisation Organisation { get; set; }
     }
 }

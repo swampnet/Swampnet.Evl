@@ -17,8 +17,8 @@ namespace Swampnet.Evl.Controllers
     /// <summary>
     /// 
     /// </summary>
-    [Route("admin")]
-    public class AdminController : Controller
+    [Route("organisation")]
+    public class OrganisationController : Controller
     {
         private readonly IAuth _auth;
 
@@ -26,7 +26,7 @@ namespace Swampnet.Evl.Controllers
         /// 
         /// </summary>
         /// <param name="auth"></param>
-        public AdminController(IAuth auth)
+        public OrganisationController(IAuth auth)
         {
             _auth = auth;
         }
@@ -36,8 +36,8 @@ namespace Swampnet.Evl.Controllers
         /// 
         /// </summary>
         /// <returns></returns>
-        [HttpGet("organisation")]
-        public async Task<IActionResult> Organisation()
+        [HttpGet]
+        public async Task<IActionResult> Get()
         {
             try
             {
