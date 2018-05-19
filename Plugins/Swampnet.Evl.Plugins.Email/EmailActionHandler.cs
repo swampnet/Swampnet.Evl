@@ -68,17 +68,19 @@ namespace Swampnet.Evl.Plugins.Email
 
         public string Type => "email";
 
+
         public async Task ApplyAsync(EventDetails evt, ActionDefinition actionDefinition, Rule rule)
 		{
 			var to = actionDefinition.Properties.StringValue("to");
 			var cc = actionDefinition.Properties.StringValue("cc");
 			var bcc = actionDefinition.Properties.StringValue("bcc");
-			var from = actionDefinition.Properties.StringValue("from-address", _cfg["email:default:address"]);
-			var fromName = actionDefinition.Properties.StringValue("from-name", _cfg["email:default:from"]);
-			var host = actionDefinition.Properties.StringValue("host", _cfg["email:smtp:host"]);
-			var port = actionDefinition.Properties.StringValue("port", _cfg["email:smtp:port"]);
-			var usr = actionDefinition.Properties.StringValue("usr", _cfg["email:smtp:usr"]);
-			var pwd = actionDefinition.Properties.StringValue("pwd", _cfg["email:smtp:pwd"]);
+
+            var from = evt.GetConfigValue("email:from-address", actionDefinition.Properties, _cfg);
+            var fromName = evt.GetConfigValue("email:from-name", actionDefinition.Properties, _cfg);
+            var host = evt.GetConfigValue("email:smtp:host", actionDefinition.Properties, _cfg);
+            var port = evt.GetConfigValue("email:smtp:port", actionDefinition.Properties, _cfg);
+            var usr = evt.GetConfigValue("email:smtp:usr", actionDefinition.Properties, _cfg);
+            var pwd = evt.GetConfigValue("email:smtp:pwd", actionDefinition.Properties, _cfg);
 
 			if (string.IsNullOrEmpty(host))
 			{
@@ -139,7 +141,7 @@ namespace Swampnet.Evl.Plugins.Email
 
 				if(!string.IsNullOrEmpty(usr) && !string.IsNullOrEmpty(pwd))
 				{
-					client.Authenticate(usr, _cfg["email:smtp:pwd"]);
+					client.Authenticate(usr, pwd);
 				}
 
 				await client.SendAsync(message);
@@ -147,6 +149,7 @@ namespace Swampnet.Evl.Plugins.Email
 				client.Disconnect(true);
 			}
 		}
+
 
         public MetaDataCapture[] GetPropertyMetaData()
         {
@@ -185,37 +188,37 @@ namespace Swampnet.Evl.Plugins.Email
 
                 new MetaDataCapture()
                 {
-                    Name = "from-address",
+                    Name = "email:from-address",
                     Description = "From (email)",
                     IsRequired = false
                 },
                 new MetaDataCapture()
                 {
-                    Name = "from-name",
+                    Name = "email:from-name",
                     Description = "From (name)",
                     IsRequired = false
                 },
                 new MetaDataCapture()
                 {
-                    Name = "host",
+                    Name = "email:smtp:host",
                     Description = "SMTP Host",
                     IsRequired = false
                 },
                 new MetaDataCapture()
                 {
-                    Name = "port",
+                    Name = "email:smtp:port",
                     Description = "SMTP Port",
                     IsRequired = false
                 },
                 new MetaDataCapture()
                 {
-                    Name = "usr",
+                    Name = "email:smtp:usr",
                     Description = "SMTP Username",
                     IsRequired = false
                 },
                 new MetaDataCapture()
                 {
-                    Name = "pwd",
+                    Name = "email:smtp:pwd",
                     Description = "SMTP Password",
                     IsRequired = false
                 }

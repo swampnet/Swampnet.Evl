@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 using Newtonsoft.Json;
+using Microsoft.Extensions.Configuration;
 
 namespace Swampnet.Evl.Common.Entities
 {
@@ -21,6 +22,24 @@ namespace Swampnet.Evl.Common.Entities
         [JsonIgnore]
         public Organisation Organisation { get; set; }
         public List<Trigger> Triggers { get; set; }
+
+
+        public string GetConfigValue(string key, IEnumerable<Property> properties, IConfiguration cfg)
+        {
+            string value = "";
+
+            value = properties.StringValue(key);
+            if (value == "")
+            {
+                value = Organisation.ConfigurationProperties.Where(p => p.Category.EqualsNoCase("configuration")).StringValue(key);
+                if (value == "")
+                {
+                    value = cfg[key];
+                }
+            }
+
+            return value;
+        }
     }
 
 

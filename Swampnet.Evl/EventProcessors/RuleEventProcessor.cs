@@ -49,7 +49,7 @@ namespace Swampnet.Evl.EventProcessors
                         {
                             var trigger = new Trigger(rule.Id.Value, rule.Name);
 
-                            foreach (var action in rule.Actions)
+                            foreach (var action in rule.Actions.Where(a => a.IsActive))
                             {
                                 var key = action.Type.Replace("-", "").ToLower();
 

@@ -54,6 +54,8 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
                         .ThenInclude(t => t.InternalActionProperties)
                         .ThenInclude(t => t.Property)
                     .Include(e => e.Organisation)
+                        .ThenInclude(o => o.InternalOrganisationConfigurationProperties)
+                            .ThenInclude(p => p.Property)
                     .Where(e => e.Id == id);
 
                 if(org != null)

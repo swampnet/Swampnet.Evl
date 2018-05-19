@@ -35,8 +35,14 @@ namespace Swampnet.Evl.Plugins.Slack
             {
                 new MetaDataCapture()
                 {
-                    Name = "channel",
+                    Name = "slack:channel",
                     Description = "Slack #channel or @usr",
+                    IsRequired = true
+                },
+                new MetaDataCapture()
+                {
+                    Name = "slack:usr",
+                    Description = "Slack Username",
                     IsRequired = true
                 }
             };
@@ -46,12 +52,12 @@ namespace Swampnet.Evl.Plugins.Slack
         // @TODO: Should probably be a service with templating and whatnopt.
         private SlackMessage CreateSlackMessage(EventDetails evt, ActionDefinition actionDefinition, Rule rule)
         {
-			return new SlackMessage()
-			{
-				Token = _cfg["slack:token"],
-				Channel = actionDefinition.Properties.StringValue("channel", _cfg["slack:default:channel"]),
-				UserName = "evl"
-			};
+            return new SlackMessage()
+            {
+                Token = evt.GetConfigValue("slack:token", actionDefinition.Properties, _cfg),
+				Channel = evt.GetConfigValue("slack:channel", actionDefinition.Properties, _cfg),
+				UserName = evt.GetConfigValue("slack:usr", actionDefinition.Properties, _cfg)
+            };
         }
     }
 }

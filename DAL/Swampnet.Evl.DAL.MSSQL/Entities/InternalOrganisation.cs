@@ -1,6 +1,7 @@
 ﻿using Swampnet.Evl.Common;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Swampnet.Evl.DAL.MSSQL.Entities
@@ -26,5 +27,12 @@ namespace Swampnet.Evl.DAL.MSSQL.Entities
         public ICollection<InternalTag> Tags { get; set; }
         public List<InternalOrganisationConfigurationProperties> InternalOrganisationConfigurationProperties { get; set; }
 
+
+        internal IEnumerable<InternalProperty> GetConfigurationProperties()
+        {
+            return InternalOrganisationConfigurationProperties == null
+                ? Enumerable.Empty<InternalProperty>()
+                : InternalOrganisationConfigurationProperties.Select(p => p.Property);
+        }
     }
 }

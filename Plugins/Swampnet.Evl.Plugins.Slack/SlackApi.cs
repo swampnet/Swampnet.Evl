@@ -25,16 +25,15 @@ namespace Swampnet.Evl.Plugins.Slack
     class SlackApi : ISlackApi
     {
         private const string BASE_URL = "https://slack.com/api";
-
+        private HttpClient _client = new HttpClient();
 
         public async Task PostAsync(SlackMessage msg)
         {
-            using (var client = new HttpClient())
-            {
-                var rs = await client.PostAsync(BASE_URL + "/chat.postMessage", new FormUrlEncodedContent(GetContent(msg)));
+            var rs = await _client.PostAsync(BASE_URL + "/chat.postMessage", new FormUrlEncodedContent(GetContent(msg)));
 
-                rs.EnsureSuccessStatusCode();
-            }
+            rs.EnsureSuccessStatusCode();
+
+            var content = rs.Content.ReadAsStringAsync();
         }
 
 
