@@ -14,7 +14,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Entities
             Events = new List<InternalEvent>();
             Rules = new List<InternalRule>();
             Tags = new List<InternalTag>();
-            InternalOrganisationConfigurationProperties = new List<InternalOrganisationConfigurationProperties>();
+            InternalOrganisationProperties = new List<InternalOrganisationProperties>();
         }
 
         public Guid Id { get; set; }
@@ -25,14 +25,14 @@ namespace Swampnet.Evl.DAL.MSSQL.Entities
         public ICollection<InternalEvent> Events { get; set; }
         public ICollection<InternalRule> Rules { get; set; }
         public ICollection<InternalTag> Tags { get; set; }
-        public List<InternalOrganisationConfigurationProperties> InternalOrganisationConfigurationProperties { get; set; }
+        public List<InternalOrganisationProperties> InternalOrganisationProperties { get; set; }
 
 
         internal IEnumerable<InternalProperty> GetConfigurationProperties()
         {
-            return InternalOrganisationConfigurationProperties == null
+            return InternalOrganisationProperties == null
                 ? Enumerable.Empty<InternalProperty>()
-                : InternalOrganisationConfigurationProperties.Select(p => p.Property);
+                : InternalOrganisationProperties.Select(p => p.Property);
         }
     }
 }

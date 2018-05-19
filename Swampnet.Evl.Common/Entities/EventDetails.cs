@@ -31,7 +31,7 @@ namespace Swampnet.Evl.Common.Entities
             value = properties.StringValue(key);
             if (value == "")
             {
-                value = Organisation.ConfigurationProperties.Where(p => p.Category.EqualsNoCase("configuration")).StringValue(key);
+                value = Organisation.Properties.Where(p => p.Category.EqualsNoCase("configuration")).StringValue(key);
                 if (value == "")
                 {
                     value = cfg[key];

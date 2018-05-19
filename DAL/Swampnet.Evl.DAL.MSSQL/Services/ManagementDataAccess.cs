@@ -27,7 +27,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
             {
                 var org = await context.Organisations
                     .Include(o => o.ApiKeys)
-                    .Include(o => o.InternalOrganisationConfigurationProperties)
+                    .Include(o => o.InternalOrganisationProperties)
                         .ThenInclude(p => p.Property)
                     .FirstOrDefaultAsync(o => 
                         o.ApiKeys.Any(k => 
@@ -44,7 +44,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
             using (var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))
             {
                 var org = await context.Organisations
-                    .Include(o => o.InternalOrganisationConfigurationProperties)
+                    .Include(o => o.InternalOrganisationProperties)
                     .ThenInclude(p => p.Property)
                     .FirstOrDefaultAsync(o => o.Id == id);
 

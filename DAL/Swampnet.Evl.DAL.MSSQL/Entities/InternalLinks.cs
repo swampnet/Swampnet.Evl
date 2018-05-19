@@ -62,14 +62,14 @@ namespace Swampnet.Evl.DAL.MSSQL.Entities
     /// <summary>
     /// 
     /// </summary>
-    class InternalOrganisationConfigurationProperties
+    class InternalOrganisationProperties
     {
-        public InternalOrganisationConfigurationProperties()
+        public InternalOrganisationProperties()
         {
 
         }
 
-        public InternalOrganisationConfigurationProperties(InternalOrganisation organisation, InternalProperty property)
+        public InternalOrganisationProperties(InternalOrganisation organisation, InternalProperty property)
             : this()
         {
             Organisation = organisation;

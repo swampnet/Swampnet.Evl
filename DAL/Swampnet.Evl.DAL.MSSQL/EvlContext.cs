@@ -80,9 +80,9 @@ namespace Swampnet.Evl.DAL.MSSQL
             modelBuilder.Entity<InternalOrganisation>().Property(f => f.Description).IsRequired();
             modelBuilder.Entity<InternalOrganisation>().Property(f => f.Name).IsRequired();
 
-            modelBuilder.Entity<InternalOrganisationConfigurationProperties>().ToTable("OrganisationConfigurationProperties", EvlContext.SCHEMA);
-            modelBuilder.Entity<InternalOrganisationConfigurationProperties>().Property(f => f.PropertyId).HasColumnName("PropertyId");
-            modelBuilder.Entity<InternalOrganisationConfigurationProperties>().HasKey(x => new { x.OrganisationId, x.PropertyId });
+            modelBuilder.Entity<InternalOrganisationProperties>().ToTable("OrganisationProperties", EvlContext.SCHEMA);
+            modelBuilder.Entity<InternalOrganisationProperties>().Property(f => f.PropertyId).HasColumnName("PropertyId");
+            modelBuilder.Entity<InternalOrganisationProperties>().HasKey(x => new { x.OrganisationId, x.PropertyId });
 
 
             modelBuilder.Entity<InternalApiKey>().ToTable("ApiKey", EvlContext.SCHEMA);

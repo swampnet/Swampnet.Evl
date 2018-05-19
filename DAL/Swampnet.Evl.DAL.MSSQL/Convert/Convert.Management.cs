@@ -23,7 +23,7 @@ namespace Swampnet.Evl.DAL.MSSQL
                     Name = source.Name,
                     Description = source.Description,
                     ApiKeys = source.ApiKeys.Select(k => k.Id).ToArray(),
-                    ConfigurationProperties = source.GetConfigurationProperties().Select(p => ToProperty(p)).ToArray()
+                    Properties = source.GetConfigurationProperties().Select(p => ToProperty(p)).ToArray()
                 };
         }
     }

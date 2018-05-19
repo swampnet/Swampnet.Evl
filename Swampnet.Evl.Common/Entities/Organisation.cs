@@ -12,13 +12,13 @@ namespace Swampnet.Evl.Common.Entities
         public string Name { get; set; }
         public string Description  { get; set; }
         public Guid[] ApiKeys { get; set; }
-        public Property[] ConfigurationProperties { get; set; }
+        public Property[] Properties { get; set; }
 
         public string GetConfigurationValue(string category, string name)
         {
-            return ConfigurationProperties == null
+            return Properties == null
                 ? ""
-                : ConfigurationProperties.Where(p => p.Category.EqualsNoCase(category)).StringValue(name, "");
+                : Properties.Where(p => p.Category.EqualsNoCase(category)).StringValue(name, "");
         }
     }
 }
