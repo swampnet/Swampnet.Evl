@@ -26,5 +26,10 @@ namespace Swampnet.Evl.Common.Entities
 		public string Type { get; set; }
 
         public Property[] Properties { get; set; }
+
+        public override string ToString()
+        {
+            return $"{Type}" + (IsActive ? "" : " (disabled)");
+        }
     }
 }

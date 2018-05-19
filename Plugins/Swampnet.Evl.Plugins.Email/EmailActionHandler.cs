@@ -21,16 +21,14 @@ using System.Xml.Linq;
 
 namespace Swampnet.Evl.Plugins.Email
 {
-	/*
+    /*
 		Configuration:
 
 		- Application settings
 		{
 			"email": {
-				"default": {
-					"from": "evl",
-					"address": "evl@theswamp.co.uk"
-				},
+				"from-name": "evl",
+				"from-address": "evl@theswamp.co.uk"
 				"smtp": {
 					"host": "smtp.sendgrid.net",
 					"port": "465",
@@ -40,20 +38,19 @@ namespace Swampnet.Evl.Plugins.Email
 			}
 		}
 		 
-
 		- Rule properties:
 		to
 		cc
 		bcc
-		from-address
-		from-name
-		host
-		port
-		usr
-		pwd
+		email:from-address
+		email:from-name
+		email:smtp:host
+		email:smtp:port
+		email:smtp:usr
+		email:smtp:pwd
 	*/
 
-	class EmailActionHandler : IActionHandler
+    class EmailActionHandler : IActionHandler
 	{
 		private readonly IConfiguration _cfg;
         private readonly ITemplateLoader _templateLoader;
@@ -84,19 +81,19 @@ namespace Swampnet.Evl.Plugins.Email
 
 			if (string.IsNullOrEmpty(host))
 			{
-				throw new ArgumentException("SMTP HOST parameter missing");
+				throw new ArgumentException("[email:smtp:host] parameter missing");
 			}
 			if (string.IsNullOrEmpty(port))
 			{
-				throw new ArgumentException("SMTP PORT parameter missing");
+				throw new ArgumentException("[email:smtp:port] parameter missing");
 			}
 			if (string.IsNullOrEmpty(from))
 			{
-				throw new ArgumentException("FROM parameter missing");
+				throw new ArgumentException("[email:from-address] parameter missing");
 			}
 			if (string.IsNullOrEmpty(to))
 			{
-				throw new ArgumentException("TO Parameter missing");
+				throw new ArgumentException("[to] Parameter missing");
 			}
 			
 			var message = new MimeMessage();
