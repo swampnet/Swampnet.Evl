@@ -124,10 +124,32 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
                     query = query.Where(e => e.Summary.Contains(criteria.Summary));
                 }
 
-                if (criteria.Category.HasValue)
+                if (!string.IsNullOrEmpty(criteria.Categories))
                 {
-                    query = query.Where(e => e.Category == criteria.Category.ToString());
+                    query = query.Where(e => criteria.Categories.Contains(e.Category));
                 }
+
+                //if (criteria.Category.HasValue)
+                //{
+                //    query = query.Where(e => e.Category == criteria.Category.ToString());
+                //}
+                //if(criteria.ShowDebug.HasValue && !criteria.ShowDebug.Value)
+                //{
+                //    query = query.Where(e => e.Category != EventCategory.Debug.ToString());
+                //}
+                //if (criteria.ShowInformation.HasValue && !criteria.ShowInformation.Value)
+                //{
+                //    query = query.Where(e => e.Category != EventCategory.Information.ToString());
+                //}
+                //if (criteria.ShowWarning.HasValue && !criteria.ShowWarning.Value)
+                //{
+                //    query = query.Where(e => e.Category != EventCategory.Warning.ToString());
+                //}
+                //if (criteria.ShowError.HasValue && !criteria.ShowError.Value)
+                //{
+                //    query = query.Where(e => e.Category != EventCategory.Error.ToString());
+                //}
+
 
                 if (!string.IsNullOrEmpty(criteria.Source))
                 {
@@ -185,8 +207,6 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
                     {
                         query = query.Where(e => e.TimestampUtc <= criteria.ToUtc);
                     }
-
-					// Advanced search returns in date order (oldest first) - Is this going to be confusing?
 				}
 
 				query = query.OrderByDescending(e => e.TimestampUtc);

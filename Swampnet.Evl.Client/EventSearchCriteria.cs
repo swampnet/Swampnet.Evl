@@ -10,8 +10,13 @@ namespace Swampnet.Evl.Client
     {
         public Guid? Id { get; set; }
 
-        [JsonConverter(typeof(StringEnumConverter))]
-        public EventCategory? Category { get; set; }
+        //[JsonConverter(typeof(StringEnumConverter))]
+        //public EventCategory? Category { get; set; }
+
+        /// <summary>
+        /// Comma separated list of categories to include in search results (empty for all)
+        /// </summary>
+        public string Categories { get; set; }
 
         public string Summary { get; set; }
 
@@ -27,6 +32,11 @@ namespace Swampnet.Evl.Client
 		public string Tags { get; set; }
 
         public string Properties { get; set; }
+
+        //public bool? ShowDebug { get; set; }
+        //public bool? ShowInformation { get; set; }
+        //public bool? ShowWarning { get; set; }
+        //public bool? ShowError { get; set; }
 
         #region Advanced
         public DateTime? FromUtc { get; set; }

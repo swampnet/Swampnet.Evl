@@ -14,13 +14,6 @@ namespace Swampnet.Evl.Services
     public interface IAuth
     {
         /// <summary>
-        /// Get profile from principal
-        /// </summary>
-        /// <param name="principle"></param>
-        /// <returns></returns>
-        //Task<Profile> GetProfileAsync(IPrincipal principle);
-
-        /// <summary>
         /// Get organisation from an api-key
         /// </summary>
         /// <param name="apiKey"></param>
@@ -45,19 +38,6 @@ namespace Swampnet.Evl.Services
 
     class Auth : IAuth
     {
-        //class CachedProfile
-        //{
-        //    public CachedProfile(Profile profile)
-        //    {
-        //        Profile = profile;
-        //        CreatedOnUtc = DateTime.UtcNow;
-        //    }
-
-        //    public Profile Profile { get; private set; }
-        //    public DateTime CreatedOnUtc { get; private set; }
-        //}
-
-
         class CachedOrganisation
         {
             private TimeSpan _ttl = TimeSpan.FromMinutes(5);
