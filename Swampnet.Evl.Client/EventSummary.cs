@@ -34,6 +34,8 @@ namespace Swampnet.Evl.Client
         /// </summary>
         public string Source { get; set; }
 
+        public string[] Tags { get; set; }
+
         public override string ToString()
         {
             return $"[{Id}] {TimestampUtc:s} [{Source}] [{Category}] {Summary}";

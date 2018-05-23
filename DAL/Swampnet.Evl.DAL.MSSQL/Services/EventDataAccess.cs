@@ -110,7 +110,10 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
         {
             using (var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))
             {
-                var query = context.Events.AsQueryable();
+                var query = context.Events
+                    .Include(f => f.InternalEventTags)
+                        .ThenInclude(f => f.Tag)
+                    .AsQueryable();
 
                 query = query.Where(e => e.OrganisationId == org.Id);
 
@@ -128,27 +131,6 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
                 {
                     query = query.Where(e => criteria.Categories.Contains(e.Category));
                 }
-
-                //if (criteria.Category.HasValue)
-                //{
-                //    query = query.Where(e => e.Category == criteria.Category.ToString());
-                //}
-                //if(criteria.ShowDebug.HasValue && !criteria.ShowDebug.Value)
-                //{
-                //    query = query.Where(e => e.Category != EventCategory.Debug.ToString());
-                //}
-                //if (criteria.ShowInformation.HasValue && !criteria.ShowInformation.Value)
-                //{
-                //    query = query.Where(e => e.Category != EventCategory.Information.ToString());
-                //}
-                //if (criteria.ShowWarning.HasValue && !criteria.ShowWarning.Value)
-                //{
-                //    query = query.Where(e => e.Category != EventCategory.Warning.ToString());
-                //}
-                //if (criteria.ShowError.HasValue && !criteria.ShowError.Value)
-                //{
-                //    query = query.Where(e => e.Category != EventCategory.Error.ToString());
-                //}
 
 
                 if (!string.IsNullOrEmpty(criteria.Source))

@@ -95,7 +95,8 @@ namespace Swampnet.Evl.DAL.MSSQL
                 Category = Enum.Parse<EventCategory>(source.Category,true),
                 Summary = source.Summary,
                 TimestampUtc = source.TimestampUtc,
-                Source = source.Source
+                Source = source.Source,
+                Tags = source.GetTagNames().ToArray()
             };
         }
     }
