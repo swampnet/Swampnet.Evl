@@ -304,6 +304,13 @@ namespace Swampnet.Evl.Controllers
 
             evt.Properties.AddRange(Request.CommonProperties());
 
+            // Truncate summary, but keep a copy of the original text in a property.
+            if(evt.Summary.Length > 1000)
+            {
+                evt.Properties.Add(new Property("Summary", evt.Summary));
+                evt.Summary = evt.Summary.Truncate(1000, true);
+            }
+
             evt.Id = await _dal.CreateAsync(org, evt);
 
             return evt;
