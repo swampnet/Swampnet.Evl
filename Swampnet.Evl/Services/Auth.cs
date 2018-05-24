@@ -66,8 +66,6 @@ namespace Swampnet.Evl.Services
         private readonly IManagementDataAccess _managementData;
         private readonly IConfiguration _cfg;
         private readonly ConcurrentDictionary<Guid, CachedOrganisation> _apiKeyCache = new ConcurrentDictionary<Guid, CachedOrganisation>();
-        private readonly ConcurrentDictionary<Guid, CachedOrganisation> _idCache = new ConcurrentDictionary<Guid, CachedOrganisation>();
-        //private readonly ConcurrentDictionary<string, CachedProfile> _cachedProfiles = new ConcurrentDictionary<string, CachedProfile>();
 
         public Auth(IManagementDataAccess managementData, IConfiguration cfg)
         {

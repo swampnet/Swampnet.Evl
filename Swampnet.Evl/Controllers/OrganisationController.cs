@@ -14,26 +14,21 @@ using System.Threading.Tasks;
 
 namespace Swampnet.Evl.Controllers
 {
-    /// <summary>
-    /// 
-    /// </summary>
     [Route("organisation")]
     public class OrganisationController : Controller
     {
         private readonly IAuth _auth;
+        private readonly IManagementDataAccess _management;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="auth"></param>
-        public OrganisationController(IAuth auth)
+        public OrganisationController(IAuth auth, IManagementDataAccess management)
         {
             _auth = auth;
+            _management = management;
         }
 
 
         /// <summary>
-        /// 
+        /// Get organisation
         /// </summary>
         /// <returns></returns>
         [HttpGet]
@@ -48,6 +43,29 @@ namespace Swampnet.Evl.Controllers
                 }
 
                 return Ok(org);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, ex.Message);
+
+                return this.InternalServerError(ex);
+            }
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> Update([FromBody]Organisation organisation)
+        {
+            try
+            {
+                var org = await _auth.GetOrganisationByApiKeyAsync(Request?.ApiKey());
+                if (org == null)
+                {
+                    return Unauthorized();
+                }
+
+                organisation = await _management.UpdateOrganisationAsync(org.Id, organisation);
+
+                return Ok(organisation);
             }
             catch (Exception ex)
             {

@@ -67,7 +67,10 @@ namespace Swampnet.Evl.EventProcessors
                                 catch (Exception ex)
                                 {
                                     ex.AddData("Action", action.Type);
-                                    Log.Error(ex, ex.Message);
+
+                                    // Warning: If we have a rule that triggers on errors (Like a catch-all error rule) and an action associated with that rule
+                                    //          throws an exception here, we enter an infinate loop sort of situation here.
+                                    Log.Information(ex.Message);
 
                                     a.Error = ex.Message;
                                 }

@@ -28,11 +28,17 @@ namespace Swampnet.Evl.DAL.MSSQL.Entities
         public List<InternalOrganisationProperties> InternalOrganisationProperties { get; set; }
 
 
-        internal IEnumerable<InternalProperty> GetConfigurationProperties()
+        internal IEnumerable<InternalProperty> GetProperties()
         {
             return InternalOrganisationProperties == null
                 ? Enumerable.Empty<InternalProperty>()
                 : InternalOrganisationProperties.Select(p => p.Property);
+        }
+
+        internal void RemoveProperty(InternalProperty existingProperty)
+        {
+            // Remove link
+            InternalOrganisationProperties.Remove(InternalOrganisationProperties.Single(x => x.PropertyId == existingProperty.Id));
         }
     }
 }

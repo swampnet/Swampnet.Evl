@@ -18,6 +18,11 @@ namespace Swampnet.Evl.DAL.MSSQL.Entities
 
         public long PropertyId { get; set; }
         public InternalProperty Property { get; set; }
+
+        public override string ToString()
+        {
+            return $"{Event?.Id} - [{Property}]";
+        }
     }
 
 
@@ -56,12 +61,14 @@ namespace Swampnet.Evl.DAL.MSSQL.Entities
 
         public long PropertyId { get; set; }
         public InternalProperty Property { get; set; }
+
+        public override string ToString()
+        {
+            return $"{Action?.Type} - [{Property}]";
+        }
     }
 
 
-    /// <summary>
-    /// 
-    /// </summary>
     class InternalOrganisationProperties
     {
         public InternalOrganisationProperties()
@@ -82,5 +89,10 @@ namespace Swampnet.Evl.DAL.MSSQL.Entities
 
         public long PropertyId { get; set; }
         public InternalProperty Property { get; set; }
+
+        public override string ToString()
+        {
+            return $"{Organisation?.Name} - [{Property}]";
+        }
     }
 }

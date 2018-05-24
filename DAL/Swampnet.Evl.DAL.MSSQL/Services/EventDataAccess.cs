@@ -51,8 +51,8 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
                         .ThenInclude(t => t.Tag)
                     .Include(e => e.Triggers)
                         .ThenInclude(t => t.Actions)
-                        .ThenInclude(t => t.InternalActionProperties)
-                        .ThenInclude(t => t.Property)
+                            .ThenInclude(t => t.InternalActionProperties)
+                                .ThenInclude(t => t.Property)
                     .Include(e => e.Organisation)
                         .ThenInclude(o => o.InternalOrganisationProperties)
                             .ThenInclude(p => p.Property)
@@ -125,6 +125,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
                 if (!string.IsNullOrEmpty(criteria.Summary))
                 {
                     query = query.Where(e => e.Summary.Contains(criteria.Summary));
+                    query = query.Where(e => e.InternalEventProperties.Any(p => p.Property.Name == "Summary" && p.Property.Value.Contains(criteria.Summary)));
                 }
 
                 if (!string.IsNullOrEmpty(criteria.Categories))

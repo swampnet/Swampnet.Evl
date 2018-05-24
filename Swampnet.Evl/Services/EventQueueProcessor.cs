@@ -17,12 +17,12 @@ namespace Swampnet.Evl.Services
         private readonly Thread _monitorThread;
         private readonly IEnumerable<IEventProcessor> _processors;
         private readonly IAuth _auth;
-        private readonly IEventDataAccess _dal;
+        private readonly IEventDataAccess _eventDataAccess;
 
         public EventQueueProcessor(IAuth auth, IEventDataAccess dal, IEnumerable<IEventProcessor> processors)
         {
             _auth = auth;
-            _dal = dal;
+            _eventDataAccess = dal;
             _processors = processors;
 
             _monitorThread = new Thread(MonitorThread)
@@ -76,7 +76,7 @@ namespace Swampnet.Evl.Services
                 {
                     try
                     {
-                        var evt = await _dal.ReadAsync(null, eventId);
+                        var evt = await _eventDataAccess.ReadAsync(null, eventId);
 
                         foreach (var processor in _processors.OrderBy(p => p.Priority))
                         {
@@ -91,7 +91,7 @@ namespace Swampnet.Evl.Services
                             }
                         }
 
-                        await _dal.UpdateAsync(null, eventId, evt);
+                        await _eventDataAccess.UpdateAsync(null, eventId, evt);
                     }
                     catch (Exception ex)
                     {
