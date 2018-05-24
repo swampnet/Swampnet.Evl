@@ -18,6 +18,7 @@ using System.Reflection.Metadata;
 using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
 using System.Reflection;
+using Microsoft.Extensions.Hosting;
 
 namespace Swampnet.Evl
 {
@@ -60,6 +61,7 @@ namespace Swampnet.Evl
             services.AddSlackActionHandler();
 
             services.AddSingleton<IAuth, Auth>();
+            services.AddSingleton<IHostedService, TruncateDataHostedService>();
 
             // Add framework services.  
             services.AddMvc().AddJsonOptions(options => {

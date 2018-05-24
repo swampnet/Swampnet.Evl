@@ -25,6 +25,8 @@ namespace Swampnet.Evl.Common.Contracts
         /// <returns></returns>
         Task<EventDetails> ReadAsync(Organisation org, Guid id);
 
+        Task TruncateEventsAsync();
+
         /// <summary>
         /// Update an existing event
         /// </summary>

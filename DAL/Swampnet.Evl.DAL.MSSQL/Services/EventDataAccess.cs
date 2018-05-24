@@ -257,5 +257,14 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
 
             return count;
         }
+
+
+        public Task TruncateEventsAsync()
+        {
+            // For each organisation:
+            //  Look up threasholds and delete data
+            //  Almost certainly going to be more efficient to do this in a sproc
+            return Task.CompletedTask;
+        }
     }
 }

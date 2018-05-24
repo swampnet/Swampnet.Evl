@@ -75,6 +75,12 @@ namespace UnitTests.Mocks
         }
 
 
+        public Task TruncateEventsAsync()
+        {
+            return Task.CompletedTask;
+        }
+
+
         private static IEnumerable<EventDetails> _events = new[]
         {
             new EventDetails()
