@@ -96,8 +96,8 @@ namespace Swampnet.Evl
             IHostingEnvironment env,
             ILoggerFactory loggerFactory,
             IApplicationLifetime appLifetime,
-            IAuth auth,
             IEventDataAccess dal,
+            IConfiguration cfg,
             IEventQueueProcessor eventProcessor)
         {
             Log.Logger = new LoggerConfiguration()
@@ -105,7 +105,7 @@ namespace Swampnet.Evl
 				.Enrich.WithExceptionDetails()
 				.Enrich.FromLogContext()
                 .WriteTo.LocalEvlSink(
-                    auth.GetEvlOrganisation(), 
+                    Guid.Parse(cfg["evl:org-id"]),
                     dal, 
                     eventProcessor,
                     typeof(Startup).Assembly.GetName().Name,
@@ -133,8 +133,8 @@ namespace Swampnet.Evl
             }
 
 
-            app.UseCors(cfg =>
-				cfg.AllowAnyOrigin()
+            app.UseCors(c =>
+				c.AllowAnyOrigin()
 				.AllowAnyHeader()
 				.AllowAnyMethod());
 

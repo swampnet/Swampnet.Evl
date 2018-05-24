@@ -22,14 +22,14 @@ namespace Swampnet.Evl
     {
         public static LoggerConfiguration LocalEvlSink(
                 this LoggerSinkConfiguration loggerConfiguration,
-                Organisation org,
+                Guid orgId,
                 IEventDataAccess dal, 
                 IEventQueueProcessor eventProcessor,
 				string source = null,
 				string version = null,
                 IFormatProvider formatProvider = null)
         {
-            return loggerConfiguration.Sink(new LocalSink(org, dal, eventProcessor, source, version, formatProvider));
+            return loggerConfiguration.Sink(new LocalSink(orgId, dal, eventProcessor, source, version, formatProvider));
         }
 
        
@@ -40,10 +40,10 @@ namespace Swampnet.Evl
         {
             private readonly IEventDataAccess _dal;
             private readonly IEventQueueProcessor _eventProcessor;
-            private readonly Organisation _org;
+            private readonly Guid _orgId;
 
             public LocalSink(
-                Organisation org,
+                Guid orgId,
                 IEventDataAccess dal,
                 IEventQueueProcessor eventProcessor,
 				string source,
@@ -51,7 +51,7 @@ namespace Swampnet.Evl
                 IFormatProvider formatProvider)
                 : base(formatProvider, null, null, source, version)
             {
-                _org = org;
+                _orgId = orgId;
                 _dal = dal;
                 _eventProcessor = eventProcessor;
             }
@@ -69,7 +69,18 @@ namespace Swampnet.Evl
                 {
                     try
                     {
-                        var id = await _dal.CreateAsync(_org, Common.Convert.ToEventDetails(evt));
+                        // Check if we want to overrride the organisation
+                        var orgOverride = evt.Properties.SingleOrDefault(p => p.Category.EqualsNoCase("__override__") && p.Name.EqualsNoCase("organisation-id"));
+                        if(orgOverride != null)
+                        {
+                            evt.Properties.Remove(orgOverride);
+                        }
+
+                        var id = await _dal.CreateAsync(
+                            orgOverride == null 
+                                ? _orgId
+                                : Guid.Parse(orgOverride.Value), 
+                            Common.Convert.ToEventDetails(evt));
 
 						_eventProcessor.Enqueue(id);
                     }

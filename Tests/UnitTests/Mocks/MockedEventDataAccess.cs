@@ -22,7 +22,7 @@ namespace UnitTests.Mocks
             UpdateCount = 0;
         }
 
-        public Task<Guid> CreateAsync(Organisation org, EventDetails evt)
+        public Task<Guid> CreateAsync(Guid orgid, EventDetails evt)
         {
             lock (_lock)
             {

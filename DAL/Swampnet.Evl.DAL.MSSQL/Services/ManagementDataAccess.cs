@@ -111,7 +111,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
                         }
                     }
                     // Add new
-                    else
+                    else if(!string.IsNullOrEmpty(prp.Value))
                     {
                         updates.Add(new Property("Update", "Create", $"Create property {prp}"));
                         org.InternalOrganisationProperties.Add(new InternalOrganisationProperties()
@@ -131,7 +131,8 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
 
                 Log.Logger
                     .WithProperties(updates)
-                    .Information("Organisation {org} updated", org.Name);
+                    .WithProperty(new Property("__override__", "organisation-id", org.Id.ToString()))
+                    .Information("Configuration updated");
 
                 return Convert.ToOrganisation(org);
             }

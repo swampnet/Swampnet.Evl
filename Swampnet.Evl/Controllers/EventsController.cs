@@ -311,7 +311,7 @@ namespace Swampnet.Evl.Controllers
                 evt.Summary = evt.Summary.Truncate(1000, true);
             }
 
-            evt.Id = await _dal.CreateAsync(org, evt);
+            evt.Id = await _dal.CreateAsync(org.Id, evt);
 
             return evt;
         }

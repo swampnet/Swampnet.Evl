@@ -79,20 +79,20 @@ namespace Swampnet.Evl.DAL.MSSQL.Entities
         }
 
 
-        internal void AddTag(EvlContext context, string tag, Organisation org)
+        internal void AddTag(EvlContext context, string tag, Guid orgid)
         {
             if(!string.IsNullOrEmpty(tag) && !GetTagNames().Any(t => t.EqualsNoCase(tag)))
             {
                 var link = new InternalEventTags();
                 link.Event = this;
 
-                var t = context.Tags.FirstOrDefault(x => x.OrganisationId == org.Id && x.Name == tag); // .First() - it *is* possible to have multiple tags with same name (due to syncronisation, or lack of lol!)
+                var t = context.Tags.FirstOrDefault(x => x.OrganisationId == orgid && x.Name == tag); // .First() - it *is* possible to have multiple tags with same name (due to syncronisation, or lack of lol!)
                 if (t == null)
                 {
                     t = new InternalTag()
                     {
                         Name = tag.Truncate(100),
-                        OrganisationId = org.Id
+                        OrganisationId = orgid
                     };
                     context.Tags.Add(t);
                 }
@@ -106,13 +106,13 @@ namespace Swampnet.Evl.DAL.MSSQL.Entities
             }
         }
 
-        internal void AddTags(EvlContext context, IEnumerable<string> tags, Organisation org)
+        internal void AddTags(EvlContext context, IEnumerable<string> tags, Guid orgid)
         {
             if (tags != null && tags.Any())
             {
                 foreach (var tag in tags)
                 {
-                    AddTag(context, tag, org);
+                    AddTag(context, tag, orgid);
                 }
             }
         }

@@ -27,11 +27,11 @@ namespace Swampnet.Evl.Services
         /// <returns></returns>
         Task<Organisation> GetOrganisationAsync(Guid id);
 
-        /// <summary>
-        /// Get the organisation that represents the EVL service itself
-        /// </summary>
-        /// <returns></returns>
-        Organisation GetEvlOrganisation();
+        ///// <summary>
+        ///// Get the organisation that represents the EVL service itself
+        ///// </summary>
+        ///// <returns></returns>
+        //Organisation GetEvlOrganisation();
     }
 
 
@@ -128,15 +128,15 @@ namespace Swampnet.Evl.Services
 
 
 
-        public Organisation GetEvlOrganisation()
-        {
-            var id = _cfg["evl:org-id"];
-            if (string.IsNullOrEmpty(id))
-            {
-                throw new ApplicationException("evl:org-id undefined");
-            }
+        //public Organisation GetEvlOrganisation()
+        //{
+        //    var id = _cfg["evl:org-id"];
+        //    if (string.IsNullOrEmpty(id))
+        //    {
+        //        throw new ApplicationException("evl:org-id undefined");
+        //    }
 
-            return GetOrganisationAsync(Guid.Parse(id)).Result;
-        }
+        //    return GetOrganisationAsync(Guid.Parse(id)).Result;
+        //}
     }
 }

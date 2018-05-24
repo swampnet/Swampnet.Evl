@@ -23,11 +23,11 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
             _cfg = cfg;
         }
 
-		public async Task<Guid> CreateAsync(Organisation org, EventDetails evt)
+		public async Task<Guid> CreateAsync(Guid orgid, EventDetails evt)
         {
             using(var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))
             {
-                var internalEvent = Convert.ToEvent(org, evt, context);
+                var internalEvent = Convert.ToEvent(orgid, evt, context);
 
                 internalEvent.Id = Guid.NewGuid();
 
@@ -97,7 +97,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
                 internalEvent.ModifiedOnUtc = DateTime.UtcNow;
 
                 internalEvent.AddProperties(evt.Properties);
-                internalEvent.AddTags(context, evt.Tags, evt.Organisation);
+                internalEvent.AddTags(context, evt.Tags, evt.Organisation.Id);
 				internalEvent.AddTriggers(evt.Triggers);
                 // @TODO: We should be able to remove tags that don't exist as well
 

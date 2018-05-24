@@ -21,8 +21,8 @@ namespace Swampnet.Evl.DAL.MSSQL.Entities
         public override string ToString()
         {
             return string.IsNullOrEmpty(Category)
-                ? $"{Id} - {Name} = {Value}"
-                : $"{Id} - [{Category}] {Name} = {Value}";
+                ? $"'{Name}' = '{Value}'"
+                : $"[{Category}] '{Name}' = '{Value}'";
         }
     }
 }

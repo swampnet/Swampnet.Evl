@@ -105,8 +105,8 @@ namespace Swampnet.Evl.Client
         public override string ToString()
         {
             return string.IsNullOrEmpty(Category) 
-                ? $"{Name} = {Value}" 
-                : $"[{Category}] {Name} = {Value}";
+                ? $"'{Name}' = '{Value}'" 
+                : $"[{Category}] '{Name}' = '{Value}'";
         }
     }
 }

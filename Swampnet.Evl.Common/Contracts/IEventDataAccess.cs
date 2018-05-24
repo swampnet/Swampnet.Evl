@@ -16,7 +16,7 @@ namespace Swampnet.Evl.Common.Contracts
         /// <param name="app"></param>
         /// <param name="evt"></param>
         /// <returns></returns>
-        Task<Guid> CreateAsync(Organisation org, EventDetails evt);
+        Task<Guid> CreateAsync(Guid orgid, EventDetails evt);
 
         /// <summary>
         /// Read an existing event from the backing store

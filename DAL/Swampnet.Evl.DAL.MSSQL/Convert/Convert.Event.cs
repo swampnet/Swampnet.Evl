@@ -16,13 +16,8 @@ namespace Swampnet.Evl.DAL.MSSQL
         /// <summary>
         /// Convert an API Event to an InternalEvent
         /// </summary>
-        internal static InternalEvent ToEvent(Organisation org, EventDetails source, EvlContext context)
+        internal static InternalEvent ToEvent(Guid orgid, EventDetails source, EvlContext context)
         {
-            if(org == null)
-            {
-                throw new ArgumentNullException("org");
-            }
-
             InternalEvent e = null;
 
             if (source != null)
@@ -34,7 +29,7 @@ namespace Swampnet.Evl.DAL.MSSQL
 
                 e = new InternalEvent()
                 {
-                    OrganisationId = org.Id,
+                    OrganisationId = orgid,
                     Category = source.Category.ToString(),
                     Summary = source.Summary,
                     TimestampUtc = source.TimestampUtc,
@@ -44,7 +39,7 @@ namespace Swampnet.Evl.DAL.MSSQL
                 };
 
                 e.AddProperties(source.Properties);
-                e.AddTags(context, source.Tags, org);
+                e.AddTags(context, source.Tags, orgid);
                 e.AddTriggers(source.Triggers);
             }
 
