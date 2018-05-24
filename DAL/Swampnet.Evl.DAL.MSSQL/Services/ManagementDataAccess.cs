@@ -76,13 +76,13 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
                 // Update stuff that may have changed
                 if (!string.IsNullOrEmpty(source.Name) && source.Name != org.Name)
                 {
-                    updates.Add(new Property("Update", "Modify",  $"Name from '{org.Name}' to '{source.Name}'"));
+                    updates.Add(new Property("Update", "Modify",  $"Name changed from '{org.Name}' to '{source.Name}'"));
                     org.Name = source.Name;
                 }
 
                 if (!string.IsNullOrEmpty(source.Description) && source.Description != org.Description)
                 {
-                    updates.Add(new Property("Update", "Modify", $"Description from '{org.Description}' to '{source.Description}'"));
+                    updates.Add(new Property("Update", "Modify", $"Description changed from '{org.Description}' to '{source.Description}'"));
                     org.Description = source.Description;
                 }
 
@@ -101,19 +101,19 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
                             // Remove the property
                             org.RemoveProperty(existingProperty);
                             context.Properties.Remove(existingProperty);
-                            updates.Add(new Property("Update", "Delete", $"{existingProperty}"));
+                            updates.Add(new Property("Update", "Delete", $"Delete property {existingProperty}"));
                         }
                         // Update
-                        else
+                        else if(existingProperty.Value != prp.Value)
                         {
-                            updates.Add(new Property("Update", "Modify", $"Property {existingProperty} value to '{prp.Value}'"));
+                            updates.Add(new Property("Update", "Modify", $"Property '{existingProperty.Name}' value changed from '{existingProperty.Value}' to '{prp.Value}'"));
                             existingProperty.Value = prp.Value;
                         }
                     }
                     // Add new
                     else
                     {
-                        updates.Add(new Property("Update", "Create", $"{prp}"));
+                        updates.Add(new Property("Update", "Create", $"Create property {prp}"));
                         org.InternalOrganisationProperties.Add(new InternalOrganisationProperties()
                         {
                             Organisation = org,
@@ -131,7 +131,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
 
                 Log.Logger
                     .WithProperties(updates)
-                    .Information("Organisation {org}", org.Name);
+                    .Information("Organisation {org} updated", org.Name);
 
                 return Convert.ToOrganisation(org);
             }
