@@ -108,9 +108,9 @@ namespace Swampnet.Evl
 				.Enrich.FromLogContext()
                 .WriteTo.LocalEvlSink(
                     Guid.Parse(cfg["evl:org-id"]),
-                    dal, 
+                    dal,
                     eventProcessor,
-                    typeof(Startup).Assembly.GetName().Name,
+                    cfg["evl:source"] ?? typeof(Startup).Assembly.GetName().Name,
                     typeof(Startup).Assembly.GetName().Version.ToString())
                 .WriteTo.Console()
                 .CreateLogger();
@@ -142,10 +142,10 @@ namespace Swampnet.Evl
 
 			app.UseMvc();
 
-            //Log.Logger
-            //    .WithTag("START")
-            //    .WithProperty("StartTime", DateTime.UtcNow)
-            //    .Information("Start");
+            Log.Logger
+                .WithTag("START")
+                .WithProperty("StartTime", DateTime.UtcNow)
+                .Information("Start");
         }
     }
 }
