@@ -40,6 +40,7 @@ namespace Swampnet.Evl.Services
                 }
                 finally
                 {
+                    // This doesn't need to run every hour - At most it's once a day...
                     await Task.Delay(TimeSpan.FromMinutes(60), stoppingToken);
                 }
             }

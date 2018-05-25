@@ -259,12 +259,12 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
         }
 
 
-        public Task TruncateEventsAsync()
+        public async Task TruncateEventsAsync()
         {
-            // For each organisation:
-            //  Look up threasholds and delete data
-            //  Almost certainly going to be more efficient to do this in a sproc
-            return Task.CompletedTask;
+            using(var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))
+            {
+                await context.Database.ExecuteSqlCommandAsync("exec [evl].[TrucateExpiredEventData]");
+            }
         }
     }
 }
