@@ -14,6 +14,7 @@ namespace Swampnet.Evl.Services
     {
         private readonly IEventDataAccess _eventDataAccess;
         private readonly IConfiguration _cfg;
+        private DateTime _lastExecutedUtc = DateTime.MinValue;
 
         public TruncateDataHostedService(IEventDataAccess eventDataAccess, IConfiguration cfg)
         {
@@ -28,11 +29,16 @@ namespace Swampnet.Evl.Services
             {
                 try
                 {
-                    var sw = Stopwatch.StartNew();
+                    if (IsDue())
+                    {
+                        var sw = Stopwatch.StartNew();
 
-                    await _eventDataAccess.TruncateEventsAsync();
+                        await _eventDataAccess.TruncateEventsAsync();
 
-                    Log.Debug("Truncate complete in {elapsed}s", sw.Elapsed.TotalSeconds.ToString("0.00"));
+                        _lastExecutedUtc = DateTime.UtcNow;
+
+                        Log.Debug("Truncate complete in {elapsed}s", sw.Elapsed.TotalSeconds.ToString("0.00"));
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -40,10 +46,24 @@ namespace Swampnet.Evl.Services
                 }
                 finally
                 {
-                    // This doesn't need to run every hour - At most it's once a day...
-                    await Task.Delay(TimeSpan.FromMinutes(60), stoppingToken);
+                    await Task.Delay(TimeSpan.FromMinutes(1), stoppingToken);
                 }
             }
+        }
+
+
+        private bool IsDue()
+        {
+            TimeSpan ts;
+            if (!TimeSpan.TryParse(_cfg["evl:schedule:trunc-events"], out ts))
+            {
+                // Default to 1am
+                ts = TimeSpan.Parse("01:00");
+            }
+
+            return DateTime.UtcNow.Hour == ts.Hours 
+                && DateTime.UtcNow.Minute == ts.Minutes 
+                && _lastExecutedUtc < DateTime.UtcNow.AddHours(-23); // Last run was at least 23 hours ago
         }
     }
 }
