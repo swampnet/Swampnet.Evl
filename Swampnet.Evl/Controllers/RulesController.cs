@@ -100,10 +100,9 @@ namespace Swampnet.Evl.Controllers
         /// <remarks>
         /// POST /rules
         /// </remarks>
-        /// <param name="rule"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] Rule rule)
+        public async Task<IActionResult> Post()
         {
             try
             {
@@ -113,12 +112,11 @@ namespace Swampnet.Evl.Controllers
                     return Unauthorized();
                 }
 
-                if (rule == null)
-				{
-					return BadRequest();
-				}
-
-				Log.Debug("POST rule {ruleName}", rule.Name);
+                var rule = new Rule()
+                {
+                    Name = "New Rule",
+                    Expression = new Expression(RuleOperatorType.MATCH_ALL)                    
+                };
 
 				await _rulesData.CreateAsync(org, rule);
 

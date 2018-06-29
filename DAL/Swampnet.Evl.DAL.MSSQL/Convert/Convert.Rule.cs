@@ -59,7 +59,7 @@ namespace Swampnet.Evl.DAL.MSSQL
                 IsActive = rule.IsActive,
                 Name = rule.Name,
                 Order = rule.Order,
-                Actions = rule.Actions.Where(a => a.IsActive).Select(a => a.Type).ToArray()
+                Actions = rule.Actions?.Where(a => a.IsActive).Select(a => a.Type).ToArray()
             };
         }
 

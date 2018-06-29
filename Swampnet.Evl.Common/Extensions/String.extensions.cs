@@ -13,11 +13,14 @@ namespace Swampnet.Evl
         {
             var rtn = default(T);
 
-            var serializer = new XmlSerializer(typeof(T));
-
-            using (var reader = new StringReader(xml))
+            if(xml != "<null />")
             {
-                rtn = (T)serializer.Deserialize(reader);
+                var serializer = new XmlSerializer(typeof(T));
+
+                using (var reader = new StringReader(xml))
+                {
+                    rtn = (T)serializer.Deserialize(reader);
+                }
             }
 
             return rtn;
