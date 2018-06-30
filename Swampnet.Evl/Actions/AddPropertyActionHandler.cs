@@ -11,6 +11,8 @@ namespace Swampnet.Evl.Actions
     class AddPropertyActionHandler : IActionHandler
     {
         public string Type => "add-property";
+        public string Name => "Add property";
+        public string Description => "@todo: Description for add-property";
 
         public Task ApplyAsync(EventDetails evt, ActionDefinition actionDefinition, Rule rule)
         {

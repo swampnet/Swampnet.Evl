@@ -21,6 +21,8 @@ namespace Swampnet.Evl.Plugins.Slack
         }
 
         public string Type => "slack";
+        public string Name => "Slack";
+        public string Description => "@todo: Description for slack";
 
         public async Task ApplyAsync(EventDetails evt, ActionDefinition actionDefinition, Rule rule)
         {

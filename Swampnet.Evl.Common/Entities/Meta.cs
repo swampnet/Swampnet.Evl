@@ -40,7 +40,9 @@ namespace Swampnet.Evl.Common.Entities
 	public class ActionMetaData
 	{
 		public string Type { get; set; }
-		public MetaDataCapture[] Properties { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public MetaDataCapture[] Properties { get; set; }
 
     }
 

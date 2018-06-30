@@ -12,6 +12,8 @@ namespace Swampnet.Evl.Actions
     class ChangeCategoryActionHandler : IActionHandler
     {
         public string Type => "change-category";
+        public string Name => "Change category";
+        public string Description => "@todo: Description for change-category";
 
 
         public Task ApplyAsync(EventDetails evt, ActionDefinition actionDefinition, Rule rule)

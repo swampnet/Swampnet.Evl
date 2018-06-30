@@ -13,6 +13,8 @@ namespace Swampnet.Evl.Actions
     class DebugActionHandler : IActionHandler
     {
         public string Type => "debug";
+        public string Name => "Debug";
+        public string Description => "@todo: Description for debug";
 
         public Task ApplyAsync(EventDetails evt, ActionDefinition actionDefinition, Rule rule)
         {

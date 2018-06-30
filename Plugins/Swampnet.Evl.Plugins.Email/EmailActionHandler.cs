@@ -64,6 +64,8 @@ namespace Swampnet.Evl.Plugins.Email
 		}
 
         public string Type => "email";
+        public string Name => "Send email";
+        public string Description => "@todo: Description for email";
 
 
         public async Task ApplyAsync(EventDetails evt, ActionDefinition actionDefinition, Rule rule)

@@ -13,6 +13,8 @@ namespace Swampnet.Evl.Common.Contracts
         /// Action code / type
         /// </summary>
         string Type { get; }
+        string Name { get; }
+        string Description { get; }
 
         /// <summary>
         /// 
