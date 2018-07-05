@@ -125,9 +125,11 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
                 if (!string.IsNullOrEmpty(criteria.Summary))
                 {
                     // Either the actual summary contains the value, or a property called 'summary' contains the value.
-                    query = query.Where(e => 
-                        e.Summary.Contains(criteria.Summary) 
-                        || e.InternalEventProperties.Any(p => p.Property.Name == "Summary" && p.Property.Value.Contains(criteria.Summary)));
+                    //query = query.Where(e => 
+                    //    e.Summary.Contains(criteria.Summary) 
+                    //    || e.InternalEventProperties.Any(p => p.Property.Name == "Summary" && p.Property.Value.Contains(criteria.Summary)));
+
+                    query = query.Where(e => e.Summary.Contains(criteria.Summary));
                 }
 
                 if (!string.IsNullOrEmpty(criteria.Categories))
