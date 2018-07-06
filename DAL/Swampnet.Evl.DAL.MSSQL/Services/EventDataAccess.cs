@@ -125,8 +125,10 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
                 if (!string.IsNullOrEmpty(criteria.Summary))
                 {
                     // Either the actual summary contains the value, or a property called 'summary' contains the value.
-                    //query = query.Where(e => 
-                    //    e.Summary.Contains(criteria.Summary) 
+                    // This currently kills the search. I suspect any 'property' search will do the same. Looks ok in the profiler (as in, no missing index) but we might need
+                    // to play about with full-text indexes which I don't think is available on the tier I have this running on in Azure atm.
+                    //query = query.Where(e =>
+                    //    e.Summary.Contains(criteria.Summary)
                     //    || e.InternalEventProperties.Any(p => p.Property.Name == "Summary" && p.Property.Value.Contains(criteria.Summary)));
 
                     query = query.Where(e => e.Summary.Contains(criteria.Summary));
@@ -203,6 +205,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
 					query = query.Skip(criteria.PageSize * criteria.Page).Take(criteria.PageSize);
 				}
 
+                //var sql = query.ToSql();
 				var results = await query.ToArrayAsync();
 
                 return results.Select(Convert.ToEventSummary);
