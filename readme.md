@@ -28,3 +28,10 @@ Create deployment script:
 azure site deploymentscript -s Swampnet.Evl.sln --aspWAP Swampnet.Evl.Web\Swampnet.Evl.Web.csproj
 
 ## Configuration
+
+Name                                         | Description
+---------------------------------------------|--------------
+````evl:schedule:trunc-events````            | timespan - When to truncate events (hh:mm)
+````evl:schedule:trunc-events-timeout````    | timespan - 
+
+
