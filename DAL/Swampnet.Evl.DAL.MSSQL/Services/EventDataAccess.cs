@@ -271,7 +271,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
             using(var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))
             {
                 TimeSpan ts;
-                if (!TimeSpan.TryParse(_cfg["evl:schedule:trunc-events-timeout"], out ts))
+                if (!TimeSpan.TryParse(_cfg["evl:trunc-events-timeout"], out ts))
                 {
                     ts = TimeSpan.FromSeconds(60);
                 }

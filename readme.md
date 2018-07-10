@@ -32,6 +32,6 @@ azure site deploymentscript -s Swampnet.Evl.sln --aspWAP Swampnet.Evl.Web\Swampn
 Name                                         | Description
 ---------------------------------------------|--------------
 ````evl:schedule:trunc-events````            | timespan - When to truncate events (hh:mm)
-````evl:schedule:trunc-events-timeout````    | timespan - 
+````evl:trunc-events-timeout````             | timespan - 
 
 
