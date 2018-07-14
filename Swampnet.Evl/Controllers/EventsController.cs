@@ -197,10 +197,12 @@ namespace Swampnet.Evl.Controllers
         /// <param name="e"></param>
         /// <returns></returns>
         [HttpPost]
-		public async Task<IActionResult> Post([FromBody] Event e)
-		{
-			try
-			{
+        public async Task<IActionResult> Post([FromBody] Event e)
+        {
+            try
+            {
+                var sw = Stopwatch.StartNew();
+
                 var org = await _auth.GetOrganisationByApiKeyAsync(Request?.ApiKey());
                 if (org == null)
                 {
@@ -212,21 +214,25 @@ namespace Swampnet.Evl.Controllers
                     return BadRequest();
                 }
 
+                if (e.Properties == null)
+                {
+                    e.Properties = new List<Property>();
+                }
+                e.Properties.AddRange(Request.CommonProperties());
 
-                var evt = await CreateEventAsync(org, e);
+                _eventProcessor.Enqueue(org.Id, e);
 
-                _eventProcessor.Enqueue(evt.Id);
-
-                return CreatedAtRoute("EventDetails", new { id = evt.Id }, evt);
-			}
-			catch (UnauthorizedAccessException ex)
-			{
-				Log.Error(ex, ex.Message);
-				return Unauthorized();
-			}
-			catch (Exception ex)
-			{
-				Log.Error(ex, ex.Message);
+                Debug.WriteLine($">>> POST in {sw.Elapsed.TotalMilliseconds}");
+                return Ok();
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                Log.Error(ex, ex.Message);
+                return Unauthorized();
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, ex.Message);
                 return this.InternalServerError(ex);
             }
         }
@@ -253,22 +259,17 @@ namespace Swampnet.Evl.Controllers
                     return BadRequest();
                 }
 
-                Parallel.ForEach(evts, async e =>
-                {
-                    try
-                    {
-                        var evt = await CreateEventAsync(org, e);
 
-                        lock (_eventProcessor)
-                        {
-                            _eventProcessor.Enqueue(evt.Id);
-                        }
-                    }
-                    catch (Exception ex)
+                Parallel.ForEach(evts, e =>
+                {
+                    if (e.Properties == null)
                     {
-						Log.Error(ex, ex.Message);
+                        e.Properties = new List<Property>();
                     }
+                    e.Properties.AddRange(Request.CommonProperties());
                 });
+
+                _eventProcessor.Enqueue(org.Id, evts);
 
                 return Ok();
             }
@@ -282,38 +283,6 @@ namespace Swampnet.Evl.Controllers
                 Log.Error(ex, ex.Message);
                 return this.InternalServerError(ex);
             }
-        }
-
-
-        /// <summary>
-        /// Create event
-        /// </summary>
-        private async Task<EventDetails> CreateEventAsync(Organisation org, Event e)
-        {
-            var evt = Common.Convert.ToEventDetails(e);
-
-            if (string.IsNullOrEmpty(evt.Source))
-            {
-                evt.Source = org.Name;
-            }
-
-            if (evt.Properties == null)
-            {
-                evt.Properties = new List<Property>();
-            }
-
-            evt.Properties.AddRange(Request.CommonProperties());
-
-            // Truncate summary, but keep a copy of the original text in a property.
-            if(evt.Summary.Length > 1000)
-            {
-                evt.Properties.Add(new Property("Summary", evt.Summary));
-                evt.Summary = evt.Summary.Truncate(1000, true);
-            }
-
-            evt.Id = await _dal.CreateAsync(org.Id, evt);
-
-            return evt;
         }
     }
 }

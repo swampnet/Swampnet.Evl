@@ -22,13 +22,13 @@ namespace UnitTests.Mocks
             UpdateCount = 0;
         }
 
-        public Task<Guid> CreateAsync(Guid orgid, EventDetails evt)
+        public Task<EventDetails> CreateAsync(Guid orgid, Event evt)
         {
             lock (_lock)
             {
                 CreateCount++;
 
-                return Task.FromResult(Guid.Empty);
+                return Task.FromResult<EventDetails>(null);
             }
         }
 
@@ -64,7 +64,7 @@ namespace UnitTests.Mocks
         }
 
 
-        public Task UpdateAsync(Organisation org, Guid id, EventDetails evt)
+        public Task UpdateAsync(Organisation org, EventDetails evt)
         {
             lock (_lock)
             {

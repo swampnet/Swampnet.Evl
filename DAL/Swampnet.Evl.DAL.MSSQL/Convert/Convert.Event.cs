@@ -16,7 +16,7 @@ namespace Swampnet.Evl.DAL.MSSQL
         /// <summary>
         /// Convert an API Event to an InternalEvent
         /// </summary>
-        internal static InternalEvent ToEvent(Guid orgid, EventDetails source, EvlContext context)
+        internal static InternalEvent ToEvent(Guid orgid, Event source, EvlContext context)
         {
             InternalEvent e = null;
 
@@ -35,12 +35,14 @@ namespace Swampnet.Evl.DAL.MSSQL
                     TimestampUtc = source.TimestampUtc,
                     ModifiedOnUtc = source.LastUpdatedUtc.HasValue ? source.LastUpdatedUtc.Value : source.TimestampUtc,
                     Source = source.Source.Truncate(2000),
-                    SourceVersion = source.SourceVersion.Truncate(2000)                    
+                    SourceVersion = source.SourceVersion.Truncate(2000),
+                    Triggers = new List<InternalTrigger>()
                 };
 
+                e.Organisation = context.Organisations.Single(o => o.Id == orgid);
                 e.AddProperties(source.Properties);
                 e.AddTags(context, source.Tags, orgid);
-                e.AddTriggers(source.Triggers);
+                //e.AddTriggers(source.Triggers);
             }
 
             return e;
@@ -48,7 +50,7 @@ namespace Swampnet.Evl.DAL.MSSQL
 
 
         /// <summary>
-        /// Convert an InternalEvent to an API Event 
+        /// Convert an InternalEvent to an API EventDetails
         /// </summary>
         internal static EventDetails ToEventDetails(InternalEvent source)
         {

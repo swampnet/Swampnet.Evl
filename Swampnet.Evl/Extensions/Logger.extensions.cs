@@ -65,7 +65,7 @@ namespace Swampnet.Evl
             {
                 await Task.CompletedTask; // Just to satisfy our async declaration for now.
 
-                Parallel.ForEach(events, async evt =>
+                Parallel.ForEach(events, evt =>
                 {
                     try
                     {
@@ -76,13 +76,11 @@ namespace Swampnet.Evl
                             evt.Properties.Remove(orgOverride);
                         }
 
-                        var id = await _dal.CreateAsync(
-                            orgOverride == null 
+						_eventProcessor.Enqueue(
+                            orgOverride == null
                                 ? _orgId
                                 : Guid.Parse(orgOverride.Value), 
-                            Common.Convert.ToEventDetails(evt));
-
-						_eventProcessor.Enqueue(id);
+                            evt);
                     }
                     catch (Exception ex)
                     {

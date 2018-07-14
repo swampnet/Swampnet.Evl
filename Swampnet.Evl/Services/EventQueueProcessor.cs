@@ -7,12 +7,34 @@ using System.Collections.Concurrent;
 using System.Threading;
 using Swampnet.Evl.Contracts;
 using Swampnet.Evl.Common.Entities;
+using System.Threading.Tasks;
+using Swampnet.Evl.Client;
+using System.Diagnostics;
 
 namespace Swampnet.Evl.Services
 {
     class EventQueueProcessor : IEventQueueProcessor
     {
-        private readonly ConcurrentQueue<Guid> _queue = new ConcurrentQueue<Guid>();
+        class QueuedEvents
+        {
+            public QueuedEvents(Guid org, Client.Event evt)
+                : this(org, new[] { evt })
+            {
+            }
+
+            public QueuedEvents(Guid org, IEnumerable<Client.Event> evts)
+            {
+                Organisation = org;
+                Events = evts;
+            }
+
+
+            public Guid Organisation { get; private set; }
+            public IEnumerable<Client.Event> Events { get; private set; }
+        }
+
+
+        private readonly ConcurrentQueue<QueuedEvents> _queue = new ConcurrentQueue<QueuedEvents>();
         private readonly AutoResetEvent _queueEvent = new AutoResetEvent(false);
         private readonly Thread _monitorThread;
         private readonly IEnumerable<IEventProcessor> _processors;
@@ -35,71 +57,75 @@ namespace Swampnet.Evl.Services
         }
 
 
-        public void Enqueue(Guid id)
+        public void Enqueue(Guid org, Client.Event evt)
         {
-            _queue.Enqueue(id);
+            _queue.Enqueue(new QueuedEvents(org, evt));
+            _queueEvent.Set();
+        }
+
+        public void Enqueue(Guid org, IEnumerable<Client.Event> evts)
+        {
+            _queue.Enqueue(new QueuedEvents(org, evts));
             _queueEvent.Set();
         }
 
 
-        public void Enqueue(IEnumerable<Guid> ids)
-        {
-            foreach(var id in ids.ToArray())
-            {
-                _queue.Enqueue(id);
-            }
-            _queueEvent.Set();
-        }
-
-
-        private IEnumerable<Guid> Wait()
+        private IEnumerable<QueuedEvents> Wait()
         {
             _queueEvent.WaitOne();
 
-            var ids = new List<Guid>();
+            var evts = new List<QueuedEvents>();
 
-            while(_queue.TryDequeue(out Guid result))
+            while(_queue.TryDequeue(out QueuedEvents evt))
             {
-                ids.Add(result);
+                evts.Add(evt);
             }
 
-            return ids;
+            return evts;
         }
 
 
-        private async void MonitorThread()
+        private void MonitorThread()
         {
-            var eventIds = Wait();
-            while (eventIds != null)
+            var queuedEvents = Wait();
+
+            while (queuedEvents != null)
             {
-                foreach(var eventId in eventIds)
-                {
-                    try
-                    {
-                        var evt = await _eventDataAccess.ReadAsync(null, eventId);
+                var sw = Stopwatch.StartNew();
 
-                        foreach (var processor in _processors.OrderBy(p => p.Priority))
+                // Can we flatten this & possibly group by organisation
+                Parallel.ForEach(queuedEvents, async queuedEvent => {
+                    foreach (var e in queuedEvent.Events)
+                    {
+                        try
                         {
-                            try
+                            var evt = await _eventDataAccess.CreateAsync(queuedEvent.Organisation, e);
+
+                            foreach (var processor in _processors.OrderBy(p => p.Priority))
                             {
-                                await processor.ProcessAsync(evt);
+                                try
+                                {
+                                    await processor.ProcessAsync(evt);
+                                }
+                                catch (Exception ex)
+                                {
+                                    ex.AddData("Processor", processor.GetType().Name);
+                                    Log.Error(ex, ex.Message);
+                                }
                             }
-                            catch (Exception ex)
-                            {
-                                ex.AddData("Processor", processor.GetType().Name);
-                                Log.Error(ex, ex.Message);
-                            }
+
+                            await _eventDataAccess.UpdateAsync(null, evt);
                         }
-
-                        await _eventDataAccess.UpdateAsync(null, eventId, evt);
+                        catch (Exception ex)
+                        {
+                            Log.Error(ex, ex.Message);
+                        }
                     }
-                    catch (Exception ex)
-                    {
-                        Log.Error(ex, ex.Message);
-                    }
-                }
+                });
 
-                eventIds = Wait();
+                Debug.WriteLine($">>> PROCESS in {sw.Elapsed.TotalMilliseconds}");
+
+                queuedEvents = Wait();
             }
         }
     }

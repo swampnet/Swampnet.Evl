@@ -23,11 +23,23 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
             _cfg = cfg;
         }
 
-		public async Task<Guid> CreateAsync(Guid orgid, EventDetails evt)
+		public async Task<EventDetails> CreateAsync(Guid orgid, Event evt)
         {
             using(var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))
             {
                 var internalEvent = Convert.ToEvent(orgid, evt, context);
+
+                // Truncate summary, but keep a copy of the original text in a property.
+                if (internalEvent.Summary.Length > 1000)
+                {
+                    internalEvent.AddProperty(new Property("Summary", evt.Summary));
+                    internalEvent.Summary = internalEvent.Summary.Truncate(1000, true);
+                }
+
+                if (string.IsNullOrEmpty(internalEvent.Source))
+                {
+                    evt.Source = internalEvent.Organisation.Name;
+                }
 
                 internalEvent.Id = Guid.NewGuid();
 
@@ -35,7 +47,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
 
                 await context.SaveChangesAsync();
 
-                return internalEvent.Id;
+                return Convert.ToEventDetails(internalEvent);
             }
         }
 
@@ -70,7 +82,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
         }
 
 
-        public async Task UpdateAsync(Organisation org, Guid id, EventDetails evt)
+        public async Task UpdateAsync(Organisation org, EventDetails evt)
         {
             using (var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))
             {
@@ -83,13 +95,13 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
                         .ThenInclude(t => t.Actions)
                         .ThenInclude(t => t.InternalActionProperties)
                         .ThenInclude(t => t.Property)
-                    .Where(e => e.Id == id);
+                    .Where(e => e.Id == evt.Id);
 
                 var internalEvent = await query.SingleOrDefaultAsync();
 
                 if (internalEvent == null)
                 {
-                    throw new NullReferenceException($"Event {id} not found");
+                    throw new NullReferenceException($"Event {evt.Id} not found");
                 }
 
                 internalEvent.Category = evt.Category.ToString();

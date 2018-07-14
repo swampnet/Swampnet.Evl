@@ -15,17 +15,17 @@ namespace UnitTests.Mocks
         }
 
 
-        public void Enqueue(Guid id)
+        public void Enqueue(Guid id, Swampnet.Evl.Client.Event evt)
         {
             Queue.Enqueue(id);
         }
 
 
-        public void Enqueue(IEnumerable<Guid> ids)
+        public void Enqueue(Guid id, IEnumerable<Swampnet.Evl.Client.Event> evts)
         {
-            foreach(var id in ids)
+            foreach(var e in evts)
             {
-                Enqueue(id);
+                Enqueue(id, e);
             }
         }
     }
