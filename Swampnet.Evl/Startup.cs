@@ -69,6 +69,7 @@ namespace Swampnet.Evl
 				options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
 			});
 
+
 			services.AddCors();
 
 			// Register the Swagger generator, defining one or more Swagger documents
@@ -139,6 +140,8 @@ namespace Swampnet.Evl
 				c.AllowAnyOrigin()
 				.AllowAnyHeader()
 				.AllowAnyMethod());
+
+            app.UseStaticFiles();
 
 			app.UseMvc();
 
