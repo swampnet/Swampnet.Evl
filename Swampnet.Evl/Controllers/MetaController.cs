@@ -102,8 +102,8 @@ namespace Swampnet.Evl.Controllers
                 .Select(a => new ActionMetaData()
                 {
                     Type = a.Type,
-                    Name = "@todo",
-                    Description = "@todo",
+                    Name = a.Name,
+                    Description = a.Description,
                     Properties = a.GetPropertyMetaData()
                 })
                 .ToArray());

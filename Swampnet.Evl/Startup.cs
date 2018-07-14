@@ -116,13 +116,13 @@ namespace Swampnet.Evl
                 .WriteTo.Console()
                 .CreateLogger();
 
-            //loggerFactory.AddSerilog(); // Pretty noisy!
-            loggerFactory.AddEntityFrameworkLogger();
-
             appLifetime.ApplicationStopped.Register(Log.CloseAndFlush);
 
 			if (env.IsDevelopment())
             {
+                //loggerFactory.AddSerilog(); // Pretty noisy!
+                loggerFactory.AddEntityFrameworkLogger();
+
                 app.UseDeveloperExceptionPage();
 
                 // Enable middleware to serve generated Swagger as a JSON endpoint.
