@@ -12,7 +12,7 @@ namespace Swampnet.Evl.Actions
     {
         public string Type => "add-property";
         public string Name => "Add property";
-        public string Description => "@todo: Description for add-property";
+        public string Description => "Add property to event";
 
         public Task ApplyAsync(EventDetails evt, ActionDefinition actionDefinition, Rule rule)
         {

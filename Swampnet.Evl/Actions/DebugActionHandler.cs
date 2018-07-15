@@ -14,7 +14,7 @@ namespace Swampnet.Evl.Actions
     {
         public string Type => "debug";
         public string Name => "Debug";
-        public string Description => "@todo: Description for debug";
+        public string Description => "Debug action. Just no-ops";
 
         public Task ApplyAsync(EventDetails evt, ActionDefinition actionDefinition, Rule rule)
         {

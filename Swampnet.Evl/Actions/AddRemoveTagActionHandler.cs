@@ -12,7 +12,7 @@ namespace Swampnet.Evl.Actions
     {
         public string Type => "add-tag";
         public string Name => "Add tag";
-        public string Description => "@todo: Description for add-tag";
+        public string Description => "Add a tag";
 
         public Task ApplyAsync(EventDetails evt, ActionDefinition actionDefinition, Rule rule)
         {
