@@ -26,7 +26,7 @@ namespace Swampnet.Evl.EventProcessors
 
         public async Task ProcessAsync(EventDetails evt)
         {
-			var rules = new List<Rule>(await _rules.LoadAsync(evt.Organisation));
+			var rules = new List<Rule>(await _rules.LoadActiveAsync(evt.Organisation));
 
             var expressionEvaluator = new ExpressionEvaluator();
 

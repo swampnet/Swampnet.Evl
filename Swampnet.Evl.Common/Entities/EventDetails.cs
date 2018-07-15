@@ -16,7 +16,7 @@ namespace Swampnet.Evl.Common.Entities
             Triggers = new List<Trigger>();
         }
 
-        new public Guid Id { get; set; }
+        public Guid Id { get; set; }
 
         [JsonIgnore]
         public Organisation Organisation { get; set; }

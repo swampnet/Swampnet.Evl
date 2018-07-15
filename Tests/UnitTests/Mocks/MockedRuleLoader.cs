@@ -16,12 +16,12 @@ namespace UnitTests.Mocks
             _rules = rules;
         }
 
-        public Task CreateAsync(Organisation profile, Rule rule)
+        public Task CreateAsync(Organisation org, Rule rule)
         {
             throw new NotImplementedException();
         }
 
-        public Task DeleteAsync(Organisation profile, Guid id)
+        public Task DeleteAsync(Organisation org, Guid id)
         {
             throw new NotImplementedException();
         }
@@ -31,7 +31,7 @@ namespace UnitTests.Mocks
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Rule>> LoadAsync(Organisation org)
+        public Task<IEnumerable<Rule>> LoadActiveAsync(Organisation org)
         {
             return Task.Run(() => _rules);
         }
@@ -41,13 +41,13 @@ namespace UnitTests.Mocks
             throw new NotImplementedException();
         }
 
-        public Task UpdateAsync(Organisation profile, Rule rule)
+        public Task UpdateAsync(Organisation org, Rule rule)
         {
             throw new NotImplementedException();
         }
 
 
-        public Task ReorderAsync(Organisation profile, IEnumerable<RuleOrder> rules)
+        public Task ReorderAsync(Organisation org, IEnumerable<RuleOrder> rules)
         {
             throw new NotImplementedException();
         }

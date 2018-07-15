@@ -25,7 +25,9 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
         {
             using (var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))
             {
-                var rules = await context.Rules.Where(r => r.IsActive && r.OrganisationId == org.Id).ToListAsync();
+                var query = context.Rules.Where(r => r.OrganisationId == org.Id);
+
+                var rules = await query.ToListAsync();
 
                 return rules.Select(Convert.ToRuleSummary);
             }
@@ -54,12 +56,17 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
         }
 
 
-        public async Task<IEnumerable<Rule>> LoadAsync(Organisation org)
+        /// <summary>
+        /// Return all active rules
+        /// </summary>
+        /// <param name="org"></param>
+        /// <returns></returns>
+        public async Task<IEnumerable<Rule>> LoadActiveAsync(Organisation org)
         {
             using (var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))
             {
                 var rules = await context.Rules
-                                .Where(r => r.IsActive && r.OrganisationId == org.Id)
+                                .Where(r => r.OrganisationId == org.Id && r.IsActive)
                                 .ToListAsync();
 
                 return rules.Select(r => Convert.ToRule(r));
