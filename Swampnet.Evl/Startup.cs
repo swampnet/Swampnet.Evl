@@ -96,9 +96,9 @@ namespace Swampnet.Evl
         /// </summary>
         public void Configure(
             IApplicationBuilder app,
-            IHostingEnvironment env,
+            Microsoft.AspNetCore.Hosting.IHostingEnvironment env,
             ILoggerFactory loggerFactory,
-            IApplicationLifetime appLifetime,
+            Microsoft.AspNetCore.Hosting.IApplicationLifetime appLifetime,
             IEventDataAccess dal,
             IConfiguration cfg,
             IEventQueueProcessor eventProcessor)
