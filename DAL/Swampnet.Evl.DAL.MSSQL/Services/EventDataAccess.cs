@@ -29,11 +29,11 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
             {
                 var internalEvent = Convert.ToEvent(orgid, evt, context);
 
-                // Truncate summary, but keep a copy of the original text in a property.
-                if (internalEvent.Summary.Length > 1000)
+                if(internalEvent.Summary.Length > 8000)
                 {
-                    internalEvent.AddProperty(new Property("Summary", evt.Summary));
-                    internalEvent.Summary = internalEvent.Summary.Truncate(1000, true);
+                    var fullSummary = internalEvent.Summary;
+                    // TODO: Put remainder of summary in properties
+                    internalEvent.Summary = internalEvent.Summary.Truncate(8000, true);
                 }
 
                 if (string.IsNullOrEmpty(internalEvent.Source))
@@ -57,8 +57,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
             using (var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))
             {
                 var query = context.Events
-                    .Include(e => e.InternalEventProperties)
-                        .ThenInclude(p => p.Property)
+                    .Include(e => e.Properties)
                     .Include(e => e.InternalEventTags)
                         .ThenInclude(t => t.Tag)
                     .Include(e => e.Triggers)
@@ -87,8 +86,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
             using (var context = EvlContext.Create(_cfg.GetConnectionString(EvlContext.CONNECTION_NAME)))
             {
                 var query = context.Events
-                    .Include(e => e.InternalEventProperties)
-                        .ThenInclude(p => p.Property)
+                    .Include(e => e.Properties)
                     .Include(e => e.InternalEventTags)
                         .ThenInclude(t => t.Tag)
                     .Include(e => e.Triggers)
@@ -184,7 +182,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
                             var name = x[0].Trim();
                             var value = x.Length > 1 ? x[1].Trim() : "";
 
-                            query = query.Where(e => e.InternalEventProperties.Any(p => p.Property.Name == name && p.Property.Value.Contains(value)));
+                            query = query.Where(e => e.Properties.Any(p => p.Name == name && p.Value.Contains(value)));
                         }
                     }
                 }

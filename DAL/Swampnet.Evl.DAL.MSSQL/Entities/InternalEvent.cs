@@ -12,6 +12,11 @@ namespace Swampnet.Evl.DAL.MSSQL.Entities
     /// </summary>
     class InternalEvent
     {
+        public InternalEvent()
+        {
+            Properties = new List<InternalEventProperty>();
+        }
+
         public Guid Id { get; set; }
 
         public Guid OrganisationId { get; set; }
@@ -33,7 +38,8 @@ namespace Swampnet.Evl.DAL.MSSQL.Entities
         /// </summary>
 		public string Summary { get; set; }
 
-		public List<InternalEventProperties> InternalEventProperties { get; set; }
+		//public List<InternalEventProperties> InternalEventProperties { get; set; }
+        public List<InternalEventProperty> Properties { get; set; }
 
         public List<InternalEventTags> InternalEventTags { get; set; }
 
@@ -121,17 +127,18 @@ namespace Swampnet.Evl.DAL.MSSQL.Entities
         internal void AddProperty(IProperty property)
         {
             // Don't add dups
-            if (GetProperties().Any(x => x.Category == property.Category && x.Name == property.Name && x.Value == property.Value))
+            if (Properties.Any(x => x.Category == property.Category && x.Name == property.Name && x.Value == property.Value))
             {
                 return;
             }
             
-            if(InternalEventProperties == null)
+            Properties.Add(new InternalEventProperty()
             {
-                InternalEventProperties = new List<Entities.InternalEventProperties>();
-            }
-
-            InternalEventProperties.Add(new InternalEventProperties() { Event = this, Property = Convert.ToInternalProperty(property) });
+                Event = this,
+                Category = property.Category.Truncate(128),
+                Name = property.Category.Truncate(128),
+                Value = property.Value.Truncate(8000, true)
+            });
         }
 
 
@@ -146,11 +153,5 @@ namespace Swampnet.Evl.DAL.MSSQL.Entities
             }
         }
 
-        internal IEnumerable<InternalProperty> GetProperties()
-        {
-            return InternalEventProperties == null
-                ? Enumerable.Empty<InternalProperty>()
-                : InternalEventProperties.Select(p => p.Property);
-        }
     }
 }
