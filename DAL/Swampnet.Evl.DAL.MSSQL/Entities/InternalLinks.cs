@@ -11,19 +11,19 @@ namespace Swampnet.Evl.DAL.MSSQL.Entities
     /// <summary>
     /// 
     /// </summary>
-    class InternalEventProperties
-    {
-        public Guid EventId { get; set; }
-        public InternalEvent Event { get; set; }
+    //class InternalEventProperties
+    //{
+    //    public Guid EventId { get; set; }
+    //    public InternalEvent Event { get; set; }
 
-        public long PropertyId { get; set; }
-        public InternalProperty Property { get; set; }
+    //    public long PropertyId { get; set; }
+    //    public InternalProperty Property { get; set; }
 
-        public override string ToString()
-        {
-            return $"{Event?.Id} - [{Property}]";
-        }
-    }
+    //    public override string ToString()
+    //    {
+    //        return $"{Event?.Id} - [{Property}]";
+    //    }
+    //}
 
 
     /// <summary>

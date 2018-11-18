@@ -64,9 +64,9 @@ namespace Swampnet.Evl.DAL.MSSQL
                     Summary = source.Summary,
                     TimestampUtc = source.TimestampUtc,
                     LastUpdatedUtc = source.ModifiedOnUtc,
-                    Properties = source.InternalEventProperties == null
+                    Properties = source.Properties == null
                         ? null
-                        : source.InternalEventProperties.Select(p => Convert.ToProperty(p.Property)).ToList(),
+                        : source.Properties.Select(p => Convert.ToProperty(p)).ToList(),
                     Source = source.Source,
                     SourceVersion = source.SourceVersion,
                     Tags = source.InternalEventTags == null
