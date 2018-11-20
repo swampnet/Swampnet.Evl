@@ -138,7 +138,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Entities
                 Event = this,
                 Category = property.Category.Truncate(128),
                 Name = property.Name.Truncate(128),
-                Value = property.Value.Truncate(8000, true)
+                Value = property.Value == null ? "[null]" : property.Value.Truncate(8000, true)
             });
         }
 
