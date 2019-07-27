@@ -1,10 +1,8 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
     <UserSecretsId>355f8b3c-fe44-4d1f-9100-40b20862c207</UserSecretsId>
-    <ApplicationInsightsResourceId>/subscriptions/36659b06-e93e-4a9b-9729-65e952fc95c4/resourcegroups/evl/providers/microsoft.insights/components/Evl-Insights</ApplicationInsightsResourceId>
-    <ApplicationInsightsAnnotationResourceId>/subscriptions/36659b06-e93e-4a9b-9729-65e952fc95c4/resourcegroups/evl/providers/microsoft.insights/components/Evl-Insights</ApplicationInsightsAnnotationResourceId>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -12,14 +10,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.5.0" />
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.7.1" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.Extensions.PlatformAbstractions" Version="1.1.0" />
-    <PackageReference Include="Serilog" Version="2.7.1" />
-    <PackageReference Include="Serilog.Exceptions" Version="4.1.0" />
-    <PackageReference Include="Serilog.Extensions.Logging" Version="2.0.2" />
+    <PackageReference Include="Serilog" Version="2.8.0" />
+    <PackageReference Include="Serilog.Exceptions" Version="5.3.1" />
+    <PackageReference Include="Serilog.Extensions.Logging" Version="2.0.4" />
     <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="3.0.0" />
+    <PackageReference Include="Serilog.Sinks.PeriodicBatching" Version="2.2.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="4.0.1" />
   </ItemGroup>
 
   <ItemGroup>

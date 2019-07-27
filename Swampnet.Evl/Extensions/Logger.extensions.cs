@@ -1,7 +1,6 @@
 ﻿using Serilog;
 using Serilog.Configuration;
 using Serilog.Events;
-using Serilog.Sinks.Evl;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +11,7 @@ using Swampnet.Evl.Contracts;
 using System.Diagnostics;
 using System.Reflection;
 using Swampnet.Evl.Common.Entities;
+using Serilog.Sinks.Evl;
 
 namespace Swampnet.Evl
 {

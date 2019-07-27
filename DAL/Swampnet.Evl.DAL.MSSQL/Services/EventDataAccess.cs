@@ -73,6 +73,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
                 {
                     query = query.Where(e => e.OrganisationId == org.Id);
                 }
+                //var sql = query.ToSql();
 
                 var evt = await query.SingleOrDefaultAsync();
 
@@ -215,7 +216,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Services
 					query = query.Skip(criteria.PageSize * criteria.Page).Take(criteria.PageSize);
 				}
 
-                //var sql = query.ToSql();
+                var sql = query.ToSql();
 				var results = await query.ToArrayAsync();
 
                 return results.Select(Convert.ToEventSummary);
