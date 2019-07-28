@@ -112,6 +112,7 @@ namespace Swampnet.Evl.DAL.MSSQL.Entities
             }
         }
 
+
         internal void AddTags(EvlContext context, IEnumerable<string> tags, Guid orgid)
         {
             if (tags != null && tags.Any())
@@ -136,8 +137,8 @@ namespace Swampnet.Evl.DAL.MSSQL.Entities
             {
                 Event = this,
                 Category = property.Category.Truncate(128),
-                Name = property.Category.Truncate(128),
-                Value = property.Value.Truncate(8000, true)
+                Name = property.Name.Truncate(128),
+                Value = property.Value == null ? "[null]" : property.Value.Truncate(8000, true)
             });
         }
 

@@ -37,7 +37,9 @@ namespace Swampnet.Evl
                 return value;
             }
 
-            return value.Length <= maxLength ? value : (value.Substring(0, maxLength) + (withEllipses ? "..." : ""));
+            return withEllipses
+                ? value.Length <= maxLength ? value : (value.Substring(0, maxLength - 3) + "...")
+                : value.Length <= maxLength ? value : (value.Substring(0, maxLength));
         }
 
         /// <summary>
