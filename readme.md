@@ -1,5 +1,5 @@
-master ![Build status](https://swampnet.visualstudio.com/_apis/public/build/definitions/2d0f5092-dcc4-4d85-80b6-c0ecbac3c14f/12/badge)
-develop ![Build status](https://swampnet.visualstudio.com/_apis/public/build/definitions/2d0f5092-dcc4-4d85-80b6-c0ecbac3c14f/16/badge)
+master [![Build status](https://swampnet.visualstudio.com/Swampnet.Evl/_apis/build/status/Evl/CI%20-%20master%20(publish%20staging))](https://swampnet.visualstudio.com/Swampnet.Evl/_build/latest?definitionId=12)
+develop [![Build status](https://swampnet.visualstudio.com/Swampnet.Evl/_apis/build/status/Evl/CI%20-%20develop)](https://swampnet.visualstudio.com/Swampnet.Evl/_build/latest?definitionId=16)
 
 # Generic event logging service
 
