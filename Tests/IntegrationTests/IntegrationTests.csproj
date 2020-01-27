@@ -15,10 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Serilog.Sinks.Evl\Serilog.Sinks.Evl.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Update="cfg.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

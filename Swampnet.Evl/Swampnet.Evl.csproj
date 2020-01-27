@@ -29,7 +29,6 @@
     <ProjectReference Include="..\DAL\Swampnet.Evl.DAL.MSSQL\Swampnet.Evl.DAL.MSSQL.csproj" />
     <ProjectReference Include="..\Plugins\Swampnet.Evl.Plugins.Email\Swampnet.Evl.Plugins.Email.csproj" />
     <ProjectReference Include="..\Plugins\Swampnet.Evl.Plugins.Slack\Swampnet.Evl.Plugins.Slack.csproj" />
-    <ProjectReference Include="..\Serilog.Sinks.Evl\Serilog.Sinks.Evl.csproj" />
     <ProjectReference Include="..\Swampnet.Evl.Client\Swampnet.Evl.Client.csproj" />
     <ProjectReference Include="..\Swampnet.Evl.Common\Swampnet.Evl.Common.csproj" />
   </ItemGroup>
