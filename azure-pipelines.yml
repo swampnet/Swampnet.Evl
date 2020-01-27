@@ -8,7 +8,7 @@ trigger:
 
 variables:
   # Azure Resource Manager connection created during pipeline creation
-  azureSubscription: '78b08473-ac09-4991-bb57-ab800ebab2ab'
+  azureSubscription: '36659b06-e93e-4a9b-9729-65e952fc95c4'
 
   # Function app name
   functionAppName: 'swampnet-events'
