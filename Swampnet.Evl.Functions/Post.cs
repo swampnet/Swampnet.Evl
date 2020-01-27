@@ -11,13 +11,12 @@ using Newtonsoft.Json;
 using System.Linq;
 using Microsoft.Extensions.Configuration;
 
-
 namespace Swampnet.Evl.Functions
 {
-    public static class EventsMain
+    public static class Post
     {
         [FunctionName("post-event")]
-        public static async Task<IActionResult> PostEvent(
+        public static async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req,
             [Queue("events"), StorageAccount("event-queue")] ICollector<string> queue,
             ILogger log)
@@ -25,33 +24,29 @@ namespace Swampnet.Evl.Functions
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
 
             //log.LogInformation(requestBody);
+            Test();
 
+            // Create an ID if we don't already have one.
             var e = JsonConvert.DeserializeObject<Event>(requestBody);
             if (e.Id == Guid.Empty)
             {
                 e.Id = Guid.NewGuid();
             }
 
+            // At this point we just want to push it into a queue
             queue.Add(JsonConvert.SerializeObject(e));
 
-            // At this point we just want to push it into a queue (probably a storage queue if 64K is enough, which I think it probably is) and return.
             // We probably just want to return a 200 rather than echo the event back (We *could* return the Id or a small summary, but what do we do with
             // batch events?)
             return new OkObjectResult(e);
         }
 
-
-        [FunctionName("search")]
-        public static async Task<IActionResult> Search([HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req, ILogger log)
+        private static void Test()
         {
-            await Task.CompletedTask;
-
-            return new OkObjectResult(Enumerable.Range(0, 100).Select(x => new Event()
-            {
-                Id = Guid.NewGuid(),
-                Summary = $"Event {x}",
-                TimestampUtc = DateTime.Now.AddSeconds(-x)
-            }));
+            //using(var context = new EventsContext())
+            //{
+            //    var xx = context.Events.ToArray();
+            //}
         }
     }
 }
