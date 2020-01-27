@@ -7,6 +7,7 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using System.Linq;
 
 namespace Swampnet.Evl.Functions
 {
@@ -38,11 +39,12 @@ namespace Swampnet.Evl.Functions
         {
             await Task.CompletedTask;
 
-            return (ActionResult)new OkObjectResult(new[] {
-                new Event(),
-                new Event(),
-                new Event()
-            });
+            return new OkObjectResult(Enumerable.Range(0, 100).Select(x => new Event()
+            {
+                Id = Guid.NewGuid(),
+                Summary = $"Event {x}",
+                TimestampUtc = DateTime.Now.AddSeconds(-x)                
+            }));
         }
     }
 }
