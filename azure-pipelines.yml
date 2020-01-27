@@ -17,7 +17,7 @@ variables:
   vmImageName: 'vs2017-win2016'
 
   # Working Directory
-  workingDirectory: 's'
+  workingDirectory: '$(System.DefaultWorkingDirectory)/Swampnet.Evl.Functions'
 
 stages:
 - stage: Build
