@@ -7,6 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Swampnet.Evl.Functions", "S
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{EF8D54C5-3414-4E13-944D-8CB12191D1A5}"
 	ProjectSection(SolutionItems) = preProject
+		azure-pipelines.yml = azure-pipelines.yml
 		LICENSE.txt = LICENSE.txt
 		readme.md = readme.md
 	EndProjectSection
