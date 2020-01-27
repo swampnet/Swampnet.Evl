@@ -8,7 +8,7 @@ trigger:
 
 variables:
   # Azure Resource Manager connection created during pipeline creation
-  azureSubscription: '36659b06-e93e-4a9b-9729-65e952fc95c4'
+  azureSubscription: '877e561a-c62b-4714-98b9-7bc79c6320db'
 
   # Function app name
   functionAppName: 'swampnet-events'
@@ -17,7 +17,7 @@ variables:
   vmImageName: 'vs2017-win2016'
 
   # Working Directory
-  workingDirectory: '$(System.DefaultWorkingDirectory)/Swampnet.Evl.Functions'
+  workingDirectory: 's'
 
 stages:
 - stage: Build
