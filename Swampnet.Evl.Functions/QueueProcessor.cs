@@ -10,7 +10,7 @@ namespace Swampnet.Evl.Functions
     public static class QueueProcessor
     {
         [FunctionName("queue-processor")]
-        public static async void Run([QueueTrigger("events", Connection = "event-queue")]string json, ILogger log)
+        public static async Task Run([QueueTrigger("events", Connection = "event-queue")]string json, ILogger log)
         {
             var e = JsonConvert.DeserializeObject<Event>(json);
 

@@ -12,9 +12,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{EF8D54C5-3
 		readme.md = readme.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Swampnet.Evl", "Swampnet.Evl\Swampnet.Evl.csproj", "{B685963C-B912-451E-9C57-FBEFEE30F9E8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Swampnet.Evl", "Swampnet.Evl\Swampnet.Evl.csproj", "{B685963C-B912-451E-9C57-FBEFEE30F9E8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Swampnet.Evl.DAL", "Swampnet.Evl.DAL\Swampnet.Evl.DAL.csproj", "{EEAEE837-690D-4480-894A-42030C3E7798}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Swampnet.Evl.DAL", "Swampnet.Evl.DAL\Swampnet.Evl.DAL.csproj", "{EEAEE837-690D-4480-894A-42030C3E7798}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
