@@ -12,19 +12,26 @@ using Swampnet.Evl.Functions.Interfaces;
 
 namespace Swampnet.Evl.Functions
 {
-    public static class Search
+    public class Search
     {
+        private readonly ITest _test;
+
+        public Search(ITest test)
+        {
+            _test = test;
+        }
+
+
         [FunctionName("search")]
-        public static async Task<IActionResult> Run(
+        public async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function,"get",Route = null)] HttpRequest req, 
-            ITest test,
             ILogger log)
         {
             await Task.CompletedTask;
 
             log.LogInformation("Running ITest.Boosh()");
 
-            test.Boosh();
+            _test.Boosh();
 
             return new OkObjectResult(Enumerable.Range(0, 100).Select(x => new Event()
             {
