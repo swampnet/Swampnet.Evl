@@ -2,8 +2,7 @@
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Swampnet.Evl.Functions.Interfaces;
-using Swampnet.Evl.Functions.Services;
+using Swampnet.Evl.Services;
 
 [assembly: FunctionsStartup(typeof(Swampnet.Evl.Functions.Startup))]
 namespace Swampnet.Evl.Functions
@@ -12,7 +11,7 @@ namespace Swampnet.Evl.Functions
     {
         public override void Configure(IFunctionsHostBuilder builder)
         {
-            builder.Services.AddSingleton<ITest, Test>();
+            builder.Services.RegisterTypes();
         }
     }
 }

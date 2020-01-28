@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System.Linq;
-using Swampnet.Evl.Functions.Interfaces;
+using Swampnet.Evl.Services.Interfaces;
 
 namespace Swampnet.Evl.Functions
 {

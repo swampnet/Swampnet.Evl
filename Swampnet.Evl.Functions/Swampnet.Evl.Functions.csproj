@@ -9,7 +9,7 @@
     <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="3.0.2" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Swampnet.Evl.DAL\Swampnet.Evl.DAL.csproj" />
+    <ProjectReference Include="..\Swampnet.Evl.Services\Swampnet.Evl.Services.csproj" />
     <ProjectReference Include="..\Swampnet.Evl\Swampnet.Evl.csproj" />
   </ItemGroup>
   <ItemGroup>

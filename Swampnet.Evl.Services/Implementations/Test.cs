@@ -1,11 +1,10 @@
-﻿using Microsoft.Extensions.Logging;
-using Swampnet.Evl.Functions.Interfaces;
+﻿using Swampnet.Evl.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Swampnet.Evl.Functions.Services
+namespace Swampnet.Evl.Services.Implementations
 {
     class Test : ITest
     {

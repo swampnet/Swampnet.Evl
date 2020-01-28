@@ -16,6 +16,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Swampnet.Evl", "Swampnet.Ev
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Swampnet.Evl.DAL", "Swampnet.Evl.DAL\Swampnet.Evl.DAL.csproj", "{EEAEE837-690D-4480-894A-42030C3E7798}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Integration", "Integration\Integration.csproj", "{004223BD-635D-4FC2-8292-6E4B9C7D276C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Swampnet.Evl.Services", "Swampnet.Evl.Services\Swampnet.Evl.Services.csproj", "{D2B0DBC5-E4C2-4274-B9CE-5B0E6001B389}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -34,6 +38,14 @@ Global
 		{EEAEE837-690D-4480-894A-42030C3E7798}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EEAEE837-690D-4480-894A-42030C3E7798}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EEAEE837-690D-4480-894A-42030C3E7798}.Release|Any CPU.Build.0 = Release|Any CPU
+		{004223BD-635D-4FC2-8292-6E4B9C7D276C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{004223BD-635D-4FC2-8292-6E4B9C7D276C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{004223BD-635D-4FC2-8292-6E4B9C7D276C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{004223BD-635D-4FC2-8292-6E4B9C7D276C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2B0DBC5-E4C2-4274-B9CE-5B0E6001B389}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2B0DBC5-E4C2-4274-B9CE-5B0E6001B389}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2B0DBC5-E4C2-4274-B9CE-5B0E6001B389}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2B0DBC5-E4C2-4274-B9CE-5B0E6001B389}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

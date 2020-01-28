@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Swampnet.Evl.Functions.Interfaces
+namespace Swampnet.Evl.Services.Interfaces
 {
     public interface ITest
     {

@@ -9,10 +9,20 @@ namespace Swampnet.Evl.DAL
     public class EventsContext : DbContext
     {
         public DbSet<Event> Events { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<Source> Sources { get; set; }
+
+        // This is bullshit
+        private readonly string _connectionString;
+
+        public EventsContext(string connectionString)
+        {
+            _connectionString = connectionString;
+        }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("events");
+            optionsBuilder.UseSqlServer(_connectionString);
 
             base.OnConfiguring(optionsBuilder);
         }
