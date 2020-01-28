@@ -8,15 +8,23 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System.Linq;
+using Swampnet.Evl.Functions.Interfaces;
 
 namespace Swampnet.Evl.Functions
 {
     public static class Search
     {
         [FunctionName("search")]
-        public static async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req, ILogger log)
+        public static async Task<IActionResult> Run(
+            [HttpTrigger(AuthorizationLevel.Function,"get",Route = null)] HttpRequest req, 
+            ITest test,
+            ILogger log)
         {
             await Task.CompletedTask;
+
+            log.LogInformation("Running ITest.Boosh()");
+
+            test.Boosh();
 
             return new OkObjectResult(Enumerable.Range(0, 100).Select(x => new Event()
             {
