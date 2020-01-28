@@ -31,14 +31,9 @@ namespace Swampnet.Evl.Functions
 
             log.LogInformation("Running ITest.Boosh()");
 
-            _test.Boosh();
+            var events = _test.Boosh();
 
-            return new OkObjectResult(Enumerable.Range(0, 100).Select(x => new Event()
-            {
-                Id = Guid.NewGuid(),
-                Summary = $"Event {x}",
-                TimestampUtc = DateTime.Now.AddSeconds(-x)
-            }));
+            return new OkObjectResult(events);
         }
     }
 }

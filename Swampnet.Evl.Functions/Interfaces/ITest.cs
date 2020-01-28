@@ -6,6 +6,6 @@ namespace Swampnet.Evl.Functions.Interfaces
 {
     public interface ITest
     {
-        void Boosh();
+        IEnumerable<Event> Boosh();
     }
 }
