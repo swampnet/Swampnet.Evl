@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Swampnet.Evl.DAL.Entities
+namespace Swampnet.Evl.Services.DAL
 {
-    public class EventEntity
+    class EventEntity
     {
         public EventEntity()
         {
@@ -31,7 +31,7 @@ namespace Swampnet.Evl.DAL.Entities
     }
 
 
-    public class CategoryEntity
+    class CategoryEntity
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -40,7 +40,7 @@ namespace Swampnet.Evl.DAL.Entities
     }
 
 
-    public class SourceEntity
+    class SourceEntity
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -49,7 +49,7 @@ namespace Swampnet.Evl.DAL.Entities
     }
 
 
-    public class EventPropertyEntity
+    class EventPropertyEntity
     {
         public long Id { get; set; }
 

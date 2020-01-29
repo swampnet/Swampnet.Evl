@@ -11,7 +11,7 @@ namespace Swampnet.Evl.Functions
     {
         public override void Configure(IFunctionsHostBuilder builder)
         {
-            builder.Services.RegisterTypes();
+            builder.Services.RegisterServiceTypes();
         }
     }
 }

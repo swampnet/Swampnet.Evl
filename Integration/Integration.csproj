@@ -14,7 +14,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Swampnet.Evl.DAL\Swampnet.Evl.DAL.csproj" />
     <ProjectReference Include="..\Swampnet.Evl.Services\Swampnet.Evl.Services.csproj" />
     <ProjectReference Include="..\Swampnet.Evl\Swampnet.Evl.csproj" />
   </ItemGroup>
