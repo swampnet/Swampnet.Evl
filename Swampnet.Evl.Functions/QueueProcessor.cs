@@ -11,10 +11,12 @@ namespace Swampnet.Evl.Functions
     public class QueueProcessor
     {
         private readonly IEventsRepository _eventsRepository;
+        private readonly IProcess _process;
 
-        public QueueProcessor(IEventsRepository eventsRepository)
+        public QueueProcessor(IEventsRepository eventsRepository, IProcess process)
         {
             _eventsRepository = eventsRepository;
+            _process = process;
         }
 
 
@@ -25,9 +27,15 @@ namespace Swampnet.Evl.Functions
 
             log.LogInformation($"de-queued event: {e.Id} / {e.Summary}");
 
+            // Save event to DB
             await _eventsRepository.SaveAsync(e);
 
-            log.LogInformation($"complete: {e.Id} / {e.Summary}");
+            log.LogInformation($"saved: {e.Id}");
+
+            // Run any processors we have registered
+            await _process.ProcessEventAsync(e.Id);
+
+            log.LogInformation($"complete: {e.Id}");
         }
     }
 }

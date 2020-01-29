@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Swampnet.Evl.Services.DAL;
 using Swampnet.Evl.Services.Implementations;
+using Swampnet.Evl.Services.Implementations.EventProcessors;
 using Swampnet.Evl.Services.Interfaces;
 using System;
 
@@ -18,8 +19,13 @@ namespace Swampnet.Evl.Services
                 .AddEnvironmentVariables()
                 .Build();
 
+            services.AddSingleton<IProcess, ProcessService>();
+            services.AddSingleton<IEventProcessor, TestProcessor01>();
+            services.AddSingleton<IEventProcessor, TestProcessor02>();
+
             services.AddTransient<ITest, Test>();
             services.AddTransient<IEventsRepository, EventsRepository>();
+
             services.AddDbContext<EventsContext>(options =>
             {
                 options.UseSqlServer(config.GetConnectionString("events"));

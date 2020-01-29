@@ -12,6 +12,7 @@ namespace Swampnet.Evl.Services.Implementations
     class EventsRepository : IEventsRepository
     {
         private readonly EventsContext _context;
+        private IEnumerable<CategoryEntity> _categories;
 
         public EventsRepository(EventsContext context)
         {
@@ -36,8 +37,8 @@ namespace Swampnet.Evl.Services.Implementations
                 Reference = e.Id == Guid.Empty ? Guid.NewGuid() : e.Id,
                 TimestampUtc = e.TimestampUtc,
                 Summary = e.Summary,
-                Category = _context.Categories.Single(c => c.Name == e.Category.ToString().ToLowerInvariant()),
-                Source = _context.Sources.Single(c => c.Name == e.Source)
+                Category = await ResolveCategoryAsync(e.Category),
+                Source = await ResolveSource(e.Source)
             };
 
             foreach (var p in e.Properties) 
@@ -50,6 +51,7 @@ namespace Swampnet.Evl.Services.Implementations
             }
 
             _context.Events.Add(entity);
+
             await _context.SaveChangesAsync();
         }
 
@@ -67,12 +69,41 @@ namespace Swampnet.Evl.Services.Implementations
                 Category = (Category)Enum.Parse(typeof(Category), e.Category.Name.ToLower()),
                 Summary = e.Summary,
                 TimestampUtc = e.TimestampUtc,
+                Source = e.Source.Name,
                 Properties = e.Properties.Select(p => new EventProperty() {
                     Category = p.Category,
                     Name = p.Name,
                     Value = p.Value
-                }).ToArray()                
+                }).ToArray()
             });
+        }
+
+
+        private async Task<CategoryEntity> ResolveCategoryAsync(Category category)
+        {
+            if(_categories == null)
+            {
+                _categories = await _context.Categories.ToArrayAsync();
+            }
+            return _categories.Single(c => c.Name.Equals(category.ToString(), StringComparison.InvariantCultureIgnoreCase));
+        }
+
+
+        private async Task<SourceEntity> ResolveSource(string source)
+        {
+            var entity = await _context.Sources.SingleOrDefaultAsync(s => s.Name == source);
+
+            if (entity == null)
+            {
+                entity = new SourceEntity()
+                {
+                    Name = source
+                };
+
+                await _context.Sources.AddAsync(entity);
+            }
+
+            return entity;
         }
     }
 }
