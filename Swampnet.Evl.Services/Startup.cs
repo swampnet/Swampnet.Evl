@@ -19,12 +19,12 @@ namespace Swampnet.Evl.Services
                 .AddEnvironmentVariables()
                 .Build();
 
-            services.AddSingleton<IProcess, ProcessService>();
-            services.AddSingleton<IEventProcessor, TestProcessor01>();
-            services.AddSingleton<IEventProcessor, TestProcessor02>();
-
             services.AddTransient<ITest, Test>();
             services.AddTransient<IEventsRepository, EventsRepository>();
+            services.AddTransient<IProcess, ProcessService>();
+
+            services.AddSingleton<IEventProcessor, TestProcessor01>();
+            services.AddSingleton<IEventProcessor, TestProcessor02>();
 
             services.AddDbContext<EventsContext>(options =>
             {
