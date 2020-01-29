@@ -45,7 +45,7 @@ namespace Integration
                 var evt = new Swampnet.Evl.Event()
                 {
                     Category = Swampnet.Evl.Category.info,
-                    Source = $"test-03",
+                    Source = $"test-04",
                     Summary = $"Test @ {DateTime.UtcNow}",
                     Properties = new[] {
                         new Swampnet.Evl.EventProperty()
@@ -61,11 +61,11 @@ namespace Integration
 
             //await _maintanence.RunAsync();
 
-            //var x = await _eventsRepository.SearchAsync();
-            //foreach (var e in x)
-            //{
-            //    Console.WriteLine($"[{e.Category}] [{e.Source}] {e.Summary}");
-            //}
+            var x = await _eventsRepository.SearchAsync();
+            foreach (var e in x)
+            {
+                Console.WriteLine($"[{e.Category}] [{e.Source}] {e.Summary}");
+            }
 
             //await _process.ProcessEventAsync(Guid.Parse("4F2E8EAF-9E31-4B24-8283-CF38FA2B6A88"));
         }

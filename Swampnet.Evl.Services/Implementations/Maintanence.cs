@@ -8,6 +8,13 @@ using System.Threading.Tasks;
 
 namespace Swampnet.Evl.Services.Implementations
 {
+    /// <summary>
+    /// Maintanence jobs
+    /// 
+    /// - Fix up duplicate source
+    /// - truncate data
+    ///  - based on category and age
+    /// </summary>
     class Maintanence : IMaintanence
     {
         private readonly EventsContext _context;
