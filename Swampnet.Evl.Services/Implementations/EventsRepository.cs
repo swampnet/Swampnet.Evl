@@ -38,7 +38,7 @@ namespace Swampnet.Evl.Services.Implementations
                 TimestampUtc = e.TimestampUtc,
                 Summary = e.Summary,
                 Category = await ResolveCategoryAsync(e.Category),
-                Source = await ResolveSource(e.Source)
+                Source = await ResolveSourceAsync(e.Source)
             };
 
             foreach (var p in e.Properties) 
@@ -88,22 +88,30 @@ namespace Swampnet.Evl.Services.Implementations
             return _categories.Single(c => c.Name.Equals(category.ToString(), StringComparison.InvariantCultureIgnoreCase));
         }
 
+        private static object _lock = new object();
 
-        private async Task<SourceEntity> ResolveSource(string source)
+        private Task<SourceEntity> ResolveSourceAsync(string source)
         {
-            var entity = await _context.Sources.SingleOrDefaultAsync(s => s.Name == source);
+            var entity = _context.Sources.Local.SingleOrDefault(s => s.Name == source);
 
             if (entity == null)
             {
-                entity = new SourceEntity()
+                lock (_lock)
                 {
-                    Name = source
-                };
+                    entity = _context.Sources.Local.SingleOrDefault(s => s.Name == source);
+                    if(entity == null)
+                    {
+                        entity = new SourceEntity()
+                        {
+                            Name = source
+                        };
 
-                await _context.Sources.AddAsync(entity);
+                        _context.Sources.Add(entity);
+                    }
+                }
             }
 
-            return entity;
+            return Task.FromResult(entity);
         }
     }
 }

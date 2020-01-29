@@ -32,6 +32,9 @@ namespace Swampnet.Evl.Services.Implementations
             foreach(var p in _eventProcessors.OrderBy(x => x.Priority))
             {
                 await p.ProcessAsync(e);
+
+                e.ModifiedOnUtc = DateTime.UtcNow;
+
                 await _context.SaveChangesAsync();
             }
         }
