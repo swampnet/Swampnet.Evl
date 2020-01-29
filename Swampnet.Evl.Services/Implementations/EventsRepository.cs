@@ -88,30 +88,23 @@ namespace Swampnet.Evl.Services.Implementations
             return _categories.Single(c => c.Name.Equals(category.ToString(), StringComparison.InvariantCultureIgnoreCase));
         }
 
-        private static object _lock = new object();
 
-        private Task<SourceEntity> ResolveSourceAsync(string source)
+        private async Task<SourceEntity> ResolveSourceAsync(string source)
         {
-            var entity = _context.Sources.Local.SingleOrDefault(s => s.Name == source);
+            // So, we're *definately* create dups here if we have a new source and have many concurrent requests with that source coming in.
+            var entity = await _context.Sources.SingleOrDefaultAsync(s => s.Name == source);
 
             if (entity == null)
             {
-                lock (_lock)
+                entity = new SourceEntity()
                 {
-                    entity = _context.Sources.Local.SingleOrDefault(s => s.Name == source);
-                    if(entity == null)
-                    {
-                        entity = new SourceEntity()
-                        {
-                            Name = source
-                        };
+                    Name = source
+                };
 
-                        _context.Sources.Add(entity);
-                    }
-                }
+                _context.Sources.Add(entity);
             }
 
-            return Task.FromResult(entity);
+            return entity;
         }
     }
 }

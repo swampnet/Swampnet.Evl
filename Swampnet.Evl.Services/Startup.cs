@@ -22,6 +22,7 @@ namespace Swampnet.Evl.Services
             services.AddTransient<ITest, Test>();
             services.AddTransient<IEventsRepository, EventsRepository>();
             services.AddTransient<IProcess, ProcessService>();
+            services.AddTransient<IMaintanence, Maintanence>();
 
             services.AddSingleton<IEventProcessor, TestProcessor01>();
             services.AddSingleton<IEventProcessor, TestProcessor02>();

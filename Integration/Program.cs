@@ -20,6 +20,7 @@ namespace Integration
         private readonly ITest _test;
         private readonly IEventsRepository _eventsRepository;
         private readonly IProcess _process;
+        private readonly IMaintanence _maintanence;
 
         static async Task Main(string[] args)
         {
@@ -27,22 +28,24 @@ namespace Integration
         }
 
 
-        public Program(ITest test, IEventsRepository eventsRepository, IProcess process)
+        public Program(ITest test, IEventsRepository eventsRepository, IProcess process, IMaintanence maintanence)
         {
             _test = test;
             _eventsRepository = eventsRepository;
             _process = process;
+            _maintanence = maintanence;
         }
 
         
         public async Task Run()
         {
-            for(int i = 0; i < 5; i++)
+
+            for (int i = 0; i < 50; i++)
             {
                 var evt = new Swampnet.Evl.Event()
                 {
                     Category = Swampnet.Evl.Category.info,
-                    Source = $"test",//-{i:00}",
+                    Source = $"test-03",
                     Summary = $"Test @ {DateTime.UtcNow}",
                     Properties = new[] {
                         new Swampnet.Evl.EventProperty()
@@ -56,11 +59,13 @@ namespace Integration
                 await _eventsRepository.SaveAsync(evt);
             }
 
-            var x = await _eventsRepository.SearchAsync();
-            foreach (var e in x)
-            {
-                Console.WriteLine($"[{e.Category}] [{e.Source}] {e.Summary}");
-            }
+            //await _maintanence.RunAsync();
+
+            //var x = await _eventsRepository.SearchAsync();
+            //foreach (var e in x)
+            //{
+            //    Console.WriteLine($"[{e.Category}] [{e.Source}] {e.Summary}");
+            //}
 
             //await _process.ProcessEventAsync(Guid.Parse("4F2E8EAF-9E31-4B24-8283-CF38FA2B6A88"));
         }
