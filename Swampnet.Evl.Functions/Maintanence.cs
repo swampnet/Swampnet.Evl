@@ -17,8 +17,8 @@ namespace Swampnet.Evl.Functions
         }
 
 
-        [FunctionName("Maintanence")]
-        public async Task Run([TimerTrigger("0 * * * * *")]TimerInfo myTimer, ILogger log)
+        [FunctionName("maintanence")]
+        public async Task Run([TimerTrigger("0 0 * * * *")]TimerInfo myTimer, ILogger log)
         {
             log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
             
