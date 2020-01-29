@@ -15,6 +15,7 @@ namespace Swampnet.Evl.Services
             var config = new ConfigurationBuilder()
                 .AddJsonFile("settings.json", true, true)
                 .AddJsonFile("local.settings.json", true, true)
+                .AddEnvironmentVariables()
                 .Build();
 
             services.AddTransient<ITest, Test>();
