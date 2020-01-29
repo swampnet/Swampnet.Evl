@@ -7,6 +7,11 @@ namespace Swampnet.Evl.Services.DAL
 {
     class EventsContext : DbContext
     {
+        public EventsContext(DbContextOptions<EventsContext> options)
+            : base(options)
+        {
+        }
+
         public DbSet<EventEntity> Events { get; set; }
         public DbSet<CategoryEntity> Categories { get; set; }
         public DbSet<SourceEntity> Sources { get; set; }

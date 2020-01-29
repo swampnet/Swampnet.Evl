@@ -15,6 +15,7 @@ namespace Swampnet.Evl
 
         [JsonConverter(typeof(StringEnumConverter))]
         public Category Category { get; set; }
+        public string Source { get; set; }
 
         public string Summary { get; set; }
         public DateTime TimestampUtc { get; set; }
@@ -39,10 +40,11 @@ namespace Swampnet.Evl
         public string Value { get; set; }
     }
 
+
     public enum Category
     {
-        Debug,
-        Info,
-        Error
+        debug,
+        info,
+        error
     }
 }

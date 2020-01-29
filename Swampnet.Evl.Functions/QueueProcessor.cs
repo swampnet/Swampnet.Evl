@@ -4,19 +4,29 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Swampnet.Evl.Services.Interfaces;
 
 namespace Swampnet.Evl.Functions
 {
-    public static class QueueProcessor
+    public class QueueProcessor
     {
+        private readonly IEventsRepository _eventsRepository;
+
+        public QueueProcessor(IEventsRepository eventsRepository)
+        {
+            _eventsRepository = eventsRepository;
+        }
+
+
         [FunctionName("queue-processor")]
-        public static async Task Run([QueueTrigger("events", Connection = "event-queue")]string json, ILogger log)
+        public async Task Run([QueueTrigger("events", Connection = "event-queue")]string json, ILogger log)
         {
             var e = JsonConvert.DeserializeObject<Event>(json);
 
-            //throw new ApplicationException("test");
             log.LogInformation($"de-queued event: {e.Id} / {e.Summary}");
-            await Task.Delay(2000);
+
+            await _eventsRepository.SaveAsync(e);
+
             log.LogInformation($"complete: {e.Id} / {e.Summary}");
         }
     }

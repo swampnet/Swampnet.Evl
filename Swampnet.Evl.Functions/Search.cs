@@ -14,11 +14,11 @@ namespace Swampnet.Evl.Functions
 {
     public class Search
     {
-        private readonly ITest _test;
+        private readonly IEventsRepository _eventsRepository;
 
-        public Search(ITest test)
+        public Search(IEventsRepository eventsRepository)
         {
-            _test = test;
+            _eventsRepository = eventsRepository;
         }
 
 
@@ -27,11 +27,9 @@ namespace Swampnet.Evl.Functions
             [HttpTrigger(AuthorizationLevel.Function,"get",Route = null)] HttpRequest req, 
             ILogger log)
         {
-            await Task.CompletedTask;
-
             log.LogInformation("Running ITest.Boosh()");
 
-            var events = _test.Boosh();
+            var events = await _eventsRepository.SearchAsync();
 
             return new OkObjectResult(events);
         }
