@@ -24,7 +24,7 @@ namespace Swampnet.Evl
         public DateTime TimestampUtc { get; set; }
         public List<string> Tags { get; set; }
 
-        public EventProperty[] Properties { get; set; }
+        public Property[] Properties { get; set; }
         public List<EventHistory> History { get; set; }
     }
 
@@ -58,24 +58,6 @@ namespace Swampnet.Evl
         public DateTime TimestampUtc { get; set; }
         public string Type { get; set; }
         public string Details { get; set; }
-    }
-
-
-    public class EventProperty
-    {
-        public EventProperty()
-        {
-        }
-
-        public EventProperty(string name, object value, string category = "")
-        {
-            Name = name;
-            Value = value?.ToString();
-        }
-
-        public string Category { get; set; }
-        public string Name { get; set; }
-        public string Value { get; set; }
     }
 
 

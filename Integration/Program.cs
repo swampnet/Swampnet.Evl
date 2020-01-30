@@ -14,7 +14,7 @@ namespace Integration
     {
         private readonly ITest _test;
         private readonly IEventsRepository _eventsRepository;
-        private readonly IProcess _process;
+        private readonly IRuleProcessor _rules;
         private readonly IMaintanence _maintanence;
 
         static async Task Main(string[] args)
@@ -23,51 +23,75 @@ namespace Integration
         }
 
 
-        public Program(ITest test, IEventsRepository eventsRepository, IProcess process, IMaintanence maintanence)
+        public Program(ITest test, IEventsRepository eventsRepository, IRuleProcessor rules, IMaintanence maintanence)
         {
             _test = test;
             _eventsRepository = eventsRepository;
-            _process = process;
+            _rules = rules;
             _maintanence = maintanence;
         }
 
         
         public async Task Run()
         {
-            for (int i = 0; i < 1; i++)
+            var id = Guid.NewGuid();
+
+            var evt = new Swampnet.Evl.Event()
             {
-                var evt = new Swampnet.Evl.Event()
-                {
-                    Category = Swampnet.Evl.Category.info,
-                    Source = $"test-04",
-                    Summary = $"Test @ {DateTime.UtcNow}",
-                    Properties = new[] {
-                        new Swampnet.Evl.EventProperty()
+                Id = id,
+                Category = Swampnet.Evl.Category.info,
+                Source = $"test-01",
+                Summary = $"test-rule-01",
+                Properties = new[] {
+                        new Swampnet.Evl.Property()
                         {
                             Name = "one",
                             Value = "one-value"
                         }
                     },
-                    Tags = new List<string>()
-                    {
-                        "tag-01",
-                        "tag-02",
-                        "tag-03"
-                    }
-                };
+                Tags = new List<string>()
+                {
+                    "tag-01",
+                }
+            };
 
-                await _eventsRepository.SaveAsync(evt);
-            }
+            await _eventsRepository.SaveAsync(evt);
+            await _rules.ProcessEventAsync(id);
+
+            //for (int i = 0; i < 1; i++)
+            //{
+            //    var evt = new Swampnet.Evl.Event()
+            //    {
+            //        Category = Swampnet.Evl.Category.info,
+            //        Source = $"test-04",
+            //        Summary = $"Test @ {DateTime.UtcNow}",
+            //        Properties = new[] {
+            //            new Swampnet.Evl.Property()
+            //            {
+            //                Name = "one",
+            //                Value = "one-value"
+            //            }
+            //        },
+            //        Tags = new List<string>()
+            //        {
+            //            "tag-01",
+            //            "tag-02",
+            //            "tag-03"
+            //        }
+            //    };
+
+            //    await _eventsRepository.SaveAsync(evt);
+            //}
 
             //await _maintanence.RunAsync();
 
-            var x = await _eventsRepository.SearchAsync();
-            foreach (var e in x)
-            {
-                Console.WriteLine($"[{e.Category}] [{e.Source}] {e.Summary} [{string.Join(",", e.Tags)}]");
-            }
+            //var x = await _eventsRepository.SearchAsync();
+            //foreach (var e in x)
+            //{
+            //    Console.WriteLine($"[{e.Category}] [{e.Source}] {e.Summary} [{string.Join(",", e.Tags)}]");
+            //}
 
-            //await _process.ProcessEventAsync(Guid.Parse("4F2E8EAF-9E31-4B24-8283-CF38FA2B6A88"));
+            //await _rules.ProcessEventAsync(Guid.Parse("4F2E8EAF-9E31-4B24-8283-CF38FA2B6A88"));
         }
 
         private static Program Boot()

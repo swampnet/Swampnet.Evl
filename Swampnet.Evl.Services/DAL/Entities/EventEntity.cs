@@ -54,7 +54,7 @@ namespace Swampnet.Evl.Services.DAL
     }
 
 
-    class EventPropertyEntity
+    class EventPropertyEntity : IProperty
     {
         public long Id { get; set; }
 
@@ -69,6 +69,11 @@ namespace Swampnet.Evl.Services.DAL
 
     class EventHistoryEntity
     {
+        public EventHistoryEntity()
+        {
+            TimestampUtc = DateTime.UtcNow;
+        }
+
         public long Id { get; set; }
 
         public long EventId { get; set; }

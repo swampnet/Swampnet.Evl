@@ -8,12 +8,12 @@ using Swampnet.Evl.Services.Interfaces;
 
 namespace Swampnet.Evl.Functions
 {
-    public class QueueProcessor
+    public class Processor
     {
         private readonly IEventsRepository _eventsRepository;
-        private readonly IProcess _process;
+        private readonly IRuleProcessor _process;
 
-        public QueueProcessor(IEventsRepository eventsRepository, IProcess process)
+        public Processor(IEventsRepository eventsRepository, IRuleProcessor process)
         {
             _eventsRepository = eventsRepository;
             _process = process;
