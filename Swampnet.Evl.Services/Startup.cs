@@ -24,6 +24,8 @@ namespace Swampnet.Evl.Services
             services.AddTransient<IRuleProcessor, RuleProcessor>();
             services.AddTransient<IMaintanence, Maintanence>();
 
+            services.AddTransient<IActionProcessor, Implementations.ActionProcessors.TagAction>();
+
             services.AddDbContext<EventsContext>(options =>
             {
                 options.UseSqlServer(config.GetConnectionString("events"));

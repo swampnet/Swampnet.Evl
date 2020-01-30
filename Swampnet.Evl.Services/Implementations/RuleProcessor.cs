@@ -14,6 +14,8 @@ namespace Swampnet.Evl.Services.Implementations
     class RuleProcessor : IRuleProcessor
     {
         private readonly EventsContext _context;
+        private readonly IEnumerable<IActionProcessor> _processors;
+
         private readonly RuleEntity[] _rules = new[] { 
             new RuleEntity()
             {
@@ -39,9 +41,10 @@ namespace Swampnet.Evl.Services.Implementations
             }
         };
 
-        public RuleProcessor(EventsContext context)
+        public RuleProcessor(EventsContext context, IEnumerable<IActionProcessor> processors)
         {
             _context = context;
+            _processors = processors;
         }
 
 
@@ -79,10 +82,17 @@ namespace Swampnet.Evl.Services.Implementations
                             {
                                 var key = action.Type.Replace("-", "").ToLower();
 
-                                e.History.Add(new EventHistoryEntity() { 
-                                    Type = "action:" + action.Type,
-                                    Details = string.Join(",", action.Properties.Select(p => $"{p.Name}={p.Value}"))
-                                });
+                                var processor = _processors.SingleOrDefault(x => x.Name.EqualsNoCase(action.Type));
+                                if(processor != null)
+                                {
+                                    await processor.ApplyAsync(_context, e, action);
+
+                                    e.History.Add(new EventHistoryEntity()
+                                    {
+                                        Type = "action:" + action.Type,
+                                        Details = string.Join(",", action.Properties.Select(p => $"{p.Name}={p.Value}"))
+                                    });
+                                }
                             }
 
                             // Stop processing rule
