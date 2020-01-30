@@ -11,6 +11,7 @@ namespace Swampnet.Evl
         {
             TimestampUtc = DateTime.UtcNow;
             History = new List<EventHistory>();
+            Tags = new List<string>();
         }
 
         public Guid Id { get; set; }
@@ -21,9 +22,22 @@ namespace Swampnet.Evl
 
         public string Summary { get; set; }
         public DateTime TimestampUtc { get; set; }
+        public List<string> Tags { get; set; }
 
         public EventProperty[] Properties { get; set; }
         public List<EventHistory> History { get; set; }
+    }
+
+
+    public class EventSummary
+    {
+        public Guid Id { get; set; }
+        [JsonConverter(typeof(StringEnumConverter))]
+        public Category Category { get; set; }
+        public string Source { get; set; }
+        public string Summary { get; set; }
+        public DateTime TimestampUtc { get; set; }
+        public List<string> Tags { get; set; }
     }
 
 
@@ -34,7 +48,7 @@ namespace Swampnet.Evl
             TimestampUtc = DateTime.UtcNow;
         }
 
-        public EventHistory(EventHistoryType type, string details = null)
+        public EventHistory(string type, string details = null)
             : this()
         {
             Type = type;
@@ -42,7 +56,7 @@ namespace Swampnet.Evl
         }
 
         public DateTime TimestampUtc { get; set; }
-        public EventHistoryType Type { get; set; }
+        public string Type { get; set; }
         public string Details { get; set; }
     }
 
@@ -70,14 +84,5 @@ namespace Swampnet.Evl
         debug,
         info,
         error
-    }
-
-
-    public enum EventHistoryType
-    {
-        Queued,
-        Processed,
-        Complete,
-        Error
     }
 }

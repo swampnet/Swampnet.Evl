@@ -54,7 +54,7 @@ namespace Swampnet.Evl.Functions
                 e.Id = Guid.NewGuid();
             }
 
-            e.History.Add(new EventHistory(EventHistoryType.Queued));
+            e.History.Add(new EventHistory("enqueued"));
 
             // At this point we just want to push it into a queue
             queue.Add(JsonConvert.SerializeObject(e));

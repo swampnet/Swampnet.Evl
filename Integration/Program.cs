@@ -10,11 +10,6 @@ using System.Threading.Tasks;
 
 namespace Integration
 {
-    //interface IProgram 
-    //{
-    //    Task Run();
-    //}
-
     class Program// : IProgram
     {
         private readonly ITest _test;
@@ -39,8 +34,7 @@ namespace Integration
         
         public async Task Run()
         {
-
-            for (int i = 0; i < 50; i++)
+            for (int i = 0; i < 1; i++)
             {
                 var evt = new Swampnet.Evl.Event()
                 {
@@ -53,6 +47,12 @@ namespace Integration
                             Name = "one",
                             Value = "one-value"
                         }
+                    },
+                    Tags = new List<string>()
+                    {
+                        "tag-01",
+                        "tag-02",
+                        "tag-03"
                     }
                 };
 
@@ -64,7 +64,7 @@ namespace Integration
             var x = await _eventsRepository.SearchAsync();
             foreach (var e in x)
             {
-                Console.WriteLine($"[{e.Category}] [{e.Source}] {e.Summary}");
+                Console.WriteLine($"[{e.Category}] [{e.Source}] {e.Summary} [{string.Join(",", e.Tags)}]");
             }
 
             //await _process.ProcessEventAsync(Guid.Parse("4F2E8EAF-9E31-4B24-8283-CF38FA2B6A88"));

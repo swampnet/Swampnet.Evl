@@ -26,13 +26,15 @@ namespace Swampnet.Evl.Functions
             var e = JsonConvert.DeserializeObject<Event>(json);
 
             log.LogInformation($"de-queued event: {e.Id} / {e.Summary}");
+            
+            e.History.Add(new EventHistory("dequeued"));
 
             // Save event to DB
             await _eventsRepository.SaveAsync(e);
 
             log.LogInformation($"saved: {e.Id}");
 
-            // Run any processors we have registered
+            // Run any processors we have registered. Should this be another queue?
             await _process.ProcessEventAsync(e.Id);
 
             log.LogInformation($"complete: {e.Id}");

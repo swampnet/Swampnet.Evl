@@ -26,6 +26,7 @@ namespace Swampnet.Evl.Services
 
             services.AddSingleton<IEventProcessor, TestProcessor01>();
             services.AddSingleton<IEventProcessor, TestProcessor02>();
+            services.AddSingleton<ITags, TagService>();
 
             services.AddDbContext<EventsContext>(options =>
             {

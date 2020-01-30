@@ -13,10 +13,12 @@ namespace Swampnet.Evl.Services.Implementations
     {
         private readonly EventsContext _context;
         private IEnumerable<CategoryEntity> _categories;
+        private ITags _tags;
 
-        public EventsRepository(EventsContext context)
+        public EventsRepository(EventsContext context, ITags tags)
         {
             _context = context;
+            _tags = tags;
         }
 
         public Task<Event> LoadAsync(long id)
@@ -41,13 +43,41 @@ namespace Swampnet.Evl.Services.Implementations
                 Source = await ResolveSourceAsync(e.Source)
             };
 
-            foreach (var p in e.Properties) 
+            if (e.Properties != null)
             {
-                entity.Properties.Add(new EventPropertyEntity() { 
-                    Category = p.Category,
-                    Name = p.Name,
-                    Value = p.Value
-                });
+                foreach (var p in e.Properties)
+                {
+                    entity.Properties.Add(new EventPropertyEntity()
+                    {
+                        Category = p.Category,
+                        Name = p.Name,
+                        Value = p.Value
+                    });
+                }
+            }
+
+            if (e.History != null)
+            {
+                foreach (var h in e.History)
+                {
+                    entity.History.Add(new EventHistoryEntity()
+                    {
+                        TimestampUtc = h.TimestampUtc,
+                        Type = h.Type,
+                        Details = h.Details
+                    });
+                }
+            }
+
+            if(e.Tags != null)
+            {
+                foreach(var t in e.Tags.Select(t => t.ToLower().Trim()).Distinct())
+                {
+                    var tag = await _tags.ResolveAsync(t);
+                    entity.EventTags.Add(new EventTagsEntity() { 
+                        TagId = tag.Id
+                    });
+                }
             }
 
             _context.Events.Add(entity);
@@ -56,25 +86,24 @@ namespace Swampnet.Evl.Services.Implementations
         }
 
 
-        public async Task<IEnumerable<Event>> SearchAsync()
+        public async Task<IEnumerable<EventSummary>> SearchAsync()
         {
             var events = await _context.Events
                 .Include(f => f.Source)
                 .Include(f => f.Category)
-                .Include(f => f.Properties)
+                .Include(f => f.History)
+                .Include(f => f.EventTags)
+                    .ThenInclude(f => f.Tag)
                 .ToArrayAsync();
 
-            return events.Select(e => new Event() { 
+            return events.Select(e => new EventSummary()
+            {
                 Id = e.Reference,
                 Category = (Category)Enum.Parse(typeof(Category), e.Category.Name.ToLower()),
                 Summary = e.Summary,
                 TimestampUtc = e.TimestampUtc,
                 Source = e.Source.Name,
-                Properties = e.Properties.Select(p => new EventProperty() {
-                    Category = p.Category,
-                    Name = p.Name,
-                    Value = p.Value
-                }).ToArray()
+                Tags = e.EventTags.Select(et => et.Tag.Name).ToList()
             });
         }
 
@@ -103,8 +132,28 @@ namespace Swampnet.Evl.Services.Implementations
 
                 _context.Sources.Add(entity);
             }
+            
+            return entity;
+        }
+
+
+        private async Task<TagEntity> ResolveTagAsync(string tag)
+        {
+            // So, we're *definately* create dups here if we have a new tag and have many concurrent requests with that source coming in.
+            var entity = await _context.Tags.SingleOrDefaultAsync(s => s.Name == tag);
+
+            if (entity == null)
+            {
+                entity = new TagEntity()
+                {
+                    Name = tag
+                };
+
+                _context.Tags.Add(entity);
+            }
 
             return entity;
         }
+
     }
 }
