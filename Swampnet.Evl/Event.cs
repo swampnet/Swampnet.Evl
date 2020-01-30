@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System;
+using System.Collections.Generic;
 
 namespace Swampnet.Evl
 {
@@ -9,6 +10,7 @@ namespace Swampnet.Evl
         public Event()
         {
             TimestampUtc = DateTime.UtcNow;
+            History = new List<EventHistory>();
         }
 
         public Guid Id { get; set; }
@@ -21,7 +23,29 @@ namespace Swampnet.Evl
         public DateTime TimestampUtc { get; set; }
 
         public EventProperty[] Properties { get; set; }
+        public List<EventHistory> History { get; set; }
     }
+
+
+    public class EventHistory
+    {
+        public EventHistory()
+        {
+            TimestampUtc = DateTime.UtcNow;
+        }
+
+        public EventHistory(EventHistoryType type, string details = null)
+            : this()
+        {
+            Type = type;
+            Details = details;
+        }
+
+        public DateTime TimestampUtc { get; set; }
+        public EventHistoryType Type { get; set; }
+        public string Details { get; set; }
+    }
+
 
     public class EventProperty
     {
@@ -46,5 +70,14 @@ namespace Swampnet.Evl
         debug,
         info,
         error
+    }
+
+
+    public enum EventHistoryType
+    {
+        Queued,
+        Processed,
+        Complete,
+        Error
     }
 }

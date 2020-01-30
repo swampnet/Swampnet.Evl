@@ -23,30 +23,41 @@ namespace Swampnet.Evl.Functions
         {
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
 
-            //log.LogInformation(requestBody);
-            Test();
+            Enqueue(queue, JsonConvert.DeserializeObject<Event>(requestBody));
 
+            return new OkResult();
+        }
+
+        [FunctionName("post-bulk")]
+        public static async Task<IActionResult> Bulk(
+            [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req,
+            [Queue("events"), StorageAccount("event-queue")] ICollector<string> queue,
+            ILogger log)
+        {
+            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+
+            var events = JsonConvert.DeserializeObject<Event[]>(requestBody);
+            foreach(var e in events)
+            {
+                Enqueue(queue, e);
+            }
+
+            return new OkResult();
+        }
+
+
+        private static void Enqueue(ICollector<string> queue, Event e)
+        {
             // Create an ID if we don't already have one.
-            var e = JsonConvert.DeserializeObject<Event>(requestBody);
             if (e.Id == Guid.Empty)
             {
                 e.Id = Guid.NewGuid();
             }
 
+            e.History.Add(new EventHistory(EventHistoryType.Queued));
+
             // At this point we just want to push it into a queue
             queue.Add(JsonConvert.SerializeObject(e));
-
-            // We probably just want to return a 200 rather than echo the event back (We *could* return the Id or a small summary, but what do we do with
-            // batch events?)
-            return new OkObjectResult(e);
-        }
-
-        private static void Test()
-        {
-            //using(var context = new EventsContext())
-            //{
-            //    var xx = context.Events.ToArray();
-            //}
         }
     }
 }
