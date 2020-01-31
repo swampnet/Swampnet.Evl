@@ -80,8 +80,7 @@ namespace Swampnet.Evl.Services.Implementations
                         {
                             foreach (var action in rule.Actions.Where(a => a.IsActive))
                             {
-                                var key = action.Type.Replace("-", "").ToLower();
-
+                                // Find action & execute it against the event
                                 var processor = _processors.SingleOrDefault(x => x.Name.EqualsNoCase(action.Type));
                                 if(processor != null)
                                 {
@@ -105,7 +104,7 @@ namespace Swampnet.Evl.Services.Implementations
                 }
             }
 
-            e.History.Add(new EventHistoryEntity() { 
+            e.History.Add(new EventHistoryEntity() {
                 Type = "rules-complete"
             });
 

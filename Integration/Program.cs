@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Swampnet.Evl.Services;
 using Swampnet.Evl.Services.Interfaces;
 using System.Threading.Tasks;
+using Swampnet.Evl;
 
 namespace Integration
 {
@@ -55,8 +56,10 @@ namespace Integration
                 }
             };
 
-            await _eventsRepository.SaveAsync(evt);
-            await _rules.ProcessEventAsync(id);
+            await evt.PostAsync();
+
+            //await _eventsRepository.SaveAsync(evt);
+            //await _rules.ProcessEventAsync(id);
 
             //for (int i = 0; i < 1; i++)
             //{
