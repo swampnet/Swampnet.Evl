@@ -223,6 +223,7 @@ namespace Swampnet.Evl.Controllers
                 _eventProcessor.Enqueue(org.Id, e);
 
                 Debug.WriteLine($">>> POST in {sw.Elapsed.TotalMilliseconds}");
+
                 return Ok();
             }
             catch (UnauthorizedAccessException ex)

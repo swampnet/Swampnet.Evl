@@ -10,6 +10,7 @@ using Swampnet.Evl.Common.Entities;
 using System.Threading.Tasks;
 using Swampnet.Evl.Client;
 using System.Diagnostics;
+using Microsoft.Extensions.Configuration;
 
 namespace Swampnet.Evl.Services
 {
@@ -40,8 +41,9 @@ namespace Swampnet.Evl.Services
         private readonly IEnumerable<IEventProcessor> _processors;
         private readonly IAuth _auth;
         private readonly IEventDataAccess _eventDataAccess;
+        private readonly IConfiguration _configuration;
 
-        public EventQueueProcessor(IAuth auth, IEventDataAccess dal, IEnumerable<IEventProcessor> processors)
+        public EventQueueProcessor(IAuth auth, IEventDataAccess dal, IEnumerable<IEventProcessor> processors, IConfiguration configuration)
         {
             _auth = auth;
             _eventDataAccess = dal;
@@ -54,6 +56,7 @@ namespace Swampnet.Evl.Services
             };
 
             _monitorThread.Start();
+            _configuration = configuration;
         }
 
 
@@ -115,6 +118,40 @@ namespace Swampnet.Evl.Services
                             }
 
                             await _eventDataAccess.UpdateAsync(null, evt);
+
+                            #region Pass on to v2
+                            try
+                            {
+                                var e2 = new v2.Event()
+                                {
+                                    Id = evt.Id,
+                                    Properties = e.Properties.ToArray(),
+                                    Source = e.Source,
+                                    Summary = e.Summary,
+                                    TimestampUtc = e.TimestampUtc,
+                                    Tags = e.Tags
+                                };
+
+                                switch (evt.Category)
+                                {
+                                    case EventCategory.Debug:
+                                        e2.Category = v2.Category.debug;
+                                        break;
+
+                                    case EventCategory.Information:
+                                        e2.Category = v2.Category.info;
+                                        break;
+                                    case EventCategory.Error:
+                                        e2.Category = v2.Category.error;
+                                        break;
+                                }
+
+                                await e2.PostAsync(_configuration.GetValue<string>("evl2:api-key"));
+                            }
+                            catch 
+                            {
+                            }
+                            #endregion
                         }
                         catch (Exception ex)
                         {
