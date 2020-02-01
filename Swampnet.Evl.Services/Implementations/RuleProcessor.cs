@@ -15,56 +15,13 @@ namespace Swampnet.Evl.Services.Implementations
     {
         private readonly EventsContext _context;
         private readonly IEnumerable<IActionProcessor> _processors;
+        private readonly IRuleRepository _rules;
 
-        private readonly RuleEntity[] _rules = new[] { 
-            new RuleEntity()
-            {
-                Name = "rule-01",
-                Order = 1,
-                Expression = new Expression(ExpressionOperatorType.MATCH_ALL)
-                {
-                    Children = new Expression[]
-                    { 
-                        new Expression(ExpressionOperatorType.EQ, ExpressionOperandType.Summary, "test-rule-01"),
-                        new Expression(ExpressionOperatorType.EQ, ExpressionOperandType.Category, "info")
-                    }
-                },
-                Actions = new[]
-                { 
-                    new ActionDefinition(                        
-                        "add-tag", 
-                        new []
-                        { 
-                            new Property("tag", "rule-01")
-                        }),
-                    new ActionDefinition(
-                        "remove-tag",
-                        new []
-                        {
-                            new Property("tag", "tag-01")
-                        }),
-                    new ActionDefinition(
-                        "add-property",
-                        new []
-                        {
-                            new Property("a", "a-value"),
-                            new Property("b", "b-value"),
-                            new Property("c", "c-value")
-                        }),
-                    new ActionDefinition(
-                        "set-category",
-                        new []
-                        {
-                            new Property("category", "debug")
-                        })
-                }
-            }
-        };
-
-        public RuleProcessor(EventsContext context, IEnumerable<IActionProcessor> processors)
+        public RuleProcessor(EventsContext context, IRuleRepository rules, IEnumerable<IActionProcessor> processors)
         {
             _context = context;
             _processors = processors;
+            _rules = rules;
         }
 
 
@@ -80,53 +37,51 @@ namespace Swampnet.Evl.Services.Implementations
                 .SingleAsync(x => x.Reference == id);
 
 
-            if (_rules.Any())
+            var sw = Stopwatch.StartNew();
+            var expressionEvaluator = new ExpressionEvaluator();
+            int count = int.MaxValue;
+            var rules = new List<Rule>(await _rules.LoadRulesAsync());
+
+            // Keep processing the rules until either we run out of rules, or all the rules evaluate to false.
+            // When a rule evaluates to true, run any associated actions and remove the rule from our list.
+            while (count > 0 && rules.Any())
             {
-                var sw = Stopwatch.StartNew();
-                var expressionEvaluator = new ExpressionEvaluator();
-                var rules = new List<RuleEntity>(_rules);
-                int count = int.MaxValue;
+                count = 0;
 
-                // Keep processing the rules until either we run out of rules, or all the rules evaluate to false.
-                // When a rule evaluates to true, run any associated actions and remove the rule from our list.
-                while (count > 0 && rules.Any())
+                foreach (var rule in rules.OrderBy(r => r.Priority).ToArray())
                 {
-                    count = 0;
-
-                    foreach (var rule in rules.OrderBy(r => r.Order).ToArray())
+                    // Rule is true.
+                    if (expressionEvaluator.Evaluate(rule.Expression, e))
                     {
-                        // Rule is true.
-                        if (expressionEvaluator.Evaluate(rule.Expression, e))
+                        e.History.Add(new EventHistoryEntity() { 
+                            Type = "triggered-rule",
+                            Details = rule.Name
+                        });
+
+                        foreach (var action in rule.Actions.Where(a => a.IsActive))
                         {
-                            foreach (var action in rule.Actions.Where(a => a.IsActive))
+                            // Find action & execute it against the event
+                            var processor = _processors.SingleOrDefault(x => x.Name.EqualsNoCase(action.Type));
+                            if (processor != null)
                             {
-                                // Find action & execute it against the event
-                                var processor = _processors.SingleOrDefault(x => x.Name.EqualsNoCase(action.Type));
-                                if(processor != null)
+                                await processor.ApplyAsync(_context, e, action);
+
+                                e.History.Add(new EventHistoryEntity()
                                 {
-                                    await processor.ApplyAsync(_context, e, action);
-
-                                    e.History.Add(new EventHistoryEntity()
-                                    {
-                                        Type = "action:" + action.Type,
-                                        Details = string.Join(",", action.Properties.Select(p => $"{p.Name}={p.Value}"))
-                                    });
-                                }
+                                    Type = "action",
+                                    Details = action.Type + "(" + string.Join(",", action.Properties.Select(p => $"{p.Name}:'{p.Value}'")) + ")"
+                                });
                             }
-
-                            // Stop processing rule
-                            rules.Remove(rule);
-
-                            // Keep track of the number of rules that evaluated to true
-                            count++;
                         }
+
+                        // Stop processing rule
+                        rules.Remove(rule);
+
+                        // Keep track of the number of rules that evaluated to true
+                        count++;
                     }
                 }
             }
-
-            e.History.Add(new EventHistoryEntity() {
-                Type = "rules-complete"
-            });
 
             e.ModifiedOnUtc = DateTime.UtcNow;
 
