@@ -36,6 +36,26 @@ namespace Swampnet.Evl.Services.Implementations
                         new []
                         { 
                             new Property("tag", "rule-01")
+                        }),
+                    new ActionDefinition(
+                        "remove-tag",
+                        new []
+                        {
+                            new Property("tag", "tag-01")
+                        }),
+                    new ActionDefinition(
+                        "add-property",
+                        new []
+                        {
+                            new Property("a", "a-value"),
+                            new Property("b", "b-value"),
+                            new Property("c", "c-value")
+                        }),
+                    new ActionDefinition(
+                        "set-category",
+                        new []
+                        {
+                            new Property("category", "debug")
                         })
                 }
             }

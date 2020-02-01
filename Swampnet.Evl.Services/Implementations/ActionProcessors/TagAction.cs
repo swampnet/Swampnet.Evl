@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace Swampnet.Evl.Services.Implementations.ActionProcessors
 {
-    class TagAction : IActionProcessor
+    class AddTagAction : IActionProcessor
     {
         private readonly ITags _tags;
 
-        public TagAction(ITags tags)
+        public AddTagAction(ITags tags)
         {
             _tags = tags;
         }
@@ -31,6 +31,24 @@ namespace Swampnet.Evl.Services.Implementations.ActionProcessors
                     Tag = await context.Tags.SingleAsync(t => t.Id == tag.Id)
                 });
             }
+        }
+    }
+
+    class RemoveTagAction : IActionProcessor
+    {
+        public string Name => "remove-tag";
+
+        public Task ApplyAsync(EventsContext context, EventEntity evt, ActionDefinition definition)
+        {
+            var tagName = definition.Properties.StringValue("tag");
+
+            foreach(var t in evt.EventTags.Where(et => et.Tag.Name.EqualsNoCase(tagName)).ToArray())
+            {
+                evt.EventTags.Remove(t);
+                context.EventTags.Remove(t);
+            }
+
+            return Task.CompletedTask;
         }
     }
 }

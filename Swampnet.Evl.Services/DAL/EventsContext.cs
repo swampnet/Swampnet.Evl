@@ -16,6 +16,7 @@ namespace Swampnet.Evl.Services.DAL
         public DbSet<CategoryEntity> Categories { get; set; }
         public DbSet<SourceEntity> Sources { get; set; }
         public DbSet<TagEntity> Tags { get; set; }
+        public DbSet<EventTagsEntity> EventTags { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

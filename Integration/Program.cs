@@ -37,14 +37,14 @@ namespace Integration
         {
             var id = Guid.NewGuid();
 
-            var evt = new Swampnet.Evl.Event()
+            var evt = new Event()
             {
                 Id = id,
-                Category = Swampnet.Evl.Category.info,
-                Source = $"test-01",
+                Category = Category.info,
+                Source = $"test",
                 Summary = $"test-rule-01",
                 Properties = new[] {
-                        new Swampnet.Evl.Property()
+                        new Property()
                         {
                             Name = "one",
                             Value = "one-value"
@@ -53,13 +53,14 @@ namespace Integration
                 Tags = new List<string>()
                 {
                     "tag-01",
+                    "tag-02"
                 }
             };
 
-            await evt.PostAsync();
+            //await evt.PostAsync();
 
-            //await _eventsRepository.SaveAsync(evt);
-            //await _rules.ProcessEventAsync(id);
+            await _eventsRepository.SaveAsync(evt);
+            await _rules.ProcessEventAsync(id);
 
             //for (int i = 0; i < 1; i++)
             //{

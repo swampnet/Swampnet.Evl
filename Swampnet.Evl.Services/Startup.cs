@@ -24,7 +24,10 @@ namespace Swampnet.Evl.Services
             services.AddTransient<IRuleProcessor, RuleProcessor>();
             services.AddTransient<IMaintanence, Maintanence>();
 
-            services.AddTransient<IActionProcessor, Implementations.ActionProcessors.TagAction>();
+            services.AddTransient<IActionProcessor, Implementations.ActionProcessors.AddTagAction>();
+            services.AddTransient<IActionProcessor, Implementations.ActionProcessors.RemoveTagAction>();
+            services.AddTransient<IActionProcessor, Implementations.ActionProcessors.SetCategoryAction>();
+            services.AddTransient<IActionProcessor, Implementations.ActionProcessors.AddPropertyAction>();
 
             services.AddDbContext<EventsContext>(options =>
             {
