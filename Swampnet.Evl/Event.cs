@@ -5,6 +5,25 @@ using System.Collections.Generic;
 
 namespace Swampnet.Evl
 {
+    public class EventSearchCriteria
+    {
+        public int Page { get; set; }
+        public int PageSize { get; set; } = 50;
+
+        public Guid? Id { get; set; }
+        public string Summary { get; set; }
+        public DateTime? Start { get; set; }
+        public DateTime? End { get; set; }
+    }
+
+
+    public class EventSearchResult
+    {
+        public EventSummary[] Events { get; set; }
+        public int TotalCount { get; set; }
+    }
+
+
     public class Event
     {
         public Event()

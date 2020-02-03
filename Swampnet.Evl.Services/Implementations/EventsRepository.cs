@@ -88,17 +88,46 @@ namespace Swampnet.Evl.Services.Implementations
         }
 
 
-        public async Task<IEnumerable<EventSummary>> SearchAsync()
+        public async Task<EventSearchResult> SearchAsync(EventSearchCriteria criteria)
         {
-            var events = await _context.Events
+            var rs = new EventSearchResult();
+
+            var events = _context.Events
                 .Include(f => f.Source)
                 .Include(f => f.Category)
                 .Include(f => f.History)
                 .Include(f => f.EventTags)
                     .ThenInclude(f => f.Tag)
-                .ToArrayAsync();
+                .AsQueryable();
 
-            return events.Select(e => new EventSummary()
+            if(criteria.Id != null)
+            {
+                events = events.Where(e => e.Reference == criteria.Id);
+            }
+            if (!string.IsNullOrEmpty(criteria.Summary))
+            {
+                events = events.Where(e => e.Summary.Contains(criteria.Summary));
+            }
+            if (criteria.Start.HasValue)
+            {
+                events = events.Where(e => e.TimestampUtc >= criteria.Start);
+            }
+            if (criteria.End.HasValue)
+            {
+                events = events.Where(e => e.TimestampUtc <= criteria.End);
+            }
+            // @TODO: More filters
+
+            rs.TotalCount = await events.CountAsync();
+
+            events = events.OrderByDescending(e => e.TimestampUtc);
+
+            // Paging
+            events = events.Skip(criteria.Page * criteria.PageSize).Take(criteria.PageSize);
+
+            var results = await events.ToArrayAsync();
+
+            rs.Events = results.Select(e => new EventSummary()
             {
                 Id = e.Reference,
                 Category = (Category)Enum.Parse(typeof(Category), e.Category.Name.ToLower()),
@@ -106,7 +135,9 @@ namespace Swampnet.Evl.Services.Implementations
                 TimestampUtc = e.TimestampUtc,
                 Source = e.Source.Name,
                 Tags = e.EventTags.Select(et => et.Tag.Name).ToList()
-            });
+            }).ToArray();
+
+            return rs;
         }
 
 

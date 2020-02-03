@@ -35,28 +35,28 @@ namespace Integration
         
         public async Task Run()
         {
-            var id = Guid.NewGuid();
+            //var id = Guid.NewGuid();
 
-            var evt = new Event()
-            {
-                Id = id,
-                Category = Category.info,
-                Source = $"test-02",
-                Summary = $"test-rule-01",
-                Properties = new[] {
-                        new Property()
-                        {
-                            Name = "one",
-                            Value = "one-value"
-                        }
-                    },
-                Tags = new List<string>()
-                {
-                    "tag-01",
-                    "tag-02",
-                    "tag-03"
-                }
-            };
+            //var evt = new Event()
+            //{
+            //    Id = id,
+            //    Category = Category.info,
+            //    Source = $"test-02",
+            //    Summary = $"test-rule-01",
+            //    Properties = new[] {
+            //            new Property()
+            //            {
+            //                Name = "one",
+            //                Value = "one-value"
+            //            }
+            //        },
+            //    Tags = new List<string>()
+            //    {
+            //        "tag-01",
+            //        "tag-02",
+            //        "tag-03"
+            //    }
+            //};
 
             //await evt.PostAsync();
 
@@ -88,9 +88,11 @@ namespace Integration
             //    await _eventsRepository.SaveAsync(evt);
             //}
 
-            await _maintanence.RunAsync();
+            //await _maintanence.RunAsync();
 
-            //var x = await _eventsRepository.SearchAsync();
+            var x = await _eventsRepository.SearchAsync(new EventSearchCriteria() { 
+                Summary = "odj search complete"
+            });
             //foreach (var e in x)
             //{
             //    Console.WriteLine($"[{e.Category}] [{e.Source}] {e.Summary} [{string.Join(",", e.Tags)}]");

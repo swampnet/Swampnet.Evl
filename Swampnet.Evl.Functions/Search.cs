@@ -24,12 +24,45 @@ namespace Swampnet.Evl.Functions
 
         [FunctionName("search")]
         public async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function,"get",Route = null)] HttpRequest req, 
+            [HttpTrigger(AuthorizationLevel.Function,"get",Route = null)] HttpRequest req,
             ILogger log)
         {
-            log.LogInformation("Running ITest.Boosh()");
+            string id = req.Query["id"];
+            string summary = req.Query["summary"];
+            string start = req.Query["start"];
+            string end = req.Query["end"];
 
-            var events = await _eventsRepository.SearchAsync();
+            string page = req.Query["page"];
+            string pageSize = req.Query["pageSize"];
+
+            var rq = new EventSearchCriteria();
+
+            if (!string.IsNullOrEmpty(id))
+            {
+                rq.Id = Guid.Parse(id);
+            }
+            if (!string.IsNullOrEmpty(summary))
+            {
+                rq.Summary = summary;
+            }
+            if (!string.IsNullOrEmpty(page))
+            {
+                rq.Page = Convert.ToInt32(page);
+            }
+            if (!string.IsNullOrEmpty(pageSize))
+            {
+                rq.PageSize = Convert.ToInt32(pageSize);
+            }
+            if (!string.IsNullOrEmpty(start) && DateTime.TryParse(start, out var dtStart))
+            {
+                rq.Start = dtStart;
+            }
+            if (!string.IsNullOrEmpty(end) && DateTime.TryParse(end, out var dtEnd))
+            {
+                rq.End = dtEnd;
+            }
+
+            var events = await _eventsRepository.SearchAsync(rq);
 
             return new OkObjectResult(events);
         }

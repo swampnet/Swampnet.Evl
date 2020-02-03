@@ -13,7 +13,7 @@ namespace Swampnet.Evl.Services.Interfaces
     public interface IEventsRepository
     {
         // should be search result with paging info etc, and should be an EventSummary
-        Task<IEnumerable<EventSummary>> SearchAsync();
+        Task<EventSearchResult> SearchAsync(EventSearchCriteria criteria);
         Task<Event> LoadAsync(long id);
         Task<Event> LoadAsync(Guid reference);
 
