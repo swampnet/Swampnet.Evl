@@ -7,13 +7,17 @@ namespace Swampnet.Evl
 {
     public class EventSearchCriteria
     {
-        public int Page { get; set; }
+        public int Page { get; set; } = 1;
         public int PageSize { get; set; } = 50;
 
         public Guid? Id { get; set; }
         public string Summary { get; set; }
         public DateTime? Start { get; set; }
         public DateTime? End { get; set; }
+        public Category? Category { get; set; }
+        public string Source { get; set; }
+        public string Tags { get; set; }
+
     }
 
 
@@ -21,6 +25,10 @@ namespace Swampnet.Evl
     {
         public EventSummary[] Events { get; set; }
         public int TotalCount { get; set; }
+        public TimeSpan Elapsed { get; set; }
+        public int Page { get; set; }
+        public int TotalPages { get; set; }
+        public int PageSize { get; set; }
     }
 
 

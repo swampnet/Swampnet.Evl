@@ -27,11 +27,12 @@ namespace Swampnet.Evl.Functions
             [HttpTrigger(AuthorizationLevel.Function,"get",Route = null)] HttpRequest req,
             ILogger log)
         {
+            // Better way of doing this? We have any kind of ModalBinder in AzFuncs?
             string id = req.Query["id"];
             string summary = req.Query["summary"];
+            string tags = req.Query["tags"];
             string start = req.Query["start"];
             string end = req.Query["end"];
-
             string page = req.Query["page"];
             string pageSize = req.Query["pageSize"];
 
@@ -44,6 +45,10 @@ namespace Swampnet.Evl.Functions
             if (!string.IsNullOrEmpty(summary))
             {
                 rq.Summary = summary;
+            }
+            if (!string.IsNullOrEmpty(tags))
+            {
+                rq.Tags = tags;
             }
             if (!string.IsNullOrEmpty(page))
             {
@@ -61,6 +66,8 @@ namespace Swampnet.Evl.Functions
             {
                 rq.End = dtEnd;
             }
+
+            rq.Page = rq.Page == 0 ? 1 : rq.Page;
 
             var events = await _eventsRepository.SearchAsync(rq);
 

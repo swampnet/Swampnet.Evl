@@ -90,9 +90,14 @@ namespace Integration
 
             //await _maintanence.RunAsync();
 
-            var x = await _eventsRepository.SearchAsync(new EventSearchCriteria() { 
-                Summary = "odj search complete"
+            var x = await _eventsRepository.SearchAsync(new EventSearchCriteria()
+            {
+                PageSize = 10,
+                Page = 10,
+                Category = Category.debug
             });
+
+
             //foreach (var e in x)
             //{
             //    Console.WriteLine($"[{e.Category}] [{e.Source}] {e.Summary} [{string.Join(",", e.Tags)}]");

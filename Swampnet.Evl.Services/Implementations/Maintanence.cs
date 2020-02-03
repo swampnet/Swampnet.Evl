@@ -29,6 +29,7 @@ namespace Swampnet.Evl.Services.Implementations
         {
             await CleanupDuplicateSourceAsync();
             await CleanupDuplicateTagsAsync();
+            await TruncateExpiredEventData();
         }
 
 
@@ -73,6 +74,11 @@ namespace Swampnet.Evl.Services.Implementations
             }
 
             await _context.SaveChangesAsync();
+        }
+
+        private async Task TruncateExpiredEventData()
+        {
+            await _context.Database.ExecuteSqlRawAsync("[events].[TrucateExpiredEventData]");
         }
     }
 }

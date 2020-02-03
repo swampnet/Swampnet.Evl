@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
+using System.Diagnostics;
 
 namespace Swampnet.Evl.Services.Implementations
 {
@@ -87,10 +88,13 @@ namespace Swampnet.Evl.Services.Implementations
             await _context.SaveChangesAsync();
         }
 
+        private static char[] _tagSplit = new[] { ',', ';' };
 
         public async Task<EventSearchResult> SearchAsync(EventSearchCriteria criteria)
         {
+            var sw = Stopwatch.StartNew();
             var rs = new EventSearchResult();
+
 
             var events = _context.Events
                 .Include(f => f.Source)
@@ -116,14 +120,36 @@ namespace Swampnet.Evl.Services.Implementations
             {
                 events = events.Where(e => e.TimestampUtc <= criteria.End);
             }
-            // @TODO: More filters
+            if (criteria.Category.HasValue)
+            {
+                var cat = criteria.Category.ToString().ToLowerInvariant();
+                events = events.Where(e => e.Category.Name == cat);
+            }
+            if(!string.IsNullOrEmpty(criteria.Source))
+            {
+                events = events.Where(e => e.Source.Name == criteria.Source);
+            }
+            if (!string.IsNullOrEmpty(criteria.Tags))
+            {
+                var tags = criteria.Tags.Split(_tagSplit, StringSplitOptions.RemoveEmptyEntries).Select(t => t.Trim());
+                foreach(var tag in tags)
+                {
+                    events = events.Where(e => e.EventTags.Any(et => et.Tag.Name == tag));
+                }
+            }
 
             rs.TotalCount = await events.CountAsync();
 
             events = events.OrderByDescending(e => e.TimestampUtc);
 
             // Paging
-            events = events.Skip(criteria.Page * criteria.PageSize).Take(criteria.PageSize);
+            criteria.Page = criteria.Page == 0 ? 1 : criteria.Page;
+            if(Math.Ceiling((double)rs.TotalCount / criteria.PageSize) < criteria.Page)
+            {
+                criteria.Page = (int)Math.Ceiling((double)rs.TotalCount / criteria.PageSize);
+            }
+
+            events = events.Skip((criteria.Page-1) * criteria.PageSize).Take(criteria.PageSize);
 
             var results = await events.ToArrayAsync();
 
@@ -136,6 +162,11 @@ namespace Swampnet.Evl.Services.Implementations
                 Source = e.Source.Name,
                 Tags = e.EventTags.Select(et => et.Tag.Name).ToList()
             }).ToArray();
+
+            rs.Elapsed = sw.Elapsed;
+            rs.Page = criteria.Page;
+            rs.TotalPages = (int)Math.Ceiling((double)rs.TotalCount / criteria.PageSize);
+            rs.PageSize = criteria.PageSize;
 
             return rs;
         }
