@@ -10,9 +10,9 @@ namespace Swampnet.Evl.Services.Implementations.ActionProcessors
 {
     class AddTagAction : IActionProcessor
     {
-        private readonly ITags _tags;
+        private readonly ITagRepository _tags;
 
-        public AddTagAction(ITags tags)
+        public AddTagAction(ITagRepository tags)
         {
             _tags = tags;
         }

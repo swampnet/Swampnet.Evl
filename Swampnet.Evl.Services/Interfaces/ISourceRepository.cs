@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Swampnet.Evl.Services.Interfaces
 {
-    interface ITags
+    interface ISourceRepository
     {
-        Task<TagEntity> ResolveAsync(string name);
+        Task<SourceEntity> ResolveAsync(string name);
     }
 }

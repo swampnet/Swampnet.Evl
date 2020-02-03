@@ -41,7 +41,7 @@ namespace Integration
             {
                 Id = id,
                 Category = Category.info,
-                Source = $"test",
+                Source = $"test-02",
                 Summary = $"test-rule-01",
                 Properties = new[] {
                         new Property()
@@ -53,14 +53,15 @@ namespace Integration
                 Tags = new List<string>()
                 {
                     "tag-01",
-                    "tag-02"
+                    "tag-02",
+                    "tag-03"
                 }
             };
 
             //await evt.PostAsync();
 
-            await _eventsRepository.SaveAsync(evt);
-            await _rules.ProcessEventAsync(id);
+            //await _eventsRepository.SaveAsync(evt);
+            //await _rules.ProcessEventAsync(id);
 
             //for (int i = 0; i < 1; i++)
             //{
@@ -87,7 +88,7 @@ namespace Integration
             //    await _eventsRepository.SaveAsync(evt);
             //}
 
-            //await _maintanence.RunAsync();
+            await _maintanence.RunAsync();
 
             //var x = await _eventsRepository.SearchAsync();
             //foreach (var e in x)

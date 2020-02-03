@@ -8,17 +8,17 @@ using System.Threading.Tasks;
 
 namespace Swampnet.Evl.Services.Implementations
 {
-    class TagService : ITags
+    class SourceRepository : ISourceRepository
     {
         private readonly EventsContext _context;
-        private static readonly Dictionary<string, TagEntity> _cache = new Dictionary<string, TagEntity>();
+        private static readonly Dictionary<string, SourceEntity> _cache = new Dictionary<string, SourceEntity>();
 
-        public TagService(EventsContext context)
+        public SourceRepository(EventsContext context)
         {
             _context = context;
         }
 
-        public async Task<TagEntity> ResolveAsync(string name)
+        public async Task<SourceEntity> ResolveAsync(string name)
         {
             var lookup = name.ToLower().Trim();
 
@@ -27,23 +27,23 @@ namespace Swampnet.Evl.Services.Implementations
                 return _cache[lookup];
             }
 
-            var tag = await _context.Tags.Where(t => t.Name == lookup).OrderBy(t => t.Id).FirstOrDefaultAsync();
-            if(tag != null)
+            var entity = await _context.Sources.Where(t => t.Name == lookup).OrderBy(t => t.Id).FirstOrDefaultAsync();
+            if (entity != null)
             {
-                _cache.Add(lookup, tag);
-                return tag;
+                _cache.Add(lookup, entity);
+                return entity;
             }
 
             // Create new tag. Note that we might be creating a dup. here so don't add it to the cache.
-            tag = new TagEntity()
+            entity = new SourceEntity()
             {
                 Name = name
             };
 
-            _context.Tags.Add(tag);
+            _context.Sources.Add(entity);
             await _context.SaveChangesAsync();
 
-            return tag;
+            return entity;
         }
     }
 }
