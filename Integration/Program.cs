@@ -18,6 +18,7 @@ namespace Integration
         private readonly IRuleProcessor _rules;
         private readonly IMaintanence _maintanence;
         private readonly INotify _notify;
+        private readonly IRuleRepository _ruleRepository;
 
         static async Task Main(string[] args)
         {
@@ -25,13 +26,14 @@ namespace Integration
         }
 
 
-        public Program(ITest test, IEventsRepository eventsRepository, IRuleProcessor rules, IMaintanence maintanence, INotify notify)
+        public Program(ITest test, IEventsRepository eventsRepository, IRuleProcessor rules, IMaintanence maintanence, INotify notify, IRuleRepository ruleRepository)
         {
             _test = test;
             _eventsRepository = eventsRepository;
             _rules = rules;
             _maintanence = maintanence;
             _notify = notify;
+            _ruleRepository = ruleRepository;
         }
 
         
@@ -135,6 +137,8 @@ namespace Integration
             //}
 
             //await _rules.ProcessEventAsync(Guid.Parse("4F2E8EAF-9E31-4B24-8283-CF38FA2B6A88"));
+
+            //var rules = await _ruleRepository.LoadRulesAsync();
         }
 
         private static Program Boot()

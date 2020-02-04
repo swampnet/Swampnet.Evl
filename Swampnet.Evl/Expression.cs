@@ -29,13 +29,13 @@ namespace Swampnet.Evl
         }
 
         public Expression(ExpressionOperatorType op, object value)
-            : this(op, ExpressionOperandType.Null, null, value)
+            : this(op, ExpressionOperandType.NULL, null, value)
         {
         }
 
 
         public Expression(ExpressionOperatorType op)
-            : this(op, ExpressionOperandType.Null, null, null)
+            : this(op, ExpressionOperandType.NULL, null, null)
         {
         }
 
@@ -65,7 +65,7 @@ namespace Swampnet.Evl
 
     public enum ExpressionOperandType
     {
-        Null,
+        NULL,
         Source,
         Category,
         Summary,

@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
-using Swampnet.Evl.Services.DAL.Entities;
 using System.Diagnostics;
 
 namespace Swampnet.Evl.Services.Implementations
@@ -40,6 +39,8 @@ namespace Swampnet.Evl.Services.Implementations
             var sw = Stopwatch.StartNew();
             var expressionEvaluator = new ExpressionEvaluator();
             int count = int.MaxValue;
+
+            // @TODO: I don't really want to load all this each time if I can help it? Cache?
             var rules = new List<Rule>(await _rules.LoadRulesAsync());
 
             // Keep processing the rules until either we run out of rules, or all the rules evaluate to false.

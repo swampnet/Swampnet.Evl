@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
+using System.Xml.Serialization;
 
 namespace Swampnet.Evl
 {
@@ -28,5 +30,16 @@ namespace Swampnet.Evl
 
             return lhs.Equals(rhs, StringComparison.OrdinalIgnoreCase);
         }
+
+        public static T DeserializeXml<T>(this string source)
+        {
+            var serializer = new XmlSerializer(typeof(T));
+
+            using (var reader = new StringReader(source))
+            {
+                return (T)serializer.Deserialize(reader);
+            }
+        }
+
     }
 }
