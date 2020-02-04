@@ -28,7 +28,8 @@ namespace Swampnet.Evl.Services.Implementations
                         "add-tag",
                         new []
                         {
-                            new Property("tag", "rule-01")
+                            new Property("tag", "rule-01")/*,
+                            new Property("tag", "test-email") // Fire the other rule!*/,
                         }),
                     new ActionDefinition(
                         "remove-tag",
@@ -49,6 +50,28 @@ namespace Swampnet.Evl.Services.Implementations
                         new []
                         {
                             new Property("category", "debug")
+                        })
+                }
+            },
+            new RuleEntity()
+            {
+                Name = "Test email",
+                Priority = 1,
+                Expression = new Expression(ExpressionOperatorType.MATCH_ALL)
+                {
+                    Children = new Expression[]
+                    {
+                        new Expression(ExpressionOperatorType.TAGGED, "test-email")
+                    }
+                },
+                Actions = new[]{
+                    new ActionDefinition(
+                        "email",
+                        new []
+                        {
+                            new Property("subject", "TEST NOTIFICATIONS SUBJECT"),
+                            new Property("recipient", "pj@theswamp.co.uk"),
+                            new Property("recipient", "test@theswamp.co.uk")
                         })
                 }
             }

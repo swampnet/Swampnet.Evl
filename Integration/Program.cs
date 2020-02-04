@@ -17,6 +17,7 @@ namespace Integration
         private readonly IEventsRepository _eventsRepository;
         private readonly IRuleProcessor _rules;
         private readonly IMaintanence _maintanence;
+        private readonly INotify _notify;
 
         static async Task Main(string[] args)
         {
@@ -24,25 +25,35 @@ namespace Integration
         }
 
 
-        public Program(ITest test, IEventsRepository eventsRepository, IRuleProcessor rules, IMaintanence maintanence)
+        public Program(ITest test, IEventsRepository eventsRepository, IRuleProcessor rules, IMaintanence maintanence, INotify notify)
         {
             _test = test;
             _eventsRepository = eventsRepository;
             _rules = rules;
             _maintanence = maintanence;
+            _notify = notify;
         }
 
         
         public async Task Run()
         {
-            //var id = Guid.NewGuid();
+            //await _notify.SendEmailAsync(new Swampnet.Evl.EmailMessage() 
+            //{ 
+            //    Subject = "Test subject",
+            //    Body = "<body>TEST BODY</body>",
+            //    To = new List<EmailMessage.Recipient>() { 
+            //        new EmailMessage.Recipient("pj@theswamp.co.uk")
+            //    }
+            //});
+
+            var id = Guid.NewGuid();
 
             //var evt = new Event()
             //{
             //    Id = id,
             //    Category = Category.info,
             //    Source = $"test-02",
-            //    Summary = $"test-rule-01",
+            //    Summary = $"Test notifications",
             //    Properties = new[] {
             //            new Property()
             //            {
@@ -52,16 +63,35 @@ namespace Integration
             //        },
             //    Tags = new List<string>()
             //    {
-            //        "tag-01",
-            //        "tag-02",
-            //        "tag-03"
+            //        "test-email"
             //    }
             //};
 
+            var evt = new Event()
+            {
+                Id = id,
+                Category = Category.info,
+                Source = $"test-02",
+                Summary = $"test-rule-01",
+                Properties = new[] {
+                        new Property()
+                        {
+                            Name = "one",
+                            Value = "one-value"
+                        }
+                    },
+                Tags = new List<string>()
+                {
+                    "tag-01",
+                    "tag-02",
+                    "tag-03"
+                }
+            };
+
             //await evt.PostAsync();
 
-            //await _eventsRepository.SaveAsync(evt);
-            //await _rules.ProcessEventAsync(id);
+            await _eventsRepository.SaveAsync(evt);
+            await _rules.ProcessEventAsync(id);
 
             //for (int i = 0; i < 1; i++)
             //{
@@ -90,13 +120,12 @@ namespace Integration
 
             //await _maintanence.RunAsync();
 
-            var x = await _eventsRepository.SearchAsync(new EventSearchCriteria()
-            {
-                PageSize = 10,
-                Page = 10,
-                Category = Category.debug
-            });
-
+            //var x = await _eventsRepository.SearchAsync(new EventSearchCriteria()
+            //{
+            //    PageSize = 10,
+            //    Page = 10,
+            //    Category = Category.debug
+            //});
 
             //foreach (var e in x)
             //{

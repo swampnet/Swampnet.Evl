@@ -18,6 +18,8 @@ namespace Swampnet.Evl.Services
                 .AddEnvironmentVariables()
                 .Build();
 
+            services.AddSingleton<IConfigurationRoot>(config);
+
             services.AddTransient<ITest, Test>();
             services.AddTransient<ITagRepository, TagRepository>();
             services.AddTransient<ISourceRepository, SourceRepository>();
@@ -25,11 +27,13 @@ namespace Swampnet.Evl.Services
             services.AddTransient<IRuleRepository, RuleRepository>();
             services.AddTransient<IRuleProcessor, RuleProcessor>();
             services.AddTransient<IMaintanence, Maintanence>();
+            services.AddTransient<INotify, NotifyService>();
 
             services.AddTransient<IActionProcessor, Implementations.ActionProcessors.AddTagAction>();
             services.AddTransient<IActionProcessor, Implementations.ActionProcessors.RemoveTagAction>();
             services.AddTransient<IActionProcessor, Implementations.ActionProcessors.SetCategoryAction>();
             services.AddTransient<IActionProcessor, Implementations.ActionProcessors.AddPropertyAction>();
+            services.AddTransient<IActionProcessor, Implementations.ActionProcessors.EmailAction>();
 
             services.AddDbContext<EventsContext>(options =>
             {
