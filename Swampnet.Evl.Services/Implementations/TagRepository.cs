@@ -30,7 +30,13 @@ namespace Swampnet.Evl.Services.Implementations
             var entity = await _context.Tags.Where(t => t.Name == lookup).OrderBy(t => t.Id).FirstOrDefaultAsync();
             if(entity != null)
             {
-                _cache.Add(lookup, entity);
+                lock (_cache)
+                {
+                    if (!_cache.ContainsKey(lookup))
+                    {
+                        _cache.Add(lookup, entity);
+                    }
+                }
                 return entity;
             }
 
