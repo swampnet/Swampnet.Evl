@@ -93,6 +93,8 @@ namespace Integration
             await _eventsRepository.SaveAsync(evt);
             await _rules.ProcessEventAsync(id);
 
+            var x = await _eventsRepository.LoadAsync(id);
+
             //for (int i = 0; i < 1; i++)
             //{
             //    var evt = new Swampnet.Evl.Event()

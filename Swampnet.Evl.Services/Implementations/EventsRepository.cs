@@ -24,14 +24,35 @@ namespace Swampnet.Evl.Services.Implementations
             _sourceService = sourceService;
         }
 
-        public Task<Event> LoadAsync(long id)
+        public async Task<Event> LoadAsync(long id)
         {
-            throw new NotImplementedException();
+            var evt = await _context.Events
+                .Include(f => f.Source)
+                .Include(f => f.Category)
+                .Include(f => f.History)
+                .Include(f => f.EventTags)
+                    .ThenInclude(f => f.Tag)
+                .SingleOrDefaultAsync(e => e.Id == id);
+
+            //@todo: Check for null, throw some kind of not found error
+
+            return evt.ToEvent();
         }
 
-        public Task<Event> LoadAsync(Guid reference)
+
+        public async Task<Event> LoadAsync(Guid reference)
         {
-            throw new NotImplementedException();
+            var evt = await _context.Events
+                .Include(f => f.Source)
+                .Include(f => f.Category)
+                .Include(f => f.History)
+                .Include(f => f.EventTags)
+                    .ThenInclude(f => f.Tag)
+                .SingleOrDefaultAsync(e=>e.Reference == reference);
+
+            //@todo: Check for null, throw some kind of not found error
+
+            return evt.ToEvent();
         }
 
 
@@ -99,7 +120,6 @@ namespace Swampnet.Evl.Services.Implementations
             var events = _context.Events
                 .Include(f => f.Source)
                 .Include(f => f.Category)
-                .Include(f => f.History)
                 .Include(f => f.EventTags)
                     .ThenInclude(f => f.Tag)
                 .AsQueryable();

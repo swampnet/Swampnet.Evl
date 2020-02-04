@@ -12,18 +12,37 @@ using Swampnet.Evl.Services.Interfaces;
 
 namespace Swampnet.Evl.Functions
 {
-    public class Search
+    public class SearchFunctions
     {
         private readonly IEventsRepository _eventsRepository;
 
-        public Search(IEventsRepository eventsRepository)
+        public SearchFunctions(IEventsRepository eventsRepository)
         {
             _eventsRepository = eventsRepository;
         }
 
+        [FunctionName("details")]
+        public async Task<IActionResult> Details(
+            [HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req,
+            ILogger log)
+        {
+            string id = req.Query["id"];
+            if(Int64.TryParse(id, out long x))
+            {
+                return new OkObjectResult(await  _eventsRepository.LoadAsync(x));
+            }
+            else if(Guid.TryParse(id, out Guid y))
+            {
+                return new OkObjectResult(await _eventsRepository.LoadAsync(y));
+            }
+            else
+            {
+                return new NotFoundResult();
+            }
+        }
 
         [FunctionName("search")]
-        public async Task<IActionResult> Run(
+        public async Task<IActionResult> Search(
             [HttpTrigger(AuthorizationLevel.Function,"get",Route = null)] HttpRequest req,
             ILogger log)
         {
