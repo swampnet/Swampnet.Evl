@@ -16,20 +16,22 @@ namespace Swampnet.Evl.Functions
     public static class Post
     {
         [FunctionName("post-event")]
-        public static async Task<IActionResult> Run(
+        public static async Task<IActionResult> PostEvent(
             [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req,
             [Queue("events"), StorageAccount("event-queue")] ICollector<string> queue,
             ILogger log)
         {
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-
-            Enqueue(queue, JsonConvert.DeserializeObject<Event>(requestBody));
+            var evt = JsonConvert.DeserializeObject<Event>(requestBody);
+            log.LogInformation($"Enqueuing 1 event");
+            Enqueue(queue, evt);
 
             return new OkResult();
         }
 
+
         [FunctionName("post-bulk")]
-        public static async Task<IActionResult> Bulk(
+        public static async Task<IActionResult> PostBulk(
             [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req,
             [Queue("events"), StorageAccount("event-queue")] ICollector<string> queue,
             ILogger log)
@@ -37,6 +39,7 @@ namespace Swampnet.Evl.Functions
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
 
             var events = JsonConvert.DeserializeObject<Event[]>(requestBody);
+            log.LogInformation($"Enqueuing {events.Count()} events");
             foreach(var e in events)
             {
                 Enqueue(queue, e);
