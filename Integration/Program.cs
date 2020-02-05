@@ -8,6 +8,7 @@ using Swampnet.Evl.Services;
 using Swampnet.Evl.Services.Interfaces;
 using System.Threading.Tasks;
 using Swampnet.Evl;
+using System.Threading;
 
 namespace Integration
 {
@@ -90,12 +91,42 @@ namespace Integration
                 }
             };
 
+            await _eventsRepository.SaveAsync(evt);
+
+            while (true)
+            {
+                Console.WriteLine(DateTime.Now);
+                await _rules.ProcessEventAsync(id);
+                Thread.Sleep(10000);
+            }
+
+            //var evt = new Event()
+            //{
+            //    Id = id,
+            //    Category = Category.info,
+            //    Source = $"test-02",
+            //    Summary = $"test-rule-01",
+            //    Properties = new[] {
+            //            new Property()
+            //            {
+            //                Name = "one",
+            //                Value = "one-value"
+            //            }
+            //        },
+            //    Tags = new List<string>()
+            //    {
+            //        "tag-01",
+            //        "tag-02",
+            //        "tag-03"
+            //    }
+            //};
+
             //await evt.PostAsync();
 
-            await _eventsRepository.SaveAsync(evt);
-            await _rules.ProcessEventAsync(id);
+            //await _eventsRepository.SaveAsync(evt);
+            //await _rules.ProcessEventAsync(id);
 
-            var x = await _eventsRepository.LoadAsync(id);
+            //var x = await _eventsRepository.LoadAsync(id);
 
             //for (int i = 0; i < 1; i++)
             //{
