@@ -49,7 +49,6 @@ namespace Swampnet.Evl.Functions
             // Better way of doing this? We have any kind of ModalBinder in AzFuncs?
             string id = req.Query["id"];
             string summary = req.Query["summary"];
-            string category = req.Query["category"];
             string tags = req.Query["tags"];
             string start = req.Query["start"];
             string end = req.Query["end"];
@@ -103,6 +102,8 @@ namespace Swampnet.Evl.Functions
             }
 
             rq.Page = rq.Page == 0 ? 1 : rq.Page;
+
+            log.LogInformation(JsonConvert.SerializeObject(rq));
 
             var events = await _eventsRepository.SearchAsync(rq);
 

@@ -13,8 +13,6 @@ namespace Swampnet.Evl.Services.Implementations
 {
     class EventsRepository : IEventsRepository
     {
-        private readonly static MemoryCache _cache = new MemoryCache(new MemoryCacheOptions());
-
         private readonly EventsContext _context;
         private IEnumerable<CategoryEntity> _categories;
         private readonly ITagRepository _tags;
@@ -182,11 +180,11 @@ namespace Swampnet.Evl.Services.Implementations
             events = events.OrderByDescending(e => e.TimestampUtc);
 
             // Paging
-            criteria.Page = criteria.Page == 0 ? 1 : criteria.Page;
-            if(Math.Ceiling((double)rs.TotalCount / criteria.PageSize) < criteria.Page)
-            {
-                criteria.Page = (int)Math.Ceiling((double)rs.TotalCount / criteria.PageSize);
-            }
+            //criteria.Page = criteria.Page == 0 ? 1 : criteria.Page;
+            //if(Math.Ceiling((double)rs.TotalCount / criteria.PageSize) < criteria.Page)
+            //{
+            //    criteria.Page = (int)Math.Ceiling((double)rs.TotalCount / criteria.PageSize);
+            //}
 
             events = events.Skip((criteria.Page-1) * criteria.PageSize).Take(criteria.PageSize);
 
@@ -213,13 +211,13 @@ namespace Swampnet.Evl.Services.Implementations
 
         public Task<string[]> SourceAsync()
         {
-            return _cache.GetOrCreateAsync<string[]>("source", LoadSource);
+            return _context.Sources.OrderBy(s => s.Name).Select(s => s.Name).ToArrayAsync();
         }
 
 
         public Task<string[]> TagsAsync()
         {
-            return _cache.GetOrCreateAsync<string[]>("tags", LoadTags);
+            return _context.Tags.OrderBy(s => s.Name).Select(s => s.Name).ToArrayAsync();
         }
 
 
@@ -230,22 +228,6 @@ namespace Swampnet.Evl.Services.Implementations
                 _categories = await _context.Categories.ToArrayAsync();
             }
             return _categories.Single(c => c.Name.Equals(category.ToString(), StringComparison.InvariantCultureIgnoreCase));
-        }
-
-
-        private Task<string[]> LoadSource(ICacheEntry arg)
-        {
-            arg.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10);
-
-            return _context.Sources.OrderBy(s => s.Name).Select(s => s.Name).ToArrayAsync();
-        }
-
-
-        private Task<string[]> LoadTags(ICacheEntry arg)
-        {
-            arg.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10);
-
-            return _context.Tags.OrderBy(s => s.Name).Select(s => s.Name).ToArrayAsync();
         }
     }
 }

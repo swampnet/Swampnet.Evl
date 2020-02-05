@@ -167,10 +167,11 @@ namespace Integration
             var x = await _eventsRepository.SearchAsync(new EventSearchCriteria()
             {
                 PageSize = 10,
-                Page = 10,
+                Page = 1,
                 ShowDebug = false,
                 ShowError = true,
-                ShowInformation = false
+                ShowInformation = false,
+                Tags = "taggy"
             });
 
             //foreach (var e in x)
