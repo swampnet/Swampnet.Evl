@@ -30,6 +30,7 @@ namespace Swampnet.Evl.Services.Implementations
                 .Include(f => f.Source)
                 .Include(f => f.Category)
                 .Include(f => f.History)
+                .Include(f => f.Properties)
                 .Include(f => f.EventTags)
                     .ThenInclude(f => f.Tag)
                 .SingleOrDefaultAsync(e => e.Id == id);
@@ -46,6 +47,7 @@ namespace Swampnet.Evl.Services.Implementations
                 .Include(f => f.Source)
                 .Include(f => f.Category)
                 .Include(f => f.History)
+                .Include(f => f.Properties)
                 .Include(f => f.EventTags)
                     .ThenInclude(f => f.Tag)
                 .SingleOrDefaultAsync(e=>e.Reference == reference);
@@ -140,12 +142,26 @@ namespace Swampnet.Evl.Services.Implementations
             {
                 events = events.Where(e => e.TimestampUtc <= criteria.End);
             }
-            if (criteria.Category.HasValue)
+
+            var categories = new List<string>();
+            if (criteria.ShowDebug)
             {
-                var cat = criteria.Category.ToString().ToLowerInvariant();
-                events = events.Where(e => e.Category.Name == cat);
+                categories.Add("debug");
             }
-            if(!string.IsNullOrEmpty(criteria.Source))
+            if (criteria.ShowInformation)
+            {
+                categories.Add("info");
+            }
+            if (criteria.ShowError)
+            {
+                categories.Add("error");
+            }
+            if (categories.Any())
+            {
+                events = events.Where(e => categories.Contains(e.Category.Name));
+            }
+
+            if (!string.IsNullOrEmpty(criteria.Source))
             {
                 events = events.Where(e => e.Source.Name == criteria.Source);
             }

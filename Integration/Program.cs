@@ -27,7 +27,14 @@ namespace Integration
         }
 
 
-        public Program(ITest test, IEventsRepository eventsRepository, IRuleProcessor rules, IMaintanence maintanence, INotify notify, IRuleRepository ruleRepository)
+        public Program(
+            IConfigurationRoot cfg,
+            ITest test,
+            IEventsRepository eventsRepository,
+            IRuleProcessor rules,
+            IMaintanence maintanence,
+            INotify notify,
+            IRuleRepository ruleRepository)
         {
             _test = test;
             _eventsRepository = eventsRepository;
@@ -49,7 +56,7 @@ namespace Integration
             //    }
             //});
 
-            var id = Guid.NewGuid();
+            //var id = Guid.NewGuid();
 
             //var evt = new Event()
             //{
@@ -70,35 +77,37 @@ namespace Integration
             //    }
             //};
 
-            var evt = new Event()
-            {
-                Id = id,
-                Category = Category.info,
-                Source = $"test-02",
-                Summary = $"test-rule-01",
-                Properties = new[] {
-                        new Property()
-                        {
-                            Name = "one",
-                            Value = "one-value"
-                        }
-                    },
-                Tags = new List<string>()
-                {
-                    "tag-01",
-                    "tag-02",
-                    "tag-03"
-                }
-            };
+            //var evt = new Event()
+            //{
+            //    Id = id,
+            //    Category = Category.info,
+            //    Source = $"test-02",
+            //    Summary = $"test-rule-01",
+            //    Properties = new[] {
+            //            new Property()
+            //            {
+            //                Name = "one",
+            //                Value = "one-value"
+            //            }
+            //        },
+            //    Tags = new List<string>()
+            //    {
+            //        "tag-01",
+            //        "tag-02",
+            //        "tag-03"
+            //    }
+            //};
 
-            await _eventsRepository.SaveAsync(evt);
+            //await evt.PostAsync();
 
-            while (true)
-            {
-                Console.WriteLine(DateTime.Now);
-                await _rules.ProcessEventAsync(id);
-                Thread.Sleep(10000);
-            }
+            //await _eventsRepository.SaveAsync(evt);
+
+            //while (true)
+            //{
+            //    Console.WriteLine(DateTime.Now);
+            //    await _rules.ProcessEventAsync(id);
+            //    Thread.Sleep(10000);
+            //}
 
             //var evt = new Event()
             //{
@@ -155,12 +164,14 @@ namespace Integration
 
             //await _maintanence.RunAsync();
 
-            //var x = await _eventsRepository.SearchAsync(new EventSearchCriteria()
-            //{
-            //    PageSize = 10,
-            //    Page = 10,
-            //    Category = Category.debug
-            //});
+            var x = await _eventsRepository.SearchAsync(new EventSearchCriteria()
+            {
+                PageSize = 10,
+                Page = 10,
+                ShowDebug = false,
+                ShowError = true,
+                ShowInformation = false
+            });
 
             //foreach (var e in x)
             //{

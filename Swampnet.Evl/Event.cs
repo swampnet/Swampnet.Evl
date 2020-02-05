@@ -14,10 +14,11 @@ namespace Swampnet.Evl
         public string Summary { get; set; }
         public DateTime? Start { get; set; }
         public DateTime? End { get; set; }
-        public Category? Category { get; set; }
         public string Source { get; set; }
         public string Tags { get; set; }
-
+        public bool ShowDebug { get; set; }
+        public bool ShowInformation { get; set; } = true;
+        public bool ShowError { get; set; } = true;
     }
 
 
