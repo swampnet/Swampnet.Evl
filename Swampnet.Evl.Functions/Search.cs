@@ -49,6 +49,7 @@ namespace Swampnet.Evl.Functions
             // Better way of doing this? We have any kind of ModalBinder in AzFuncs?
             string id = req.Query["id"];
             string summary = req.Query["summary"];
+            string source = req.Query["source"];
             string tags = req.Query["tags"];
             string start = req.Query["start"];
             string end = req.Query["end"];
@@ -67,6 +68,10 @@ namespace Swampnet.Evl.Functions
             if (!string.IsNullOrEmpty(summary))
             {
                 rq.Summary = summary;
+            }
+            if (!string.IsNullOrEmpty(source))
+            {
+                rq.Source = source;
             }
             if (!string.IsNullOrEmpty(tags))
             {
@@ -109,6 +114,7 @@ namespace Swampnet.Evl.Functions
 
             return new OkObjectResult(events);
         }
+
 
         [FunctionName("source")]
         public async Task<IActionResult> Source(

@@ -168,10 +168,11 @@ namespace Integration
             {
                 PageSize = 10,
                 Page = 1,
-                ShowDebug = false,
-                ShowError = true,
-                ShowInformation = false,
-                Tags = "taggy"
+                //ShowDebug = false,
+                //ShowError = true,
+                //ShowInformation = false,
+                //Tags = "auth",
+                Source = "Intranet"
             });
 
             //foreach (var e in x)
