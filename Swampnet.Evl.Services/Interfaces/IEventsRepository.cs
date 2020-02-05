@@ -17,6 +17,9 @@ namespace Swampnet.Evl.Services.Interfaces
         Task<Event> LoadAsync(long id);
         Task<Event> LoadAsync(Guid reference);
 
+        Task<string[]> TagsAsync();
+        Task<string[]> SourceAsync();
+
         /// <summary>
         /// Save event to backend
         /// </summary>

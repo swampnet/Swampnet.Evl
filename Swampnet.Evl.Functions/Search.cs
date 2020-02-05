@@ -55,6 +55,9 @@ namespace Swampnet.Evl.Functions
             string end = req.Query["end"];
             string page = req.Query["page"];
             string pageSize = req.Query["pageSize"];
+            string showDebug = req.Query["showDebug"];
+            string showInfo = req.Query["showInfo"];
+            string showError = req.Query["showError"];
 
             var rq = new EventSearchCriteria();
 
@@ -65,10 +68,6 @@ namespace Swampnet.Evl.Functions
             if (!string.IsNullOrEmpty(summary))
             {
                 rq.Summary = summary;
-            }
-            if (!string.IsNullOrEmpty(category))
-            {
-                rq.Category = (Category)Enum.Parse(typeof(Category), category.ToLowerInvariant());
             }
             if (!string.IsNullOrEmpty(tags))
             {
@@ -90,12 +89,43 @@ namespace Swampnet.Evl.Functions
             {
                 rq.End = dtEnd;
             }
+            if (bool.TryParse(showDebug, out var d))
+            {
+                rq.ShowDebug = d;
+            }
+            if (bool.TryParse(showInfo, out var i))
+            {
+                rq.ShowInformation = i;
+            }
+            if (bool.TryParse(showError, out var e))
+            {
+                rq.ShowError = e;
+            }
 
             rq.Page = rq.Page == 0 ? 1 : rq.Page;
 
             var events = await _eventsRepository.SearchAsync(rq);
 
             return new OkObjectResult(events);
+        }
+
+        [FunctionName("source")]
+        public async Task<IActionResult> Source(
+            [HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req,
+            ILogger log)
+        {
+            var source = await _eventsRepository.SourceAsync();
+            return new OkObjectResult(source);
+        }
+
+
+        [FunctionName("tags")]
+        public async Task<IActionResult> Tags(
+            [HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req,
+            ILogger log)
+        {
+            var tags = await _eventsRepository.TagsAsync();
+            return new OkObjectResult(tags);
         }
     }
 }

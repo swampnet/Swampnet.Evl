@@ -13,10 +13,11 @@ namespace Swampnet.Evl.Services.Implementations
 {
     class RuleProcessor : IRuleProcessor
     {
+        private readonly static MemoryCache _cache = new MemoryCache(new MemoryCacheOptions());
+
         private readonly EventsContext _context;
         private readonly IEnumerable<IActionProcessor> _processors;
         private readonly IRuleRepository _rules;
-        private readonly MemoryCache _cache = new MemoryCache(new MemoryCacheOptions());
         private readonly IConfigurationRoot _configuration;
 
         public RuleProcessor(

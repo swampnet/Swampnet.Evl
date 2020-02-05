@@ -7,11 +7,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
 using System.Diagnostics;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace Swampnet.Evl.Services.Implementations
 {
     class EventsRepository : IEventsRepository
     {
+        private readonly static MemoryCache _cache = new MemoryCache(new MemoryCacheOptions());
+
         private readonly EventsContext _context;
         private IEnumerable<CategoryEntity> _categories;
         private readonly ITagRepository _tags;
@@ -208,6 +211,18 @@ namespace Swampnet.Evl.Services.Implementations
         }
 
 
+        public Task<string[]> SourceAsync()
+        {
+            return _cache.GetOrCreateAsync<string[]>("source", LoadSource);
+        }
+
+
+        public Task<string[]> TagsAsync()
+        {
+            return _cache.GetOrCreateAsync<string[]>("tags", LoadTags);
+        }
+
+
         private async Task<CategoryEntity> ResolveCategoryAsync(Category category)
         {
             if(_categories == null)
@@ -215,6 +230,22 @@ namespace Swampnet.Evl.Services.Implementations
                 _categories = await _context.Categories.ToArrayAsync();
             }
             return _categories.Single(c => c.Name.Equals(category.ToString(), StringComparison.InvariantCultureIgnoreCase));
+        }
+
+
+        private Task<string[]> LoadSource(ICacheEntry arg)
+        {
+            arg.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10);
+
+            return _context.Sources.OrderBy(s => s.Name).Select(s => s.Name).ToArrayAsync();
+        }
+
+
+        private Task<string[]> LoadTags(ICacheEntry arg)
+        {
+            arg.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10);
+
+            return _context.Tags.OrderBy(s => s.Name).Select(s => s.Name).ToArrayAsync();
         }
     }
 }
