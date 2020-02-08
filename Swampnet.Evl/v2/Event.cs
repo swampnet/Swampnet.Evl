@@ -16,6 +16,7 @@ namespace Swampnet.Evl.v2
             TimestampUtc = DateTime.UtcNow;
             History = new List<EventHistory>();
             Tags = new List<string>();
+            Properties = new List<Client.Property>();
         }
 
         public Guid Id { get; set; }
@@ -28,11 +29,45 @@ namespace Swampnet.Evl.v2
         public DateTime TimestampUtc { get; set; }
         public List<string> Tags { get; set; }
 
-        public Client.Property[] Properties { get; set; }
+        public List<Client.Property> Properties { get; set; }
         public List<EventHistory> History { get; set; }
 
 
+        public static Event FromLegacyEvent(Client.Event source)
+        {
+            var e = new Event() { 
+                Properties = source.Properties.ToList(),
+                Summary = source.Summary,
+                TimestampUtc = source.TimestampUtc,
+                Source = source.Source,
+                Tags = source.Tags,
+                Category = Convert(source.Category)
+            };
 
+            e.History.Add(new EventHistory() { 
+                TimestampUtc = DateTime.UtcNow,
+                Type = "convert-legacy"
+            });
+
+            return e;
+        }
+
+
+        private static Category Convert(Client.EventCategory category)
+        {
+            switch (category)
+            {
+                case Client.EventCategory.Information:
+                    return Category.info;
+
+                case Client.EventCategory.Warning:
+                case Client.EventCategory.Error:
+                    return Category.error;
+                    
+                default:
+                    return Category.debug;
+            }
+        }
     }
 
 
