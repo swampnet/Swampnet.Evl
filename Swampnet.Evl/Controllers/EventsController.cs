@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Serilog;
 using Swampnet.Evl.Client;
 using Swampnet.Evl.Common.Contracts;
@@ -23,15 +24,17 @@ namespace Swampnet.Evl.Controllers
         private readonly IEventQueueProcessor _eventProcessor;
         private readonly IEventDataAccess _dal;
         private readonly IAuth _auth;
+        private readonly IConfiguration _configuration;
 
         /// <summary>
         /// construction
         /// </summary>
-        public EventsController(IEventDataAccess dal, IEventQueueProcessor eventProcessor, IAuth auth)
+        public EventsController(IEventDataAccess dal, IEventQueueProcessor eventProcessor, IAuth auth, IConfiguration configuration)
         {
             _dal = dal;
             _eventProcessor = eventProcessor;
             _auth = auth;
+            _configuration = configuration;
         }
 
         /// <summary>
@@ -218,7 +221,7 @@ namespace Swampnet.Evl.Controllers
                 {
                     e.Properties = new List<Property>();
                 }
-                e.Properties.AddRange(Request.CommonProperties());
+                //e.Properties.AddRange(Request.CommonProperties());
 
                 _eventProcessor.Enqueue(org.Id, e);
 
@@ -260,15 +263,14 @@ namespace Swampnet.Evl.Controllers
                     return BadRequest();
                 }
 
-
-                Parallel.ForEach(evts, e =>
-                {
-                    if (e.Properties == null)
-                    {
-                        e.Properties = new List<Property>();
-                    }
-                    e.Properties.AddRange(Request.CommonProperties());
-                });
+                //Parallel.ForEach(evts, e =>
+                //{
+                //    if (e.Properties == null)
+                //    {
+                //        e.Properties = new List<Property>();
+                //    }
+                //    e.Properties.AddRange(Request.CommonProperties());
+                //});
 
                 _eventProcessor.Enqueue(org.Id, evts);
 

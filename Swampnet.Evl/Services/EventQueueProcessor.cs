@@ -38,17 +38,10 @@ namespace Swampnet.Evl.Services
         private readonly ConcurrentQueue<QueuedEvents> _queue = new ConcurrentQueue<QueuedEvents>();
         private readonly AutoResetEvent _queueEvent = new AutoResetEvent(false);
         private readonly Thread _monitorThread;
-        private readonly IEnumerable<IEventProcessor> _processors;
-        private readonly IAuth _auth;
-        private readonly IEventDataAccess _eventDataAccess;
         private readonly IConfiguration _configuration;
 
-        public EventQueueProcessor(IAuth auth, IEventDataAccess dal, IEnumerable<IEventProcessor> processors, IConfiguration configuration)
+        public EventQueueProcessor(IConfiguration configuration)
         {
-            _auth = auth;
-            _eventDataAccess = dal;
-            _processors = processors;
-
             _monitorThread = new Thread(MonitorThread)
             {
                 IsBackground = true,
@@ -88,7 +81,7 @@ namespace Swampnet.Evl.Services
         }
 
 
-        private void MonitorThread()
+        private async void MonitorThread()
         {
             var queuedEvents = Wait();
 
@@ -96,69 +89,11 @@ namespace Swampnet.Evl.Services
             {
                 var sw = Stopwatch.StartNew();
 
-                // Can we flatten this & possibly group by organisation
-                Parallel.ForEach(queuedEvents, async queuedEvent => {
-                    foreach (var e in queuedEvent.Events)
-                    {
-                        try
-                        {
-                            var evt = await _eventDataAccess.CreateAsync(queuedEvent.Organisation, e);
-
-                            foreach (var processor in _processors.OrderBy(p => p.Priority))
-                            {
-                                try
-                                {
-                                    await processor.ProcessAsync(evt);
-                                }
-                                catch (Exception ex)
-                                {
-                                    ex.AddData("Processor", processor.GetType().Name);
-                                    Log.Error(ex, ex.Message);
-                                }
-                            }
-
-                            await _eventDataAccess.UpdateAsync(null, evt);
-
-                            #region Pass on to v2
-                            try
-                            {
-                                var e2 = new v2.Event()
-                                {
-                                    Id = evt.Id,
-                                    Properties = e.Properties.ToArray(),
-                                    Source = e.Source,
-                                    Summary = e.Summary,
-                                    TimestampUtc = e.TimestampUtc,
-                                    Tags = e.Tags
-                                };
-
-                                switch (evt.Category)
-                                {
-                                    case EventCategory.Debug:
-                                        e2.Category = v2.Category.debug;
-                                        break;
-
-                                    case EventCategory.Information:
-                                        e2.Category = v2.Category.info;
-                                        break;
-                                    case EventCategory.Error:
-                                        e2.Category = v2.Category.error;
-                                        break;
-                                }
-
-                                await e2.PostAsync(_configuration.GetValue<string>("evl2:api-key"));
-                            }
-                            catch 
-                            {
-                            }
-                            #endregion
-                        }
-                        catch (Exception ex)
-                        {
-                            Log.Error(ex, ex.Message);
-                        }
-                    }
-                });
+                // Just pushing to v2
+                await queuedEvents
+                    .SelectMany(x => x.Events)
+                    .Select(s => v2.Event.FromLegacyEvent(s))
+                    .PostAsync(_configuration.GetValue<string>("evl2:api-key"));
 
                 Debug.WriteLine($">>> PROCESS in {sw.Elapsed.TotalMilliseconds}");
 

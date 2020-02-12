@@ -63,15 +63,15 @@ namespace UnitTests
             Assert.AreEqual(expected, actual);
         }
 
-        [TestMethod]
-        public void String_TruncateWithEllipses()
-        {
-            string value = "ABCDEFGH";
-            string actual = value.Truncate(5, true);
-            string expected = "ABCDE...";
+        //[TestMethod]
+        //public void String_TruncateWithEllipses()
+        //{
+        //    string value = "ABCDEFGH";
+        //    string actual = value.Truncate(5, true);
+        //    string expected = "ABCDE...";
 
-            Assert.AreEqual(expected, actual);
-        }
+        //    Assert.AreEqual(expected, actual);
+        //}
 
 
         [TestMethod]
