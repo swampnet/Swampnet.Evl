@@ -52,16 +52,16 @@ namespace Swampnet.Evl
             services.AddSqlServerDataProvider();
 
             // Add default Event Processors
-            services.AddDefaultEventProcessors();
+            //services.AddDefaultEventProcessors();
 
             // Add default Action Handlers
-            services.AddDefaultActionHandlers();
+            //services.AddDefaultActionHandlers();
 
-            services.AddEmailActionHandler();
-            services.AddSlackActionHandler();
+            //services.AddEmailActionHandler();
+            //services.AddSlackActionHandler();
 
             services.AddSingleton<IAuth, Auth>();
-            services.AddSingleton<IHostedService, TruncateDataHostedService>();
+            //services.AddSingleton<IHostedService, TruncateDataHostedService>();
 
             // Add framework services.  
             services.AddMvc().AddJsonOptions(options => {
@@ -69,25 +69,24 @@ namespace Swampnet.Evl
 				options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
 			});
 
-
 			services.AddCors();
 
 			// Register the Swagger generator, defining one or more Swagger documents
-			services.AddSwaggerGen(c =>
-			{
-				c.SwaggerDoc("v1", new Info
-				{
-					Title = "Evl API",
-					Version = "v1",
-					Description = "Backend API for Evl"					
-				});
+			//services.AddSwaggerGen(c =>
+			//{
+			//	c.SwaggerDoc("v1", new Info
+			//	{
+			//		Title = "Evl API",
+			//		Version = "v1",
+			//		Description = "Backend API for Evl"					
+			//	});
 
 
-				var filePath = Path.Combine(PlatformServices.Default.Application.ApplicationBasePath, "Swampnet.Evl.xml");
-				c.IncludeXmlComments(filePath);
+			//	var filePath = Path.Combine(PlatformServices.Default.Application.ApplicationBasePath, "Swampnet.Evl.xml");
+			//	c.IncludeXmlComments(filePath);
 
-				//c.OperationFilter<MyOpFil>();
-			});
+			//	//c.OperationFilter<MyOpFil>();
+			//});
 		}
 
 
