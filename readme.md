@@ -11,17 +11,8 @@ develop [![Build status](https://swampnet.visualstudio.com/Swampnet.Evl/_apis/bu
 Flexible, structured events
 https://serilog.net/
 
-~~Assembly scanning and decoration extensions for Microsoft.Extensions.DependencyInjection~~
-~~https://github.com/khellang/Scrutor~~
-
 http://www.mimekit.net/
 A cross-platform .NET library for IMAP, POP3, and SMTP
-
-~~dragula~~
-~~https://github.com/valor-software/ng2-dragula~~
-
-~~owl date time picker~~
-~~https://github.com/DanielYKPan/date-time-picker~~
 
 @Notes
 Create deployment script:
