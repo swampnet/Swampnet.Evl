@@ -10,9 +10,9 @@ namespace Swampnet.Evl.Services.Implementations.ActionProcessors
 {
     class AddTagAction : IActionProcessor
     {
-        private readonly ITags _tags;
+        private readonly ITagRepository _tags;
 
-        public AddTagAction(ITags tags)
+        public AddTagAction(ITagRepository tags)
         {
             _tags = tags;
         }
@@ -21,15 +21,17 @@ namespace Swampnet.Evl.Services.Implementations.ActionProcessors
 
         public async Task ApplyAsync(EventsContext context, EventEntity evt, ActionDefinition definition)
         {
-            var tagName = definition.Properties.StringValue("tag");
-            
-            if(!evt.EventTags.Any(et => et.Tag.Name.EqualsNoCase(tagName)))
+            foreach(var tagName in definition.Properties.StringValues("tag"))
             {
-                var tag = await _tags.ResolveAsync(tagName);
+                if (!evt.EventTags.Any(et => et.Tag.Name.EqualsNoCase(tagName)))
+                {
+                    var tag = await _tags.ResolveAsync(tagName);
 
-                evt.EventTags.Add(new EventTagsEntity() { 
-                    Tag = await context.Tags.SingleAsync(t => t.Id == tag.Id)
-                });
+                    evt.EventTags.Add(new EventTagsEntity()
+                    {
+                        Tag = await context.Tags.SingleAsync(t => t.Id == tag.Id)
+                    });
+                }
             }
         }
     }
@@ -40,12 +42,13 @@ namespace Swampnet.Evl.Services.Implementations.ActionProcessors
 
         public Task ApplyAsync(EventsContext context, EventEntity evt, ActionDefinition definition)
         {
-            var tagName = definition.Properties.StringValue("tag");
-
-            foreach(var t in evt.EventTags.Where(et => et.Tag.Name.EqualsNoCase(tagName)).ToArray())
+            foreach(var tagName in definition.Properties.StringValues("tag"))
             {
-                evt.EventTags.Remove(t);
-                context.EventTags.Remove(t);
+                foreach (var t in evt.EventTags.Where(et => et.Tag.Name.EqualsNoCase(tagName)).ToArray())
+                {
+                    evt.EventTags.Remove(t);
+                    context.EventTags.Remove(t);
+                }
             }
 
             return Task.CompletedTask;

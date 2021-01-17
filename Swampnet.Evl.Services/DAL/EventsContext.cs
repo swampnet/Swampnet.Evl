@@ -17,6 +17,7 @@ namespace Swampnet.Evl.Services.DAL
         public DbSet<SourceEntity> Sources { get; set; }
         public DbSet<TagEntity> Tags { get; set; }
         public DbSet<EventTagsEntity> EventTags { get; set; }
+        public DbSet<RuleEntity> Rules { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -28,6 +29,7 @@ namespace Swampnet.Evl.Services.DAL
             modelBuilder.Entity<EventEntity>().HasOne(f => f.Source).WithMany(f => f.Events).HasForeignKey(f => f.SourceId);
             modelBuilder.Entity<EventEntity>().HasMany(f => f.EventTags).WithOne(f => f.Event).HasForeignKey(f => f.EventId);
 
+            modelBuilder.Entity<RuleEntity>().ToTable("Rule");
             modelBuilder.Entity<CategoryEntity>().ToTable("Category");
             modelBuilder.Entity<SourceEntity>().ToTable("Source");
             modelBuilder.Entity<EventPropertyEntity>().ToTable("EventProperty");
@@ -41,6 +43,7 @@ namespace Swampnet.Evl.Services.DAL
 
             modelBuilder.Entity<TagEntity>().ToTable("Tag");
             modelBuilder.Entity<TagEntity>().HasMany(f => f.EventTags).WithOne(f => f.Tag).HasForeignKey(f => f.TagId);
+
 
             base.OnModelCreating(modelBuilder);
         }

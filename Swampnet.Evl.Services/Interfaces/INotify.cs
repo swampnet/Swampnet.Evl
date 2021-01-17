@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
+
+
 namespace Swampnet.Evl.Services.Interfaces
 {
-    public interface IRuleRepository
+    public interface INotify
     {
-        Task<Rule[]> LoadRulesAsync();
+        Task SendEmailAsync(EmailMessage msg);
     }
 }

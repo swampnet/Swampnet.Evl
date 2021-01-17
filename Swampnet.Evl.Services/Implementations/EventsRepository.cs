@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
+using System.Diagnostics;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace Swampnet.Evl.Services.Implementations
 {
@@ -13,22 +15,47 @@ namespace Swampnet.Evl.Services.Implementations
     {
         private readonly EventsContext _context;
         private IEnumerable<CategoryEntity> _categories;
-        private ITags _tags;
+        private readonly ITagRepository _tags;
+        private readonly ISourceRepository _sourceService;
 
-        public EventsRepository(EventsContext context, ITags tags)
+        public EventsRepository(EventsContext context, ITagRepository tags, ISourceRepository sourceService)
         {
             _context = context;
             _tags = tags;
+            _sourceService = sourceService;
         }
 
-        public Task<Event> LoadAsync(long id)
+        public async Task<Event> LoadAsync(long id)
         {
-            throw new NotImplementedException();
+            var evt = await _context.Events
+                .Include(f => f.Source)
+                .Include(f => f.Category)
+                .Include(f => f.History)
+                .Include(f => f.Properties)
+                .Include(f => f.EventTags)
+                    .ThenInclude(f => f.Tag)
+                .SingleOrDefaultAsync(e => e.Id == id);
+
+            //@todo: Check for null, throw some kind of not found error
+
+            return evt.ToEvent();
         }
 
-        public Task<Event> LoadAsync(Guid reference)
+
+        public async Task<Event> LoadAsync(Guid reference)
         {
-            throw new NotImplementedException();
+            var evt = await _context.Events
+                .Include(f => f.Source)
+                .Include(f => f.Category)
+                .Include(f => f.History)
+                .Include(f => f.Properties)
+                .Include(f => f.EventTags)
+                    .ThenInclude(f => f.Tag)
+                .SingleOrDefaultAsync(e=>e.Reference == reference);
+
+            //@todo: Check for null, throw some kind of not found error
+
+            return evt.ToEvent();
         }
 
 
@@ -40,7 +67,7 @@ namespace Swampnet.Evl.Services.Implementations
                 TimestampUtc = e.TimestampUtc,
                 Summary = e.Summary,
                 Category = await ResolveCategoryAsync(e.Category),
-                Source = await ResolveSourceAsync(e.Source)
+                SourceId = (await _sourceService.ResolveAsync(e.Source)).Id
             };
 
             if (e.Properties != null)
@@ -85,18 +112,85 @@ namespace Swampnet.Evl.Services.Implementations
             await _context.SaveChangesAsync();
         }
 
+        private static char[] _tagSplit = new[] { ',', ';' };
 
-        public async Task<IEnumerable<EventSummary>> SearchAsync()
+        public async Task<EventSearchResult> SearchAsync(EventSearchCriteria criteria)
         {
-            var events = await _context.Events
+            var sw = Stopwatch.StartNew();
+            var rs = new EventSearchResult();
+
+
+            var events = _context.Events
                 .Include(f => f.Source)
                 .Include(f => f.Category)
-                .Include(f => f.History)
                 .Include(f => f.EventTags)
                     .ThenInclude(f => f.Tag)
-                .ToArrayAsync();
+                .AsQueryable();
 
-            return events.Select(e => new EventSummary()
+            if(criteria.Id != null)
+            {
+                events = events.Where(e => e.Reference == criteria.Id);
+            }
+            if (!string.IsNullOrEmpty(criteria.Summary))
+            {
+                events = events.Where(e => e.Summary.Contains(criteria.Summary));
+            }
+            if (criteria.Start.HasValue)
+            {
+                events = events.Where(e => e.TimestampUtc >= criteria.Start);
+            }
+            if (criteria.End.HasValue)
+            {
+                events = events.Where(e => e.TimestampUtc <= criteria.End);
+            }
+
+            var categories = new List<string>();
+            if (criteria.ShowDebug)
+            {
+                categories.Add("debug");
+            }
+            if (criteria.ShowInformation)
+            {
+                categories.Add("info");
+            }
+            if (criteria.ShowError)
+            {
+                categories.Add("error");
+            }
+            if (categories.Any())
+            {
+                events = events.Where(e => categories.Contains(e.Category.Name));
+            }
+
+            if (!string.IsNullOrEmpty(criteria.Source))
+            {
+                events = events.Where(e => e.Source.Name == criteria.Source);
+            }
+            if (!string.IsNullOrEmpty(criteria.Tags))
+            {
+                var tags = criteria.Tags.Split(_tagSplit, StringSplitOptions.RemoveEmptyEntries).Select(t => t.Trim());
+                foreach(var tag in tags)
+                {
+                    events = events.Where(e => e.EventTags.Any(et => et.Tag.Name == tag));
+                }
+            }
+
+            rs.TotalCount = await events.CountAsync();
+
+            events = events.OrderByDescending(e => e.TimestampUtc);
+
+            // Paging
+            //criteria.Page = criteria.Page == 0 ? 1 : criteria.Page;
+            //if(Math.Ceiling((double)rs.TotalCount / criteria.PageSize) < criteria.Page)
+            //{
+            //    criteria.Page = (int)Math.Ceiling((double)rs.TotalCount / criteria.PageSize);
+            //}
+
+            events = events.Skip((criteria.Page-1) * criteria.PageSize).Take(criteria.PageSize);
+
+            var results = await events.ToArrayAsync();
+
+            rs.Events = results.Select(e => new EventSummary()
             {
                 Id = e.Reference,
                 Category = (Category)Enum.Parse(typeof(Category), e.Category.Name.ToLower()),
@@ -104,7 +198,26 @@ namespace Swampnet.Evl.Services.Implementations
                 TimestampUtc = e.TimestampUtc,
                 Source = e.Source.Name,
                 Tags = e.EventTags.Select(et => et.Tag.Name).ToList()
-            });
+            }).ToArray();
+
+            rs.Elapsed = sw.Elapsed;
+            rs.Page = criteria.Page;
+            rs.TotalPages = (int)Math.Ceiling((double)rs.TotalCount / criteria.PageSize);
+            rs.PageSize = criteria.PageSize;
+
+            return rs;
+        }
+
+
+        public Task<string[]> SourceAsync()
+        {
+            return _context.Sources.OrderBy(s => s.Name).Select(s => s.Name).ToArrayAsync();
+        }
+
+
+        public Task<string[]> TagsAsync()
+        {
+            return _context.Tags.OrderBy(s => s.Name).Select(s => s.Name).ToArrayAsync();
         }
 
 
@@ -116,44 +229,5 @@ namespace Swampnet.Evl.Services.Implementations
             }
             return _categories.Single(c => c.Name.Equals(category.ToString(), StringComparison.InvariantCultureIgnoreCase));
         }
-
-
-        private async Task<SourceEntity> ResolveSourceAsync(string source)
-        {
-            // So, we're *definately* create dups here if we have a new source and have many concurrent requests with that source coming in.
-            var entity = await _context.Sources.SingleOrDefaultAsync(s => s.Name == source);
-
-            if (entity == null)
-            {
-                entity = new SourceEntity()
-                {
-                    Name = source
-                };
-
-                _context.Sources.Add(entity);
-            }
-            
-            return entity;
-        }
-
-
-        private async Task<TagEntity> ResolveTagAsync(string tag)
-        {
-            // So, we're *definately* create dups here if we have a new tag and have many concurrent requests with that source coming in.
-            var entity = await _context.Tags.SingleOrDefaultAsync(s => s.Name == tag);
-
-            if (entity == null)
-            {
-                entity = new TagEntity()
-                {
-                    Name = tag
-                };
-
-                _context.Tags.Add(entity);
-            }
-
-            return entity;
-        }
-
     }
 }

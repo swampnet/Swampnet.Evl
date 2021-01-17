@@ -27,17 +27,35 @@ namespace Swampnet.Evl.Services.Implementations
 
         public async Task RunAsync()
         {
-            // Clean up duplicate source
-            //var x = await _context.Sources
-            //    .GroupBy(s => s.Name)
-            //    .Where(s => s.Count() > 1)
-            //    .Select(g => new
-            //    {
-            //        Id = g.Key,
-            //        Count = g.Count()
-            //    })
-            //    .ToArrayAsync();
+            await CleanupDuplicateSourceAsync();
+            await CleanupDuplicateTagsAsync();
+            await TruncateExpiredEventData();
+        }
 
+
+        private async Task CleanupDuplicateTagsAsync()
+        {
+            var tags = await _context.Tags.ToArrayAsync();
+            foreach (var target in tags.GroupBy(t => t.Name).Where(t => t.Count() > 1))
+            {
+                var consolidateOn = target.First();
+                var remove = target.Where(i => i != consolidateOn);
+                var remove_id = remove.Select(i => i.Id);
+                var eventTags = await _context.EventTags.Where(e => remove_id.Contains(e.TagId)).ToArrayAsync();
+                foreach (var e in eventTags)
+                {
+                    e.TagId = consolidateOn.Id;
+                }
+
+                _context.Tags.RemoveRange(remove);
+            }
+
+            await _context.SaveChangesAsync();
+        }
+
+
+        private async Task CleanupDuplicateSourceAsync()
+        {
             var sources = await _context.Sources.ToArrayAsync();
 
             foreach (var target in sources.GroupBy(s => s.Name).Where(s => s.Count() > 1))
@@ -56,6 +74,11 @@ namespace Swampnet.Evl.Services.Implementations
             }
 
             await _context.SaveChangesAsync();
+        }
+
+        private async Task TruncateExpiredEventData()
+        {
+            await _context.Database.ExecuteSqlRawAsync("[events].[TrucateExpiredEventData]");
         }
     }
 }

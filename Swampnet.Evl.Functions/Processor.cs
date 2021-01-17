@@ -29,6 +29,16 @@ namespace Swampnet.Evl.Functions
             
             e.History.Add(new EventHistory("dequeued"));
 
+            if (e.Summary.Length > 512)
+            {
+                e.History.Add(new EventHistory()
+                {
+                    Type = "truncate",
+                    Details = $"Truncating summary (length: {e.Summary.Length})"
+                });
+                e.Summary = e.Summary.Substring(0, 500) + " ...";
+            }
+
             // Save event to DB
             await _eventsRepository.SaveAsync(e);
 

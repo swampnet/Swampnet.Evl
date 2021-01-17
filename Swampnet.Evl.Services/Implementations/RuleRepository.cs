@@ -1,4 +1,7 @@
-﻿using Swampnet.Evl.Services.DAL.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Configuration;
+using Swampnet.Evl.Services.DAL;
 using Swampnet.Evl.Services.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -9,62 +12,27 @@ namespace Swampnet.Evl.Services.Implementations
 {
     class RuleRepository : IRuleRepository
     {
-        private readonly RuleEntity[] _rules = new[] {
-            new RuleEntity()
-            {
-                Name = "rule-01",
-                Priority = 1,
-                Expression = new Expression(ExpressionOperatorType.MATCH_ALL)
-                {
-                    Children = new Expression[]
-                    {
-                        new Expression(ExpressionOperatorType.EQ, ExpressionOperandType.Summary, "test-rule-01"),
-                        new Expression(ExpressionOperatorType.EQ, ExpressionOperandType.Category, "info")
-                    }
-                },
-                Actions = new[]
-                {
-                    new ActionDefinition(
-                        "add-tag",
-                        new []
-                        {
-                            new Property("tag", "rule-01")
-                        }),
-                    new ActionDefinition(
-                        "remove-tag",
-                        new []
-                        {
-                            new Property("tag", "tag-01")
-                        }),
-                    new ActionDefinition(
-                        "add-property",
-                        new []
-                        {
-                            new Property("a", "a-value"),
-                            new Property("b", "b-value"),
-                            new Property("c", "c-value")
-                        }),
-                    new ActionDefinition(
-                        "set-category",
-                        new []
-                        {
-                            new Property("category", "debug")
-                        })
-                }
-            }
-        };
+        private readonly EventsContext _context;
 
-
-        public Task<Rule[]> LoadRulesAsync()
+        public RuleRepository(EventsContext context)
         {
-            return Task.FromResult(_rules.Select(r => new Rule() {
+            _context = context;
+        }
+
+
+        public async Task<Rule[]> LoadRulesAsync()
+        {
+            var source = await _context.Rules.ToArrayAsync();
+
+            return source.Select(r => new Rule()
+            {
                 Id = r.Id,
-                Name = r.Name,
                 Priority = r.Priority,
-                // @todo: Possibly deserialize at this point?
-                Expression = r.Expression,
-                Actions = r.Actions
-            }).ToArray());
+                IsEnabled = r.IsEnabled,
+                Name = r.Name,
+                Expression = r.Expression.DeserializeXml<Expression>(),
+                Actions = r.Actions.DeserializeXml<ActionDefinition[]>()
+            }).ToArray();
         }
     }
 }

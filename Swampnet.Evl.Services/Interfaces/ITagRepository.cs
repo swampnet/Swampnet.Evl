@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace Swampnet.Evl.Services.Interfaces
 {
-    interface IActionProcessor
+    interface ITagRepository
     {
-        string Name { get; }
-        Task ApplyAsync(EventsContext context, EventEntity evt, ActionDefinition definition);
+        Task<TagEntity> ResolveAsync(string name);
     }
 }
